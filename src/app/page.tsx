@@ -1,65 +1,183 @@
-import Image from "next/image";
+import Link from "next/link";
+import Nav from "@/components/Nav";
+import ScrollyHero from "@/components/ScrollyHero";
+import { CircularGallery } from "@/components/ui/circular-gallery";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
+
+      <Nav />
+
+      <ScrollyHero />
+
+      {/* SOCIAL PROOF BAR */}
+      <section className="py-12 px-6" style={{ borderTop: "1px solid #1f1f1f", borderBottom: "1px solid #1f1f1f" }}>
+        <div className="max-w-4xl mx-auto flex flex-wrap justify-center gap-12 text-center">
+          {[
+            { stat: "25+", label: "Years Teaching" },
+            { stat: "5,000+", label: "Students Trained" },
+            { stat: "8+", label: "Colleges Taught At" },
+            { stat: "5", label: "Dance Styles" },
+          ].map(({ stat, label }) => (
+            <div key={label}>
+              <div className="text-3xl font-bold mb-1" style={{ color: "var(--accent-primary)" }}>{stat}</div>
+              <div className="text-sm" style={{ color: "var(--muted)" }}>{label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* BEATFIRST TEASER */}
+      <section className="py-24 px-6" style={{ backgroundColor: "var(--surface)" }}>
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
+            BeatFirst Rhythm Trainer
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">
+            The first skill every dancer<br />needs — and most skip.
+          </h2>
+          <p className="text-lg mb-10 max-w-xl mx-auto leading-relaxed" style={{ color: "var(--muted)" }}>
+            Tap to the beat, earn your rhythm score, and unlock real dance move tutorials. Free. No account needed.
           </p>
+          <Link href="/beat-first" className="inline-block px-8 py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: "var(--accent-primary)" }}>
+            Play BeatFirst — Free
+          </Link>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* DANCE STYLES */}
+      <section className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">Pick Your Style</h2>
+            <p style={{ color: "var(--muted)" }}>Five hip-hop dance styles. All teachable. All learnable.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { name: "Hip-Hop", slug: "/hip-hop-dance-moves", image: "/images/styles/hip-hop.jpg", description: "The foundation. Groove, bounce, and flow." },
+              { name: "Locking", slug: "/locking-dance-moves", image: "/images/styles/locking.jpg", description: "Funky freezes and sharp punctuations." },
+              { name: "Breaking", slug: "/breaking-dance-moves", image: "/images/styles/breaking.jpg", description: "Footwork, power moves, and style." },
+              { name: "Funk & Popping", slug: "/funk-style-dance-moves", image: "/images/styles/funk.jpg", description: "Isolations, waves, and electric hits." },
+              { name: "House Dance", slug: "/blog?category=house-dance", image: "/images/styles/house.jpg", description: "Fast footwork rooted in the underground." },
+            ].map(({ name, slug, image, description }) => (
+              <Link key={name} href={slug} className="group rounded-2xl overflow-hidden transition-colors hover:border-blue-600" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
+                <div className="h-48 overflow-hidden">
+                  <img
+                    src={image}
+                    alt={name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="font-bold text-lg mb-1 group-hover:text-blue-400 transition-colors">{name}</h3>
+                  <p className="text-sm" style={{ color: "var(--muted)" }}>{description}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-24 overflow-x-hidden" style={{ backgroundColor: "var(--surface)" }}>
+        <div className="px-6 text-center mb-12">
+          <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
+            Student Results
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold">Real students. Real progress.</h2>
+          <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}>Hover to pause · Click any card to watch</p>
+        </div>
+        <div style={{ height: "480px" }}>
+          <CircularGallery
+            items={[
+              { videoId: "PppnU3oHvlQ" },
+              { videoId: "J4_XpORtTfQ" },
+              { videoId: "bdSEa_S85-c" },
+              { videoId: "I68OCXhkaEo" },
+              { videoId: "0DKQ1PPW7Ag" },
+              { videoId: "CgB1N_nx5vo" },
+              { videoId: "h32DyBzyi4Q" },
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* ACADEMY TEASER */}
+      <section className="py-24 px-6" style={{ backgroundColor: "var(--background)" }}>
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-secondary)" }}>
+            The Academy
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">
+            When your rhythm is ready,<br />the academy unlocks.
+          </h2>
+          <p className="text-lg mb-10 leading-relaxed" style={{ color: "var(--muted)" }}>
+            A full progressive curriculum — drill by drill, move by move. Built for students who want a real system, not random YouTube clips.
+          </p>
+          <Link href="/academy" className="inline-block px-8 py-4 rounded-full font-semibold transition-colors hover:text-white" style={{ border: "1px solid #333", color: "var(--muted)" }}>
+            Explore the Academy
+          </Link>
+        </div>
+      </section>
+
+      {/* PRIVATE LESSONS CTA */}
+      <section className="py-24 px-6" style={{ backgroundColor: "var(--surface)" }}>
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Want direct feedback from Ceech?
+          </h2>
+          <p className="text-lg mb-10 leading-relaxed" style={{ color: "var(--muted)" }}>
+            Private 1-on-1 Zoom lessons. Real-time corrections. Personalized to exactly where you are.
+          </p>
+          <Link href="/private-lessons" className="inline-block px-8 py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: "var(--accent-primary)" }}>
+            Book a Private Lesson
+          </Link>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="py-12 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between gap-8">
+          <div>
+            <div className="font-bold text-lg mb-2">DanceWithCeech</div>
+            <p className="text-sm max-w-xs leading-relaxed" style={{ color: "var(--muted)" }}>
+              Rhythm first. Then dance. Hip-hop dance education for analytical minds.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-12">
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>Learn</div>
+              <div className="flex flex-col gap-2 text-sm" style={{ color: "var(--muted)" }}>
+                <Link href="/beat-first" className="hover:text-white transition-colors">BeatFirst</Link>
+                <Link href="/academy" className="hover:text-white transition-colors">Academy</Link>
+                <Link href="/private-lessons" className="hover:text-white transition-colors">Private Lessons</Link>
+              </div>
+            </div>
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>Styles</div>
+              <div className="flex flex-col gap-2 text-sm" style={{ color: "var(--muted)" }}>
+                <Link href="/hip-hop-dance-moves" className="hover:text-white transition-colors">Hip-Hop</Link>
+                <Link href="/locking-dance-moves" className="hover:text-white transition-colors">Locking</Link>
+                <Link href="/breaking-dance-moves" className="hover:text-white transition-colors">Breaking</Link>
+                <Link href="/funk-style-dance-moves" className="hover:text-white transition-colors">Funk & Popping</Link>
+              </div>
+            </div>
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>Connect</div>
+              <div className="flex flex-col gap-2 text-sm" style={{ color: "var(--muted)" }}>
+                <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
+                <Link href="/about" className="hover:text-white transition-colors">About</Link>
+                <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="max-w-5xl mx-auto mt-8 pt-8 text-xs text-center" style={{ borderTop: "1px solid #1f1f1f", color: "var(--muted)" }}>
+          © {new Date().getFullYear()} DanceWithCeech. All rights reserved.
+        </div>
+      </footer>
+
+    </main>
   );
 }

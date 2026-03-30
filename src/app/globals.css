@@ -1,26 +1,237 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --button-ripple-color: rgba(255, 255, 255, 0.3);
+
+  /* Brand: DanceWithCeech.com — dark mode only */
+  --background: #0A0A0A;
+  --surface: #111111;
+  --foreground: #F9F9F9;
+  --muted: #6B7280;
+
+  /* Accent colors */
+  --accent-primary: #2563EB;   /* Electric blue — CTAs, links, highlights */
+  --accent-secondary: #FDB515; /* Cal Gold — milestones, achievements, badges */
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-secondary: var(--accent-secondary);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-barlow-condensed);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* ─── BLOG PROSE ─────────────────────────────────────────── */
+
+.prose {
+  color: #D1D5DB;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 1.0625rem !important;
+  line-height: 1.9 !important;
+}
+
+/* H2 — major section headers */
+.prose h2 {
+  font-family: var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif !important;
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: #FFFFFF !important;
+  margin-top: 3.75rem !important;
+  margin-bottom: 1.25rem !important;
+  padding-left: 1.125rem !important;
+  border-left: 4px solid #2563EB !important;
+  line-height: 1.2 !important;
+}
+
+/* H3 — subsection labels */
+.prose h3 {
+  font-family: var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif !important;
+  font-size: 1.375rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: #FDB515 !important;
+  margin-top: 2.5rem !important;
+  margin-bottom: 0.625rem !important;
+  line-height: 1.25 !important;
+}
+
+/* H4 — inline labels */
+.prose h4 {
+  font-family: var(--font-geist-sans), system-ui, sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: #9CA3AF !important;
+  margin-top: 1.75rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Paragraphs */
+.prose p {
+  margin-bottom: 1.5rem !important;
+}
+
+/* Links */
+.prose a {
+  color: #2563EB !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(37, 99, 235, 0.4) !important;
+  transition: color 0.15s, border-color 0.15s !important;
+}
+.prose a:hover {
+  color: #FDB515 !important;
+  border-bottom-color: #FDB515 !important;
+}
+
+/* Bold */
+.prose strong {
+  color: #F9F9F9 !important;
+  font-weight: 600 !important;
+}
+
+.prose em {
+  color: #9CA3AF !important;
+}
+
+/* ── Unordered lists — em dash in blue */
+.prose ul {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin-bottom: 1.5rem !important;
+}
+.prose ul > li {
+  position: relative !important;
+  padding-left: 1.5rem !important;
+  margin-bottom: 0.65rem !important;
+}
+.prose ul > li::before {
+  content: "—" !important;
+  position: absolute !important;
+  left: 0 !important;
+  color: #2563EB !important;
+  font-weight: 700 !important;
+}
+
+/* ── Ordered lists — numbered blue badge */
+.prose ol {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin-bottom: 1.5rem !important;
+  counter-reset: prose-ol !important;
+}
+.prose ol > li {
+  position: relative !important;
+  padding-left: 2.5rem !important;
+  margin-bottom: 0.875rem !important;
+  counter-increment: prose-ol !important;
+}
+.prose ol > li::before {
+  content: counter(prose-ol) !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0.1em !important;
+  width: 1.625rem !important;
+  height: 1.625rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #2563EB !important;
+  color: #fff !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+  line-height: 1 !important;
+  font-family: var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif !important;
+}
+
+/* ── Blockquote — gold accent */
+.prose blockquote {
+  border-left: 4px solid #FDB515 !important;
+  padding: 1rem 1.5rem !important;
+  margin: 2.25rem 0 !important;
+  background: rgba(253, 181, 21, 0.05) !important;
+  border-radius: 0 8px 8px 0 !important;
+  color: #9CA3AF !important;
+  font-style: italic !important;
+}
+
+/* ── Horizontal rule */
+.prose hr {
+  border: none !important;
+  border-top: 1px solid #222 !important;
+  margin: 3rem 0 !important;
+}
+
+/* ── Inline code */
+.prose code {
+  font-family: var(--font-geist-mono), monospace !important;
+  font-size: 0.875em !important;
+  background: #1a1a1a !important;
+  color: #FDB515 !important;
+  padding: 0.15em 0.45em !important;
+  border-radius: 4px !important;
+}
+
+/* ── Code block */
+.prose pre {
+  background: #111 !important;
+  border: 1px solid #222 !important;
+  border-radius: 8px !important;
+  padding: 1.25rem !important;
+  overflow-x: auto !important;
+  margin-bottom: 1.5rem !important;
+}
+.prose pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  color: #D1D5DB !important;
+}
+
+/* ── Nested lists */
+.prose ul ul,
+.prose ol ol,
+.prose ul ol,
+.prose ol ul {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+/* ── Table (if any) */
+.prose table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin-bottom: 1.5rem !important;
+  font-size: 0.9375rem !important;
+}
+.prose th {
+  font-family: var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif !important;
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: #6B7280 !important;
+  padding: 0.625rem 0.875rem !important;
+  border-bottom: 1px solid #222 !important;
+  text-align: left !important;
+}
+.prose td {
+  padding: 0.625rem 0.875rem !important;
+  border-bottom: 1px solid #1a1a1a !important;
+  color: #D1D5DB !important;
 }
