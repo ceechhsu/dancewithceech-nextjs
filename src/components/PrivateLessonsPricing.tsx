@@ -3,6 +3,7 @@
 import { GlassyPricingSection } from "@/components/ui/animated-glassy-pricing";
 
 const scrollToBooking = () => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' });
+const scrollToVideoEval = () => document.getElementById('video-eval')?.scrollIntoView({ behavior: 'smooth' });
 
 export default function PrivateLessonsPricing() {
   return (
@@ -20,9 +21,19 @@ export default function PrivateLessonsPricing() {
             subtitle="Via Zoom or Google Meet — same precision, same feedback, from anywhere."
             plans={[
               {
+                planName: "Free Video Eval",
+                description: "Submit a 30-sec video. Get a personal breakdown.",
+                price: "$0",
+                priceSuffix: "",
+                features: ["Upload to YouTube (unlisted)", "Ceech reviews & analyzes", "Same-day eval discount available", "One per person"],
+                buttonText: "Submit Your Video",
+                buttonVariant: "secondary",
+                onButtonClick: scrollToVideoEval,
+              },
+              {
                 planName: "Single Session",
                 description: "Try it out at your own pace.",
-                price: "$30",
+                price: "$80",
                 priceSuffix: "/ 30 min",
                 features: ["Zoom or Google Meet", "Any style or level", "Real-time corrections"],
                 buttonText: "Book a Consultation",
@@ -32,9 +43,9 @@ export default function PrivateLessonsPricing() {
               {
                 planName: "Monthly Pack",
                 description: "4 sessions per month. Best value.",
-                price: "$100",
+                price: "$280",
                 priceSuffix: "/ month",
-                features: ["4 × 30-min sessions", "Save $20 vs single rate", "Zoom or Google Meet", "Any style or level"],
+                features: ["4 × 30-min sessions", "Save $40 vs single rate", "Zoom or Google Meet", "Any style or level"],
                 buttonText: "Book a Consultation",
                 isPopular: true,
                 buttonVariant: "primary",
@@ -79,7 +90,7 @@ export default function PrivateLessonsPricing() {
                 priceSuffix: "/ 5 sessions",
                 features: ["$230/lesson", "60 min each", "Get Down Dance Studio"],
                 buttonText: "Book a Consultation",
-                buttonVariant: "primary",
+                buttonVariant: "secondary",
                 onButtonClick: scrollToBooking,
               },
               {

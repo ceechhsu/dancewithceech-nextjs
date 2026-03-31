@@ -154,7 +154,7 @@ export const PricingCard = ({
   const buttonClasses = `
     mt-auto w-full py-2.5 rounded-xl font-semibold text-[14px] transition font-sans
     ${buttonVariant === 'primary'
-      ? 'bg-cyan-400 hover:bg-cyan-300 text-black'
+      ? 'bg-[#2563EB] hover:bg-[#1d4ed8] text-white'
       : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
     }
   `;
@@ -162,7 +162,7 @@ export const PricingCard = ({
   return (
     <div className={cardClasses.trim()}>
       {isPopular && (
-        <div className="absolute -top-4 right-4 px-3 py-1 text-[12px] font-semibold rounded-full bg-cyan-400 text-black">
+        <div className="absolute -top-4 right-4 px-3 py-1 text-[12px] font-semibold rounded-full bg-[#2563EB] text-white">
           Most Popular
         </div>
       )}

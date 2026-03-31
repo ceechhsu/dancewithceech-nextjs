@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import PrivateLessonsPricing from "@/components/PrivateLessonsPricing";
+import VideoEvalForm from "@/components/VideoEvalForm";
 
 export const metadata = {
   title: "Private Lessons — DanceWithCeech",
@@ -168,6 +169,8 @@ export default function PrivateLessonsPage() {
       <div id="pricing">
         <PrivateLessonsPricing />
       </div>
+
+      <VideoEvalForm />
 
       {/* BOOKING */}
       <section id="booking" className="py-24 px-6">
