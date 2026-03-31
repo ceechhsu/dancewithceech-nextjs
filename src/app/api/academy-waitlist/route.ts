@@ -13,10 +13,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Step 1: create or find contact
-  const contactBody: Record<string, unknown> = {
-    email,
-    fields: name ? [{ slug: 'first_name', value: name }] : [],
-  }
+  const contactBody: Record<string, unknown> = { email, firstName: name || '', fields: [] }
 
   console.log('Sending to systeme.io:', JSON.stringify(contactBody))
 
@@ -32,6 +29,17 @@ export async function POST(req: NextRequest) {
     const data = await contactRes.json()
     console.log('Systeme.io 201 response:', JSON.stringify(data))
     contactId = data?.id ?? null
+
+    // PATCH to explicitly set firstName after creation
+    if (contactId && name) {
+      const patchRes = await fetch(`https://api.systeme.io/api/contacts/${contactId}`, {
+        method: 'PATCH',
+        headers: { 'X-API-Key': apiKey, 'Content-Type': 'application/merge-patch+json' },
+        body: JSON.stringify({ firstName: name }),
+      })
+      const patchData = await patchRes.json()
+      console.log('PATCH response:', JSON.stringify(patchData))
+    }
   } else if (contactRes.status === 422) {
     const body = await contactRes.json()
     const alreadyExists = body?.violations?.some(
