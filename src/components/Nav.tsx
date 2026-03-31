@@ -17,7 +17,7 @@ export default async function Nav() {
           height={36}
         />
         <span style={{ fontSize: "1.05rem", fontWeight: 700, letterSpacing: "-0.02em", color: "#F9F9F9" }}>
-          DanceWith<span style={{ color: "#2563EB" }}>Ceech</span>
+          Dance With <span style={{ color: "#2563EB" }}>Ceech</span>
         </span>
       </Link>
       {/* Desktop nav links */}
