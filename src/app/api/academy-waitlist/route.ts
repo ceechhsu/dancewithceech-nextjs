@@ -12,56 +12,49 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 })
   }
 
-  // Try to create contact
+  // Step 1: create or find contact
+  const contactBody: Record<string, unknown> = { email, fields: [] }
+  if (name) contactBody.firstName = name
+
   const contactRes = await fetch('https://api.systeme.io/api/contacts', {
     method: 'POST',
-    headers: {
-      'X-API-Key': apiKey,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email,
-      firstName: name || '',
-      fields: [],
-      tags: ['academy-waitlist'],
-    }),
+    headers: { 'X-API-Key': apiKey, 'Content-Type': 'application/json' },
+    body: JSON.stringify(contactBody),
   })
 
-  // 201 = created, treat "already used" (422) as success too —
-  // contact exists, so look them up and patch the tag on
-  if (contactRes.status === 422) {
+  let contactId: number | null = null
+
+  if (contactRes.status === 201) {
+    const data = await contactRes.json()
+    contactId = data?.id ?? null
+  } else if (contactRes.status === 422) {
     const body = await contactRes.json()
     const alreadyExists = body?.violations?.some(
       (v: { message: string }) => v.message?.includes('already used')
     )
     if (alreadyExists) {
-      // Look up the existing contact and add the tag
       const lookupRes = await fetch(
         `https://api.systeme.io/api/contacts?email=${encodeURIComponent(email)}`,
         { headers: { 'X-API-Key': apiKey } }
       )
       if (lookupRes.ok) {
         const data = await lookupRes.json()
-        const contact = data?.items?.[0]
-        if (contact?.id) {
-          await fetch(`https://api.systeme.io/api/contacts/${contact.id}`, {
-            method: 'PATCH',
-            headers: {
-              'X-API-Key': apiKey,
-              'Content-Type': 'application/merge-patch+json',
-            },
-            body: JSON.stringify({ tags: ['academy-waitlist'] }),
-          })
-        }
+        contactId = data?.items?.[0]?.id ?? null
       }
-      return NextResponse.json({ success: true })
     }
-  }
-
-  if (!contactRes.ok) {
+  } else {
     const err = await contactRes.text()
     console.error('Systeme.io error:', err)
     return NextResponse.json({ error: 'Failed to subscribe' }, { status: 500 })
+  }
+
+  // Step 2: apply academy-waitlist tag via dedicated endpoint
+  if (contactId) {
+    await fetch(`https://api.systeme.io/api/contacts/${contactId}/tags`, {
+      method: 'POST',
+      headers: { 'X-API-Key': apiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'academy-waitlist' }),
+    })
   }
 
   return NextResponse.json({ success: true })
