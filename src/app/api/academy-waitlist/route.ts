@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  const { email, name } = await req.json()
+  const { email } = await req.json()
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Step 1: create or find contact
-  const contactBody: Record<string, unknown> = { email, firstName: name || '', fields: [] }
+  const contactBody: Record<string, unknown> = { email, fields: [] }
 
   console.log('Sending to systeme.io:', JSON.stringify(contactBody))
 
@@ -32,16 +32,6 @@ export async function POST(req: NextRequest) {
     console.log('Systeme.io 201 response:', JSON.stringify(data))
     contactId = data?.id ?? null
 
-    // PATCH to explicitly set firstName after creation
-    if (contactId && name) {
-      const patchRes = await fetch(`https://api.systeme.io/api/contacts/${contactId}`, {
-        method: 'PATCH',
-        headers: { 'X-API-Key': apiKey, 'Content-Type': 'application/merge-patch+json' },
-        body: JSON.stringify({ firstName: name }),
-      })
-      const patchData = await patchRes.json()
-      console.log('PATCH response:', JSON.stringify(patchData))
-    }
   } else if (contactRes.status === 422) {
     const body = await contactRes.json()
     console.log('422 body:', JSON.stringify(body))

@@ -15,7 +15,6 @@ const MODULES = [
 
 export default function AcademyWaitlist() {
   const [email, setEmail] = useState('')
-  const [name, setName] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [emailError, setEmailError] = useState('')
 
@@ -34,7 +33,7 @@ export default function AcademyWaitlist() {
       const res = await fetch('/api/academy-waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name }),
+        body: JSON.stringify({ email }),
       })
       if (!res.ok) throw new Error()
       setStatus('success')
@@ -93,23 +92,6 @@ export default function AcademyWaitlist() {
           ) : (
             <form onSubmit={handleSubmit} style={{ maxWidth: '480px', margin: '0 auto' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '12px' }}>
-                <input
-                  type="text"
-                  placeholder="First name"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  style={{
-                    background: '#111',
-                    border: '1px solid #2a2a2a',
-                    borderRadius: '8px',
-                    padding: '14px 16px',
-                    fontSize: '15px',
-                    color: '#f9f9f9',
-                    outline: 'none',
-                    width: '100%',
-                    boxSizing: 'border-box',
-                  }}
-                />
                 <input
                   type="email"
                   placeholder="Your email address"
