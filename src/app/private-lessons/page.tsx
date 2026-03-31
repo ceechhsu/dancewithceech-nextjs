@@ -50,7 +50,7 @@ export default function PrivateLessonsPage() {
                 className="px-8 py-4 rounded-full text-white font-semibold text-center transition-opacity hover:opacity-90"
                 style={{ backgroundColor: "var(--accent-primary)" }}
               >
-                Book a Free 15-Min Demo
+                Book a Free Consultation
               </a>
               <a
                 href="#pricing"
@@ -226,9 +226,9 @@ export default function PrivateLessonsPage() {
           <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
             Let&apos;s Talk
           </div>
-          <h2 className="text-3xl font-bold mb-4">Every lesson starts with a free consultation</h2>
+          <h2 className="text-3xl font-bold mb-4">Start with a free 30-minute consultation</h2>
           <p className="mb-3" style={{ color: "var(--muted)" }}>
-            Book a free 30-minute call and we&apos;ll figure out exactly what you need — no obligation, no pressure.
+            We&apos;ll talk through your goals, experience level, and what you want to learn — then build a plan around you. No obligation.
           </p>
           <p style={{ color: "var(--muted)" }}>
             Or skip the form and text me directly:{" "}
