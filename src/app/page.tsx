@@ -2,6 +2,7 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import ScrollyHero from "@/components/ScrollyHero";
 import { CircularGallery } from "@/components/ui/circular-gallery";
+import { RainbowBorderButton } from "@/components/ui/rainbow-border-button";
 
 export default function Home() {
   return (
@@ -115,9 +116,11 @@ export default function Home() {
           <p className="text-lg mb-10 leading-relaxed" style={{ color: "var(--muted)" }}>
             A full progressive curriculum — drill by drill, move by move. Built for students who want a real system, not random YouTube clips.
           </p>
-          <Link href="/academy" className="inline-block px-8 py-4 rounded-full font-semibold transition-colors hover:text-white" style={{ border: "1px solid #333", color: "var(--muted)" }}>
-            Explore the Academy
-          </Link>
+          <div className="flex justify-center">
+            <RainbowBorderButton href="/academy">
+              Explore the Academy
+            </RainbowBorderButton>
+          </div>
         </div>
       </section>
 
