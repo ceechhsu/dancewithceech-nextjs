@@ -15,10 +15,9 @@ export default async function Nav() {
           alt="DanceWithCeech"
           width={36}
           height={36}
-          style={{ filter: "brightness(0) saturate(100%) invert(72%) sepia(98%) saturate(400%) hue-rotate(5deg) brightness(103%) contrast(101%)" }}
         />
         <span style={{ fontSize: "1.05rem", fontWeight: 700, letterSpacing: "-0.02em", color: "#F9F9F9" }}>
-          DanceWith<span style={{ color: "#FDB515" }}>Ceech</span>
+          DanceWith<span style={{ color: "#2563EB" }}>Ceech</span>
         </span>
       </Link>
       {/* Desktop nav links */}
