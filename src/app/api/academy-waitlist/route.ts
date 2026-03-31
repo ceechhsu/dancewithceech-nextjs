@@ -23,6 +23,8 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify(contactBody),
   })
 
+  console.log('Systeme.io status:', contactRes.status)
+
   let contactId: number | null = null
 
   if (contactRes.status === 201) {
