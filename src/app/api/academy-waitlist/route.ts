@@ -16,6 +16,8 @@ export async function POST(req: NextRequest) {
   const contactBody: Record<string, unknown> = { email, fields: [] }
   if (name) contactBody.firstName = name
 
+  console.log('Sending to systeme.io:', JSON.stringify(contactBody))
+
   const contactRes = await fetch('https://api.systeme.io/api/contacts', {
     method: 'POST',
     headers: { 'X-API-Key': apiKey, 'Content-Type': 'application/json' },
@@ -26,6 +28,7 @@ export async function POST(req: NextRequest) {
 
   if (contactRes.status === 201) {
     const data = await contactRes.json()
+    console.log('Systeme.io 201 response:', JSON.stringify(data))
     contactId = data?.id ?? null
   } else if (contactRes.status === 422) {
     const body = await contactRes.json()
