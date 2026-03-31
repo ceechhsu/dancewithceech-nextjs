@@ -17,9 +17,18 @@ export default function AcademyWaitlist() {
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [emailError, setEmailError] = useState('')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setEmailError('')
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setEmailError('Please enter a valid email address.')
+      return
+    }
+
     setStatus('loading')
     try {
       const res = await fetch('/api/academy-waitlist', {
@@ -105,11 +114,10 @@ export default function AcademyWaitlist() {
                   type="email"
                   placeholder="Your email address"
                   value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
+                  onChange={e => { setEmail(e.target.value); setEmailError('') }}
                   style={{
                     background: '#111',
-                    border: '1px solid #2a2a2a',
+                    border: `1px solid ${emailError ? '#ef4444' : '#2a2a2a'}`,
                     borderRadius: '8px',
                     padding: '14px 16px',
                     fontSize: '15px',
@@ -119,6 +127,11 @@ export default function AcademyWaitlist() {
                     boxSizing: 'border-box',
                   }}
                 />
+                {emailError && (
+                  <div style={{ color: '#ef4444', fontSize: '13px', marginTop: '6px' }}>
+                    {emailError}
+                  </div>
+                )}
               </div>
               <button
                 type="submit"
