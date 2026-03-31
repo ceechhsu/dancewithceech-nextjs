@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { auth, signIn } from "@/auth";
 import MobileMenu from "@/components/MobileMenu";
 import UserMenu from "@/components/UserMenu";
@@ -8,8 +9,17 @@ export default async function Nav() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4" style={{ backgroundColor: "var(--background)", borderBottom: "1px solid #1f1f1f" }}>
-      <Link href="/" className="text-lg font-bold tracking-tight" style={{ color: "var(--foreground)" }}>
-        DanceWithCeech
+      <Link href="/" className="flex items-center gap-2" style={{ textDecoration: "none" }}>
+        <Image
+          src="/logo-mark.png"
+          alt="DanceWithCeech"
+          width={36}
+          height={36}
+          style={{ filter: "brightness(0) saturate(100%) invert(72%) sepia(98%) saturate(400%) hue-rotate(5deg) brightness(103%) contrast(101%)" }}
+        />
+        <span style={{ fontSize: "1.05rem", fontWeight: 700, letterSpacing: "-0.02em", color: "#F9F9F9" }}>
+          DanceWith<span style={{ color: "#FDB515" }}>Ceech</span>
+        </span>
       </Link>
       {/* Desktop nav links */}
       <div className="hidden md:flex items-center gap-6 text-sm" style={{ color: "var(--muted)" }}>
