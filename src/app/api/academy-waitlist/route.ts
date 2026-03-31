@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
     }
   } else if (contactRes.status === 422) {
     const body = await contactRes.json()
+    console.log('422 body:', JSON.stringify(body))
     const alreadyExists = body?.violations?.some(
       (v: { message: string }) => v.message?.includes('already used')
     )
