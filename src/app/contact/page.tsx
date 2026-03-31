@@ -1,7 +1,7 @@
-import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Script from "next/script";
+import ContactForm from "./ContactForm";
 
 export const metadata = {
   title: "Contact — DanceWithCeech",
@@ -109,84 +109,17 @@ export default function ContactPage() {
             <div>
               <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>Follow Along</div>
               <div className="flex flex-col gap-2 text-sm" style={{ color: "var(--muted)" }}>
-                {/* TODO: Add real social URLs */}
-                <a href="#" className="hover:text-white transition-colors">YouTube</a>
-                <a href="#" className="hover:text-white transition-colors">TikTok</a>
-                <a href="#" className="hover:text-white transition-colors">Instagram</a>
+                <a href="https://www.youtube.com/@dancewithceech" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">YouTube</a>
+                <a href="https://www.tiktok.com/@dancewithceech" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">TikTok</a>
+                <a href="https://www.instagram.com/dancewithceech" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
+                <a href="https://www.facebook.com/dancewithceech" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Facebook</a>
               </div>
             </div>
           </div>
 
           {/* CONTACT FORM */}
           {/* TODO Phase 2: Wire up to Resend API route for email delivery */}
-          <form
-            action={`mailto:dancewithceech@gmail.com`}
-            method="GET"
-            className="flex flex-col gap-4"
-          >
-            <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: "var(--muted)" }}>
-                Your Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                required
-                placeholder="First and last name"
-                className="w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 outline-none focus:ring-2 focus:ring-blue-600 transition"
-                style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: "var(--muted)" }}>
-                Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="you@example.com"
-                className="w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 outline-none focus:ring-2 focus:ring-blue-600 transition"
-                style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: "var(--muted)" }}>
-                What are you interested in?
-              </label>
-              <select
-                name="subject"
-                className="w-full px-4 py-3 rounded-xl text-white outline-none focus:ring-2 focus:ring-blue-600 transition"
-                style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f", color: "var(--foreground)" }}
-              >
-                <option value="general">General question</option>
-                <option value="private">Private lessons</option>
-                <option value="academy">Online academy</option>
-                <option value="community">Community college classes</option>
-                <option value="other">Something else</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: "var(--muted)" }}>
-                Message
-              </label>
-              <textarea
-                name="body"
-                required
-                rows={5}
-                placeholder="Tell me what's on your mind..."
-                className="w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 outline-none focus:ring-2 focus:ring-blue-600 transition resize-none"
-                style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "var(--accent-primary)" }}
-            >
-              Send Message
-            </button>
-          </form>
+          <ContactForm />
 
         </div>
       </section>
