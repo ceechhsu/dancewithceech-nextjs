@@ -13,8 +13,10 @@ export async function POST(req: NextRequest) {
   }
 
   // Step 1: create or find contact
-  const contactBody: Record<string, unknown> = { email, fields: [] }
-  if (name) contactBody.firstName = name
+  const contactBody: Record<string, unknown> = {
+    email,
+    fields: name ? [{ slug: 'first_name', value: name }] : [],
+  }
 
   console.log('Sending to systeme.io:', JSON.stringify(contactBody))
 
