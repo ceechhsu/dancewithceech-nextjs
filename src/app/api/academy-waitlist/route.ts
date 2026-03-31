@@ -54,12 +54,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to subscribe' }, { status: 500 })
   }
 
-  // Step 2: apply academy-waitlist tag via dedicated endpoint
+  // Step 2: apply academy-waitlist tag (tag ID: 1943652)
   if (contactId) {
     await fetch(`https://api.systeme.io/api/contacts/${contactId}/tags`, {
       method: 'POST',
       headers: { 'X-API-Key': apiKey, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: 'academy-waitlist' }),
+      body: JSON.stringify({ tagId: 1943652 }),
     })
   }
 

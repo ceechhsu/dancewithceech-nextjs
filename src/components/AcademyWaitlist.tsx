@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { BeamsBackground } from '@/components/ui/beams-background'
 
@@ -17,6 +17,14 @@ export default function AcademyWaitlist() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [emailError, setEmailError] = useState('')
+  const [spotsClaimed, setSpotsClaimed] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetch('/api/academy-waitlist/count')
+      .then(r => r.json())
+      .then(d => setSpotsClaimed(d.count))
+      .catch(() => {})
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -163,10 +171,30 @@ export default function AcademyWaitlist() {
           <h2 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '16px' }}>
             First 100 students get locked-in pricing — forever.
           </h2>
-          <p style={{ color: 'var(--muted)', lineHeight: 1.7, maxWidth: '480px', margin: '0 auto' }}>
+          <p style={{ color: 'var(--muted)', lineHeight: 1.7, maxWidth: '480px', margin: '0 auto 24px' }}>
             When the academy launches, founding members pay less than anyone who comes after them.
             That price never goes up for you. Join the waitlist now to qualify.
           </p>
+          {spotsClaimed !== null && (
+            <div style={{ maxWidth: '360px', margin: '0 auto' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '8px' }}>
+                <span style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>{spotsClaimed} spots claimed</span>
+                <span style={{ color: 'var(--muted)' }}>100 total</span>
+              </div>
+              <div style={{ height: '6px', background: '#1f1f1f', borderRadius: '999px', overflow: 'hidden' }}>
+                <div style={{
+                  height: '100%',
+                  width: `${Math.min((spotsClaimed / 100) * 100, 100)}%`,
+                  background: 'var(--accent-primary)',
+                  borderRadius: '999px',
+                  transition: 'width 0.8s ease',
+                }} />
+              </div>
+              <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px' }}>
+                {100 - spotsClaimed} founding member spots remaining
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
