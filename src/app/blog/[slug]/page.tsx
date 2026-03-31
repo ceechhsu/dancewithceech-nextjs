@@ -183,34 +183,69 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {/* Decorative rule */}
         <div className="mt-16 mb-12" style={{ height: "1px", background: "linear-gradient(to right, #2563EB, transparent)" }} />
 
-        {/* CTA */}
-        <div
-          className="p-8 rounded-2xl"
-          style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}
-        >
-          <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--accent-primary)" }}>
-            Ready to feel this move?
+        {/* CTAs */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          {/* Academy waitlist */}
+          <div
+            className="p-7 rounded-2xl flex flex-col"
+            style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}
+          >
+            <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--accent-primary)" }}>
+              Online Academy
+            </div>
+            <p
+              className="font-black uppercase leading-none mb-3"
+              style={{
+                fontFamily: "var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif",
+                fontSize: "1.5rem",
+                letterSpacing: "0.03em",
+              }}
+            >
+              Learn on your schedule.
+            </p>
+            <p className="text-sm mb-6 flex-1" style={{ color: "var(--muted)" }}>
+              The DanceWithCeech academy is coming. Get early access before it opens.
+            </p>
+            <Link
+              href="/academy"
+              className="inline-block text-center px-6 py-3 rounded-full text-sm text-white font-semibold uppercase tracking-wider transition-opacity hover:opacity-80"
+              style={{ backgroundColor: "var(--accent-primary)" }}
+            >
+              Join the Waitlist
+            </Link>
           </div>
-          <p
-            className="font-black uppercase leading-none mb-3"
-            style={{
-              fontFamily: "var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif",
-              fontSize: "1.75rem",
-              letterSpacing: "0.03em",
-            }}
+
+          {/* Private lessons */}
+          <div
+            className="p-7 rounded-2xl flex flex-col"
+            style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}
           >
-            Train your rhythm first.
-          </p>
-          <p className="text-sm mb-6" style={{ color: "var(--muted)" }}>
-            Every dance move starts with timing. BeatFirst builds that foundation — free.
-          </p>
-          <Link
-            href="/beat-first"
-            className="inline-block px-8 py-3 rounded-full text-sm text-white font-semibold uppercase tracking-wider transition-opacity hover:opacity-80"
-            style={{ backgroundColor: "var(--accent-primary)" }}
-          >
-            Play BeatFirst — Free
-          </Link>
+            <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--accent-gold)" }}>
+              Private Lessons
+            </div>
+            <p
+              className="font-black uppercase leading-none mb-3"
+              style={{
+                fontFamily: "var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif",
+                fontSize: "1.5rem",
+                letterSpacing: "0.03em",
+              }}
+            >
+              Train 1-on-1 with Ceech.
+            </p>
+            <p className="text-sm mb-6 flex-1" style={{ color: "var(--muted)" }}>
+              Get personalized coaching tailored to your style and goals.
+            </p>
+            <Link
+              href="/private-lessons"
+              className="inline-block text-center px-6 py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-opacity hover:opacity-80"
+              style={{ backgroundColor: "var(--accent-gold)", color: "#000" }}
+            >
+              Book a Free Consult
+            </Link>
+          </div>
+
         </div>
 
       </article>
