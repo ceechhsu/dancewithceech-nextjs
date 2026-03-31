@@ -1,34 +1,33 @@
 'use client';
 
-import { Stories, StoriesContent, Story, StoryImage, StoryAuthor, StoryAuthorName, StoryOverlay } from "@/components/ui/stories-carousel";
+import { CircularTestimonials } from "@/components/ui/circular-testimonials";
 
 const testimonials = [
-  { videoId: "I68OCXhkaEo", name: "Dax" },
-  { videoId: "0DKQ1PPW7Ag", name: "Anabelle" },
-  { videoId: "h32DyBzyi4Q", name: "Campbell" },
+  {
+    videoId: "I68OCXhkaEo",
+    name: "Dax Mills",
+    designation: "Community College Student",
+    quote: "Ceech breaks moves down so you actually understand them. He makes it look incredible — then shows you exactly how.",
+  },
+  {
+    videoId: "0DKQ1PPW7Ag",
+    name: "Cambell",
+    designation: "Community College Student",
+    quote: "He gets into the nitty gritty of every step — breaks it down until you know exactly how to do it properly.",
+  },
+  {
+    videoId: "h32DyBzyi4Q",
+    name: "Anabelle",
+    designation: "Community College Student",
+    quote: "In the little time I've known Ceech, he's helped me improve so much — not just as a dancer, but as a person.",
+  },
 ];
 
 export default function TestimonialsCarousel() {
   return (
-    <Stories>
-      <StoriesContent>
-        {testimonials.map((t) => (
-          <Story
-            key={t.videoId}
-            className="aspect-[3/4] w-[220px]"
-            onClick={() => window.open(`https://www.youtube.com/watch?v=${t.videoId}`, '_blank')}
-          >
-            <StoryImage
-              src={`https://img.youtube.com/vi/${t.videoId}/hqdefault.jpg`}
-              alt={`${t.name} testimonial`}
-            />
-            <StoryOverlay />
-            <StoryAuthor>
-              <StoryAuthorName>{t.name}</StoryAuthorName>
-            </StoryAuthor>
-          </Story>
-        ))}
-      </StoriesContent>
-    </Stories>
+    <CircularTestimonials
+      testimonials={testimonials}
+      autoplay={true}
+    />
   );
 }
