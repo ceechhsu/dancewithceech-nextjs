@@ -6,6 +6,21 @@ import { getAllPosts } from "@/lib/posts";
 export const metadata = {
   title: "Locking Dance Moves — DanceWithCeech",
   description: "Learn locking dance moves step by step. Funky freezes and sharp punctuations taught by instructor Ceech.",
+  keywords: ["locking dance moves", "locking dance tutorials", "funk locking", "locking choreography", "learn locking", "locking freezes", "street dance locking"],
+  openGraph: {
+    title: "Locking Dance Moves — DanceWithCeech",
+    description: "Learn locking dance moves step by step. Funky freezes and sharp punctuations taught by instructor Ceech.",
+    url: "https://dancewithceech.com/locking-dance-moves",
+    siteName: "DanceWithCeech",
+    images: [{ url: "https://dancewithceech.com/images/styles/locking.jpg", width: 1200, height: 630, alt: "Locking Dance Moves" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Locking Dance Moves — DanceWithCeech",
+    description: "Learn locking dance moves step by step. Funky freezes and sharp punctuations taught by instructor Ceech.",
+    images: ["https://dancewithceech.com/images/styles/locking.jpg"],
+  },
 };
 
 export default function LockingMovesPage() {

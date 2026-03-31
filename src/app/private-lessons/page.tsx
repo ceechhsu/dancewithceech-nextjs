@@ -9,6 +9,20 @@ import VideoEvalForm from "@/components/VideoEvalForm";
 export const metadata = {
   title: "Private Lessons — DanceWithCeech",
   description: "Book a private 1-on-1 dance lesson with Ceech — in-person at Get Down Dance Studio in San Jose, or virtually via Zoom. Personalized hip-hop instruction for all levels.",
+  openGraph: {
+    title: "Private Lessons — DanceWithCeech",
+    description: "Book a private 1-on-1 dance lesson with Ceech — in-person at Get Down Dance Studio in San Jose, or virtually via Zoom. Personalized hip-hop instruction for all levels.",
+    url: "https://dancewithceech.com/private-lessons",
+    siteName: "DanceWithCeech",
+    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Private Dance Lessons with Ceech" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Private Lessons — DanceWithCeech",
+    description: "Book a private 1-on-1 dance lesson with Ceech — in-person at Get Down Dance Studio in San Jose, or virtually via Zoom. Personalized hip-hop instruction for all levels.",
+    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+  },
 };
 
 export default function PrivateLessonsPage() {

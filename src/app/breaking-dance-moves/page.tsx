@@ -6,6 +6,21 @@ import { getAllPosts } from "@/lib/posts";
 export const metadata = {
   title: "Breaking Dance Moves — DanceWithCeech",
   description: "Learn breaking dance moves step by step. Footwork, power moves, and freezes taught by instructor Ceech.",
+  keywords: ["breaking dance moves", "breakdancing tutorials", "footwork", "power moves", "freezes", "bboy", "bgirl", "learn breaking"],
+  openGraph: {
+    title: "Breaking Dance Moves — DanceWithCeech",
+    description: "Learn breaking dance moves step by step. Footwork, power moves, and freezes taught by instructor Ceech.",
+    url: "https://dancewithceech.com/breaking-dance-moves",
+    siteName: "DanceWithCeech",
+    images: [{ url: "https://dancewithceech.com/images/styles/breaking.jpg", width: 1200, height: 630, alt: "Breaking Dance Moves" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Breaking Dance Moves — DanceWithCeech",
+    description: "Learn breaking dance moves step by step. Footwork, power moves, and freezes taught by instructor Ceech.",
+    images: ["https://dancewithceech.com/images/styles/breaking.jpg"],
+  },
 };
 
 export default function BreakingMovesPage() {

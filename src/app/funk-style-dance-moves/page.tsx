@@ -6,6 +6,21 @@ import { getAllPosts } from "@/lib/posts";
 export const metadata = {
   title: "Funk Style Dance Moves — DanceWithCeech",
   description: "Learn popping, waving, tutting and funk style dance moves. Step-by-step tutorials from instructor Ceech.",
+  keywords: ["funk style dance", "popping dance moves", "waving dance", "tutting", "electric boogaloo", "learn popping", "funk dance tutorials"],
+  openGraph: {
+    title: "Funk Style Dance Moves — DanceWithCeech",
+    description: "Learn popping, waving, tutting and funk style dance moves. Step-by-step tutorials from instructor Ceech.",
+    url: "https://dancewithceech.com/funk-style-dance-moves",
+    siteName: "DanceWithCeech",
+    images: [{ url: "https://dancewithceech.com/images/styles/funk.jpg", width: 1200, height: 630, alt: "Funk Style Dance Moves" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Funk Style Dance Moves — DanceWithCeech",
+    description: "Learn popping, waving, tutting and funk style dance moves. Step-by-step tutorials from instructor Ceech.",
+    images: ["https://dancewithceech.com/images/styles/funk.jpg"],
+  },
 };
 
 export default function FunkStyleMovesPage() {

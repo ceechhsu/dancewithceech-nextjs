@@ -6,6 +6,21 @@ import { getAllPosts } from "@/lib/posts";
 export const metadata = {
   title: "Hip-Hop Dance Moves — DanceWithCeech",
   description: "Learn hip-hop dance moves step by step. Tutorials for all levels from instructor Ceech.",
+  keywords: ["hip-hop dance moves", "hip hop dance tutorials", "learn hip hop", "street dance", "hip hop choreography", "hip hop dance for beginners"],
+  openGraph: {
+    title: "Hip-Hop Dance Moves — DanceWithCeech",
+    description: "Learn hip-hop dance moves step by step. Tutorials for all levels from instructor Ceech.",
+    url: "https://dancewithceech.com/hip-hop-dance-moves",
+    siteName: "DanceWithCeech",
+    images: [{ url: "https://dancewithceech.com/images/styles/hip-hop.jpg", width: 1200, height: 630, alt: "Hip-Hop Dance Moves" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hip-Hop Dance Moves — DanceWithCeech",
+    description: "Learn hip-hop dance moves step by step. Tutorials for all levels from instructor Ceech.",
+    images: ["https://dancewithceech.com/images/styles/hip-hop.jpg"],
+  },
 };
 
 export default function HipHopMovesPage() {
