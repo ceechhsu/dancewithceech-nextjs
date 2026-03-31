@@ -6,28 +6,14 @@ import { signIn } from 'next-auth/react'
 import * as Tone from 'tone'
 import { type Beat, BEATS } from '@/lib/beats'
 import ProgressTab from '@/components/ProgressTab'
-
-// ─── Constants ───────────────────────────────────────────────────────────────
-
-const TOLERANCE = { beginner: 300, intermediate: 200, advanced: 100 }
-const STEPS_PER_BAR = 16
-const GAME_BARS = 9      // 1 countdown bar + 8 scored bars
-const CANVAS_W = 560
-const CANVAS_H = 120
-const PLAYBACK_SCALE = 0.18 // px/ms — shows ~3.1 seconds at a time
+import { useBeatFirstAudio } from '@/hooks/useBeatFirstAudio'
+import { drawBeatWaveform, buildResultsDrawFn, clientToCanvasX, ratingColor } from '@/lib/beatfirst-canvas'
+import {
+  TOLERANCE, STEPS_PER_BAR, GAME_BARS, CANVAS_W, CANVAS_H, PLAYBACK_SCALE,
+  type TapResult, type GamePhase,
+} from '@/lib/beatfirst-constants'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
-
-type TapResult = {
-  beat: number
-  tapMs: number
-  idealMs: number
-  diffMs: number
-  offsetMs: number  // signed: negative = early, positive = late
-  rating: 'perfect' | 'good' | 'ok' | 'miss'
-}
-
-type GamePhase = 'select' | 'preview' | 'ready' | 'countdown' | 'playing' | 'results'
 
 type Props = { user: { name?: string | null; email?: string | null; image?: string | null } | null }
 
@@ -51,14 +37,10 @@ export default function BeatFirstGame({ user }: Props) {
   }, [searchParams])
 
   // Audio
-  const kickRef    = useRef<Tone.MembraneSynth | null>(null)
-  const snareRef   = useRef<Tone.NoiseSynth | null>(null)
-  const hihatRef   = useRef<Tone.MetalSynth | null>(null)
-  const clapRef    = useRef<Tone.NoiseSynth | null>(null)
-  const clapFilterRef = useRef<Tone.Filter | null>(null)
-  const bassRef        = useRef<Tone.MonoSynth | null>(null)
-  const analyserRef    = useRef<Tone.Analyser | null>(null)
-  const bassAnalyserRef = useRef<Tone.Analyser | null>(null)
+  const {
+    kickRef, snareRef, hihatRef, clapRef, clapFilterRef,
+    bassRef, analyserRef, bassAnalyserRef, initAudio,
+  } = useBeatFirstAudio()
 
   // Game state
   const animFrameRef   = useRef<number>(0)
@@ -77,155 +59,26 @@ export default function BeatFirstGame({ user }: Props) {
   const timelineCanvasRef = useRef<HTMLCanvasElement>(null)
 
   // Results zoom/pan
-  const zoomRef       = useRef(1)       // 1 = fit-all, higher = zoomed in
-  const panMsRef      = useRef(0)       // left edge of view in ms
+  const zoomRef       = useRef(1)
+  const panMsRef      = useRef(0)
   const isDraggingRef = useRef(false)
   const dragStartRef  = useRef({ x: 0, panMs: 0 })
   const redrawResultsRef = useRef<(() => void) | null>(null)
+
+  const difficultyBadge = (d: Beat['difficulty']) =>
+    ({ beginner: '#22c55e', intermediate: '#FDB515', advanced: '#ef4444' })[d]
 
   // Pre-generate envelope for beats with bassline so waveform shows bassline pattern
   useEffect(() => {
     if (selectedBeat.bassline) {
       const stepMs = (60000 / selectedBeat.bpm) / 4
-      const samples = Math.floor(stepMs / 10) // one 16th note worth of samples
+      const samples = Math.floor(stepMs / 10)
       waveformEnvelopeRef.current = Array.from({ length: samples }, (_, i) =>
         Math.exp(-i * 10 / 25)
       )
       peakOffsetMsRef.current = 0
     }
   }, [selectedBeat])
-
-  // ── Helpers ──────────────────────────────────────────────────────────────
-
-  const ratingColor = (r: TapResult['rating']) =>
-    ({ perfect: '#22c55e', good: '#86efac', ok: '#FDB515', miss: '#ef4444' })[r]
-
-  const difficultyBadge = (d: Beat['difficulty']) =>
-    ({ beginner: '#22c55e', intermediate: '#FDB515', advanced: '#ef4444' })[d]
-
-  // Convert canvas clientX to canvas pixel X (accounts for CSS scaling)
-  const clientToCanvasX = (canvas: HTMLCanvasElement, clientX: number) => {
-    const rect = canvas.getBoundingClientRect()
-    return (clientX - rect.left) * (canvas.width / rect.width)
-  }
-
-  // ── Audio init ───────────────────────────────────────────────────────────
-
-  const initAudio = useCallback(async () => {
-    await Tone.start()
-    analyserRef.current = new Tone.Analyser('waveform', 512)
-
-    kickRef.current = new Tone.MembraneSynth({
-      pitchDecay: 0.05, octaves: 6,
-      envelope: { attack: 0.001, decay: 0.3, sustain: 0, release: 0.1 },
-    }).toDestination()
-    kickRef.current.volume.value = 6
-    kickRef.current.connect(analyserRef.current)
-
-    snareRef.current = new Tone.NoiseSynth({
-      noise: { type: 'white' },
-      envelope: { attack: 0.001, decay: 0.15, sustain: 0, release: 0.05 },
-    }).toDestination()
-    snareRef.current.volume.value = -4
-    snareRef.current.connect(analyserRef.current)
-
-    hihatRef.current = new Tone.MetalSynth({
-      envelope: { attack: 0.001, decay: 0.05, release: 0.01 },
-      harmonicity: 5.1, modulationIndex: 32, resonance: 4000, octaves: 1.5,
-    }).toDestination()
-    hihatRef.current.volume.value = -12
-    hihatRef.current.connect(analyserRef.current)
-
-    clapFilterRef.current = new Tone.Filter(1800, 'bandpass').toDestination()
-    clapFilterRef.current.connect(analyserRef.current)
-    clapRef.current = new Tone.NoiseSynth({
-      noise: { type: 'white' },
-      envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.02 },
-    })
-    clapRef.current.connect(clapFilterRef.current)
-    clapRef.current.volume.value = 6
-
-    bassAnalyserRef.current = new Tone.Analyser('waveform', 512)
-    bassRef.current = new Tone.MonoSynth({
-      oscillator: { type: 'sawtooth' },
-      envelope: { attack: 0.002, decay: 0.08, sustain: 0, release: 0.04 },
-      filter: { Q: 3, type: 'lowpass', rolloff: -24 },
-      filterEnvelope: { attack: 0.002, decay: 0.08, sustain: 0, release: 0.04, baseFrequency: 300, octaves: 2 },
-    }).toDestination()
-    bassRef.current.volume.value = 8
-    bassRef.current.connect(analyserRef.current)
-    bassRef.current.connect(bassAnalyserRef.current)
-  }, [])
-
-  // ── Draw waveform shape for one beat ─────────────────────────────────────
-
-  const drawBeatWaveform = (
-    ctx: CanvasRenderingContext2D,
-    beatOriginX: number,   // x = onset trigger time
-    centerY: number,
-    halfH: number,
-    scale: number,         // px/ms
-    envelope: number[],
-    maxAmp: number,
-    peakOffsetMs: number,
-    alpha = 1,
-    stepMs = 200,          // cap zones to fit within one step
-  ) => {
-    if (envelope.length < 2) return
-    ctx.save()
-    ctx.globalAlpha = alpha
-
-    // Color zones centered on the perfect (peak) position
-    // Cap at 70% of stepMs so zones never bleed into adjacent steps
-    const yellowMs = Math.min(150, stepMs * 0.7)
-    const blueMs   = Math.min(50,  stepMs * 0.3)
-    const perfectX = beatOriginX + peakOffsetMs * scale
-    ctx.fillStyle = 'rgba(253,181,21,0.12)'
-    ctx.fillRect(perfectX - yellowMs * scale, 0, yellowMs * 2 * scale, centerY * 2)
-    ctx.fillStyle = 'rgba(37,99,235,0.25)'
-    ctx.fillRect(perfectX - blueMs * scale, 0, blueMs * 2 * scale, centerY * 2)
-
-    // Build top path (positive side)
-    const topPoints: [number, number][] = []
-    const botPoints: [number, number][] = []
-    for (let j = 0; j < envelope.length; j++) {
-      const x = beatOriginX + j * 10 * scale
-      const amp = (envelope[j] / maxAmp) * halfH * 0.85
-      topPoints.push([x, centerY - amp])
-      botPoints.push([x, centerY + amp])
-    }
-
-    // Filled shape
-    ctx.beginPath()
-    ctx.moveTo(topPoints[0][0], centerY)
-    topPoints.forEach(([x, y]) => ctx.lineTo(x, y))
-    for (let j = botPoints.length - 1; j >= 0; j--) ctx.lineTo(botPoints[j][0], botPoints[j][1])
-    ctx.closePath()
-    ctx.fillStyle = 'rgba(253,181,21,0.2)'
-    ctx.fill()
-
-    // Outline (top only for clarity)
-    ctx.beginPath()
-    ctx.moveTo(topPoints[0][0], centerY)
-    topPoints.forEach(([x, y]) => ctx.lineTo(x, y))
-    ctx.strokeStyle = '#FDB515'
-    ctx.lineWidth = 1.5
-    ctx.stroke()
-
-    ctx.beginPath()
-    botPoints.forEach(([x, y], j) => j === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y))
-    ctx.strokeStyle = 'rgba(253,181,21,0.4)'
-    ctx.lineWidth = 1
-    ctx.stroke()
-
-    // Perfect line at peak
-    ctx.strokeStyle = '#2563EB'
-    ctx.lineWidth = 1.5
-    ctx.setLineDash([])
-    ctx.beginPath(); ctx.moveTo(perfectX, 6); ctx.lineTo(perfectX, centerY * 2 - 6); ctx.stroke()
-
-    ctx.restore()
-  }
 
   // ── Playback timeline (rAF loop) ─────────────────────────────────────────
 
@@ -251,7 +104,6 @@ export default function BeatFirstGame({ user }: Props) {
     ctx.fillStyle = '#0a0a0a'
     ctx.fillRect(0, 0, W, H)
 
-    // Centre baseline
     ctx.strokeStyle = '#1e1e1e'
     ctx.lineWidth = 1
     ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(W, centerY); ctx.stroke()
@@ -265,13 +117,11 @@ export default function BeatFirstGame({ user }: Props) {
     for (let b = firstBar; b <= lastBar; b++) {
       const x = (b * barMs - viewStartMs) * scale
       if (isPreview) {
-        // Bright solid bar-start line during preview
         ctx.strokeStyle = 'rgba(255,255,255,0.5)'
         ctx.lineWidth = 2
         ctx.setLineDash([])
         ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke()
         if (x >= 0 && x <= W) {
-          // Pill label
           const label = `Bar ${b + 1}`
           ctx.font = 'bold 10px monospace'
           const tw = ctx.measureText(label).width
@@ -298,13 +148,12 @@ export default function BeatFirstGame({ user }: Props) {
       }
     }
 
-    // Draw beat waveforms in view (infinite during preview, 9 bars during game)
+    // Draw beat waveforms in view
     const totalSteps = isPreviewRef.current
       ? Math.ceil((viewEndMs + stepMs) / stepMs) + 1
       : GAME_BARS * STEPS_PER_BAR
 
     if (beat.bassline) {
-      // Bassline beat: draw clean spikes only at exact bassline hit positions
       for (let i = 0; i < totalSteps; i++) {
         const s = i % STEPS_PER_BAR
         if (beat.bassline[s] === null) continue
@@ -312,12 +161,10 @@ export default function BeatFirstGame({ user }: Props) {
         if (beatOriginMs < viewStartMs || beatOriginMs > viewEndMs) continue
         const x = (beatOriginMs - viewStartMs) * scale
         const spikeH = halfH * 0.85
-        // Blue marker line
         ctx.strokeStyle = '#2563eb'
         ctx.lineWidth = 1.5
         ctx.setLineDash([])
         ctx.beginPath(); ctx.moveTo(x, centerY - spikeH); ctx.lineTo(x, centerY + spikeH); ctx.stroke()
-        // Amber filled triangle (top)
         ctx.fillStyle = 'rgba(253,181,21,0.5)'
         ctx.beginPath()
         ctx.moveTo(x, centerY - spikeH)
@@ -325,7 +172,6 @@ export default function BeatFirstGame({ user }: Props) {
         ctx.lineTo(x, centerY)
         ctx.closePath()
         ctx.fill()
-        // Amber filled triangle (bottom)
         ctx.beginPath()
         ctx.moveTo(x, centerY + spikeH)
         ctx.lineTo(x + stepMs * scale * 0.5, centerY)
@@ -344,7 +190,7 @@ export default function BeatFirstGame({ user }: Props) {
       }
     }
 
-    // User taps so far (as vertical marks below centreline)
+    // User taps so far
     userTapsRef.current.forEach(tapMs => {
       const x = (tapMs - viewStartMs) * scale
       if (x < 0 || x > W) return
@@ -362,116 +208,6 @@ export default function BeatFirstGame({ user }: Props) {
     animFrameRef.current = requestAnimationFrame(drawTimeline)
   }, [selectedBeat])
 
-  // ── Results timeline draw ─────────────────────────────────────────────────
-
-  const buildResultsDrawFn = useCallback((
-    canvas: HTMLCanvasElement,
-    beat: Beat,
-    tapResults: TapResult[],
-  ) => {
-    const stepMs = (60000 / beat.bpm) / 4
-    const totalMs = beat.bars * STEPS_PER_BAR * stepMs
-    const envelope = waveformEnvelopeRef.current
-    const maxAmp = Math.max(...envelope, 0.01)
-    const peakOffsetMs = peakOffsetMsRef.current
-    const W = canvas.width, H = canvas.height
-    const centerY = H / 2, halfH = H / 2
-
-    return () => {
-      const ctx = canvas.getContext('2d')!
-      const fitScale = W / totalMs
-      const scale = fitScale * zoomRef.current
-      const panMs = panMsRef.current
-      const msToX = (ms: number) => (ms - panMs) * scale
-
-      ctx.clearRect(0, 0, W, H)
-      ctx.fillStyle = '#0a0a0a'
-      ctx.fillRect(0, 0, W, H)
-
-      // Centre baseline
-      ctx.strokeStyle = '#1e1e1e'
-      ctx.lineWidth = 1
-      ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(W, centerY); ctx.stroke()
-
-      // Bar markers
-      const barMs = (60000 / beat.bpm) * 4
-      for (let b = 0; b <= beat.bars; b++) {
-        const x = msToX(b * barMs)
-        if (x < -10 || x > W + 10) continue
-        ctx.strokeStyle = '#1a1a1a'
-        ctx.lineWidth = 1
-        ctx.setLineDash([4, 4])
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke()
-        ctx.setLineDash([])
-        ctx.fillStyle = '#333'
-        ctx.font = '9px monospace'
-        ctx.textAlign = 'left'
-        ctx.fillText(`B${b + 1}`, x + 2, 10)
-      }
-
-      // Beat waveforms
-      const totalSteps = beat.bars * STEPS_PER_BAR
-      for (let i = 0; i < totalSteps; i++) {
-        const s = i % STEPS_PER_BAR
-        if (!(beat.bassline ? beat.bassline[s] !== null : !!beat.taps[s])) continue
-        const beatOriginMs = i * stepMs
-        const beatOriginX = msToX(beatOriginMs)
-        const endX = msToX(beatOriginMs + 500)
-        if (endX < 0 || beatOriginX > W) continue
-        drawBeatWaveform(ctx, beatOriginX, centerY, halfH, scale, envelope, maxAmp, peakOffsetMs, 0.85, stepMs)
-      }
-
-      // User tap lines + offset labels
-      tapResults.forEach(r => {
-        if (r.rating === 'miss') return
-        const x = msToX(r.tapMs)
-        if (x < 0 || x > W) return
-        const color = ratingColor(r.rating)
-
-        ctx.strokeStyle = color
-        ctx.lineWidth = 2
-        ctx.globalAlpha = 0.85
-        ctx.setLineDash([])
-        ctx.beginPath(); ctx.moveTo(x, 4); ctx.lineTo(x, H - 4); ctx.stroke()
-        ctx.globalAlpha = 1
-
-        // Offset label
-        const label = `${r.offsetMs >= 0 ? '+' : ''}${Math.round(r.offsetMs)}ms`
-        ctx.font = 'bold 9px monospace'
-        ctx.textAlign = 'center'
-        ctx.fillStyle = color
-        ctx.globalAlpha = 0.9
-        ctx.fillText(label, x, H - 6)
-        ctx.globalAlpha = 1
-      })
-
-      // Miss markers (X at ideal position)
-      tapResults.forEach(r => {
-        if (r.rating !== 'miss') return
-        const x = msToX(r.idealMs + peakOffsetMs)
-        if (x < 0 || x > W) return
-        ctx.strokeStyle = '#ef4444'
-        ctx.lineWidth = 1.5
-        ctx.globalAlpha = 0.5
-        const s = 5
-        ctx.beginPath()
-        ctx.moveTo(x - s, centerY - s); ctx.lineTo(x + s, centerY + s)
-        ctx.moveTo(x + s, centerY - s); ctx.lineTo(x - s, centerY + s)
-        ctx.stroke()
-        ctx.globalAlpha = 1
-      })
-
-      // Zoom hint
-      if (zoomRef.current === 1) {
-        ctx.fillStyle = '#333'
-        ctx.font = '9px monospace'
-        ctx.textAlign = 'right'
-        ctx.fillText('scroll to zoom · drag to pan', W - 6, H - 4)
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   // ── Results useEffect: draw + wire zoom/pan ───────────────────────────────
 
   useEffect(() => {
@@ -486,27 +222,27 @@ export default function BeatFirstGame({ user }: Props) {
     zoomRef.current = 1
     panMsRef.current = 0
 
-    const draw = buildResultsDrawFn(canvas, beat, results)
+    const draw = buildResultsDrawFn(
+      canvas, beat, results,
+      waveformEnvelopeRef.current, peakOffsetMsRef.current,
+      zoomRef, panMsRef,
+    )
     redrawResultsRef.current = draw
     draw()
 
-    // Wheel → zoom centered on mouse position
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
       const fitScale = CANVAS_W / totalMs
       const mouseMs = panMsRef.current + clientToCanvasX(canvas, e.clientX) / (fitScale * zoomRef.current)
       const delta = e.deltaY > 0 ? 0.85 : 1.18
       zoomRef.current = Math.max(1, Math.min(30, zoomRef.current * delta))
-      // Keep mouseMs under cursor
       const newScale = fitScale * zoomRef.current
       panMsRef.current = mouseMs - clientToCanvasX(canvas, e.clientX) / newScale
-      // Clamp pan
       const maxPan = totalMs - CANVAS_W / newScale
       panMsRef.current = Math.max(0, Math.min(maxPan, panMsRef.current))
       draw()
     }
 
-    // Drag → pan
     const onMouseDown = (e: MouseEvent) => {
       isDraggingRef.current = true
       dragStartRef.current = { x: e.clientX, panMs: panMsRef.current }
@@ -533,9 +269,9 @@ export default function BeatFirstGame({ user }: Props) {
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
     }
-  }, [phase, results, selectedBeat, buildResultsDrawFn])
+  }, [phase, results, selectedBeat])
 
-  // ── Enter preview (no audio yet) ─────────────────────────────────────────
+  // ── Enter preview ─────────────────────────────────────────────────────────
 
   const startPreview = useCallback(() => {
     userTapsRef.current = []
@@ -549,10 +285,9 @@ export default function BeatFirstGame({ user }: Props) {
     setPhase('preview')
   }, [])
 
-  // ── Listen to beat pattern (starts audio loop) ────────────────────────────
+  // ── Listen to beat pattern ────────────────────────────────────────────────
 
   const listenBeat = useCallback(async () => {
-    // Stop any existing audio first
     Tone.getTransport().stop()
     Tone.getTransport().cancel()
     cancelAnimationFrame(animFrameRef.current)
@@ -564,56 +299,56 @@ export default function BeatFirstGame({ user }: Props) {
     isPreviewRef.current = true
 
     const beat = selectedBeat
-    setIsListening(true) // mount canvas first, then start Transport next tick
+    setIsListening(true)
 
     setTimeout(() => {
-    startTimeRef.current = performance.now()
+      startTimeRef.current = performance.now()
 
-    Tone.getTransport().bpm.value = beat.bpm
-    Tone.getTransport().cancel()
-    Tone.getTransport().position = 0
+      Tone.getTransport().bpm.value = beat.bpm
+      Tone.getTransport().cancel()
+      Tone.getTransport().position = 0
 
-    let step = 0
-    let capturedWaveform = waveformEnvelopeRef.current.length > 0 // skip if pre-generated (e.g. bassline beats)
+      let step = 0
+      let capturedWaveform = waveformEnvelopeRef.current.length > 0
 
-    Tone.getTransport().scheduleRepeat((time) => {
-      const s = step % STEPS_PER_BAR
-      if (beat.kick[s])  kickRef.current?.triggerAttackRelease('C1', '8n', time)
-      if (beat.snare[s]) snareRef.current?.triggerAttackRelease('8n', time)
-      if (beat.hihat[s]) hihatRef.current?.triggerAttackRelease('C6', '32n', time)
-      if (beat.clap?.[s]) clapRef.current?.triggerAttackRelease('8n', time)
-      const bassNote = beat.bassline?.[s]
-      if (bassNote) bassRef.current?.triggerAttackRelease(bassNote, '16n', time)
+      Tone.getTransport().scheduleRepeat((time) => {
+        const s = step % STEPS_PER_BAR
+        if (beat.kick[s])  kickRef.current?.triggerAttackRelease('C1', '8n', time)
+        if (beat.snare[s]) snareRef.current?.triggerAttackRelease('8n', time)
+        if (beat.hihat[s]) hihatRef.current?.triggerAttackRelease('C6', '32n', time)
+        if (beat.clap?.[s]) clapRef.current?.triggerAttackRelease('8n', time)
+        const bassNote = beat.bassline?.[s]
+        if (bassNote) bassRef.current?.triggerAttackRelease(bassNote, '16n', time)
 
-      if (step === 0 && !capturedWaveform && analyserRef.current) {
-        capturedWaveform = true
-        waveformEnvelopeRef.current = []
-        let elapsed = 0
-        const activeAnalyser = beat.bassline ? bassAnalyserRef.current : analyserRef.current
-        waveformCaptureRef.current = setInterval(() => {
-          const data = activeAnalyser!.getValue() as Float32Array
-          const amp = Math.max(...Array.from(data).map(Math.abs))
-          waveformEnvelopeRef.current.push(amp)
-          elapsed += 10
-          if (elapsed >= 500) {
-            clearInterval(waveformCaptureRef.current!)
-            const env = waveformEnvelopeRef.current
-            const peakIdx = env.indexOf(Math.max(...env))
-            peakOffsetMsRef.current = peakIdx * 10
-          }
-        }, 10)
-      }
+        if (step === 0 && !capturedWaveform && analyserRef.current) {
+          capturedWaveform = true
+          waveformEnvelopeRef.current = []
+          let elapsed = 0
+          const activeAnalyser = beat.bassline ? bassAnalyserRef.current : analyserRef.current
+          waveformCaptureRef.current = setInterval(() => {
+            const data = activeAnalyser!.getValue() as Float32Array
+            const amp = Math.max(...Array.from(data).map(Math.abs))
+            waveformEnvelopeRef.current.push(amp)
+            elapsed += 10
+            if (elapsed >= 500) {
+              clearInterval(waveformCaptureRef.current!)
+              const env = waveformEnvelopeRef.current
+              const peakIdx = env.indexOf(Math.max(...env))
+              peakOffsetMsRef.current = peakIdx * 10
+            }
+          }, 10)
+        }
 
-      step++
-    }, '16n')
+        step++
+      }, '16n')
 
-    Tone.getTransport().start()
-    animFrameRef.current = requestAnimationFrame(drawTimeline)
-    }, 0) // wait one tick for React to mount the canvas
+      Tone.getTransport().start()
+      animFrameRef.current = requestAnimationFrame(drawTimeline)
+    }, 0)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBeat, initAudio, drawTimeline])
 
-  // ── Cancel preview ───────────────────────────────────────────────────────
+  // ── Cancel preview ────────────────────────────────────────────────────────
 
   const cancelPreview = useCallback(() => {
     Tone.getTransport().stop()
@@ -626,7 +361,7 @@ export default function BeatFirstGame({ user }: Props) {
     setPhase('select')
   }, [])
 
-  // ── Commit ready — stop preview, show static canvas + Go button ─────────
+  // ── Commit ready ──────────────────────────────────────────────────────────
 
   const commitReady = useCallback(() => {
     Tone.getTransport().stop()
@@ -639,7 +374,7 @@ export default function BeatFirstGame({ user }: Props) {
     setPhase('ready')
   }, [])
 
-  // ── Static draw at t=0 when entering ready phase ──────────────────────
+  // ── Static draw at t=0 when entering ready phase ──────────────────────────
 
   useEffect(() => {
     if (phase !== 'ready') return
@@ -694,7 +429,6 @@ export default function BeatFirstGame({ user }: Props) {
       if (envelope.length >= 2) {
         drawBeatWaveform(ctx, beatOriginX, centerY, halfH, scale, envelope, maxAmp, peakOffsetMs, 1, stepMs)
       } else {
-        // Fallback: simple beat marker line
         ctx.strokeStyle = 'rgba(253,181,21,0.5)'
         ctx.lineWidth = 2
         ctx.setLineDash([])
@@ -709,14 +443,14 @@ export default function BeatFirstGame({ user }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, selectedBeat])
 
-  // ── Start game (Go button) — 9 bars, bar 1 = countdown, bars 2–9 = scored
+  // ── Start game ────────────────────────────────────────────────────────────
 
   const startGame = useCallback(async () => {
-    await initAudio() // ensure synths exist even if user skipped Listen
+    await initAudio()
     const beat = selectedBeat
     const stepMs = (60000 / beat.bpm) / 4
     const totalSteps = GAME_BARS * STEPS_PER_BAR
-    const scoredStartStep = STEPS_PER_BAR // bar 2 onwards
+    const scoredStartStep = STEPS_PER_BAR
 
     const ideals: number[] = []
     for (let i = scoredStartStep; i < totalSteps; i++) {
@@ -727,14 +461,13 @@ export default function BeatFirstGame({ user }: Props) {
 
     setPhase('countdown')
     setCountdown('3')
-    isPreviewRef.current = true // bar markers visible during countdown bar
+    isPreviewRef.current = true
 
     Tone.getTransport().bpm.value = beat.bpm
     Tone.getTransport().cancel()
     Tone.getTransport().position = 0
     startTimeRef.current = performance.now()
 
-    // Countdown number overlays on each beat of bar 1
     setTimeout(() => setCountdown('2'),   4 * stepMs)
     setTimeout(() => setCountdown('1'),   8 * stepMs)
     setTimeout(() => setCountdown('GO!'), 12 * stepMs)
@@ -745,13 +478,12 @@ export default function BeatFirstGame({ user }: Props) {
       isPlayingRef.current = true
     }, STEPS_PER_BAR * stepMs)
 
-    // If user skipped Listen, reset envelope so capture runs fresh in the transport
     if (waveformEnvelopeRef.current.length === 0) {
       peakOffsetMsRef.current = 0
     }
 
     let step = 0
-    let capturedWaveform = waveformEnvelopeRef.current.length > 0 // skip if already captured
+    let capturedWaveform = waveformEnvelopeRef.current.length > 0
     Tone.getTransport().scheduleRepeat((time) => {
       const s = step % STEPS_PER_BAR
       if (beat.kick[s])  kickRef.current?.triggerAttackRelease('C1', '8n', time)
@@ -795,7 +527,7 @@ export default function BeatFirstGame({ user }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBeat, initAudio, drawTimeline])
 
-  // ── Handle tap ───────────────────────────────────────────────────────────
+  // ── Handle tap ────────────────────────────────────────────────────────────
 
   const handleTap = useCallback(() => {
     if (!isPlayingRef.current) return
@@ -804,7 +536,7 @@ export default function BeatFirstGame({ user }: Props) {
     setTimeout(() => setFeedback(''), 200)
   }, [])
 
-  // ── Spacebar ─────────────────────────────────────────────────────────────
+  // ── Spacebar ──────────────────────────────────────────────────────────────
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -814,7 +546,7 @@ export default function BeatFirstGame({ user }: Props) {
     return () => window.removeEventListener('keydown', onKey)
   }, [handleTap])
 
-  // ── Cleanup on unmount ───────────────────────────────────────────────────
+  // ── Cleanup on unmount ────────────────────────────────────────────────────
 
   useEffect(() => {
     return () => {
@@ -822,16 +554,10 @@ export default function BeatFirstGame({ user }: Props) {
       if (waveformCaptureRef.current) clearInterval(waveformCaptureRef.current)
       Tone.getTransport().stop()
       Tone.getTransport().cancel()
-      kickRef.current?.dispose()
-      snareRef.current?.dispose()
-      hihatRef.current?.dispose()
-      clapRef.current?.dispose()
-      clapFilterRef.current?.dispose()
-      analyserRef.current?.dispose()
     }
   }, [])
 
-  // ── Analyze results ──────────────────────────────────────────────────────
+  // ── Analyze results ───────────────────────────────────────────────────────
 
   const endGame = (ideals: number[], beat: Beat) => {
     const taps = [...userTapsRef.current]
@@ -1143,7 +869,6 @@ export default function BeatFirstGame({ user }: Props) {
         {/* ── Results ── */}
         {phase === 'results' && (
           <div>
-            {/* Score */}
             <div className="text-center mb-6">
               <div className="text-6xl font-bold mb-1"
                 style={{ color: score.pct >= 80 ? '#22c55e' : score.pct >= 50 ? '#FDB515' : '#ef4444' }}>
@@ -1153,7 +878,6 @@ export default function BeatFirstGame({ user }: Props) {
               <div className="text-sm mt-1" style={{ color: 'var(--muted)' }}>{selectedBeat.name} · {selectedBeat.bpm} BPM</div>
             </div>
 
-            {/* Mastery banner */}
             {showMasteryBanner && (
               <div className="mb-6 p-4 rounded-xl text-center" style={{ backgroundColor: '#0f2a0f', border: '1px solid #22c55e' }}>
                 <div className="text-3xl mb-1">★</div>
@@ -1162,7 +886,6 @@ export default function BeatFirstGame({ user }: Props) {
               </div>
             )}
 
-            {/* Sign-in prompt */}
             {showSignIn && (
               <div className="mb-6 p-4 rounded-xl text-center" style={{ backgroundColor: '#111', border: '1px solid #2563EB' }}>
                 <p className="font-semibold mb-1">Save your score & unlock tutorials</p>
@@ -1177,7 +900,6 @@ export default function BeatFirstGame({ user }: Props) {
               </div>
             )}
 
-            {/* Full round timeline */}
             <div className="mb-6">
               <h3 className="text-sm font-semibold uppercase tracking-widest mb-1" style={{ color: 'var(--muted)' }}>
                 Full Round Timeline
@@ -1198,7 +920,6 @@ export default function BeatFirstGame({ user }: Props) {
                 <span>scroll wheel = zoom · drag = pan</span>
                 <span>End</span>
               </div>
-              {/* Legend */}
               <div className="flex gap-4 mt-2 text-xs flex-wrap" style={{ color: 'var(--muted)' }}>
                 {(['perfect','good','ok','miss'] as const).map(r => (
                   <span key={r} className="flex items-center gap-1">
