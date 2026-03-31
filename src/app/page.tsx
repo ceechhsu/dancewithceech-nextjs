@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Nav from "@/components/Nav";
 import ScrollyHero from "@/components/ScrollyHero";
 import { CircularGallery } from "@/components/ui/circular-gallery";
@@ -26,6 +27,66 @@ export default function Home() {
               <div className="text-sm" style={{ color: "var(--muted)" }}>{label}</div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* CREDIBILITY */}
+      <section className="py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-xs font-bold uppercase tracking-widest text-center mb-8" style={{ color: "var(--muted)" }}>
+            Ceech&apos;s Story
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
+              <Image
+                src="/images/ceech/dsp-agt.jpg"
+                alt="DS Players on America's Got Talent 2010"
+                width={600}
+                height={380}
+                className="w-full object-cover"
+                style={{ height: "200px" }}
+              />
+              <div className="px-4 py-3" style={{ backgroundColor: "var(--surface)" }}>
+                <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--accent-gold)" }}>America&apos;s Got Talent</div>
+                <div className="text-sm font-semibold">DS Players — Season 5 (2010)</div>
+              </div>
+            </div>
+            <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
+              <Image
+                src="/images/ceech/mindtricks.jpg"
+                alt="Mindtricks — original Jabbawockeez founders"
+                width={600}
+                height={380}
+                className="w-full object-cover"
+                style={{ height: "200px" }}
+              />
+              <div className="px-4 py-3" style={{ backgroundColor: "var(--surface)" }}>
+                <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--accent-gold)" }}>Crew with Future Jabbawockeez Members</div>
+                <div className="text-sm font-semibold">Mindtricks — Bay Area&apos;s most respected crew</div>
+              </div>
+            </div>
+            <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
+              <Image
+                src="/images/ceech/bodyrockwinner.jpg"
+                alt="DS Players Body Rock 2007 Champions"
+                width={600}
+                height={380}
+                className="w-full object-cover"
+                style={{ height: "200px" }}
+              />
+              <div className="px-4 py-3" style={{ backgroundColor: "var(--surface)" }}>
+                <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--accent-gold)" }}>Body Rock 2007 — 1st Place</div>
+                <div className="text-sm font-semibold">International Hip-Hop Dance Championship</div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm" style={{ color: "var(--muted)" }}>
+            <span>Also taught at</span>
+            <strong style={{ color: "var(--foreground)" }}>Google</strong>
+            <strong style={{ color: "var(--foreground)" }}>LinkedIn</strong>
+            <strong style={{ color: "var(--foreground)" }}>Mission College</strong>
+            <span>+ 8 Bay Area colleges</span>
+          </div>
         </div>
       </section>
 
