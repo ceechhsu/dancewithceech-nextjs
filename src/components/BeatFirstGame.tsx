@@ -890,8 +890,37 @@ export default function BeatFirstGame({ user }: Props) {
   return (
     <main className="min-h-screen pt-24 pb-16 px-4" style={{ backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-1">BeatFirst</h1>
-        <p className="mb-6" style={{ color: 'var(--muted)' }}>Tap in time with the beat. Train your rhythm.</p>
+        {/* ── Hero ── */}
+        <div className="mb-10">
+          <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--accent-primary)' }}>
+            Rhythm Trainer
+          </div>
+          <h1
+            className="font-black uppercase leading-none mb-4"
+            style={{
+              fontFamily: "var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif",
+              fontSize: 'clamp(2.5rem, 7vw, 4rem)',
+              letterSpacing: '0.02em',
+            }}
+          >
+            Rhythm Isn&apos;t Born.<br />It&apos;s Trained.
+          </h1>
+          <p className="text-lg mb-6 max-w-lg" style={{ color: 'var(--muted)' }}>
+            Most people can&apos;t dance because nobody taught them rhythm. BeatFirst does.
+          </p>
+          <div className="flex flex-col gap-2">
+            {[
+              'Tap along to real beats — no instruments needed',
+              'Track your accuracy and watch your timing improve',
+              'Build the foundation every dance style runs on',
+            ].map((point) => (
+              <div key={point} className="flex items-start gap-3 text-sm" style={{ color: 'var(--muted)' }}>
+                <span style={{ color: 'var(--accent-primary)', marginTop: 2 }}>→</span>
+                <span>{point}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* ── Tab switcher ── */}
         <div className="flex mb-8" style={{ borderBottom: '1px solid #222' }}>
