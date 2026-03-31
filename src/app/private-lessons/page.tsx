@@ -94,6 +94,40 @@ export default function PrivateLessonsPage() {
         </div>
       </section>
 
+      {/* TEACHING VIDEOS */}
+      <section className="pb-24 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
+              The Method in Action
+            </div>
+            <h2 className="text-3xl font-bold mb-3">Watch Ceech teach</h2>
+            <p style={{ color: "var(--muted)" }}>Not just performing — actually teaching. This is what your lesson looks like.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[
+              { videoId: "6OctgBz5jPU", label: "1-on-1 Final Routine", desc: "Student performing what they learned in a private session" },
+              { videoId: "2Xcd7XoI2Vg", label: "Breaking Down the Steps", desc: "Ceech counting through moves with students in real time" },
+              { videoId: "kmv1R6y4eH0", label: "3 Drills to Practice", desc: "Simple drills you can follow along at home" },
+            ].map(({ videoId, label, desc }) => (
+              <div key={videoId}>
+                <div className="rounded-2xl overflow-hidden mb-3" style={{ aspectRatio: "9/16", position: "relative" }}>
+                  <iframe
+                    src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+                    title={label}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
+                  />
+                </div>
+                <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--accent-primary)" }}>{label}</div>
+                <p className="text-sm" style={{ color: "var(--muted)" }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* LESSON PHOTOS */}
       <section className="pb-24 px-6">
         <div className="max-w-4xl mx-auto">
