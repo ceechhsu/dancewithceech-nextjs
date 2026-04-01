@@ -1,7 +1,8 @@
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { getAllPosts } from "@/lib/posts";
+import Image from "next/image";
+import { getAllPosts, CATEGORY_LABELS } from "@/lib/posts";
 
 export const metadata = {
   title: "Breaking Dance Moves — DanceWithCeech",
@@ -46,14 +47,29 @@ export default function BreakingMovesPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group rounded-2xl p-6 flex flex-col gap-3 transition-colors hover:border-blue-600"
+              className="group rounded-2xl overflow-hidden flex flex-col transition-colors hover:border-blue-600"
               style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}
             >
-              <h2 className="font-bold text-lg leading-snug group-hover:text-blue-400 transition-colors">
-                {post.title}
-              </h2>
-              <div className="text-xs mt-auto" style={{ color: "var(--muted)" }}>
-                {new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+              {post.hasImage && (
+                <div className="relative overflow-hidden" style={{ aspectRatio: "16/9" }}>
+                  <Image
+                    src={`/images/posts/${post.slug}.jpg`}
+                    alt={post.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+              )}
+              <div className="p-6 flex flex-col gap-3 flex-1">
+                <div className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--accent-primary)" }}>
+                  {CATEGORY_LABELS[post.category] ?? post.category}
+                </div>
+                <h2 className="font-bold text-lg leading-snug group-hover:text-blue-400 transition-colors">
+                  {post.title}
+                </h2>
+                <div className="text-xs mt-auto" style={{ color: "var(--muted)" }}>
+                  {new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                </div>
               </div>
             </Link>
           ))}
