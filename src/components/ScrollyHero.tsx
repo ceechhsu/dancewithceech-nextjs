@@ -21,7 +21,7 @@ const PHASES: [number, number, string][] = [
 const CTA_BUTTONS = (
   <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
     <Link
-      href="/beat-first"
+      href="/private-lessons"
       style={{
         padding: "16px 32px",
         borderRadius: "9999px",
@@ -32,7 +32,7 @@ const CTA_BUTTONS = (
         textDecoration: "none",
       }}
     >
-      Test Your Rhythm — Free
+      Book a Private Lesson
     </Link>
     <Link
       href="/about"
@@ -210,7 +210,7 @@ export default function ScrollyHero() {
           </div>
 
           <div ref={ctaRef} style={{ position: "absolute", bottom: "10%", left: 0, right: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", opacity: 0 }}>
-            <div style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: "#2563EB", marginBottom: "8px" }}>
+            <div style={{ fontSize: "0.85rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#F9F9F9",marginBottom: "8px", textShadow: "0 1px 10px rgba(0,0,0,0.9)" }}>
               Rhythm First. Then Dance.
             </div>
             {CTA_BUTTONS}
@@ -235,7 +235,7 @@ export default function ScrollyHero() {
           <div style={{ fontSize: "clamp(2.2rem, 9vw, 3.5rem)", fontWeight: 800, color: "#F9F9F9", letterSpacing: "-0.02em", lineHeight: 1.1, textShadow: "0 2px 20px rgba(0,0,0,0.6)", marginBottom: "2rem" }}>
             It&apos;s a skill —<br />not a gift.
           </div>
-          <div style={{ fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: "#2563EB", marginBottom: "20px" }}>
+          <div style={{ fontSize: "0.85rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#F9F9F9",marginBottom: "20px", textShadow: "0 1px 10px rgba(0,0,0,0.9)" }}>
             Rhythm First. Then Dance.
           </div>
           {CTA_BUTTONS}

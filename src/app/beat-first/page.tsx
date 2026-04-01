@@ -2,6 +2,7 @@ import BeatFirstGame from '@/components/BeatFirstGame'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import { auth } from '@/auth'
+import { supabaseAdmin } from '@/lib/supabase-admin'
 
 export const metadata = {
   title: 'BeatFirst — Rhythm Trainer | DanceWithCeech',
@@ -24,10 +25,21 @@ export const metadata = {
 
 export default async function BeatFirstPage() {
   const session = await auth()
+
+  let unlockedCount = 0
+  if (session?.user?.email) {
+    const { count } = await supabaseAdmin
+      .from('referrals')
+      .select('id', { count: 'exact', head: true })
+      .eq('referrer_email', session.user.email)
+      .not('fulfilled_at', 'is', null)
+    unlockedCount = Math.min(count ?? 0, 3)
+  }
+
   return (
     <>
       <Nav />
-      <BeatFirstGame user={session?.user ?? null} />
+      <BeatFirstGame user={session?.user ?? null} unlockedCount={unlockedCount} />
       <Footer />
     </>
   )

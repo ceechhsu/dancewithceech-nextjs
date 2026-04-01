@@ -3,15 +3,16 @@ import Footer from "@/components/Footer";
 import Image from "next/image";
 import Link from "next/link";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
+import TestimonialsMarquee from "@/components/TestimonialsMarquee";
 import PrivateLessonsPricing from "@/components/PrivateLessonsPricing";
 import VideoEvalForm from "@/components/VideoEvalForm";
 
 export const metadata = {
   title: "Private Lessons — DanceWithCeech",
-  description: "Book a private 1-on-1 dance lesson with Ceech — in-person at Get Down Dance Studio in San Jose, or virtually via Zoom. Personalized hip-hop instruction for all levels.",
+  description: "Book a private 1-on-1 dance lesson with Ceech — in-person at Get Down Dance Studios in San Jose, or virtually via Zoom. Personalized hip-hop instruction for all levels.",
   openGraph: {
     title: "Private Lessons — DanceWithCeech",
-    description: "Book a private 1-on-1 dance lesson with Ceech — in-person at Get Down Dance Studio in San Jose, or virtually via Zoom. Personalized hip-hop instruction for all levels.",
+    description: "Book a private 1-on-1 dance lesson with Ceech — in-person at Get Down Dance Studios in San Jose, or virtually via Zoom. Personalized hip-hop instruction for all levels.",
     url: "https://dancewithceech.com/private-lessons",
     siteName: "DanceWithCeech",
     images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Private Dance Lessons with Ceech" }],
@@ -20,7 +21,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Private Lessons — DanceWithCeech",
-    description: "Book a private 1-on-1 dance lesson with Ceech — in-person at Get Down Dance Studio in San Jose, or virtually via Zoom. Personalized hip-hop instruction for all levels.",
+    description: "Book a private 1-on-1 dance lesson with Ceech — in-person at Get Down Dance Studios in San Jose, or virtually via Zoom. Personalized hip-hop instruction for all levels.",
     images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
   },
 };
@@ -38,11 +39,11 @@ export default function PrivateLessonsPage() {
             <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
               1-on-1 Instruction
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-balance">
               Private Lessons<br />with Ceech
             </h1>
             <p className="text-lg leading-relaxed mb-8" style={{ color: "var(--muted)" }}>
-              Real-time feedback. Personalized to exactly where you are. Available in-person at Get Down Dance Studio in San Jose — or virtually via Zoom from anywhere in the world.
+              Real-time feedback. Personalized to exactly where you are. Available in-person at <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}>Get Down Dance Studios</a> in San Jose — or virtually via Zoom from anywhere in the world.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
@@ -81,7 +82,7 @@ export default function PrivateLessonsPage() {
             <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
               What You Get
             </div>
-            <h2 className="text-3xl font-bold">Every lesson is built around you</h2>
+            <h2 className="text-3xl font-bold text-balance">Every lesson is built around you</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
@@ -115,7 +116,7 @@ export default function PrivateLessonsPage() {
             <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
               The Method in Action
             </div>
-            <h2 className="text-3xl font-bold mb-3">Watch Ceech teach</h2>
+            <h2 className="text-3xl font-bold mb-3 text-balance">Watch Ceech teach</h2>
             <p style={{ color: "var(--muted)" }}>Not just performing — actually teaching. This is what your lesson looks like.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -146,7 +147,7 @@ export default function PrivateLessonsPage() {
       <section className="pb-24 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-2xl font-bold mb-2">What a lesson looks like</h2>
+            <h2 className="text-2xl font-bold mb-2 text-balance">What a lesson looks like</h2>
             <p className="text-sm" style={{ color: "var(--muted)" }}>Hands-on. Specific. No vague instructions.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -181,7 +182,7 @@ export default function PrivateLessonsPage() {
       {/* WHO IT'S FOR */}
       <section className="py-16 px-6" style={{ backgroundColor: "var(--surface)", borderTop: "1px solid #1f1f1f", borderBottom: "1px solid #1f1f1f" }}>
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">Who private lessons are for</h2>
+          <h2 className="text-3xl font-bold mb-6 text-balance">Who private lessons are for</h2>
           <div className="flex flex-col gap-4 text-left max-w-xl mx-auto">
             {[
               "You want to learn faster than a group class allows",
@@ -205,7 +206,7 @@ export default function PrivateLessonsPage() {
           <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
             Student Results
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold">Real students. Real progress.</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-balance">Real students. Real progress.</h2>
           <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}>Click any card to watch on YouTube</p>
         </div>
         <div className="max-w-4xl mx-auto">
@@ -218,6 +219,8 @@ export default function PrivateLessonsPage() {
         <PrivateLessonsPricing />
       </div>
 
+      <TestimonialsMarquee />
+
       <VideoEvalForm />
 
       {/* BOOKING */}
@@ -226,9 +229,9 @@ export default function PrivateLessonsPage() {
           <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
             Let&apos;s Talk
           </div>
-          <h2 className="text-3xl font-bold mb-4">Start with a free 30-minute consultation</h2>
+          <h2 className="text-3xl font-bold mb-4 text-balance">Book your free 30-min consultation</h2>
           <p className="mb-3" style={{ color: "var(--muted)" }}>
-            We&apos;ll talk through your goals, experience level, and what you want to learn — then build a plan around you. No obligation.
+            We&apos;ll go over your goals, experience level, and background — then schedule your free 15-min in-person demo class. No obligation.
           </p>
           <p style={{ color: "var(--muted)" }}>
             Or skip the form and text me directly:{" "}
@@ -246,8 +249,8 @@ export default function PrivateLessonsPage() {
           <iframe
             src="https://calendly.com/ceechhsu/30min"
             width="100%"
-            height="700"
-            frameBorder="0"
+            className="h-[700px]"
+            style={{ border: 0 }}
             title="Book a private lesson with Ceech"
           />
         </div>

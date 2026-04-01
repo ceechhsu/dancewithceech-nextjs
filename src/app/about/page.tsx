@@ -193,7 +193,7 @@ export default function AboutPage() {
             ))}
           </div>
           <p className="text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-            Beyond academia, I&apos;ve taught at corporate campuses including <strong style={{ color: 'var(--foreground)' }}>Google</strong> and <strong style={{ color: 'var(--foreground)' }}>LinkedIn</strong>, fitness chains including 24 Hour Fitness, and multiple dance studios throughout the Bay Area. I currently co-direct <strong style={{ color: 'var(--foreground)' }}>Get Down Dance Studio</strong> in San Jose, California.
+            Beyond academia, I&apos;ve taught at corporate campuses including <strong style={{ color: 'var(--foreground)' }}>Google</strong> and <strong style={{ color: 'var(--foreground)' }}>LinkedIn</strong>, fitness chains including 24 Hour Fitness, and multiple dance studios throughout the Bay Area. I am co-founder of <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}><strong style={{ color: 'var(--foreground)' }}>Get Down Dance Studios</strong></a> in San Jose, California.
           </p>
         </div>
 

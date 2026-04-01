@@ -42,6 +42,28 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to save session' }, { status: 500 })
   }
 
+  // Referral fulfillment — if this user was referred and scores ≥50%, mark the referral fulfilled.
+  // Check both referred_user_email (set via localStorage claim flow) AND referred_email (the address
+  // the invite was sent to directly), so fulfillment works even if the claim step was skipped.
+  if (score_pct >= 50) {
+    const { data: pendingReferral } = await supabaseAdmin
+      .from('referrals')
+      .select('id, referred_user_email')
+      .or(`referred_user_email.eq.${user_email},and(referred_email.eq.${user_email},referred_user_email.is.null)`)
+      .is('fulfilled_at', null)
+      .maybeSingle()
+
+    if (pendingReferral) {
+      await supabaseAdmin
+        .from('referrals')
+        .update({
+          fulfilled_at: new Date().toISOString(),
+          ...(pendingReferral.referred_user_email ? {} : { referred_user_email: user_email }),
+        })
+        .eq('id', pendingReferral.id)
+    }
+  }
+
   // Mastery check — insert must complete first so the new row is included
   const alreadyMastered = await supabaseAdmin
     .from('beat_masteries')

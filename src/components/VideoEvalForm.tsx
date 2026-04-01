@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 
+const inputClass = "w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 outline-none focus-visible:ring-2 focus-visible:ring-blue-600 transition";
+const inputStyle = { backgroundColor: "var(--background)", border: "1px solid #1f1f1f" };
+
 export default function VideoEvalForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
@@ -35,7 +38,7 @@ export default function VideoEvalForm() {
           <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
             Free Offer
           </div>
-          <h2 className="text-3xl font-bold mb-4">Get a Free Video Evaluation</h2>
+          <h2 className="text-3xl font-bold mb-4 text-balance">Get a Free Video Evaluation</h2>
           <p className="leading-relaxed" style={{ color: "var(--muted)" }}>
             Record a 30-second dance video, upload it to YouTube as <strong style={{ color: "var(--foreground)" }}>unlisted</strong>, and paste the link below.
             Ceech will personally break down exactly what to improve and send you a detailed analysis — free.
@@ -54,48 +57,53 @@ export default function VideoEvalForm() {
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: "var(--muted)" }}>Your Email</label>
+              <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: "var(--muted)" }}>Your Email</label>
               <input
+                id="email"
                 type="email"
                 name="email"
                 required
+                autoComplete="email"
                 placeholder="you@example.com"
-                className="w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 outline-none focus:ring-2 focus:ring-blue-600 transition"
-                style={{ backgroundColor: "var(--background)", border: "1px solid #1f1f1f" }}
+                className={inputClass}
+                style={inputStyle}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: "var(--muted)" }}>YouTube Link (unlisted)</label>
+              <label htmlFor="youtubeUrl" className="block text-sm font-medium mb-2" style={{ color: "var(--muted)" }}>YouTube Link (unlisted)</label>
               <input
+                id="youtubeUrl"
                 type="url"
                 name="youtubeUrl"
                 required
+                autoComplete="off"
                 placeholder="https://www.youtube.com/watch?v=..."
-                className="w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 outline-none focus:ring-2 focus:ring-blue-600 transition"
-                style={{ backgroundColor: "var(--background)", border: "1px solid #1f1f1f" }}
+                className={inputClass}
+                style={inputStyle}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: "var(--muted)" }}>
+              <label htmlFor="notes" className="block text-sm font-medium mb-2" style={{ color: "var(--muted)" }}>
                 Anything you want Ceech to focus on? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span>
               </label>
               <textarea
+                id="notes"
                 name="notes"
                 rows={3}
                 placeholder="e.g. my timing feels off, I can't find the groove..."
-                className="w-full px-4 py-3 rounded-xl text-white placeholder-gray-600 outline-none focus:ring-2 focus:ring-blue-600 transition resize-none"
-                style={{ backgroundColor: "var(--background)", border: "1px solid #1f1f1f" }}
+                className={`${inputClass} resize-none`}
+                style={inputStyle}
               />
             </div>
 
             {status === "error" && (
-              <p className="text-sm text-red-400">Something went wrong. Please try again.</p>
+              <p role="alert" className="text-sm text-red-400">Something went wrong. Please try again.</p>
             )}
 
             <button
               type="submit"
               disabled={status === "sending"}
-              className="w-full py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90 disabled:opacity-50"
+              className="w-full py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90 disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
               style={{ backgroundColor: "var(--accent-primary)" }}
             >
               {status === "sending" ? "Submitting..." : "Submit My Video for Free Eval"}

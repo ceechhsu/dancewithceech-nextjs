@@ -15,11 +15,14 @@ import {
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Props = { user: { name?: string | null; email?: string | null; image?: string | null } | null }
+type Props = {
+  user: { name?: string | null; email?: string | null; image?: string | null } | null
+  unlockedCount?: number
+}
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
-export default function BeatFirstGame({ user }: Props) {
+export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
   const [phase, setPhase] = useState<GamePhase>('select')
   const [selectedBeat, setSelectedBeat] = useState<Beat>(BEATS[0])
   const [countdown, setCountdown] = useState('')
@@ -30,11 +33,35 @@ export default function BeatFirstGame({ user }: Props) {
   const [showMasteryBanner, setShowMasteryBanner] = useState(false)
   const [activeTab, setActiveTab] = useState<'play' | 'progress'>('play')
   const [isListening, setIsListening] = useState(false)
+  const [showUnlockModal, setShowUnlockModal] = useState(false)
+  const [inviteEmail, setInviteEmail] = useState('')
+  const [inviteSent, setInviteSent] = useState(false)
+  const [inviteError, setInviteError] = useState('')
+  const [inviteLoading, setInviteLoading] = useState(false)
 
   const searchParams = useSearchParams()
   useEffect(() => {
     if (searchParams.get('tab') === 'progress') setActiveTab('progress')
   }, [searchParams])
+
+  // Save ?ref=CODE to localStorage so it survives the OAuth redirect
+  useEffect(() => {
+    const ref = searchParams.get('ref')
+    if (ref) localStorage.setItem('beatfirst_ref', ref)
+  }, [searchParams])
+
+  // After sign-in, claim any pending referral code
+  useEffect(() => {
+    if (!user?.email) return
+    const code = localStorage.getItem('beatfirst_ref')
+    if (!code) return
+    localStorage.removeItem('beatfirst_ref')
+    fetch('/api/referral/claim', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ referralCode: code }),
+    }).catch(() => {})
+  }, [user?.email])
 
   // Audio
   const {
@@ -682,37 +709,74 @@ export default function BeatFirstGame({ user }: Props) {
         {phase === 'select' && (
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--muted)' }}>Choose a Beat</h2>
-            <div className="flex flex-col gap-3 mb-8">
-              {BEATS.filter(b => b.difficulty !== 'advanced').map(b => (
-                <div
-                  key={b.id}
-                  onClick={() => { setSelectedBeat(b); waveformEnvelopeRef.current = [] }}
-                  className="flex items-center justify-between px-4 py-3 rounded-lg border"
-                  style={{
-                    borderColor: selectedBeat.id === b.id ? 'var(--accent-primary)' : '#2a2a2a',
-                    backgroundColor: selectedBeat.id === b.id ? 'rgba(37,99,235,0.1)' : '#111',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium">{b.name}</div>
-                    <div className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>{b.bpm} BPM</div>
-                  </div>
-                  <span className="text-xs font-semibold px-2 py-1 rounded-full mr-3"
-                    style={{ backgroundColor: difficultyBadge(b.difficulty) + '22', color: difficultyBadge(b.difficulty) }}>
-                    {b.difficulty}
-                  </span>
-                  <button
-                    onClick={() => { setSelectedBeat(b); waveformEnvelopeRef.current = []; startPreview() }}
-                    className="px-4 py-1.5 rounded-full text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                    style={{ backgroundColor: 'var(--accent-primary)', flexShrink: 0 }}
+            <div className="flex flex-col gap-3 mb-6">
+              {BEATS.filter(b => b.difficulty !== 'advanced').map((b, index) => {
+                const isLocked = index >= (3 + unlockedCount)
+                if (isLocked) {
+                  return (
+                    <div
+                      key={b.id}
+                      className="flex items-center justify-between px-4 py-3 rounded-lg border"
+                      style={{ borderColor: '#1a1a1a', backgroundColor: '#0d0d0d' }}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium" style={{ color: '#444' }}>{b.name}</div>
+                        <div className="text-xs mt-0.5" style={{ color: '#333' }}>{b.bpm} BPM</div>
+                      </div>
+                      <span className="text-xs font-semibold px-2 py-1 rounded-full mr-3"
+                        style={{ backgroundColor: '#1a1a1a', color: '#333' }}>
+                        {b.difficulty}
+                      </span>
+                      <div className="px-4 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2"
+                        style={{ backgroundColor: '#1a1a1a', color: '#444', border: '1px solid #2a2a2a', flexShrink: 0 }}>
+                        <span>🔒</span>
+                        <span>Locked</span>
+                      </div>
+                    </div>
+                  )
+                }
+                return (
+                  <div
+                    key={b.id}
+                    onClick={() => { setSelectedBeat(b); waveformEnvelopeRef.current = [] }}
+                    className="flex items-center justify-between px-4 py-3 rounded-lg border"
+                    style={{
+                      borderColor: selectedBeat.id === b.id ? 'var(--accent-primary)' : '#2a2a2a',
+                      backgroundColor: selectedBeat.id === b.id ? 'rgba(37,99,235,0.1)' : '#111',
+                      cursor: 'pointer',
+                    }}
                   >
-                    Play
-                  </button>
-                </div>
-              ))}
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium">{b.name}</div>
+                      <div className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>{b.bpm} BPM</div>
+                    </div>
+                    <span className="text-xs font-semibold px-2 py-1 rounded-full mr-3"
+                      style={{ backgroundColor: difficultyBadge(b.difficulty) + '22', color: difficultyBadge(b.difficulty) }}>
+                      {b.difficulty}
+                    </span>
+                    <button
+                      onClick={() => { setSelectedBeat(b); waveformEnvelopeRef.current = []; startPreview() }}
+                      className="px-4 py-1.5 rounded-full text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                      style={{ backgroundColor: 'var(--accent-primary)', flexShrink: 0 }}
+                    >
+                      Play
+                    </button>
+                  </div>
+                )
+              })}
             </div>
-            {user && <p className="text-center text-sm mt-3" style={{ color: 'var(--muted)' }}>Signed in as {user.name}</p>}
+
+            {unlockedCount < 3 && (
+              <button
+                onClick={() => setShowUnlockModal(true)}
+                className="w-full py-3 rounded-full font-semibold transition-colors hover:border-blue-500 hover:text-white"
+                style={{ backgroundColor: 'transparent', border: '1px solid #2a2a2a', color: 'var(--muted)' }}
+              >
+                🔓 Unlock New Beat Pattern
+              </button>
+            )}
+
+            {user && <p className="text-center text-sm mt-4" style={{ color: 'var(--muted)' }}>Signed in as {user.name}</p>}
           </div>
         )}
 
@@ -951,6 +1015,113 @@ export default function BeatFirstGame({ user }: Props) {
 
         </> /* end play tab */}
       </div>
+
+      {/* ── Unlock Modal ── */}
+      {showUnlockModal && (
+        <div
+          style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50, padding: '24px' }}
+          onClick={(e) => { if (e.target === e.currentTarget) { setShowUnlockModal(false); setInviteSent(false); setInviteEmail(''); setInviteError('') } }}
+        >
+          <div style={{ backgroundColor: '#111', border: '1px solid #2a2a2a', borderRadius: '16px', padding: '32px', maxWidth: '420px', width: '100%' }}>
+            <div className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent-primary)' }}>
+              Unlock Beat Pattern
+            </div>
+            <h2 className="text-2xl font-bold mb-3">Invite a friend. Get a new beat.</h2>
+
+            {!user ? (
+              <>
+                <p className="text-sm mb-6 leading-relaxed" style={{ color: 'var(--muted)' }}>
+                  Log in first so we know which account to unlock the pattern for.
+                </p>
+                <button
+                  onClick={() => signIn('google')}
+                  className="w-full py-3 rounded-full font-semibold text-white transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: 'var(--accent-primary)' }}
+                >
+                  Sign in with Google
+                </button>
+              </>
+            ) : inviteSent ? (
+              <>
+                <div className="p-4 rounded-xl mb-6 text-center" style={{ backgroundColor: '#0f2a0f', border: '1px solid #22c55e' }}>
+                  <div className="text-2xl mb-1">✓</div>
+                  <p className="font-semibold" style={{ color: '#22c55e' }}>Invite sent!</p>
+                  <p className="text-sm mt-1" style={{ color: 'var(--muted)' }}>
+                    Once {inviteEmail} signs up and completes a beat with 50%+, your next pattern unlocks.
+                  </p>
+                </div>
+                <button
+                  onClick={() => { setInviteSent(false); setInviteEmail('') }}
+                  className="w-full py-3 rounded-full font-semibold transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: '#1a1a1a', color: 'var(--foreground)', border: '1px solid #333' }}
+                >
+                  Invite Another Friend
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="text-sm mb-2 leading-relaxed" style={{ color: 'var(--muted)' }}>
+                  Send an invite to a friend. When they sign up and complete any beat pattern with a 50%+ score, you unlock the next beat pattern.
+                </p>
+                <p className="text-xs mb-6" style={{ color: '#444' }}>
+                  {3 - unlockedCount} pattern{3 - unlockedCount !== 1 ? 's' : ''} left to unlock
+                </p>
+                <div className="flex flex-col gap-3">
+                  <input
+                    type="email"
+                    placeholder="friend@email.com"
+                    value={inviteEmail}
+                    onChange={(e) => setInviteEmail(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl text-sm"
+                    style={{ backgroundColor: '#0a0a0a', border: '1px solid #2a2a2a', color: 'var(--foreground)', outline: 'none' }}
+                  />
+                  <button
+                    onClick={async () => {
+                      if (!inviteEmail.includes('@') || !user?.email) return
+                      setInviteLoading(true)
+                      setInviteError('')
+                      try {
+                        const res = await fetch('/api/referral/invite', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ referrerEmail: user.email, referredEmail: inviteEmail }),
+                        })
+                        if (res.ok) {
+                          setInviteSent(true)
+                        } else {
+                          const data = await res.json()
+                          setInviteError(data.error ?? 'Something went wrong')
+                        }
+                      } catch {
+                        setInviteError('Network error — please try again')
+                      } finally {
+                        setInviteLoading(false)
+                      }
+                    }}
+                    disabled={inviteLoading}
+                    className="w-full py-3 rounded-full font-semibold text-white transition-opacity hover:opacity-90"
+                    style={{ backgroundColor: 'var(--accent-primary)', opacity: inviteEmail.includes('@') && !inviteLoading ? 1 : 0.4 }}
+                  >
+                    {inviteLoading ? 'Sending…' : 'Send Invite'}
+                  </button>
+                  {inviteError && (
+                    <p style={{ color: '#f87171', fontSize: '0.8rem', textAlign: 'center', marginTop: '0.5rem' }}>{inviteError}</p>
+                  )}
+                </div>
+              </>
+            )}
+
+            <button
+              onClick={() => { setShowUnlockModal(false); setInviteSent(false); setInviteEmail(''); setInviteError('') }}
+              className="w-full py-2 rounded-full text-sm mt-4 transition-opacity hover:opacity-90"
+              style={{ color: '#444' }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
     </main>
   )
 }

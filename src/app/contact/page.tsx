@@ -77,7 +77,7 @@ export default function ContactPage() {
             </div>
             <div>
               <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>Studio</div>
-              <div className="text-lg font-medium mb-1">Get Down Dance Studio</div>
+              <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" className="text-lg font-medium mb-1 hover:underline block" style={{ color: 'var(--foreground)' }}>Get Down Dance Studios</a>
               <p className="mb-3" style={{ color: "var(--muted)" }}>
                 196 Jackson St<br />
                 San Jose, CA 95112
@@ -103,7 +103,7 @@ export default function ContactPage() {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Get Down Dance Studio location"
+                title="Get Down Dance Studios location"
               />
             </div>
             <div>

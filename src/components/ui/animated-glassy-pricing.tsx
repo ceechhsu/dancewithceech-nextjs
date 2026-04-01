@@ -192,6 +192,7 @@ interface GlassyPricingSectionProps {
   subtitle?: React.ReactNode;
   plans: PricingCardProps[];
   showAnimatedBackground?: boolean;
+  footer?: React.ReactNode;
 }
 
 export const GlassyPricingSection = ({
@@ -199,6 +200,7 @@ export const GlassyPricingSection = ({
   subtitle,
   plans,
   showAnimatedBackground = true,
+  footer,
 }: GlassyPricingSectionProps) => {
   return (
     <div className="relative overflow-hidden rounded-2xl" style={{ backgroundColor: '#050505', minHeight: '400px' }}>
@@ -217,6 +219,11 @@ export const GlassyPricingSection = ({
         <div className="flex flex-col md:flex-row gap-8 md:gap-6 justify-center items-stretch w-full max-w-4xl">
           {plans.map((plan) => <PricingCard key={plan.planName} {...plan} />)}
         </div>
+        {footer && (
+          <div className="w-full max-w-4xl mt-8">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );

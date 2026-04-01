@@ -2,8 +2,29 @@ import Link from "next/link";
 import Image from "next/image";
 import Nav from "@/components/Nav";
 import ScrollyHero from "@/components/ScrollyHero";
+import StatsBar from "@/components/StatsBar";
+import TestimonialsMarquee from "@/components/TestimonialsMarquee";
 import { CircularGallery } from "@/components/ui/circular-gallery";
 import { RainbowBorderButton } from "@/components/ui/rainbow-border-button";
+
+export const metadata = {
+  title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
+  description: "Learn hip-hop, locking, popping, breaking, and house dance from Ceech — America's Got Talent performer, Body Rock champion, and Bay Area dance instructor. Private lessons in San Jose or online.",
+  openGraph: {
+    title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
+    description: "Learn hip-hop, locking, popping, breaking, and house dance from Ceech — America's Got Talent performer, Body Rock champion, and Bay Area dance instructor.",
+    url: "https://dancewithceech.com",
+    siteName: "DanceWithCeech",
+    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Ceech teaching hip-hop dance" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
+    description: "Learn hip-hop, locking, popping, breaking, and house dance from Ceech — America's Got Talent performer, Body Rock champion, and Bay Area dance instructor.",
+    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+  },
+};
 
 export default function Home() {
   return (
@@ -14,21 +35,7 @@ export default function Home() {
       <ScrollyHero />
 
       {/* SOCIAL PROOF BAR */}
-      <section className="py-12 px-6" style={{ borderTop: "1px solid #1f1f1f", borderBottom: "1px solid #1f1f1f" }}>
-        <div className="max-w-4xl mx-auto flex flex-wrap justify-center gap-12 text-center">
-          {[
-            { stat: "25+", label: "Years Teaching" },
-            { stat: "5,000+", label: "Students Trained" },
-            { stat: "8+", label: "Colleges Taught At" },
-            { stat: "5", label: "Dance Styles" },
-          ].map(({ stat, label }) => (
-            <div key={label}>
-              <div className="text-3xl font-bold mb-1" style={{ color: "var(--accent-primary)" }}>{stat}</div>
-              <div className="text-sm" style={{ color: "var(--muted)" }}>{label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <StatsBar />
 
       {/* CREDIBILITY */}
       <section className="py-16 px-6">
@@ -90,6 +97,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* REVIEWS MARQUEE */}
+      <TestimonialsMarquee />
+
       {/* BEATFIRST TEASER */}
       <section className="py-24 px-6" style={{ backgroundColor: "var(--surface)" }}>
         <div className="max-w-4xl mx-auto text-center">
@@ -147,7 +157,7 @@ export default function Home() {
           <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
             Student Results
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold">Real students. Real progress.</h2>
+          <h2 className="text-3xl md:text-4xl font-bold">What Students Say on Video</h2>
           <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}>Hover to pause · Click any card to watch</p>
         </div>
         <div style={{ height: "480px" }}>

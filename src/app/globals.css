@@ -34,6 +34,32 @@ body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
+/* ─── MARQUEE ANIMATIONS ─────────────────────────────────── */
+@theme inline {
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-100% - var(--gap))); }
+}
+
+@keyframes marquee-vertical {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(-100% - var(--gap))); }
+}
+
+/* ─── AUTOFILL OVERRIDE ──────────────────────────────────── */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #0A0A0A inset;
+  -webkit-text-fill-color: #F9F9F9;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 /* ─── BLOG PROSE ─────────────────────────────────────────── */
 
 .prose {
