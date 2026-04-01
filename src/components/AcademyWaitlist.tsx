@@ -88,7 +88,7 @@ export default function AcademyWaitlist() {
     }
   }
 
-  const spotsLeft = spotsClaimed !== null ? 100 - spotsClaimed : null
+  const spotsLeft = spotsClaimed !== null ? 15 - spotsClaimed : null
 
   return (
     <BeamsBackground intensity="medium">
@@ -334,7 +334,7 @@ export default function AcademyWaitlist() {
             <div style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--accent-primary)', marginBottom: '12px' }}>
               Founding Members
             </div>
-            <h2 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '12px' }}>First 100 students. Locked-in pricing. Forever.</h2>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '12px' }}>First 15 students. Locked-in pricing. Forever.</h2>
             <p style={{ color: 'var(--muted)', lineHeight: 1.7 }}>
               Founding members pay less than anyone who comes after them — and that rate never goes up, no matter what we charge in the future.
             </p>
@@ -388,7 +388,7 @@ export default function AcademyWaitlist() {
                   <div style={{ height: '5px', background: '#1f1f1f', borderRadius: '999px', overflow: 'hidden' }}>
                     <div style={{
                       height: '100%',
-                      width: `${Math.min((spotsClaimed / 100) * 100, 100)}%`,
+                      width: `${Math.min((spotsClaimed / 15) * 100, 100)}%`,
                       background: 'var(--accent-primary)',
                       borderRadius: '999px',
                       transition: 'width 0.8s ease',
