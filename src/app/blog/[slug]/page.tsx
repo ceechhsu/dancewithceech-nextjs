@@ -169,13 +169,15 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
 
         {/* Hero image */}
-        <div className="mb-12 rounded-2xl overflow-hidden" style={{ aspectRatio: "16/9" }}>
-          <img
-            src={`/images/posts/${post.slug}.jpg`}
-            alt={post.title}
-            className="w-full h-full object-cover"
-          />
-        </div>
+        {post.hasImage && (
+          <div className="mb-12 rounded-2xl overflow-hidden" style={{ aspectRatio: "16/9" }}>
+            <img
+              src={`/images/posts/${post.slug}.jpg`}
+              alt={post.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )}
 
         {/* Content */}
         <div className="prose" dangerouslySetInnerHTML={{ __html: html }} />

@@ -77,13 +77,15 @@ export default async function BlogPage({
               className="group rounded-2xl overflow-hidden flex flex-col transition-colors hover:border-blue-600"
               style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}
             >
-              <div className="overflow-hidden" style={{ aspectRatio: "16/9" }}>
-                <img
-                  src={`/images/posts/${post.slug}.jpg`}
-                  alt={post.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
+              {post.hasImage && (
+                <div className="overflow-hidden" style={{ aspectRatio: "16/9" }}>
+                  <img
+                    src={`/images/posts/${post.slug}.jpg`}
+                    alt={post.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+              )}
               <div className="p-6 flex flex-col gap-3 flex-1">
                 <div className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--accent-primary)" }}>
                   {CATEGORY_LABELS[post.category] ?? post.category}
