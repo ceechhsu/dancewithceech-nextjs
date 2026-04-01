@@ -65,12 +65,37 @@ export default function BreakingMovesPage() {
         </div>
       </section>
 
-      <section className="py-16 px-6 text-center" style={{ backgroundColor: "var(--surface)", borderTop: "1px solid #1f1f1f" }}>
-        <h2 className="text-2xl font-bold mb-4">Train your rhythm before your feet.</h2>
-        <p className="mb-8" style={{ color: "var(--muted)" }}>Breaking demands precision timing. Build that foundation first.</p>
-        <Link href="/beat-first" className="inline-block px-8 py-4 rounded-full text-white font-semibold hover:opacity-90 transition-opacity" style={{ backgroundColor: "var(--accent-primary)" }}>
-          Play BeatFirst — Free
-        </Link>
+      <section className="py-20 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
+        <div className="max-w-5xl mx-auto text-center mb-12">
+          <h2 className="text-2xl font-bold mb-3">Ready to go deeper?</h2>
+          <p style={{ color: "var(--muted)" }}>Three ways to keep moving — pick what fits where you are right now.</p>
+        </div>
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="rounded-2xl p-8 flex flex-col gap-4" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
+            <div className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--accent-primary)" }}>Free</div>
+            <h3 className="text-lg font-bold">Train Your Rhythm</h3>
+            <p className="text-sm flex-1" style={{ color: "var(--muted)" }}>Breaking demands precision timing. BeatFirst builds that foundation — free, no sign-up required.</p>
+            <Link href="/beat-first" className="inline-block text-center px-6 py-3 rounded-full font-semibold text-white hover:opacity-90 transition-opacity" style={{ backgroundColor: "var(--accent-primary)" }}>
+              Play BeatFirst — Free
+            </Link>
+          </div>
+          <div className="rounded-2xl p-8 flex flex-col gap-4" style={{ backgroundColor: "var(--surface)", border: "1px solid #2563eb44" }}>
+            <div className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--accent-primary)" }}>Academy</div>
+            <h3 className="text-lg font-bold">Full Curriculum</h3>
+            <p className="text-sm flex-1" style={{ color: "var(--muted)" }}>A structured path from zero to freestyle. Video lessons, private community, and live sessions with Ceech.</p>
+            <Link href="/academy" className="inline-block text-center px-6 py-3 rounded-full font-semibold text-white hover:opacity-90 transition-opacity" style={{ backgroundColor: "var(--accent-primary)" }}>
+              Join the Academy
+            </Link>
+          </div>
+          <div className="rounded-2xl p-8 flex flex-col gap-4" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
+            <div className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FDB515" }}>Private Lessons</div>
+            <h3 className="text-lg font-bold">1-on-1 with Ceech</h3>
+            <p className="text-sm flex-1" style={{ color: "var(--muted)" }}>Want faster results? Book a private lesson — in-person in San Jose or virtually via Zoom.</p>
+            <Link href="/private-lessons" className="inline-block text-center px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity" style={{ border: "1px solid #FDB515", color: "#FDB515" }}>
+              Book a Lesson
+            </Link>
+          </div>
+        </div>
       </section>
 
       <Footer />
