@@ -118,7 +118,6 @@ export default function ContactPage() {
           </div>
 
           {/* CONTACT FORM */}
-          {/* TODO Phase 2: Wire up to Resend API route for email delivery */}
           <ContactForm />
 
         </div>
