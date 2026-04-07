@@ -716,8 +716,9 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
                   return (
                     <div
                       key={b.id}
+                      onClick={() => setShowUnlockModal(true)}
                       className="flex items-center justify-between px-4 py-3 rounded-lg border"
-                      style={{ borderColor: '#1a1a1a', backgroundColor: '#0d0d0d' }}
+                      style={{ borderColor: '#1a1a1a', backgroundColor: '#0d0d0d', cursor: 'pointer' }}
                     >
                       <div className="flex-1 min-w-0">
                         <div className="font-medium" style={{ color: '#444' }}>{b.name}</div>
@@ -766,15 +767,6 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
               })}
             </div>
 
-            {unlockedCount < 3 && (
-              <button
-                onClick={() => setShowUnlockModal(true)}
-                className="w-full py-3 rounded-full font-semibold transition-colors hover:border-blue-500 hover:text-white"
-                style={{ backgroundColor: 'transparent', border: '1px solid #2a2a2a', color: 'var(--muted)' }}
-              >
-                🔓 Unlock New Beat Pattern
-              </button>
-            )}
 
             {user && <p className="text-center text-sm mt-4" style={{ color: 'var(--muted)' }}>Signed in as {user.name}</p>}
           </div>
