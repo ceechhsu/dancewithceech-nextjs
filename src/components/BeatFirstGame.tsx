@@ -879,6 +879,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
               <span style={{ color: '#fff' }}>▶ now</span>
               <span>future →</span>
             </div>
+            <div className="h-6" />
             <button
               onPointerDown={handleTap}
               className="w-full max-w-xs py-6 rounded-2xl font-bold text-2xl text-white select-none active:scale-95 transition-transform"
