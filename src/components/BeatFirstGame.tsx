@@ -945,7 +945,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
 
             {showSignIn && (
               <div className="mb-6 p-4 rounded-xl text-center" style={{ backgroundColor: '#111', border: '1px solid #2563EB' }}>
-                <p className="font-semibold mb-1">Save your score & unlock tutorials</p>
+                <p className="font-semibold mb-1">To save your score & unlock tutorials</p>
                 <p className="text-sm mb-3" style={{ color: 'var(--muted)' }}>Sign in with Google — it&apos;s free</p>
                 <button
                   onClick={() => signIn('google')}
