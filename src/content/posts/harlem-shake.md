@@ -1,9 +1,9 @@
 ---
-title: "6 Simple Steps to Learn The Harlem Shake"
+title: "How to Do the Harlem Shake: The Real 80s Dance (Not the Meme)"
 slug: "harlem-shake"
 date: "2024-05-13 21:02:53"
 category: "hip-hop-dance-moves"
-description: "Learn the Harlem Shake step by step — the original 80s hip-hop dance from Harlem, NY. Master the shoulder shimmy, loose-limb shake, and authentic street dance style."
+description: "Learn the real Harlem Shake — the original 1980s Harlem street dance, not the 2013 meme. 6-step tutorial from a 25-year dance instructor: shoulder shimmy, torso shake, authentic style."
 ---
 ## The Harlem Shake and Its Enduring Hip Hop Legacy
 
@@ -48,6 +48,23 @@ The dance became mainstream when it appeared in music videos and was performed b
 ## Conclusion
 
 The Harlem Shake stands as a potent symbol of Hip Hop's enduring ability to bring a communal sense of joy and unscripted expression to the dance floor. This move isn't just about the shaking; it's about embracing the moment, the music, and the quintessential spirit of freedom that epitomizes Hip Hop. As a fixture of street dance history, the Harlem Shake remains a crowd favorite, embodying the electric pulse of Harlem's streets and the soul of Hip Hop dance.
+
+## Frequently Asked Questions
+
+### What is the Harlem Shake dance?
+The Harlem Shake is a 1980s hip-hop street dance that originated in Harlem, New York. It's built on loose shoulder shimmies, torso shakes, and free-flowing upper-body movement. It is NOT the same as the 2013 Harlem Shake internet meme — that viral video trend used Baauer's song but had no connection to the original dance.
+
+### Is the Harlem Shake the same as the 2013 meme?
+No. The 2013 meme (one dancer going wild while others stand still, then everyone joins in) used Baauer's 2012 song "Harlem Shake" but the choreography had no relation to the actual dance. The real Harlem Shake is a specific 1980s hip-hop street move from Harlem.
+
+### Who created the Harlem Shake?
+The Harlem Shake was created in the early 1980s by a Harlem resident named Al B, who jokingly described it as an "alcoholic shake." Despite the name, the dance itself was inspired by an ancient Egyptian dance step called "the pharaoh."
+
+### How long does it take to learn the Harlem Shake?
+Most beginners can pick up the basic shoulder shimmy and loose upper-body motion in 15–20 minutes of practice. The real challenge isn't the technique — it's loosening up enough to let the shake feel natural rather than forced.
+
+### What's the most common mistake when learning the Harlem Shake?
+Trying to shake everything at once. Start with just the shoulders — get the alternating shoulder shimmy solid first, then let it naturally flow down through your arms and into your torso. Adding the knees and hips comes last.
 
 ## More Hip Hop Dance Moves
 

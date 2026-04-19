@@ -145,7 +145,11 @@
   },
   {
     "source": "/1845-2/",
-    "destination": "/blog/1845-2"
+    "destination": "/blog/steve-martin-dance"
+  },
+  {
+    "source": "/blog/1845-2",
+    "destination": "/blog/steve-martin-dance"
   },
   {
     "source": "/hip-hop-dance-move-stomping/",

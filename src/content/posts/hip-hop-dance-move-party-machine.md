@@ -48,6 +48,6 @@ The Party Machine is a lively and energetic hip hop dance move that showcases fo
 If you liked the Party Machine, these moves share the same kick-and-hop alternating footwork and hip-twisting groove:
 
 - [6 Simple Steps To Learn The Happy Feet](/blog/happy-feet) — Happy Feet uses an almost identical side-kick-and-hop pattern as the Party Machine, but without the hip twist, making it the simpler prerequisite move to master first.
-- [How to Learn the Steve Martin Dance Move](/blog/1845-2) — the Steve Martin's side kick with a bounce shares the Party Machine's kick-out rhythm and the same late-80s/early-90s energy in battle and party contexts.
+- [How to Learn the Steve Martin Dance Move](/blog/steve-martin-dance) — the Steve Martin's side kick with a bounce shares the Party Machine's kick-out rhythm and the same late-80s/early-90s energy in battle and party contexts.
 - [How to Do the Monastery Hip Hop Dance Move](/blog/hip-hop-dance-move-monastery) — the Monastery is a footwork-centric move like the Party Machine, and both are used in battles and cyphers where clean, rhythmic footwork transitions matter.
 - [Mastering the ATL Stomp: Atlanta's Iconic Hip-Hop Dance Move](/blog/mastering-the-atl-stomp-rhythm-of-the-south) — the ATL Stomp shares the Party Machine's stomp-and-hop structure and works well as a Southern-flavored alternative in the same freestyle sequence.

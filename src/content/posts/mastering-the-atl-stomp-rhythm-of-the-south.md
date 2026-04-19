@@ -47,6 +47,23 @@ This hip hop dance move can be seen in Usher's music video "[Yeah](https://youtu
 
 The ATL Stomp is more than a series of movements; it's a vibrant expression of Atlanta's street culture and hip-hop legacy. Embodying the energy and unity of the dance floor, the ATL Stomp invites dancers of all levels to join in its rhythmic journey. Whether you're a seasoned stomper or a newcomer eager to learn, this dance move offers a fun, engaging way to connect with the soul of Atlanta's dance scene.
 
+## Frequently Asked Questions
+
+### What is the ATL Stomp dance?
+The ATL Stomp is an Atlanta-born hip hop dance move built on a stomp-hop-switch-turn sequence that became a staple of Southern hip hop and crunk culture in the late 1990s and early 2000s. It's characterized by a percussive foot stomp followed by a light hop, alternating legs, and quarter-turns that build rhythm and traveling energy.
+
+### Where did the ATL Stomp come from?
+The ATL Stomp originated in Atlanta, Georgia, and became a cultural phenomenon in the late 1990s to early 2000s during the rise of crunk and Southern hip hop music. It was popularized through club scenes and music videos, including appearances in Usher's "Yeah!" (2004). The exact creator is layered in urban legend, but it's unmistakably Atlanta.
+
+### Is the ATL Stomp the same as the Fila or Bankhead Bounce?
+They're cousins, not twins. All three come from the Atlanta hip hop scene and share stomp-based percussive energy. The Fila uses an almost identical stomp-hop-switch-turn structure — they're structurally very similar. The Bankhead Bounce shares the Atlanta roots but emphasizes a looser body bounce over the explicit stomp-hop.
+
+### How long does it take to learn the ATL Stomp?
+Most beginners can learn the basic stomp-hop in 15-20 minutes. Adding the quarter-turn and alternating it smoothly left and right takes 45-60 minutes. Making it flow with music and personal style (arm movements, additional turns) takes 1-2 practice sessions before it feels natural.
+
+### What's the most common ATL Stomp mistake?
+Weak stomps. The ATL Stomp lives and dies by the percussive foot strike — it has to be AUDIBLE and deliberate, matching the beat. Beginners tap the floor instead of stomping, which drains the move of its Southern energy. Plant the foot with confidence, let the heel follow, and commit to the rhythm.
+
 ## More Hip Hop Dance Moves
 
 If you liked the ATL Stomp, these moves share the same Southern stomp-and-hop structure and Atlanta hip-hop DNA:

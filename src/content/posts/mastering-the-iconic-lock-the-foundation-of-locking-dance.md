@@ -1,9 +1,9 @@
 ---
-title: "Mastering the Iconic Lock: The Foundation of Locking Dance"
+title: "How to Do The Lock: The Foundation Move of Locking Dance"
 slug: "mastering-the-iconic-lock-the-foundation-of-locking-dance"
 date: "2024-06-20 15:42:57"
 category: "locking-dance-moves"
-description: "Learn the Lock, the foundational move of locking dance created by Don Campbell. Master step-by-step freeze and release technique that defines this funk dance style."
+description: "Learn The Lock — the foundation move of Locking dance, created by Don Campbell in 1969. Step-by-step freeze-and-release tutorial from a 25-year dance instructor."
 ---
 ## Introduction
 
@@ -39,6 +39,23 @@ The Lock was created by Don Campbell, a young art student in the late 1960s. Whi
 ## Conclusion
 
 The Lock is the cornerstone of the Locking dance style, a testament to the creativity and innovation of its founder, Don Campbell. By embracing an accidental freeze and transforming it into a captivating move, Campbell paved the way for a unique dance form that continues to inspire and entertain audiences worldwide. Whether you're a seasoned Locker or a beginner, mastering the Lock is essential to truly embodying the spirit and energy of this dynamic dance style.
+
+## Frequently Asked Questions
+
+### What is Locking dance?
+Locking is a funk-style street dance that originated in Los Angeles in the late 1960s. It's defined by sudden "locks" — freezing mid-movement into a held position, then releasing into the next move. This freeze-and-release contrast is what gives Locking its signature punchy, theatrical energy, distinct from popping, breaking, or hip hop styles.
+
+### Who created Locking dance?
+Locking was created by Don Campbell in 1969 in Los Angeles. While trying to perform a dance called the Funky Chicken, Campbell got stuck in an awkward position and froze. His friends thought it looked cool and asked him to do it again — that accidental freeze became "The Lock," and Campbell built an entire dance style around it.
+
+### What is The Lock move in dance?
+The Lock is the foundational move of Locking dance. It's a fast arm movement that suddenly freezes — locks — in a specific position, creating a sharp visual contrast against the body's ongoing momentum. Every other Locking move (the Point, Stop N Go, Sneak, Scoobot, Pacing) builds on The Lock's freeze-and-release mechanic.
+
+### When was Locking dance created?
+Locking was created in 1969 by Don Campbell in Los Angeles. It gained national exposure in the early 1970s through Campbell's dance crew, The Lockers, which included future stars like Fred Berry (of "What's Happening!!"), Toni Basil, and Shabba-Doo. The Lockers appeared on Soul Train and helped codify Locking as a recognized street dance style.
+
+### How is Locking different from popping and breaking?
+Locking uses freeze-and-release — fast movement into a held lock, then out again. Popping uses muscle contraction (pops) to create sharp jerks. Breaking (b-boying) is floor-based and includes power moves, footwork, and freezes. All three emerged from the 1970s funk era, but they have different techniques, music, and origins: Locking from LA, Popping from Fresno, Breaking from the Bronx.
 
 ## More Locking Dance Moves
 

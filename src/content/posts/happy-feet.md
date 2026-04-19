@@ -54,6 +54,6 @@ Happy Feet is more than a series of steps—it's a way to let loose and showcase
 If you liked Happy Feet, these moves share the same light, bouncy kick-and-hop footwork built for energy and rhythm:
 
 - [How to Do the Party Machine Hip Hop Dance Move](/blog/hip-hop-dance-move-party-machine) — the Party Machine uses an almost identical kick-and-hop alternation, but adds a hip twist on each switch, making it the natural next step after Happy Feet.
-- [How to Learn the Steve Martin Dance Move](/blog/1845-2) — the Steve Martin's side kick with a bounce is mechanically similar to Happy Feet's hop-and-kick, and both moves share a playful, energetic party vibe.
+- [How to Learn the Steve Martin Dance Move](/blog/steve-martin-dance) — the Steve Martin's side kick with a bounce is mechanically similar to Happy Feet's hop-and-kick, and both moves share a playful, energetic party vibe.
 - [4 Easy Tips For The BK Bounce](/blog/bk-bounce) — the BK Bounce layers a side-step dip onto the same rhythmic bounce that drives Happy Feet, making both moves easy to combo in a freestyle.
 - [5 Easy Steps to Learn The Farmer Dance](/blog/farmer-dance) — the Farmer shares Happy Feet's lateral hop-and-knee-lift structure, just framed within a hip-hop house tradition instead of street party culture.

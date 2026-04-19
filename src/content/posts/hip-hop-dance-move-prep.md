@@ -1,9 +1,9 @@
 ---
-title: "How to Do the Prep Hip Hop Dance Move"
+title: "The Prep Dance: How to Do This 90s Hip Hop Move (Step by Step)"
 slug: "hip-hop-dance-move-prep"
 date: "2024-06-13 17:07:49"
 category: "hip-hop-dance-moves"
-description: "Learn the Prep hip hop dance move step by step. Master this classic 90s street dance with expressive mirror-check and brush-off actions full of personality."
+description: "The Prep dance tutorial — the 90s hip hop move mimicking getting ready to go out, with mirror-check and brush-off actions. 5 easy steps full of personality."
 ---
 ## Introduction
 
@@ -44,6 +44,23 @@ The Prep dance move emerged from the vibrant hip hop scene of the 1990s. While i
 ## Conclusion
 
 The Prep is a classic hip hop dance move that has stood the test of time. Its simple yet expressive actions make it a great addition to any hip hop routine or freestyle session. By mastering the Prep, you'll not only pay homage to the golden era of hip hop but also showcase your groove and personality on the dance floor.
+
+## Frequently Asked Questions
+
+### What is the Prep dance?
+The Prep is a 90s hip hop dance move that mimes the actions of getting ready to go out — checking yourself in the mirror, brushing off lint from your shoulders, cleaning dust off your jeans — all performed over a consistent bounce. It's a storytelling dance that leans heavily on personality, attitude, and exaggerated physical gestures rather than technical footwork.
+
+### Where did the Prep dance come from?
+The Prep emerged from the vibrant hip hop scene of the early 1990s, popularized by dancers and choreographers in LA and New York. The move's name reflects its concept: "prepping" to leave the house. Its exact creator is unknown — it spread organically through music videos, clubs, and freestyle battles during the golden age of hip hop.
+
+### What moves make up the Prep?
+The Prep has four signature actions performed in sequence over a steady bounce: (1) the mirror check — hands brought up to the face, (2) the shoulder brush — mimicking brushing off lint, (3) the jeans brush — bending to clean off the legs, and (4) the bop — a final upright bounce. Each action is done twice before moving to the next.
+
+### How long does it take to learn the Prep?
+Most beginners can learn the sequence in 10-15 minutes. Making it look PERFORMATIVE rather than robotic takes 30-60 minutes — the Prep is a character move, so it only works when you exaggerate and commit to the miming. Adding personal flair (facial expressions, timing variations) develops over 1-2 practice sessions.
+
+### What's the most common Prep mistake?
+Being shy. The Prep is a theatrical move built on exaggerated mime actions — if you do it small and politely, it looks awkward and pointless. Commit fully to each action: really check that imaginary mirror, really brush those shoulders. The bigger you go, the better it looks.
 
 ## More Hip Hop Dance Moves
 
