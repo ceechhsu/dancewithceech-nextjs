@@ -9,7 +9,7 @@ import ProgressTab from '@/components/ProgressTab'
 import { useBeatFirstAudio } from '@/hooks/useBeatFirstAudio'
 import { drawBeatWaveform, buildResultsDrawFn, clientToCanvasX, ratingColor } from '@/lib/beatfirst-canvas'
 import {
-  TOLERANCE, STEPS_PER_BAR, GAME_BARS, CANVAS_W, CANVAS_H, PLAYBACK_SCALE,
+  TOLERANCE, STEPS_PER_BAR, GAME_BARS, CANVAS_W, CANVAS_H, PLAYBACK_SCALE, WAVEFORM_CAPTURE_MS,
   type TapResult, type GamePhase,
 } from '@/lib/beatfirst-constants'
 
@@ -18,6 +18,100 @@ import {
 type Props = {
   user: { name?: string | null; email?: string | null; image?: string | null } | null
   unlockedCount?: number
+}
+
+// ─── Rhythm stat helpers ────────────────────────────────────────────────────
+
+function feelLabel(meanMs: number): { label: string; color: string } {
+  if (meanMs < -60) return { label: 'Rushing', color: '#ef4444' }
+  if (meanMs < -20) return { label: 'On top', color: '#FDB515' }
+  if (meanMs <= 20) return { label: 'Dead on', color: '#22c55e' }
+  if (meanMs <= 80) return { label: 'In the pocket', color: '#22c55e' }
+  return { label: 'Dragging', color: '#ef4444' }
+}
+
+function consistencyLabel(stdDev: number): { label: string; color: string } {
+  if (stdDev <= 15) return { label: 'Locked in', color: '#22c55e' }
+  if (stdDev <= 35) return { label: 'Solid', color: '#22c55e' }
+  if (stdDev <= 60) return { label: 'Wobbly', color: '#FDB515' }
+  return { label: 'Scattered', color: '#ef4444' }
+}
+
+type TierSpec = { label: string; active: boolean; color: string }
+
+function feelTiers(meanMs: number): TierSpec[] {
+  const active = meanMs < -60 ? 0 : meanMs < -20 ? 1 : meanMs <= 20 ? 2 : meanMs <= 80 ? 3 : 4
+  return [
+    { label: 'Rush',    active: active === 0, color: '#ef4444' },
+    { label: 'On top',  active: active === 1, color: '#FDB515' },
+    { label: 'Dead on', active: active === 2, color: '#22c55e' },
+    { label: 'Pocket',  active: active === 3, color: '#22c55e' },
+    { label: 'Drag',    active: active === 4, color: '#ef4444' },
+  ]
+}
+
+function consistencyTiers(stdDev: number): TierSpec[] {
+  const active = stdDev <= 15 ? 0 : stdDev <= 35 ? 1 : stdDev <= 60 ? 2 : 3
+  return [
+    { label: 'Locked',  active: active === 0, color: '#22c55e' },
+    { label: 'Solid',   active: active === 1, color: '#22c55e' },
+    { label: 'Wobbly',  active: active === 2, color: '#FDB515' },
+    { label: 'Scatter', active: active === 3, color: '#ef4444' },
+  ]
+}
+
+function feelPointerPct(meanMs: number): number {
+  const bounds = [-120, -60, -20, 20, 80, 120]
+  const idx = meanMs < -60 ? 0 : meanMs < -20 ? 1 : meanMs <= 20 ? 2 : meanMs <= 80 ? 3 : 4
+  const lo = bounds[idx], hi = bounds[idx + 1]
+  const within = Math.min(1, Math.max(0, (meanMs - lo) / (hi - lo)))
+  return ((idx + within) / 5) * 100
+}
+
+function consistencyPointerPct(stdDev: number): number {
+  const bounds = [0, 15, 35, 60, 90]
+  const idx = stdDev <= 15 ? 0 : stdDev <= 35 ? 1 : stdDev <= 60 ? 2 : 3
+  const lo = bounds[idx], hi = bounds[idx + 1]
+  const within = Math.min(1, Math.max(0, (stdDev - lo) / (hi - lo)))
+  return ((idx + within) / 4) * 100
+}
+
+function TierBar({ tiers, pointerPct }: { tiers: TierSpec[]; pointerPct: number }) {
+  const clampedPct = Math.max(3, Math.min(97, pointerPct))
+  return (
+    <div className="mt-3">
+      <div className="flex gap-[2px]">
+        {tiers.map((t, i) => (
+          <div
+            key={i}
+            className="flex-1 rounded text-center px-0.5 py-1"
+            style={{
+              backgroundColor: t.active ? t.color + '22' : '#0a0a0a',
+              border: t.active ? `1px solid ${t.color}` : '1px solid #222',
+            }}
+          >
+            <div
+              className="text-[10px] font-semibold leading-tight"
+              style={{ color: t.active ? t.color : 'var(--muted)' }}
+            >
+              {t.label}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="relative h-2 mt-1">
+        <div
+          className="absolute -translate-x-1/2 w-0 h-0"
+          style={{
+            left: `${clampedPct}%`,
+            borderLeft: '4px solid transparent',
+            borderRight: '4px solid transparent',
+            borderBottom: '6px solid var(--foreground)',
+          }}
+        />
+      </div>
+    </div>
+  )
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -30,6 +124,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
   const [results, setResults] = useState<TapResult[]>([])
   const [showSignIn, setShowSignIn] = useState(false)
   const [score, setScore] = useState({ hits: 0, total: 0, pct: 0 })
+  const [rhythmStats, setRhythmStats] = useState<{ mean: number; stdDev: number } | null>(null)
   const [showMasteryBanner, setShowMasteryBanner] = useState(false)
   const [activeTab, setActiveTab] = useState<'play' | 'progress'>('play')
   const [isListening, setIsListening] = useState(false)
@@ -38,6 +133,19 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
   const [inviteSent, setInviteSent] = useState(false)
   const [inviteError, setInviteError] = useState('')
   const [inviteLoading, setInviteLoading] = useState(false)
+  const [playingProgress, setPlayingProgress] = useState(0)
+
+  const playingDurationMs = selectedBeat.bars * STEPS_PER_BAR * (60000 / selectedBeat.bpm / 4)
+
+  useEffect(() => {
+    if (phase !== 'playing') {
+      setPlayingProgress(0)
+      return
+    }
+    setPlayingProgress(0)
+    const t = setTimeout(() => setPlayingProgress(100), 20)
+    return () => clearTimeout(t)
+  }, [phase])
 
   const searchParams = useSearchParams()
   useEffect(() => {
@@ -211,7 +319,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
         const s = i % STEPS_PER_BAR
         if (!beat.taps[s]) continue
         const beatOriginMs = i * stepMs
-        if (beatOriginMs + 500 < viewStartMs || beatOriginMs > viewEndMs) continue
+        if (beatOriginMs + WAVEFORM_CAPTURE_MS < viewStartMs || beatOriginMs > viewEndMs) continue
         const beatOriginX = (beatOriginMs - viewStartMs) * scale
         drawBeatWaveform(ctx, beatOriginX, centerY, halfH, scale, envelope, maxAmp, peakOffsetMs, 1, stepMs)
       }
@@ -357,7 +465,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
             const amp = Math.max(...Array.from(data).map(Math.abs))
             waveformEnvelopeRef.current.push(amp)
             elapsed += 10
-            if (elapsed >= 500) {
+            if (elapsed >= WAVEFORM_CAPTURE_MS) {
               clearInterval(waveformCaptureRef.current!)
               const env = waveformEnvelopeRef.current
               const peakIdx = env.indexOf(Math.max(...env))
@@ -451,7 +559,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
       const s = i % STEPS_PER_BAR
       if (!(beat.bassline ? beat.bassline[s] !== null : !!beat.taps[s])) continue
       const beatOriginMs = i * stepMs
-      if (beatOriginMs + 500 < viewStartMs || beatOriginMs > viewEndMs) continue
+      if (beatOriginMs + WAVEFORM_CAPTURE_MS < viewStartMs || beatOriginMs > viewEndMs) continue
       const beatOriginX = (beatOriginMs - viewStartMs) * scale
       if (envelope.length >= 2) {
         drawBeatWaveform(ctx, beatOriginX, centerY, halfH, scale, envelope, maxAmp, peakOffsetMs, 1, stepMs)
@@ -530,7 +638,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
           const amp = Math.max(...Array.from(data).map(Math.abs))
           waveformEnvelopeRef.current.push(amp)
           elapsed += 10
-          if (elapsed >= 500) {
+          if (elapsed >= WAVEFORM_CAPTURE_MS) {
             clearInterval(waveformCaptureRef.current!)
             const env = waveformEnvelopeRef.current
             const peakIdx = env.indexOf(Math.max(...env))
@@ -589,29 +697,35 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
   const endGame = (ideals: number[], beat: Beat) => {
     const taps = [...userTapsRef.current]
     const tol = TOLERANCE[beat.difficulty]
-    const matched = new Set<number>()
     const tapResults: TapResult[] = []
 
-    taps.forEach(tap => {
-      let bestDiff = Infinity, bestIdx = -1
-      ideals.forEach((ideal, i) => {
-        if (!matched.has(i) && Math.abs(tap - ideal) < bestDiff) {
-          bestDiff = Math.abs(tap - ideal); bestIdx = i
-        }
-      })
-      if (bestIdx === -1) return
-      matched.add(bestIdx)
-      const offset = tap - ideals[bestIdx] - peakOffsetMsRef.current
-      const rating = bestDiff <= 50 ? 'perfect' : bestDiff <= 150 ? 'good' : bestDiff <= tol ? 'ok' : 'miss'
-      tapResults.push({ beat: bestIdx + 1, tapMs: tap, idealMs: ideals[bestIdx], diffMs: bestDiff, offsetMs: offset, rating })
-    })
-
-    ideals.forEach((ideal, i) => {
-      if (!matched.has(i))
-        tapResults.push({ beat: i + 1, tapMs: 0, idealMs: ideal, diffMs: 0, offsetMs: 0, rating: 'miss' })
-    })
-
-    tapResults.sort((a, b) => a.beat - b.beat)
+    // Order-preserving match: walk taps and ideals in parallel.
+    // If a tap is too far past the current ideal → that ideal is a miss, advance ideal.
+    // If a tap is too far before the current ideal → spurious tap, discard.
+    // Otherwise → match and advance both.
+    let ti = 0, ii = 0
+    while (ti < taps.length && ii < ideals.length) {
+      const tap = taps[ti]
+      const ideal = ideals[ii]
+      const diff = tap - ideal
+      if (diff > tol) {
+        tapResults.push({ beat: ii + 1, tapMs: 0, idealMs: ideal, diffMs: 0, offsetMs: 0, rating: 'miss' })
+        ii++
+      } else if (diff < -tol) {
+        ti++
+      } else {
+        const absDiff = Math.abs(diff)
+        const offset = diff - peakOffsetMsRef.current
+        const rating = absDiff <= 50 ? 'perfect' : absDiff <= 150 ? 'good' : 'ok'
+        tapResults.push({ beat: ii + 1, tapMs: tap, idealMs: ideal, diffMs: absDiff, offsetMs: offset, rating })
+        ti++
+        ii++
+      }
+    }
+    while (ii < ideals.length) {
+      tapResults.push({ beat: ii + 1, tapMs: 0, idealMs: ideals[ii], diffMs: 0, offsetMs: 0, rating: 'miss' })
+      ii++
+    }
     const hits = tapResults.filter(r => r.rating !== 'miss').length
     const pct = Math.round((hits / ideals.length) * 100)
 
@@ -619,6 +733,15 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
     const good    = tapResults.filter(r => r.rating === 'good').length
     const ok      = tapResults.filter(r => r.rating === 'ok').length
     const miss    = tapResults.filter(r => r.rating === 'miss').length
+
+    const nonMissOffsets = tapResults.filter(r => r.rating !== 'miss').map(r => r.offsetMs)
+    if (nonMissOffsets.length >= 3) {
+      const mean = nonMissOffsets.reduce((a, b) => a + b, 0) / nonMissOffsets.length
+      const variance = nonMissOffsets.reduce((s, o) => s + (o - mean) ** 2, 0) / nonMissOffsets.length
+      setRhythmStats({ mean, stdDev: Math.sqrt(variance) })
+    } else {
+      setRhythmStats(null)
+    }
 
     setScore({ hits, total: ideals.length, pct })
     setResults(tapResults)
@@ -861,6 +984,15 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
         {/* ── Countdown ── */}
         {phase === 'countdown' && (
           <div className="flex flex-col items-center gap-4">
+            <div className="w-full">
+              <div className="flex justify-between text-xs mb-1" style={{ color: 'var(--muted)' }}>
+                <span>Round progress</span>
+                <span>{selectedBeat.bars} bars · {selectedBeat.bpm} BPM</span>
+              </div>
+              <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: '#222' }}>
+                <div className="h-full" style={{ width: '0%', backgroundColor: 'var(--accent-primary)' }} />
+              </div>
+            </div>
             <div className="w-full rounded-lg overflow-hidden" style={{ border: '1px solid #222', position: 'relative' }}>
               <canvas
                 ref={timelineCanvasRef}
@@ -896,6 +1028,22 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
         {/* ── Playing ── */}
         {phase === 'playing' && (
           <div className="flex flex-col items-center gap-4">
+            <div className="w-full">
+              <div className="flex justify-between text-xs mb-1" style={{ color: 'var(--muted)' }}>
+                <span>Round progress</span>
+                <span>{selectedBeat.bars} bars · {selectedBeat.bpm} BPM</span>
+              </div>
+              <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: '#222' }}>
+                <div
+                  className="h-full"
+                  style={{
+                    width: `${playingProgress}%`,
+                    backgroundColor: 'var(--accent-primary)',
+                    transition: `width ${playingDurationMs}ms linear`,
+                  }}
+                />
+              </div>
+            </div>
             <div className="w-full rounded-lg overflow-hidden" style={{ border: '1px solid #222' }}>
               <canvas
                 ref={timelineCanvasRef}
@@ -987,6 +1135,45 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
               </div>
             </div>
 
+            {rhythmStats && (
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: 'var(--muted)' }}>
+                  Your Rhythm
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="p-4 rounded-xl" style={{ backgroundColor: '#111', border: '1px solid #222' }}>
+                    <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--muted)' }}>
+                      Average Timing
+                    </div>
+                    <div className="text-3xl font-bold mb-1">
+                      {rhythmStats.mean >= 0 ? '+' : ''}{Math.round(rhythmStats.mean)}
+                      <span className="text-base font-normal ml-1" style={{ color: 'var(--muted)' }}>ms</span>
+                    </div>
+                    <div className="text-sm font-semibold" style={{ color: feelLabel(rhythmStats.mean).color }}>
+                      {feelLabel(rhythmStats.mean).label}
+                    </div>
+                    <TierBar tiers={feelTiers(rhythmStats.mean)} pointerPct={feelPointerPct(rhythmStats.mean)} />
+                  </div>
+                  <div className="p-4 rounded-xl" style={{ backgroundColor: '#111', border: '1px solid #222' }}>
+                    <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--muted)' }}>
+                      Consistency
+                    </div>
+                    <div className="text-3xl font-bold mb-1">
+                      ±{Math.round(rhythmStats.stdDev)}
+                      <span className="text-base font-normal ml-1" style={{ color: 'var(--muted)' }}>ms</span>
+                    </div>
+                    <div className="text-sm font-semibold" style={{ color: consistencyLabel(rhythmStats.stdDev).color }}>
+                      {consistencyLabel(rhythmStats.stdDev).label}
+                    </div>
+                    <TierBar tiers={consistencyTiers(rhythmStats.stdDev)} pointerPct={consistencyPointerPct(rhythmStats.stdDev)} />
+                  </div>
+                </div>
+                <p className="text-xs mt-3" style={{ color: 'var(--muted)' }}>
+                  Tight clusters beat random scatter — even slightly behind the beat is good, as long as you&apos;re consistent. That&apos;s what rhythm is.
+                </p>
+              </div>
+            )}
+
             <div className="flex flex-col gap-3">
               <button
                 onClick={startPreview}
@@ -996,7 +1183,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
                 Play Again
               </button>
               <button
-                onClick={() => { setPhase('select'); setResults([]); setShowSignIn(false) }}
+                onClick={() => { setPhase('select'); setResults([]); setShowSignIn(false); setRhythmStats(null) }}
                 className="w-full py-3 rounded-full font-semibold transition-opacity hover:opacity-90"
                 style={{ backgroundColor: '#1a1a1a', color: 'var(--foreground)', border: '1px solid #333' }}
               >

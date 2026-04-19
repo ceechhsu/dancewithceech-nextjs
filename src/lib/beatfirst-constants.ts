@@ -4,6 +4,7 @@ export const GAME_BARS = 9      // 1 countdown bar + 8 scored bars
 export const CANVAS_W = 560
 export const CANVAS_H = 120
 export const PLAYBACK_SCALE = 0.18 // px/ms — shows ~3.1 seconds at a time
+export const WAVEFORM_CAPTURE_MS = 200 // kept shorter than the smallest tap gap (2 steps @ 125bpm = 240ms) so the captured envelope never contains the next hit
 
 export type TapResult = {
   beat: number

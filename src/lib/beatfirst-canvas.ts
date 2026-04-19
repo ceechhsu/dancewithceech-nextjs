@@ -1,6 +1,6 @@
 import React from 'react'
 import { type Beat } from '@/lib/beats'
-import { type TapResult, CANVAS_W, STEPS_PER_BAR } from '@/lib/beatfirst-constants'
+import { type TapResult, CANVAS_W, STEPS_PER_BAR, WAVEFORM_CAPTURE_MS } from '@/lib/beatfirst-constants'
 
 export const ratingColor = (r: TapResult['rating']) =>
   ({ perfect: '#22c55e', good: '#86efac', ok: '#FDB515', miss: '#ef4444' })[r]
@@ -119,7 +119,7 @@ export function buildResultsDrawFn(
       if (!(beat.bassline ? beat.bassline[s] !== null : !!beat.taps[s])) continue
       const beatOriginMs = i * stepMs
       const beatOriginX = msToX(beatOriginMs)
-      const endX = msToX(beatOriginMs + 500)
+      const endX = msToX(beatOriginMs + WAVEFORM_CAPTURE_MS)
       if (endX < 0 || beatOriginX > W) continue
       drawBeatWaveform(ctx, beatOriginX, centerY, halfH, scale, envelope, maxAmp, peakOffsetMs, 0.85, stepMs)
     }
