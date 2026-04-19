@@ -76,6 +76,13 @@ export default async function LinksPage({ searchParams }: { searchParams: Search
       campaign: "youtube",
     },
     {
+      label: "Text Ceech",
+      sublabel: "Fastest way to reach me — (408) 657-3771",
+      href: "sms:4086573771",
+      external: true,
+      campaign: "sms",
+    },
+    {
       label: "Contact Ceech",
       sublabel: "Questions, bookings, collabs",
       href: internal("/contact", "contact"),

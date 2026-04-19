@@ -68,10 +68,19 @@ export default function ContactPage() {
               </a>
             </div>
             <div>
-              <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>Phone</div>
-              <a href="tel:4086573771" className="text-lg font-medium hover:text-blue-400 transition-colors" style={{ color: "var(--foreground)" }}>
-                (408) 657-3771
-              </a>
+              <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>Phone &amp; Text</div>
+              <div className="flex flex-wrap items-center gap-3">
+                <a href="tel:4086573771" className="text-lg font-medium hover:text-blue-400 transition-colors" style={{ color: "var(--foreground)" }}>
+                  (408) 657-3771
+                </a>
+                <a
+                  href="sms:4086573771"
+                  className="inline-block text-sm px-4 py-2 rounded-full transition-colors hover:opacity-90"
+                  style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f", color: "var(--accent-primary)" }}
+                >
+                  Text Ceech →
+                </a>
+              </div>
             </div>
             <div>
               <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>Studio</div>
