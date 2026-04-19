@@ -1,9 +1,9 @@
 ---
-title: "Mastering the Windmill: The Iconic B-Boy Power Move"
+title: "Windmill Breakdance: How to Do the B-Boy Power Move (Step by Step)"
 slug: "mastering-the-windmill-the-iconic-b-boy-power-move"
 date: "2024-06-21 16:35:56"
 category: "breaking-dance-moves"
-description: "Learn the Windmill breaking power move step by step. Master this iconic b-boy continuous backspin created by Ken Swift—a must-have for every breaker's set."
+description: "Windmill breakdance tutorial — the iconic b-boy power move created by Ken Swift of Rock Steady Crew. 9-step guide to this continuous backspin with kung-fu roots."
 ---
 ## Introduction
 
@@ -41,6 +41,23 @@ The windmill was accidentally created by Ken Swift of the Rock Steady Crew from 
 ## Conclusion
 
 The windmill is a cornerstone move in breaking that showcases a dancer's strength, control, and fluidity. While it may take time and dedication to master, the windmill opens up a world of possibilities for combining with other moves and developing your unique style. As you progress, you can explore variations like power windmills, no-handed windmills, and combinations with other power moves. Remember, consistent practice and proper technique are key to perfecting this iconic b-boy move.
+
+## Frequently Asked Questions
+
+### What is the Windmill in breakdancing?
+The Windmill (also called the continuous backspin) is an iconic b-boy power move where the dancer rolls their torso continuously in a circular motion on the floor while their legs twirl through the air in a V-shape. It's one of the most recognizable power moves in breaking and serves as the foundation for many advanced variations.
+
+### Who created the Windmill breakdance move?
+The Windmill was accidentally created by Ken Swift of the Rock Steady Crew from the Bronx, New York. The move was born when Swift overshot a chair freeze and the momentum carried him into a continuous back spin. He drew additional inspiration from kung fu films — particularly Bruce Lee — which featured ground-based kicks that resembled the windmill's leg motion.
+
+### How long does it take to learn a Windmill?
+Most dancers need 2-6 months of dedicated practice to perform a rough Windmill. A clean, sustained Windmill with good leg extension takes 6-12 months. Prerequisites like the backspin and turtle freeze should be solid first — jumping straight to the Windmill without those foundations dramatically slows progress and increases injury risk.
+
+### Is the Windmill dangerous to learn?
+There's real risk if you skip the progressions. Landing hard on shoulders, neck, or lower back without proper technique can cause bruising or more serious injury. Learn the backspin and turtle freeze first, practice on padded surfaces, use a cypher mat or a thick rug, and consider wearing a beanie to protect your head. Ramp up slowly.
+
+### What's the most common Windmill mistake?
+Not keeping the feet off the ground. The Windmill only LOOKS like a windmill when the legs stay fully elevated in the V-shape throughout the rotation. Beginners drag their feet on the floor, which both kills the visual and ruins the momentum. Kick harder from the hips and keep the feet UP — that single adjustment fixes half the problems beginners have.
 
 ## More Breaking Dance Moves
 
