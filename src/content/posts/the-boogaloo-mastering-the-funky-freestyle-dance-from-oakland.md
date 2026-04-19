@@ -47,6 +47,23 @@ The Electronic Boogaloo Lockers formed in Fresno, California, made a name for th
 
 Boogaloo is more than just a dance; it's a cultural expression deeply rooted in African American history and the funk era. By learning and practicing Boogaloo, dancers not only master a unique and dynamic style but also connect with an important piece of dance history. As the original Boogaloo dancers pass their knowledge to new generations, they ensure that this influential dance form continues to thrive and inspire, bridging the gap between classic funk styles and modern street dance.
 
+## Frequently Asked Questions
+
+### What is the Boogaloo dance?
+The Boogaloo is a funk-style street dance that emerged in Oakland, California, in the late 1960s. It's built on rolling hip and leg motion, rhythmic knee bends, and fluid full-body grooves inspired by James Brown, the Temptations, and even cartoon characters. The Boogaloo predates hip hop and is the foundation from which popping, strutting, and robotting all grew.
+
+### Is the Boogaloo the same as popping?
+No — but they're deeply connected. Boogaloo Sam (from Fresno) invented popping by taking the Boogaloo's fluid body mechanics and adding sharp muscle contractions ("pops") to it. The Boogaloo itself is purely fluid and rolling; popping introduces the jerky hits. Most funk style dancers learn Boogaloo first because it builds the body awareness popping relies on.
+
+### Who created the Boogaloo dance?
+The Boogaloo was created collectively by African American youth in Oakland, California, in the late 1960s. No single person invented it — it emerged organically from the funk music scene. The Electronic Boogaloo Lockers (later the Electric Boogaloos), founded by Boogaloo Sam in Fresno, popularized and refined the style globally after their 1979 Soul Train appearance.
+
+### How long does it take to learn the Boogaloo?
+The basic hip-rolling stance takes 1-2 weeks of daily practice to start feeling natural. Developing the full Boogaloo vocabulary (Dime Stop, Hit, Mack Pose, Old Man, etc.) takes 6 months to a year. Boogaloo rewards patience — it's a groove-first dance, and rushing the fundamentals produces stiff, unconvincing results.
+
+### What's the most common Boogaloo mistake?
+Dancing from the hips only. Boogaloo moves from the WHOLE lower body — knees, hips, ankles, feet all contributing to the rolling motion. Beginners who only swivel their hips produce a move that looks hollow. The motion should originate from the knees, travel through the hips, and subtly travel up to the shoulders.
+
 ## More Funk & Popping Dance Moves
 
 If you liked the Boogaloo, these moves share the same Oakland/California funk lineage and grew directly out of the boogaloo tradition:
