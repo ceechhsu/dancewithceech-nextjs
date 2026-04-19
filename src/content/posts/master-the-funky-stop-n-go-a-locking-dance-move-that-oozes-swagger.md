@@ -1,9 +1,9 @@
 ---
-title: "Master the Stop N Go: A Locking Dance Move with Swagger"
+title: "Stop N Go Dance: How to Do This Locking Move (by Scoo B Doo)"
 slug: "master-the-funky-stop-n-go-a-locking-dance-move-that-oozes-swagger"
 date: "2024-06-20 15:45:52"
 category: "locking-dance-moves"
-description: "Learn the Stop N Go locking dance move step-by-step. Master the freeze-and-flow contrast created by Scoo B Doo and command the dance floor with pure locking swagger."
+description: "Stop N Go locking dance tutorial — the freeze-and-flow move created by Jimmy 'Scoo B Doo' Foster. 5 steps to master this signature locking contrast technique."
 ---
 ## Introduction
 
@@ -36,6 +36,23 @@ Locking, a funk dance style that emerged in the late 1960s, was pioneered by Don
 ## Conclusion
 
 The "Stop N' Go" is a true embodiment of the locking dance style, showcasing the contrast between stillness and motion that defines this funk-fueled art form. By mastering this move, dancers can tap into the raw energy and playful spirit that has made locking a beloved dance genre for decades. Whether performed solo or incorporated into intricate routines, the "Stop N' Go" is a surefire way to elevate your locking game and command the dance floor with unparalleled swagger.
+
+## Frequently Asked Questions
+
+### What is the Stop N Go locking dance?
+The Stop N Go is a locking dance move built on the contrast between sudden freezes and smooth transitions back into motion. The dancer steps, freezes in a locked pose for a beat, then releases and steps again in the opposite direction. The sharp tension between stillness and flow is what gives locking its signature character.
+
+### Who created the Stop N Go move?
+The Stop N Go was created by Jimmy "Scoo B Doo" Foster, an original member of The Lockers and a pioneering protégé of locking founder Don Campbell. Foster developed the move in the 1970s and it became one of the most widely used locking techniques because it captures the dance style's defining tension between motion and stillness.
+
+### Is the Stop N Go the same as the Lock?
+Closely related. The Lock is the foundational freeze position that defines locking dance — a sudden pause after motion. The Stop N Go is a specific traveling move that USES the Lock (the freeze) as its defining beat. Every time you freeze during a Stop N Go, you're performing a Lock. The two moves train the same fundamental skill.
+
+### How long does it take to learn the Stop N Go?
+Most beginners can perform the step-freeze-step pattern in 20-30 minutes. Getting the SHARPNESS right on the freeze — a truly locked, tension-filled pose rather than a soft pause — takes 1-2 weeks of focused practice. Matching the freezes to the music's accent beats is the next layer, another week or two.
+
+### What's the most common Stop N Go mistake?
+Soft freezes. The Stop N Go lives and dies on how sharp the freeze is — it should feel like every muscle locks simultaneously, not like a gradual deceleration. Beginners let the freeze fade instead of hitting it hard. Practice the freeze alone first (without the step) until it feels like hitting a wall, then add the stepping.
 
 ## More Locking Dance Moves
 
