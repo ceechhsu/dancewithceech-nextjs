@@ -1,9 +1,9 @@
 ---
-title: "Mastering the Thomas Flare: A Powerful Breaking Move"
+title: "Thomas Flare Breakdance: How to Do This B-Boy Power Move"
 slug: "mastering-the-thomas-flare-a-powerful-breaking-move"
 date: "2024-06-21 16:33:43"
 category: "breaking-dance-moves"
-description: "Learn the Thomas Flare breaking power move step by step. Master this b-boy staple—circular leg swings on two arms—adapted from gymnastics to the dance floor."
+description: "Thomas Flare breakdance tutorial — the gymnastics-born b-boy power move with continuous leg circles on two arms. 8-step guide with strength and flexibility tips."
 ---
 ## Introduction
 
@@ -41,6 +41,23 @@ The flare originated in gymnastics and was popularized in breaking culture. It w
 ## Conclusion
 
 The Thomas Flare is a cornerstone move in breaking that demands dedication and practice to master. By understanding its origins in gymnastics and its adaptation to breaking, dancers can appreciate the rich history behind this dynamic power move. With consistent practice and attention to technique, breakers can develop smooth, high-flying flares that will elevate their performances and battles. Remember, the key to successful flares lies in the combination of leg power, arm strength, and precise weight shifts, all working together to create a fluid, circular motion.
+
+## Frequently Asked Questions
+
+### What is the Thomas Flare?
+The Thomas Flare (usually just called "flare" in breaking) is a power move where the dancer alternates balance between both arms while swinging their legs in continuous wide circles. It originated in gymnastics on the pommel horse and was adapted to breakdancing in the late 1970s, becoming one of breaking's most recognizable power moves.
+
+### Who created the Thomas Flare?
+The Thomas Flare was created by American gymnast Kurt Thomas in the 1970s on the pommel horse. B-boys adapted the move to the dance floor by performing it without a pommel horse, balancing on their hands and the floor instead. In gymnastics it's technically the "Thomas flair" — the breaking spelling "flare" is the one that stuck in dance circles.
+
+### Is the Thomas Flare hard to learn?
+Very hard. The Thomas Flare is one of the most physically demanding moves in breaking — it requires significant shoulder and arm strength, hip flexibility, core control, and coordination. Most breakers need 6-12 months of dedicated training with solid prerequisites (swipes, push-ups, straddle flexibility) before they can execute a clean flare.
+
+### How long does it take to learn the Thomas Flare?
+Assuming you have the prerequisite strength and flexibility: 3-6 months of dedicated practice to get a rough flare, 6-12 months for a clean one, 1-2 years to combine flares into sequences smoothly. Without prerequisites (shoulder strength, straddle flexibility, core stability), expect significantly longer — start with conditioning first.
+
+### What's the most common Thomas Flare mistake?
+Not keeping the arms fully extended. The flare requires locked-out, fully extended arms to transfer weight between them cleanly. Bent arms collapse, causing the hips to drop and the rotation to die. Drill planche-position arm strength BEFORE attempting full flares — push-ups with locked arms, L-sits, and straddle holds build the required structure.
 
 ## More Breaking Dance Moves
 
