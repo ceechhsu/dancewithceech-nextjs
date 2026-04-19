@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
 import Nav from "@/components/Nav";
 import ScrollyHero from "@/components/ScrollyHero";
 import StatsBar from "@/components/StatsBar";
@@ -50,8 +49,7 @@ export const metadata = {
 export default function Home() {
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
-      <Script
-        id="organization-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
