@@ -1,6 +1,5 @@
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import Script from "next/script";
 import ContactForm from "./ContactForm";
 
 export const metadata = {
@@ -38,8 +37,7 @@ const schema = {
 export default function ContactPage() {
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
-      <Script
-        id="business-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
