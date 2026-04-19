@@ -1,9 +1,9 @@
 ---
-title: "Mastering the Which A Way: A Classic Locking Move"
+title: "Which A Way Dance: How to Do the Locking Move by Damita Jo Freeman"
 slug: "the-which-a-way-locking-move"
 date: "2024-06-21 11:44:52"
 category: "locking-dance-moves"
-description: "Learn the Which A Way locking move step by step. Master Damita Jo Freeman's signature hip rotation that creates a mesmerizing multi-directional illusion."
+description: "Which A Way locking tutorial — the signature hip-and-torso rotation created by Damita Jo Freeman of Soul Train. 6 steps to master this classic 1970s locking move."
 ---
 ## Introduction
 
@@ -36,6 +36,23 @@ The "Which A Way" move was created by Damita Jo Freeman, a pioneering female loc
 ## Conclusion
 
 The "Which A Way" is a quintessential locking move that embodies the smooth, controlled, and funky essence of the dance style. By mastering this move, dancers can pay homage to the pioneers who shaped locking while adding their own unique flair and personality to the movement.
+
+## Frequently Asked Questions
+
+### What is the Which A Way locking move?
+The Which A Way is a classic locking dance move built on a smooth alternating rotation of the hips and torso while the feet stay planted. The dancer's midsection twists right, returns through center, then twists left in a continuous rhythmic wave. The illusion makes it look like the body is heading multiple directions at once — hence the name.
+
+### Who created the Which A Way dance?
+The Which A Way was created by Damita Jo Freeman, a pioneering female locker from the early 1970s Los Angeles locking scene. Freeman introduced the move on Soul Train, where it became a recognized locking signature. She's one of the most important women in locking history and her contribution to the locking vocabulary is foundational.
+
+### Who is Damita Jo Freeman?
+Damita Jo Freeman is a legendary dancer best known for her appearances on Soul Train in the early 1970s, where she performed locking alongside the show's other iconic dancers. She popularized multiple locking moves including the Which A Way and is considered one of the founding figures of women in locking. Her influence on the dance genre is immense.
+
+### How long does it take to learn the Which A Way?
+The basic hip-and-torso rotation takes 15-20 minutes to perform. Making it SMOOTH — the defining quality that sells the illusion — takes 2-4 weeks of daily practice. The challenge is isolating the midsection: keeping your feet planted and shoulders relatively still while only the hips and torso rotate. That isolation takes reps.
+
+### What's the most common Which A Way mistake?
+Moving the shoulders too much. The Which A Way works when the rotation is concentrated in the HIPS and TORSO — not in the shoulders. Beginners who twist their shoulders with the hips lose the isolation that creates the "which way is she going" illusion. Keep the upper body relatively stable and let the midsection do the twisting.
 
 ## More Locking Dance Moves
 
