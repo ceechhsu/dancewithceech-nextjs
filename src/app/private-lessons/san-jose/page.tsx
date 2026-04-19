@@ -173,7 +173,7 @@ export default function SanJosePrivateLessonsPage() {
           </p>
           <div className="flex flex-wrap gap-3 text-sm">
             <a
-              href="https://www.yelp.com/biz/dance-with-ceech-san-jose"
+              href="https://www.yelp.com/biz/dance-with-ceech-san-jose-3"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-4 py-2 rounded-full transition-colors hover:opacity-90"

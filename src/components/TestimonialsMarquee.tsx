@@ -113,7 +113,7 @@ export default function TestimonialsMarquee() {
               <span className="text-yellow-400">★</span> 5.0 Google · 56 reviews →
             </a>
             <a
-              href="https://www.yelp.com/biz/dance-with-ceech-santa-clara"
+              href="https://www.yelp.com/biz/dance-with-ceech-san-jose-3"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-white"
