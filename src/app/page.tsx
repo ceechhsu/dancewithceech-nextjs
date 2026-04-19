@@ -1,11 +1,32 @@
 import Link from "next/link";
 import Image from "next/image";
+import Script from "next/script";
 import Nav from "@/components/Nav";
 import ScrollyHero from "@/components/ScrollyHero";
 import StatsBar from "@/components/StatsBar";
 import TestimonialsMarquee from "@/components/TestimonialsMarquee";
 import { CircularGallery } from "@/components/ui/circular-gallery";
 import { RainbowBorderButton } from "@/components/ui/rainbow-border-button";
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "DanceWithCeech",
+  "alternateName": "Dance With Ceech",
+  "url": "https://dancewithceech.com",
+  "logo": "https://dancewithceech.com/logo-mark.png",
+  "description": "Hip-hop, locking, popping, breaking, and house dance lessons in San Jose, CA — private, academy, and online — taught by Ceech, Electric Boogaloos lineage instructor with 25+ years of teaching experience.",
+  "founder": {
+    "@type": "Person",
+    "name": "Ceech Hsu"
+  },
+  "sameAs": [
+    "https://www.instagram.com/dancewithceech",
+    "https://www.tiktok.com/@dancewithceech",
+    "https://www.youtube.com/@dancewithceech",
+    "https://www.facebook.com/dancewithceech"
+  ]
+};
 
 export const metadata = {
   title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
@@ -29,6 +50,11 @@ export const metadata = {
 export default function Home() {
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
+      <Script
+        id="organization-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
 
       <Nav />
 

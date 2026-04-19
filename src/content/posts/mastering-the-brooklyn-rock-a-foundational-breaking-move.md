@@ -1,9 +1,9 @@
 ---
-title: "Mastering the Brooklyn Rock: A Foundational Breaking Move"
+title: "Brooklyn Rock (Uprock): How to Do This Breaking Battle Move"
 slug: "mastering-the-brooklyn-rock-a-foundational-breaking-move"
 date: "2024-06-21 14:55:34"
 category: "breaking-dance-moves"
-description: "Learn the Brooklyn Rock (Uprock), a foundational breaking move with sharp footwork and battle style. Step-by-step guide for b-boys and b-girls to master this street classic."
+description: "Brooklyn Rock (Uprock) tutorial — the 1970s Bushwick breaking move built on jerks, burns, and battle style. 8-step guide to this breaking toprock foundation."
 ---
 ## Introduction
 
@@ -42,6 +42,23 @@ The term "Rocking" or "Uprock" may have derived from the colloquial use of "rock
 ## Conclusion
 
 The Brooklyn Rock is more than just a dance move; it's a cultural expression that embodies the competitive spirit and creativity of breaking. By mastering this style, dancers can connect with the roots of hip-hop culture while developing their own unique voice within the breaking community. Whether used in battles or performances, the Brooklyn Rock remains a powerful tool for self-expression and a testament to the enduring legacy of street dance.
+
+## Frequently Asked Questions
+
+### What is Brooklyn Rock (Uprock)?
+Brooklyn Rock (also called Uprock or Rocking) is a breaking/hip hop battle dance built on sharp jerks, intricate footwork, and theatrical "burns" — mimed attacks directed at an opponent without physical contact. It's a standing-level battle style developed to replace physical gang fighting with dance-based competition, and a foundational element of breaking's toprock vocabulary.
+
+### Is Brooklyn Rock the same as Uprock?
+Yes — the terms are used interchangeably. "Brooklyn Rock" emphasizes the geographic origin; "Uprock" describes the standing-level technique (as opposed to "downrock," which is floor-level footwork). "Rocking" is the older shortened name. All three refer to the same dance.
+
+### Where did Brooklyn Rock come from?
+Brooklyn Rock emerged in the early 1970s in the Bushwick section of Brooklyn, New York. It was conceived by a dancer known as Rubber Band as a non-violent alternative to gang fighting — a way for rival crews to compete through dance rather than physical conflict. It predates the term "breakdancing" and became a foundational influence on breaking's toprock.
+
+### Is Brooklyn Rock the same as breakdancing?
+Not exactly. Breakdancing (breaking) includes four elements: toprock, downrock (floor footwork), freezes, and power moves. Brooklyn Rock is a standing-level battle style that heavily influenced toprock but exists as its own tradition. Most breakers incorporate Brooklyn Rock elements into their toprock, but dedicated uprockers maintain the style separately.
+
+### What are "burns" in Brooklyn Rock?
+Burns are theatrical, mimed attacks directed at your opponent — pointing at them, mimicking a gun, pretending to slap or kick, all without physical contact. Burns are how you "win" in an uprock battle: your burns have to be more creative, better-timed, and more stylish than your opponent's. They're the competitive heart of Brooklyn Rock.
 
 ## More Breaking Dance Moves
 

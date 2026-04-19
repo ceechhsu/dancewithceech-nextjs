@@ -1,9 +1,9 @@
 ---
-title: "Master the Scooby Doo: A Locking Dance Move with Personality"
+title: "Scooby Doo Dance: How to Do Jimmy 'Scoo B Doo' Foster's Locking Move"
 slug: "master-the-funky-scooby-doo-a-locking-dance-move-with-personality"
 date: "2024-06-20 17:20:29"
 category: "locking-dance-moves"
-description: "Learn the Scooby Doo locking dance move step-by-step. Master the funky kicks and arm swings created by Jimmy Foster and add serious personality to your locking."
+description: "Scooby Doo dance tutorial — the funky locking move created by Jimmy 'Scoo B Doo' Foster in the 1970s. Step-by-step with kicks, arm swings, and personality tips."
 ---
 ## Introduction
 
@@ -36,6 +36,23 @@ The Scooby Doo was created by Jimmy "Scoo B Doo" Foster, a legendary locker from
 ## Conclusion
 
 The Scooby Doo is a dynamic and entertaining locking move that showcases the funk and creativity of the dance style. By mastering this move, you'll not only expand your locking repertoire but also develop a deeper appreciation for the art form's rich history and cultural significance.
+
+## Frequently Asked Questions
+
+### What is the Scooby Doo dance?
+The Scooby Doo is a signature locking dance move built on a squat-dip-kick-step-stomp sequence with exaggerated arm positions. Created by Jimmy "Scoo B Doo" Foster — a legendary locker from the 1970s — it's named after the cartoon character, reflecting its playful, funky, and comedic character. It's a staple of the locking dance vocabulary.
+
+### Who created the Scooby Doo locking move?
+Jimmy "Scoo B Doo" Foster, a pioneer of locking dance from the 1970s Los Angeles scene, created the move. Foster was one of the era's most innovative lockers and the Scooby Doo became his signature step. He named it after the Scooby-Doo cartoon because the move's exaggerated, goofy physicality matched the character's comedic energy.
+
+### Is the Scooby Doo hard to learn?
+It's moderate difficulty. The individual actions (squat, kick, step, stomp) are simple, but coordinating them WITH the specific arm positions and maintaining the exaggerated locking attitude takes practice. Most beginners can perform the sequence in 30 minutes; making it look funky and characterful takes 1-2 weeks.
+
+### How long does it take to learn the Scooby Doo?
+The basic step takes 20-30 minutes. Layering in the muscle-man arm start, the arm swap on the kick, and the attitude takes another 60-90 minutes. Integrating it into a longer locking sequence — transitioning in and out smoothly — takes a couple of practice sessions once the standalone move is solid.
+
+### What's the most common Scooby Doo mistake?
+Doing it too small. The Scooby Doo is a CHARACTER move — it's meant to be big, funny, and slightly cartoonish. Beginners who perform it tightly and politely lose the move's whole identity. Exaggerate the squat, commit to the kick, sell the arm positions. If it doesn't feel slightly silly, you're not doing enough.
 
 ## More Locking Dance Moves
 

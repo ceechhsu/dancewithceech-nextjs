@@ -1,9 +1,9 @@
 ---
-title: "Mastering the CC: A Fundamental Breaking Move"
+title: "CC Breaking Move (Kickout): How to Do This Foundational Footwork"
 slug: "mastering-the-cc-a-fundamental-breaking-move"
 date: "2024-06-21 14:57:53"
 category: "breaking-dance-moves"
-description: "Learn the CC (Kickout), a fundamental breakdancing footwork move. Master this essential b-boy step-by-step to build fluid downrock combinations and breaking agility."
+description: "CC (Kickout) breakdance tutorial — the foundational b-boy downrock footwork move used to build fluid floor combinations. 10-step guide with timing and tips."
 ---
 ## Introduction
 
@@ -42,6 +42,23 @@ The CC is one of the core footwork moves in breaking, which originated in the 19
 ## Conclusion
 
 The CC is a fundamental move in breaking that demonstrates a dancer's control, flexibility, and musicality. By mastering this technique, breakers can enhance their footwork sequences and create more dynamic performances. As with any breaking move, consistent practice and attention to detail are key to perfecting the CC. Remember that breaking is not just about executing moves, but also about expressing yourself and your style through the dance.
+
+## Frequently Asked Questions
+
+### What is the CC in breaking?
+The CC (also called the Kickout) is a foundational breakdancing footwork move where the dancer alternates leg kicks while supporting their body on the opposite arm and leg in a low squat. It's a core downrock element — a floor-level move that connects other footwork patterns and creates rhythmic transitions in a breaking set.
+
+### Is the CC the same as the Kickout?
+Yes — they're the same move. "CC" is the shortened name used in modern breaking culture; "Kickout" is the descriptive alternate name that refers to the kicking action. Both terms appear in tutorials and battle commentary.
+
+### Where did the CC breaking move come from?
+The CC is one of the foundational footwork moves in breaking, which originated in the early 1970s among African American and Puerto Rican youth in the South Bronx, New York. The exact creator isn't documented — the move grew out of the collective evolution of breaking's downrock vocabulary during the genre's first decade.
+
+### How long does it take to learn the CC?
+Most beginners can execute a rough CC in 1-2 weeks of daily practice. Clean form (the snap on the kick, smooth weight transfers, proper balance) takes 4-6 weeks. The move rewards flexibility — if your hamstrings and hip flexors are tight, add stretching to your practice to accelerate progress.
+
+### What's the most common CC mistake?
+Collapsing the supporting arm. The CC demands that you hold the weight on one arm AND one leg while the other leg kicks — beginners tend to let the support arm buckle, which kills the kick's power. Drill the support position (one arm, one leg, balanced) BEFORE adding the kick. Strong support makes for a sharp kickout.
 
 ## More Breaking Dance Moves
 
