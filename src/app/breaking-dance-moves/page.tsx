@@ -7,6 +7,7 @@ import { getAllPosts, CATEGORY_LABELS } from "@/lib/posts";
 export const metadata = {
   title: "Breaking Dance Moves — DanceWithCeech",
   description: "Learn breaking dance moves step by step. Footwork, power moves, and freezes taught by instructor Ceech.",
+  alternates: { canonical: "https://dancewithceech.com/breaking-dance-moves" },
   keywords: ["breaking dance moves", "breakdancing tutorials", "footwork", "power moves", "freezes", "bboy", "bgirl", "learn breaking"],
   openGraph: {
     title: "Breaking Dance Moves — DanceWithCeech",

@@ -5,6 +5,7 @@ import ContactForm from "./ContactForm";
 export const metadata = {
   title: "Contact — DanceWithCeech",
   description: "Get in touch with Ceech for questions about dance classes, private lessons, or anything else.",
+  alternates: { canonical: "https://dancewithceech.com/contact" },
 };
 
 const schema = {

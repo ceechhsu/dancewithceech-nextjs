@@ -7,6 +7,7 @@ import { getAllPosts, CATEGORY_LABELS } from "@/lib/posts";
 export const metadata = {
   title: "Hip-Hop Dance Moves — DanceWithCeech",
   description: "Learn hip-hop dance moves step by step. Tutorials for all levels from instructor Ceech.",
+  alternates: { canonical: "https://dancewithceech.com/hip-hop-dance-moves" },
   keywords: ["hip-hop dance moves", "hip hop dance tutorials", "learn hip hop", "street dance", "hip hop choreography", "hip hop dance for beginners"],
   openGraph: {
     title: "Hip-Hop Dance Moves — DanceWithCeech",

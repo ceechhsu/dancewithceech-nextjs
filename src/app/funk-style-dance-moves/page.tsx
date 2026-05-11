@@ -7,6 +7,7 @@ import { getAllPosts, CATEGORY_LABELS } from "@/lib/posts";
 export const metadata = {
   title: "Funk Style Dance Moves — DanceWithCeech",
   description: "Learn popping, waving, tutting and funk style dance moves. Step-by-step tutorials from instructor Ceech.",
+  alternates: { canonical: "https://dancewithceech.com/funk-style-dance-moves" },
   keywords: ["funk style dance", "popping dance moves", "waving dance", "tutting", "electric boogaloo", "learn popping", "funk dance tutorials"],
   openGraph: {
     title: "Funk Style Dance Moves — DanceWithCeech",

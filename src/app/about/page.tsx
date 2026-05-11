@@ -5,6 +5,7 @@ import Nav from "@/components/Nav";
 export const metadata = {
   title: "About Ceech — DanceWithCeech",
   description: "From UC Berkeley electrical engineer to hip-hop dance educator. Ceech's story, philosophy, and 25+ years of teaching.",
+  alternates: { canonical: "https://dancewithceech.com/about" },
 };
 
 export default function AboutPage() {

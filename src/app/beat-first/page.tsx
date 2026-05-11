@@ -7,6 +7,7 @@ import { supabaseAdmin } from '@/lib/supabase-admin'
 export const metadata = {
   title: 'BeatFirst — Rhythm Trainer | DanceWithCeech',
   description: 'Train your rhythm with real drum beats. Tap along, score points, unlock dance tutorials.',
+  alternates: { canonical: 'https://dancewithceech.com/beat-first' },
   openGraph: {
     title: 'BeatFirst — Rhythm Trainer | DanceWithCeech',
     description: 'Train your rhythm with real drum beats. Tap along, score points, unlock dance tutorials.',

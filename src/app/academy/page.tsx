@@ -82,6 +82,7 @@ const courseSchema = {
 export const metadata = {
   title: 'The Academy — DanceWithCeech',
   description: 'A private, judgment-free dance program for working professionals. Learn at home, build real confidence, and get on any dance floor. Founding member spots open now.',
+  alternates: { canonical: 'https://dancewithceech.com/academy' },
   openGraph: {
     title: 'The Academy — DanceWithCeech',
     description: 'A private, judgment-free dance program for working professionals. Learn at home, build real confidence, and get on any dance floor. Founding member spots open now.',

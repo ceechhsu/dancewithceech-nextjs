@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "check:redirects": "node scripts/check-redirects.mjs"
+    "check:redirects": "node scripts/check-redirects.mjs",
+    "check:sitemap-canonicals": "node scripts/check-sitemap-canonicals.mjs"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.11",

@@ -30,6 +30,7 @@ const organizationSchema = {
 export const metadata = {
   title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
   description: "Learn hip-hop, locking, popping, breaking, and house dance from Ceech — America's Got Talent performer, Body Rock champion, and Bay Area dance instructor. Private lessons in San Jose or online.",
+  alternates: { canonical: "https://dancewithceech.com" },
   openGraph: {
     title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
     description: "Learn hip-hop, locking, popping, breaking, and house dance from Ceech — America's Got Talent performer, Body Rock champion, and Bay Area dance instructor.",

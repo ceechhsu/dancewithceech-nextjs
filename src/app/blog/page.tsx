@@ -6,6 +6,7 @@ import { getAllPosts, CATEGORY_LABELS } from "@/lib/posts";
 export const metadata = {
   title: "Blog — DanceWithCeech",
   description: "Hip-hop dance tutorials, move breakdowns, and tips from Ceech.",
+  alternates: { canonical: "https://dancewithceech.com/blog" },
 };
 
 const CATEGORIES = [

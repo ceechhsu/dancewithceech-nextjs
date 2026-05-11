@@ -10,6 +10,7 @@ import VideoEvalForm from "@/components/VideoEvalForm";
 export const metadata = {
   title: "Private Lessons — DanceWithCeech",
   description: "Book a private 1-on-1 dance lesson with Ceech — in-person at Get Down Dance Studios in San Jose, or virtually via Zoom. Personalized hip-hop instruction for all levels.",
+  alternates: { canonical: "https://dancewithceech.com/private-lessons" },
   openGraph: {
     title: "Private Lessons — DanceWithCeech",
     description: "Book a private 1-on-1 dance lesson with Ceech — in-person at Get Down Dance Studios in San Jose, or virtually via Zoom. Personalized hip-hop instruction for all levels.",
