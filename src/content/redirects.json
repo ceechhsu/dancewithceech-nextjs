@@ -820,11 +820,47 @@
     "destination": "/breaking-dance-moves"
   },
   {
+    "source": "/category/dance-moves/locking-dance-moves/",
+    "destination": "/locking-dance-moves"
+  },
+  {
+    "source": "/category/dance-moves/locking-dance-moves",
+    "destination": "/locking-dance-moves"
+  },
+  {
     "source": "/category/dance-moves/page/2/",
     "destination": "/blog"
   },
   {
     "source": "/category/dance-moves/page/2",
     "destination": "/blog"
+  },
+  {
+    "source": "/category/dance-moves/page/:page/",
+    "destination": "/blog"
+  },
+  {
+    "source": "/category/dance-moves/page/:page",
+    "destination": "/blog"
+  },
+  {
+    "source": "/blog/page/:page/",
+    "destination": "/blog"
+  },
+  {
+    "source": "/blog/page/:page",
+    "destination": "/blog"
+  },
+  {
+    "source": "/hip-hop-dance-move-prep/:path*",
+    "destination": "/blog/hip-hop-dance-move-prep"
+  },
+  {
+    "source": "/youtube.com/nustudios/",
+    "destination": "https://www.youtube.com/nustudios"
+  },
+  {
+    "source": "/youtube.com/nustudios",
+    "destination": "https://www.youtube.com/nustudios"
   }
 ]
