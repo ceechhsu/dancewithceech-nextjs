@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { getAllPosts, CATEGORY_LABELS } from "@/lib/posts";
+import { CATEGORY_LABELS, CATEGORY_PATHS, getAllPosts, getFeaturedTutorialsByCategory } from "@/lib/posts";
 
 export const metadata = {
   title: "Blog — DanceWithCeech",
@@ -31,6 +31,9 @@ export default async function BlogPage({
     activeCategory === "all"
       ? allPosts
       : allPosts.filter((p) => p.category === activeCategory);
+  const featuredTutorialGroups = Object.entries(getFeaturedTutorialsByCategory()).filter(
+    ([, featuredPosts]) => featuredPosts.length > 0
+  );
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
@@ -65,6 +68,48 @@ export default async function BlogPage({
               {cat === "all" ? "All" : CATEGORY_LABELS[cat] ?? cat}
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* FEATURED TUTORIALS */}
+      <section className="px-6 pb-16">
+        <div className="max-w-5xl mx-auto rounded-2xl p-6 md:p-8" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+            <div>
+              <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--accent-primary)" }}>
+                Featured Tutorials
+              </div>
+              <h2 className="text-2xl font-bold">Core dance move guides by style</h2>
+            </div>
+            <p className="text-sm max-w-md" style={{ color: "var(--muted)" }}>
+              These are the main tutorial paths students usually need first.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
+            {featuredTutorialGroups.map(([category, featuredPosts]) => (
+              <div key={category}>
+                <Link
+                  href={CATEGORY_PATHS[category] ?? `/blog?category=${category}`}
+                  className="block text-xs font-bold uppercase tracking-widest mb-3 hover:text-blue-400 transition-colors"
+                  style={{ color: "var(--accent-primary)" }}
+                >
+                  {CATEGORY_LABELS[category] ?? category}
+                </Link>
+                <div className="flex flex-col gap-2">
+                  {featuredPosts.map((post) => (
+                    <Link
+                      key={post.slug}
+                      href={`/blog/${post.slug}`}
+                      className="text-sm leading-snug hover:text-white transition-colors"
+                      style={{ color: "var(--muted)" }}
+                    >
+                      {post.title}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

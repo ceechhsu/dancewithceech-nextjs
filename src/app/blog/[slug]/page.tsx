@@ -3,7 +3,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { getAllPosts, getPostBySlug, CATEGORY_LABELS } from "@/lib/posts";
+import { CATEGORY_LABELS, CATEGORY_PATHS, getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/posts";
 
 export async function generateStaticParams() {
   const posts = getAllPosts();
@@ -67,6 +67,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const pageUrl = `https://dancewithceech.com/blog/${post.slug}`;
   const ogImage = `https://dancewithceech.com/images/posts/${post.slug}.jpg`;
   const description = post.description ?? `Learn the ${post.title} dance move with step-by-step instruction from Ceech.`;
+  const relatedPosts = getRelatedPosts(post);
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -181,6 +182,40 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         {/* Content */}
         <div className="prose" dangerouslySetInnerHTML={{ __html: html }} />
+
+        {relatedPosts.length > 0 && (
+          <section className="mt-14 p-6 rounded-2xl" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-5">
+              <div>
+                <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--accent-primary)" }}>
+                  Keep Learning
+                </div>
+                <h2 className="text-xl font-bold">
+                  More {CATEGORY_LABELS[post.category] ?? "dance"} tutorials
+                </h2>
+              </div>
+              <Link
+                href={CATEGORY_PATHS[post.category] ?? `/blog?category=${post.category}`}
+                className="text-sm font-semibold hover:text-white transition-colors"
+                style={{ color: "var(--muted)" }}
+              >
+                View all →
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 gap-3">
+              {relatedPosts.map((relatedPost) => (
+                <Link
+                  key={relatedPost.slug}
+                  href={`/blog/${relatedPost.slug}`}
+                  className="block rounded-xl px-4 py-3 text-sm font-semibold transition-colors hover:border-blue-600"
+                  style={{ color: "var(--foreground)", backgroundColor: "var(--background)", border: "1px solid #1f1f1f" }}
+                >
+                  {relatedPost.title}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Decorative rule */}
         <div className="mt-16 mb-12" style={{ height: "1px", background: "linear-gradient(to right, #2563EB, transparent)" }} />

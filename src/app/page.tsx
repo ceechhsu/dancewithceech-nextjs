@@ -6,6 +6,7 @@ import StatsBar from "@/components/StatsBar";
 import TestimonialsMarquee from "@/components/TestimonialsMarquee";
 import { CircularGallery } from "@/components/ui/circular-gallery";
 import { RainbowBorderButton } from "@/components/ui/rainbow-border-button";
+import { CATEGORY_LABELS, CATEGORY_PATHS, getFeaturedTutorialsByCategory } from "@/lib/posts";
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -48,6 +49,10 @@ export const metadata = {
 };
 
 export default function Home() {
+  const featuredTutorialGroups = Object.entries(getFeaturedTutorialsByCategory()).filter(
+    ([, posts]) => posts.length > 0
+  );
+
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
       <script
@@ -171,6 +176,46 @@ export default function Home() {
                   <p className="text-sm" style={{ color: "var(--muted)" }}>{description}</p>
                 </div>
               </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURED TUTORIAL LINKS */}
+      <section className="py-20 px-6" style={{ backgroundColor: "var(--surface)", borderTop: "1px solid #1f1f1f" }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
+              Start Learning
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Start with these dance tutorials</h2>
+            <p className="max-w-2xl mx-auto" style={{ color: "var(--muted)" }}>
+              Core tutorials from each style, linked directly from the homepage so students and search engines can reach them faster.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {featuredTutorialGroups.map(([category, posts]) => (
+              <div key={category} className="rounded-2xl p-5" style={{ backgroundColor: "var(--background)", border: "1px solid #1f1f1f" }}>
+                <Link
+                  href={CATEGORY_PATHS[category] ?? `/blog?category=${category}`}
+                  className="block text-sm font-bold uppercase tracking-widest mb-4 hover:text-blue-400 transition-colors"
+                  style={{ color: "var(--accent-primary)" }}
+                >
+                  {CATEGORY_LABELS[category] ?? category}
+                </Link>
+                <div className="flex flex-col gap-3">
+                  {posts.map((post) => (
+                    <Link
+                      key={post.slug}
+                      href={`/blog/${post.slug}`}
+                      className="text-sm leading-snug hover:text-white transition-colors"
+                      style={{ color: "var(--muted)" }}
+                    >
+                      {post.title}
+                    </Link>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
