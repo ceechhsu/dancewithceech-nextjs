@@ -197,14 +197,15 @@ export default function ScrollyHero() {
           <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "0 24px", pointerEvents: "none" }}>
             {PHASES.map(([, , text], i) => {
               const refs = [phase0Ref, phase1Ref, phase2Ref];
+              const Tag = i === 1 ? "h1" : "div";
               return (
-                <div
+                <Tag
                   key={i}
                   ref={refs[i]}
                   style={{ position: "absolute", opacity: 0, fontSize: "clamp(2rem, 6vw, 5rem)", fontWeight: 800, color: "#F9F9F9", letterSpacing: "-0.02em", lineHeight: 1.1, maxWidth: "800px", textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}
                 >
                   {text}
-                </div>
+                </Tag>
               );
             })}
           </div>
