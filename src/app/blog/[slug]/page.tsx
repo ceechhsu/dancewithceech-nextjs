@@ -68,6 +68,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const ogImage = `https://dancewithceech.com/images/posts/${post.slug}.jpg`;
   const description = post.description ?? `Learn the ${post.title} dance move with step-by-step instruction from Ceech.`;
   const relatedPosts = getRelatedPosts(post);
+  const categoryPath = CATEGORY_PATHS[post.category] ?? "/blog";
+  const categoryUrl = `https://dancewithceech.com${categoryPath}`;
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -86,7 +88,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Blog", item: "https://dancewithceech.com/blog" },
-      { "@type": "ListItem", position: 2, name: CATEGORY_LABELS[post.category] ?? post.category, item: `https://dancewithceech.com/blog?category=${post.category}` },
+      { "@type": "ListItem", position: 2, name: CATEGORY_LABELS[post.category] ?? post.category, item: categoryUrl },
       { "@type": "ListItem", position: 3, name: post.title, item: pageUrl },
     ],
   };
@@ -127,7 +129,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <nav className="flex items-center gap-2 text-xs mb-10 uppercase tracking-widest" style={{ color: "var(--muted)" }}>
           <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
           <span style={{ color: "#333" }}>/</span>
-          <Link href={`/blog?category=${post.category}`} className="hover:text-white transition-colors">
+          <Link href={categoryPath} className="hover:text-white transition-colors">
             {CATEGORY_LABELS[post.category] ?? post.category}
           </Link>
         </nav>
@@ -195,7 +197,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                 </h2>
               </div>
               <Link
-                href={CATEGORY_PATHS[post.category] ?? `/blog?category=${post.category}`}
+                href={categoryPath}
                 className="text-sm font-semibold hover:text-white transition-colors"
                 style={{ color: "var(--muted)" }}
               >

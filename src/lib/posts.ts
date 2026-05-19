@@ -51,8 +51,8 @@ export const CATEGORY_PATHS: Record<string, string> = {
   "locking-dance-moves": "/locking-dance-moves",
   "breaking-dance-moves": "/breaking-dance-moves",
   "funk-style-dance-moves": "/funk-style-dance-moves",
-  "house-dance": "/blog?category=house-dance",
-  "general": "/blog?category=general",
+  "house-dance": "/house-dance",
+  "general": "/blog",
 };
 
 export function getAllPosts(): PostMeta[] {

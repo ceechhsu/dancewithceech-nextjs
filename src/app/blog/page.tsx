@@ -16,21 +16,12 @@ const CATEGORIES = [
   "breaking-dance-moves",
   "funk-style-dance-moves",
   "house-dance",
-  "general",
 ];
 
-export default async function BlogPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string }>;
-}) {
-  const { category } = await searchParams;
-  const activeCategory = category ?? "all";
+export default function BlogPage() {
+  const activeCategory = "all";
   const allPosts = getAllPosts();
-  const posts =
-    activeCategory === "all"
-      ? allPosts
-      : allPosts.filter((p) => p.category === activeCategory);
+  const posts = allPosts;
   const featuredTutorialGroups = Object.entries(getFeaturedTutorialsByCategory()).filter(
     ([, featuredPosts]) => featuredPosts.length > 0
   );
@@ -57,7 +48,7 @@ export default async function BlogPage({
           {CATEGORIES.map((cat) => (
             <Link
               key={cat}
-              href={cat === "all" ? "/blog" : `/blog?category=${cat}`}
+              href={cat === "all" ? "/blog" : CATEGORY_PATHS[cat]}
               className="px-4 py-2 rounded-full text-sm font-medium transition-colors"
               style={{
                 backgroundColor: activeCategory === cat ? "var(--accent-primary)" : "var(--surface)",
@@ -89,7 +80,7 @@ export default async function BlogPage({
             {featuredTutorialGroups.map(([category, featuredPosts]) => (
               <div key={category}>
                 <Link
-                  href={CATEGORY_PATHS[category] ?? `/blog?category=${category}`}
+                  href={CATEGORY_PATHS[category] ?? "/blog"}
                   className="block text-xs font-bold uppercase tracking-widest mb-3 hover:text-blue-400 transition-colors"
                   style={{ color: "var(--accent-primary)" }}
                 >

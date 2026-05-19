@@ -161,7 +161,7 @@ export default function Home() {
               { name: "Locking", slug: "/locking-dance-moves", image: "/images/styles/locking.jpg", description: "Funky freezes and sharp punctuations." },
               { name: "Breaking", slug: "/breaking-dance-moves", image: "/images/styles/breaking.jpg", description: "Footwork, power moves, and style." },
               { name: "Funk & Popping", slug: "/funk-style-dance-moves", image: "/images/styles/funk.jpg", description: "Isolations, waves, and electric hits." },
-              { name: "House Dance", slug: "/blog?category=house-dance", image: "/images/styles/house.jpg", description: "Fast footwork rooted in the underground." },
+              { name: "House Dance", slug: "/house-dance", image: "/images/styles/house.jpg", description: "Fast footwork rooted in the underground." },
             ].map(({ name, slug, image, description }) => (
               <Link key={name} href={slug} className="group rounded-2xl overflow-hidden transition-colors hover:border-blue-600" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
                 <div className="h-48 overflow-hidden">
@@ -197,7 +197,7 @@ export default function Home() {
             {featuredTutorialGroups.map(([category, posts]) => (
               <div key={category} className="rounded-2xl p-5" style={{ backgroundColor: "var(--background)", border: "1px solid #1f1f1f" }}>
                 <Link
-                  href={CATEGORY_PATHS[category] ?? `/blog?category=${category}`}
+                  href={CATEGORY_PATHS[category] ?? "/blog"}
                   className="block text-sm font-bold uppercase tracking-widest mb-4 hover:text-blue-400 transition-colors"
                   style={{ color: "var(--accent-primary)" }}
                 >
