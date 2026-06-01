@@ -69,6 +69,10 @@ const nextConfig: NextConfig = {
         source: "/favicon.png",
         headers: immutableCacheHeaders,
       },
+      {
+        source: "/favicon.ico",
+        headers: immutableCacheHeaders,
+      },
     ];
   },
   async redirects() {
