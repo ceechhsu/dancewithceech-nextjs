@@ -20,6 +20,7 @@ export default function MobileMenu() {
       <button
         onClick={() => setOpen(!open)}
         aria-label="Toggle menu"
+        className="flex min-h-11 min-w-11 items-center justify-center"
         style={{ color: "var(--foreground)" }}
       >
         {open ? <X size={24} /> : <Menu size={24} />}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, HTMLAttributes } from 'react';
+import Image from 'next/image';
 
 const cn = (...classes: (string | undefined | null | false)[]) => {
   return classes.filter(Boolean).join(' ');
@@ -73,6 +74,8 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
             const normalizedAngle = Math.abs(relativeAngle > 180 ? 360 - relativeAngle : relativeAngle);
             const opacity = Math.max(0.25, 1 - normalizedAngle / 180);
 
+            const isActive = activeVideoId === item.videoId;
+
             return (
               <div
                 key={item.videoId}
@@ -90,24 +93,51 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                 }}
               >
                 <div className="relative w-full h-full rounded-xl overflow-hidden shadow-2xl">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${item.videoId}`}
-                    width="200"
-                    height="356"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    title="Student testimonial"
-                    className="w-full h-full"
-                    style={{ border: 'none', display: 'block' }}
-                  />
-                  {/* Touch overlay: blocks iframe from stealing touch events.
-                      First tap activates the video; after that the iframe handles interaction. */}
-                  {activeVideoId !== item.videoId && (
-                    <div
-                      className="absolute inset-0"
-                      style={{ touchAction: 'pan-y' }}
-                      onClick={() => handleCardTap(item.videoId)}
+                  {isActive ? (
+                    <iframe
+                      src={`https://www.youtube-nocookie.com/embed/${item.videoId}?rel=0&autoplay=1`}
+                      width="200"
+                      height="356"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      title={`Student testimonial video ${i + 1}`}
+                      className="w-full h-full"
+                      style={{ border: 'none', display: 'block' }}
                     />
+                  ) : (
+                    <button
+                      type="button"
+                      aria-label={`Play student testimonial video ${i + 1}`}
+                      className="absolute inset-0 flex items-center justify-center"
+                      style={{ border: 0, padding: 0, backgroundColor: 'transparent', cursor: 'pointer', touchAction: 'pan-y' }}
+                      onClick={() => handleCardTap(item.videoId)}
+                    >
+                      <Image
+                        src={`https://i.ytimg.com/vi/${item.videoId}/hqdefault.jpg`}
+                        alt=""
+                        fill
+                        sizes="200px"
+                        className="object-cover"
+                      />
+                      <span
+                        aria-hidden="true"
+                        className="absolute flex h-14 w-14 items-center justify-center rounded-full text-lg font-bold text-white"
+                        style={{ backgroundColor: 'rgba(37, 99, 235, 0.9)' }}
+                      >
+                        <span
+                          style={{
+                            width: 0,
+                            height: 0,
+                            borderTop: '10px solid transparent',
+                            borderBottom: '10px solid transparent',
+                            borderLeft: '16px solid #fff',
+                            marginLeft: '4px',
+                          }}
+                        />
+                      </span>
+                    </button>
                   )}
                 </div>
               </div>

@@ -80,6 +80,7 @@ export default function Home() {
                 alt="DS Players on America's Got Talent 2010"
                 width={600}
                 height={380}
+                sizes="(min-width: 640px) 33vw, 100vw"
                 className="w-full object-cover"
                 style={{ height: "200px" }}
               />
@@ -94,6 +95,7 @@ export default function Home() {
                 alt="Mindtricks — original Jabbawockeez founders"
                 width={600}
                 height={380}
+                sizes="(min-width: 640px) 33vw, 100vw"
                 className="w-full object-cover"
                 style={{ height: "200px" }}
               />
@@ -108,6 +110,7 @@ export default function Home() {
                 alt="DS Players Body Rock 2007 Champions"
                 width={600}
                 height={380}
+                sizes="(min-width: 640px) 33vw, 100vw"
                 className="w-full object-cover"
                 style={{ height: "200px" }}
               />
@@ -164,11 +167,13 @@ export default function Home() {
               { name: "House Dance", slug: "/house-dance", image: "/images/styles/house.jpg", description: "Fast footwork rooted in the underground." },
             ].map(({ name, slug, image, description }) => (
               <Link key={name} href={slug} className="group rounded-2xl overflow-hidden transition-colors hover:border-blue-600" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
-                <div className="h-48 overflow-hidden">
-                  <img
+                <div className="relative h-48 overflow-hidden">
+                  <Image
                     src={image}
                     alt={name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
                 <div className="p-6">

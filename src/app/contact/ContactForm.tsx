@@ -88,7 +88,7 @@ export default function ContactForm() {
       </div>
 
       {status === "success" && (
-        <p className="text-sm text-green-400">Message sent! I'll get back to you soon.</p>
+        <p className="text-sm text-green-400">Message sent! I&apos;ll get back to you soon.</p>
       )}
       {status === "error" && (
         <p className="text-sm text-red-400">Something went wrong. Please try again or email me directly.</p>

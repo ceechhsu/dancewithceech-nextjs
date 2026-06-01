@@ -2,10 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import type gsapType from "gsap";
+import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 
 const CLOUD_NAME = "dedxm1lig";
 const TOTAL_FRAMES = 197;
@@ -24,6 +22,7 @@ const CTA_BUTTONS = (
       href="/private-lessons"
       style={{
         padding: "16px 32px",
+        minHeight: "44px",
         borderRadius: "9999px",
         backgroundColor: "#2563EB",
         color: "#fff",
@@ -38,6 +37,7 @@ const CTA_BUTTONS = (
       href="/about"
       style={{
         padding: "16px 32px",
+        minHeight: "44px",
         borderRadius: "9999px",
         border: "1px solid rgba(255,255,255,0.25)",
         color: "#F9F9F9",
@@ -64,6 +64,22 @@ export default function ScrollyHero() {
   useEffect(() => {
     // Desktop only — show video on mobile
     if (window.innerWidth < 768) return;
+
+    let cancelled = false;
+    let cleanup: (() => void) | undefined;
+
+    const setupDesktopHero = async () => {
+      const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]) as [
+        { default: typeof gsapType },
+        { ScrollTrigger: typeof ScrollTriggerType },
+      ];
+
+      if (cancelled) return;
+
+      gsap.registerPlugin(ScrollTrigger);
 
     const canvas = canvasRef.current;
     const container = containerRef.current;
@@ -129,7 +145,7 @@ export default function ScrollyHero() {
     });
 
     const phaseRefs = [phase0Ref, phase1Ref, phase2Ref];
-    const phaseTriggers: ScrollTrigger[] = [];
+    const phaseTriggers: ScrollTriggerType[] = [];
 
     PHASES.forEach(([start, end], i) => {
       const el = phaseRefs[i].current;
@@ -175,10 +191,18 @@ export default function ScrollyHero() {
       phaseTriggers.push(ctaTrigger);
     }
 
-    return () => {
+    cleanup = () => {
       st.kill();
       phaseTriggers.forEach((t) => t.kill());
       window.removeEventListener("resize", setSize);
+    };
+    };
+
+    void setupDesktopHero();
+
+    return () => {
+      cancelled = true;
+      cleanup?.();
     };
   }, []);
 
@@ -227,8 +251,11 @@ export default function ScrollyHero() {
           loop
           muted
           playsInline
+          aria-hidden="true"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-        />
+        >
+          <track kind="captions" src="/captions/hero-mobile.vtt" srcLang="en" label="No speech" default />
+        </video>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.7) 100%)" }} />
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.9) 100%)" }} />
 

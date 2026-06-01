@@ -1,7 +1,6 @@
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import Image from "next/image";
 
 export const metadata = {
   title: "Hip Hop Dance Lessons in San Jose — Private 1-on-1 with Ceech",
@@ -152,10 +151,10 @@ export default function SanJosePrivateLessonsPage() {
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-balance">Why train with Ceech in San Jose</h2>
           <div className="space-y-5 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
             <p>
-              San Jose has a surprisingly deep dance scene for a tech-heavy city, but finding an instructor who actually teaches the <em>foundation</em> — not just copy-the-choreography — is rare. I've taught at De Anza, Evergreen Valley College, West Valley College, and Mission College in the Bay Area for over 25 years, and my teaching approach comes from engineering: diagnose the movement problem, apply the right technique, build up systematically.
+              San Jose has a surprisingly deep dance scene for a tech-heavy city, but finding an instructor who actually teaches the <em>foundation</em> — not just copy-the-choreography — is rare. I&apos;ve taught at De Anza, Evergreen Valley College, West Valley College, and Mission College in the Bay Area for over 25 years, and my teaching approach comes from engineering: diagnose the movement problem, apply the right technique, build up systematically.
             </p>
             <p>
-              My funk styles lineage traces directly to the Electric Boogaloos (Pop'in Pete, Skeeter Rabbit) — the crew that invented popping. That means when you learn popping, waving, or boogaloo from me, you're learning the real thing, not a watered-down studio version.
+              My funk styles lineage traces directly to the Electric Boogaloos (Pop&apos;in Pete, Skeeter Rabbit) — the crew that invented popping. That means when you learn popping, waving, or boogaloo from me, you&apos;re learning the real thing, not a watered-down studio version.
             </p>
             <p>
               Lessons happen at <strong style={{ color: "var(--foreground)" }}>Get Down Dance Studios at 196 Jackson St</strong> in Japantown — a professional studio with sprung floors, mirrors, and sound, a few minutes from downtown San Jose. Free street parking is usually easy to find.
