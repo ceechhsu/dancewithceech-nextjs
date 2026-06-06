@@ -111,7 +111,6 @@ function currentMode() {
 
 function setAnalysisBackendAvailability(available) {
   analysisBackendAvailable = Boolean(available);
-  compareSavedTake.disabled = !analysisBackendAvailable;
   if (currentMode() === "detail") setMode("detail");
 }
 
@@ -432,8 +431,8 @@ function setMode(mode) {
   retryRecording.hidden = !visibility.retryRecording;
   retryRecording.textContent = "Retry";
   saveToPhone.hidden = !visibility.saveToPhone;
-  compareSavedTake.hidden = !visibility.compareSavedTake || !analysisBackendAvailable;
-  compareSavedTake.disabled = !analysisBackendAvailable;
+  compareSavedTake.hidden = !visibility.compareSavedTake;
+  compareSavedTake.disabled = false;
   for (const button of backToChallenges) button.hidden = !visibility.backToChallenges;
   analyzingSpinner.hidden = !visibility.analyzingSpinner;
   uploadProgress.hidden = !visibility.uploadProgress;
