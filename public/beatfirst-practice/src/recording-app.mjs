@@ -52,6 +52,7 @@ const captureStatus = document.querySelector("[data-capture-recording-status]");
 const savedLinks = document.querySelector("[data-saved-links]");
 const DEMO_VIDEO_CACHE_NAME = "dancewithceech-reference-v2";
 const RECORD_CAPTURE_CONTROLS_SPACE = 156;
+const ANALYSIS_UNAVAILABLE_MESSAGE = "Automated analysis is not enabled on this private beta yet. You can still record and save your take to your phone.";
 
 let mediaStream = null;
 let mediaRecorder = null;
@@ -82,6 +83,7 @@ let activeChallenge = marchingOnBeatChallenge;
 let timeline = buildTimelineForChallenge(activeChallenge);
 let stopTimer = null;
 let countdownTimers = [];
+let analysisBackendAvailable = false;
 
 function buildTimelineForChallenge(challenge) {
   return buildRecordingTimeline({
@@ -100,6 +102,28 @@ function setStatus(message, tone = "") {
     statusOutput.textContent = message;
     statusOutput.classList.toggle("warning", tone === "warning");
     statusOutput.classList.toggle("error", tone === "error");
+  }
+}
+
+function currentMode() {
+  return recordShell.dataset.mode || "library";
+}
+
+function setAnalysisBackendAvailability(available) {
+  analysisBackendAvailable = Boolean(available);
+  compareSavedTake.disabled = !analysisBackendAvailable;
+  if (currentMode() === "detail") setMode("detail");
+}
+
+async function refreshAnalysisBackendStatus() {
+  try {
+    const response = await fetch("/api/beatfirst-practice/status", {
+      cache: "no-store",
+    });
+    const payload = await response.json().catch(() => ({}));
+    setAnalysisBackendAvailability(Boolean(response.ok && payload.canAnalyze));
+  } catch {
+    setAnalysisBackendAvailability(false);
   }
 }
 
@@ -408,7 +432,8 @@ function setMode(mode) {
   retryRecording.hidden = !visibility.retryRecording;
   retryRecording.textContent = "Retry";
   saveToPhone.hidden = !visibility.saveToPhone;
-  compareSavedTake.hidden = !visibility.compareSavedTake;
+  compareSavedTake.hidden = !visibility.compareSavedTake || !analysisBackendAvailable;
+  compareSavedTake.disabled = !analysisBackendAvailable;
   for (const button of backToChallenges) button.hidden = !visibility.backToChallenges;
   analyzingSpinner.hidden = !visibility.analyzingSpinner;
   uploadProgress.hidden = !visibility.uploadProgress;
@@ -913,6 +938,10 @@ function buildPhaseUploadProgress({ label, startPercent, spanPercent }) {
 }
 
 function handleCompareSavedTake() {
+  if (!analysisBackendAvailable) {
+    setStatus(ANALYSIS_UNAVAILABLE_MESSAGE, "warning");
+    return;
+  }
   savedTakeInput.value = "";
   savedTakeInput.click();
 }
@@ -989,7 +1018,12 @@ function handleSaveToPhone() {
   window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 10_000);
   clearReview();
   setMode("detail");
-  setStatus("Saved to phone. Choose Analyze Saved Take when ready.");
+  setStatus(
+    analysisBackendAvailable
+      ? "Saved to phone. Choose Analyze Saved Take when ready."
+      : "Saved to phone. Automated analysis is not enabled on this beta yet.",
+    analysisBackendAvailable ? "" : "warning",
+  );
 }
 
 async function analyzeSavedSubmission() {
@@ -1046,6 +1080,7 @@ function bindEvents() {
 function init() {
   setDemoVideoLoadingState();
   bindEvents();
+  void refreshAnalysisBackendStatus();
   if (!openRequestedChallengeFromUrl()) {
     setMode("library");
     setStatus("Choose a challenge to begin.");
