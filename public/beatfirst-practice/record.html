@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BeatFirst Practice</title>
+    <link rel="stylesheet" href="src/styles.css?v=product-cleanup">
+  </head>
+  <body>
+    <main class="record-shell" data-record-shell data-mode="library">
+      <section class="record-panel record-demo-panel" data-demo-panel aria-label="Challenge library">
+        <div class="record-copy">
+          <p class="record-kicker">Challenges</p>
+          <h1>Choose a Dance Challenge</h1>
+        </div>
+
+        <div data-library-view>
+          <div data-challenge-list class="challenge-list">
+            <section data-challenge-row class="challenge-row" aria-labelledby="level-1-title">
+              <h2 id="level-1-title">Level 1</h2>
+              <div class="challenge-carousel">
+                <button data-challenge-card data-open-challenge data-challenge-id="marching-on-beat-check" class="challenge-card active" type="button">
+                  <span class="challenge-thumb media">
+                    <img data-challenge-thumbnail src="edit/marching-on-beat-check-thumbnail.jpg" alt="">
+                  </span>
+                  <strong>Marching</strong>
+                  <span>Timing basics</span>
+                </button>
+                <button data-challenge-card data-open-challenge data-challenge-id="2-step" class="challenge-card active" type="button">
+                  <span class="challenge-thumb media">
+                    <img data-challenge-thumbnail src="edit/2-step-thumbnail.jpg" alt="">
+                  </span>
+                  <strong>2 Step</strong>
+                  <span>Lateral timing</span>
+                </button>
+                <button data-challenge-card data-coming-soon-card class="challenge-card" type="button" disabled>
+                  <span class="challenge-thumb">03</span>
+                  <strong>Basic Bounce</strong>
+                  <span>Coming Soon</span>
+                </button>
+              </div>
+            </section>
+
+            <section data-challenge-row class="challenge-row" aria-labelledby="level-2-title">
+              <h2 id="level-2-title">Level 2</h2>
+              <div class="challenge-carousel">
+                <button data-challenge-card data-coming-soon-card class="challenge-card" type="button" disabled>
+                  <span class="challenge-thumb">04</span>
+                  <strong>Kick Ball Change</strong>
+                  <span>Coming Soon</span>
+                </button>
+                <button data-challenge-card data-coming-soon-card class="challenge-card" type="button" disabled>
+                  <span class="challenge-thumb">05</span>
+                  <strong>Box Step</strong>
+                  <span>Coming Soon</span>
+                </button>
+                <button data-challenge-card data-coming-soon-card class="challenge-card" type="button" disabled>
+                  <span class="challenge-thumb">06</span>
+                  <strong>Cross Step</strong>
+                  <span>Coming Soon</span>
+                </button>
+              </div>
+            </section>
+
+            <section data-challenge-row class="challenge-row" aria-labelledby="level-3-title">
+              <h2 id="level-3-title">Level 3</h2>
+              <div class="challenge-carousel">
+                <button data-challenge-card data-coming-soon-card class="challenge-card" type="button" disabled>
+                  <span class="challenge-thumb">07</span>
+                  <strong>Running Man</strong>
+                  <span>Coming Soon</span>
+                </button>
+                <button data-challenge-card data-coming-soon-card class="challenge-card" type="button" disabled>
+                  <span class="challenge-thumb">08</span>
+                  <strong>Charleston</strong>
+                  <span>Coming Soon</span>
+                </button>
+                <button data-challenge-card data-coming-soon-card class="challenge-card" type="button" disabled>
+                  <span class="challenge-thumb">09</span>
+                  <strong>Shuffle Drill</strong>
+                  <span>Coming Soon</span>
+                </button>
+                <button data-challenge-card data-coming-soon-card class="challenge-card" type="button" disabled>
+                  <span class="challenge-thumb">10</span>
+                  <strong>Fast Footwork</strong>
+                  <span>Coming Soon</span>
+                </button>
+                <button data-challenge-card data-coming-soon-card class="challenge-card" type="button" disabled>
+                  <span class="challenge-thumb">11</span>
+                  <strong>Combo Timing</strong>
+                  <span>Coming Soon</span>
+                </button>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <div data-challenge-detail hidden class="challenge-detail">
+          <div class="record-copy">
+            <h2 data-challenge-detail-title>Marching</h2>
+          </div>
+
+          <div class="record-video-frame">
+            <div data-demo-loading class="demo-loading">Loading reference video...</div>
+            <video data-demo-video controls playsinline preload="none" hidden></video>
+          </div>
+
+          <div class="record-actions">
+            <button data-back-to-challenges type="button" hidden>Back to Challenges</button>
+            <button data-compare-saved-take type="button" hidden>Analyze Saved Take</button>
+            <button data-try-this type="button" disabled>Try This</button>
+          </div>
+          <input data-saved-take-input type="file" accept="video/*" hidden>
+        </div>
+
+        <p data-demo-recording-status class="record-status">Choose a challenge to begin.</p>
+      </section>
+
+      <section class="record-panel record-capture-panel" data-capture-panel aria-label="Record your take">
+        <div class="record-stage" data-record-stage>
+          <video data-camera-preview class="camera-preview" autoplay muted playsinline hidden></video>
+          <video data-review-video class="camera-preview" controls playsinline hidden></video>
+          <div data-safe-frame class="safe-frame-overlay" aria-hidden="true"></div>
+          <div data-countdown-overlay class="countdown-overlay" hidden></div>
+          <div data-recording-badge class="recording-badge" hidden>Recording</div>
+        </div>
+
+        <div data-saved-links class="saved-links" hidden></div>
+
+        <div data-upload-progress class="upload-progress" aria-label="Upload progress" hidden>
+          <div class="upload-progress-header">
+            <span data-upload-progress-label>Preparing upload</span>
+            <strong data-upload-progress-percent>0%</strong>
+          </div>
+          <progress data-upload-progress-bar max="100" value="0"></progress>
+        </div>
+
+        <div class="record-actions">
+          <button data-start-recording type="button" disabled>Start Recording</button>
+          <button data-retry-recording type="button" hidden>Retry</button>
+          <button data-save-to-phone type="button" hidden>Save to Phone</button>
+          <button data-back-to-challenges type="button" hidden>Back Home</button>
+        </div>
+
+        <div data-analyzing-spinner class="analyzing-spinner" hidden aria-hidden="true"></div>
+        <p data-capture-recording-status class="record-status">Tap Try This to allow camera and microphone access.</p>
+      </section>
+    </main>
+
+    <script type="module" src="src/recording-app.mjs?v=product-cleanup"></script>
+  </body>
+</html>

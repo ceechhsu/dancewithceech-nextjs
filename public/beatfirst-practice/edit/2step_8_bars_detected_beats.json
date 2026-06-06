@@ -1,0 +1,911 @@
+{
+  "source": "/Volumes/ACASIS4T/Movies/Raw Footages/2025/03/11 reference/2step_8_bars.mp4",
+  "engine": "essentia.js",
+  "fps": 30,
+  "duration_seconds": 21.6,
+  "video_start_offset_seconds": 0,
+  "frame_count": 648,
+  "bpm": 99.8489,
+  "confidence": 3.547135,
+  "intervals": [
+    0.626939,
+    0.603719,
+    0.603719,
+    0.592109,
+    0.592109,
+    0.603719,
+    0.603719,
+    0.603719,
+    0.603719,
+    0.592109,
+    0.592109,
+    0.603719,
+    0.603719,
+    0.603719,
+    0.603719,
+    0.603719,
+    0.592109,
+    0.592109,
+    0.603719,
+    0.603719,
+    0.603719,
+    0.592109,
+    0.59211,
+    0.603719,
+    0.603719,
+    0.603718,
+    0.60372,
+    0.603718,
+    0.59211,
+    0.59211,
+    0.603718,
+    0.60372,
+    0.603718,
+    0.60372
+  ],
+  "audio_onsets": [
+    {
+      "timestamp_seconds": 0.02322,
+      "strength": 1,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 0.04644,
+      "strength": 0.978992,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 0.621134,
+      "strength": 0.88579,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 0.644354,
+      "strength": 0.760685,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 1.219048,
+      "strength": 0.600927,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 1.242268,
+      "strength": 0.741613,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 1.822766,
+      "strength": 0.968897,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 1.845986,
+      "strength": 0.757301,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 2.42068,
+      "strength": 0.799785,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 2.4439,
+      "strength": 1,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 3.018594,
+      "strength": 0.58592,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 3.041814,
+      "strength": 0.731374,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 3.622313,
+      "strength": 0.962974,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 3.645533,
+      "strength": 0.749328,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 4.220227,
+      "strength": 0.678113,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 4.243447,
+      "strength": 0.752655,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 4.823946,
+      "strength": 0.642451,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 4.847166,
+      "strength": 0.953457,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 5.421859,
+      "strength": 0.95763,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 5.445079,
+      "strength": 0.74774,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 6.019773,
+      "strength": 0.653983,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 6.042993,
+      "strength": 0.747507,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 6.623492,
+      "strength": 0.977839,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 6.646712,
+      "strength": 0.751263,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 7.221406,
+      "strength": 0.968792,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 7.244626,
+      "strength": 0.985381,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 7.81932,
+      "strength": 0.634844,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 7.84254,
+      "strength": 0.738017,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 8.423039,
+      "strength": 0.974881,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 8.446259,
+      "strength": 0.745629,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 9.020952,
+      "strength": 0.872023,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 9.044172,
+      "strength": 0.761564,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 9.618866,
+      "strength": 0.58602,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 9.642086,
+      "strength": 0.963022,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 10.222585,
+      "strength": 0.967352,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 10.245805,
+      "strength": 0.751729,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 10.820499,
+      "strength": 0.678761,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 10.843719,
+      "strength": 0.75711,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 11.418413,
+      "strength": 0.539317,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 11.447438,
+      "strength": 0.744334,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 12.022132,
+      "strength": 0.975682,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 12.045351,
+      "strength": 0.99252,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 12.620045,
+      "strength": 0.67277,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 12.643265,
+      "strength": 0.746389,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 13.223764,
+      "strength": 0.979881,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 13.246984,
+      "strength": 0.741814,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 13.821678,
+      "strength": 0.946261,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 13.844898,
+      "strength": 0.754783,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 14.419592,
+      "strength": 0.639227,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 14.442812,
+      "strength": 0.97552,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 15.023311,
+      "strength": 0.976741,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 15.046531,
+      "strength": 0.745733,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 15.621224,
+      "strength": 0.903287,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 15.644444,
+      "strength": 0.762094,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 16.219138,
+      "strength": 0.619476,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 16.242358,
+      "strength": 0.745081,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 16.822857,
+      "strength": 0.992787,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 16.846077,
+      "strength": 0.977209,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 17.420771,
+      "strength": 0.75844,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 17.443991,
+      "strength": 0.756705,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 18.018685,
+      "strength": 0.590282,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 18.04771,
+      "strength": 0.731741,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 18.622404,
+      "strength": 0.962941,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 18.645624,
+      "strength": 0.756428,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 19.220317,
+      "strength": 0.670628,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 19.243537,
+      "strength": 0.991122,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 19.818231,
+      "strength": 0.512682,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 19.847256,
+      "strength": 0.742206,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 20.42195,
+      "strength": 0.958487,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 20.44517,
+      "strength": 0.750674,
+      "source": "amplitude_attack"
+    },
+    {
+      "timestamp_seconds": 21.043084,
+      "strength": 0.756032,
+      "source": "amplitude_attack"
+    }
+  ],
+  "beats": [
+    {
+      "number": 1,
+      "timestamp_seconds": 0,
+      "nearest_frame": 0,
+      "strength": 1,
+      "label_frames": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "source": "inferred"
+    },
+    {
+      "number": 2,
+      "timestamp_seconds": 0.626939,
+      "nearest_frame": 19,
+      "strength": 1,
+      "label_frames": [
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 3,
+      "timestamp_seconds": 1.253878,
+      "nearest_frame": 38,
+      "strength": 1,
+      "label_frames": [
+        38,
+        39,
+        40,
+        41,
+        42
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 4,
+      "timestamp_seconds": 1.857596,
+      "nearest_frame": 56,
+      "strength": 1,
+      "label_frames": [
+        56,
+        57,
+        58,
+        59,
+        60
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 5,
+      "timestamp_seconds": 2.461315,
+      "nearest_frame": 74,
+      "strength": 1,
+      "label_frames": [
+        74,
+        75,
+        76,
+        77,
+        78
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 6,
+      "timestamp_seconds": 3.053424,
+      "nearest_frame": 92,
+      "strength": 1,
+      "label_frames": [
+        92,
+        93,
+        94,
+        95,
+        96
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 7,
+      "timestamp_seconds": 3.645533,
+      "nearest_frame": 109,
+      "strength": 1,
+      "label_frames": [
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 8,
+      "timestamp_seconds": 4.249252,
+      "nearest_frame": 127,
+      "strength": 1,
+      "label_frames": [
+        127,
+        128,
+        129,
+        130,
+        131
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 9,
+      "timestamp_seconds": 4.852971,
+      "nearest_frame": 146,
+      "strength": 1,
+      "label_frames": [
+        146,
+        147,
+        148,
+        149,
+        150
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 10,
+      "timestamp_seconds": 5.456689,
+      "nearest_frame": 164,
+      "strength": 1,
+      "label_frames": [
+        164,
+        165,
+        166,
+        167,
+        168
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 11,
+      "timestamp_seconds": 6.060408,
+      "nearest_frame": 182,
+      "strength": 1,
+      "label_frames": [
+        182,
+        183,
+        184,
+        185,
+        186
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 12,
+      "timestamp_seconds": 6.652517,
+      "nearest_frame": 200,
+      "strength": 1,
+      "label_frames": [
+        200,
+        201,
+        202,
+        203,
+        204
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 13,
+      "timestamp_seconds": 7.244626,
+      "nearest_frame": 217,
+      "strength": 1,
+      "label_frames": [
+        217,
+        218,
+        219,
+        220,
+        221
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 14,
+      "timestamp_seconds": 7.848344,
+      "nearest_frame": 235,
+      "strength": 1,
+      "label_frames": [
+        235,
+        236,
+        237,
+        238,
+        239
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 15,
+      "timestamp_seconds": 8.452064,
+      "nearest_frame": 254,
+      "strength": 1,
+      "label_frames": [
+        254,
+        255,
+        256,
+        257,
+        258
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 16,
+      "timestamp_seconds": 9.055782,
+      "nearest_frame": 272,
+      "strength": 1,
+      "label_frames": [
+        272,
+        273,
+        274,
+        275,
+        276
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 17,
+      "timestamp_seconds": 9.659501,
+      "nearest_frame": 290,
+      "strength": 1,
+      "label_frames": [
+        290,
+        291,
+        292,
+        293,
+        294
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 18,
+      "timestamp_seconds": 10.26322,
+      "nearest_frame": 308,
+      "strength": 1,
+      "label_frames": [
+        308,
+        309,
+        310,
+        311,
+        312
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 19,
+      "timestamp_seconds": 10.855329,
+      "nearest_frame": 326,
+      "strength": 1,
+      "label_frames": [
+        326,
+        327,
+        328,
+        329,
+        330
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 20,
+      "timestamp_seconds": 11.447437,
+      "nearest_frame": 343,
+      "strength": 1,
+      "label_frames": [
+        343,
+        344,
+        345,
+        346,
+        347
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 21,
+      "timestamp_seconds": 12.051156,
+      "nearest_frame": 362,
+      "strength": 1,
+      "label_frames": [
+        362,
+        363,
+        364,
+        365,
+        366
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 22,
+      "timestamp_seconds": 12.654875,
+      "nearest_frame": 380,
+      "strength": 1,
+      "label_frames": [
+        380,
+        381,
+        382,
+        383,
+        384
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 23,
+      "timestamp_seconds": 13.258594,
+      "nearest_frame": 398,
+      "strength": 1,
+      "label_frames": [
+        398,
+        399,
+        400,
+        401,
+        402
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 24,
+      "timestamp_seconds": 13.850702,
+      "nearest_frame": 416,
+      "strength": 1,
+      "label_frames": [
+        416,
+        417,
+        418,
+        419,
+        420
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 25,
+      "timestamp_seconds": 14.442812,
+      "nearest_frame": 433,
+      "strength": 1,
+      "label_frames": [
+        433,
+        434,
+        435,
+        436,
+        437
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 26,
+      "timestamp_seconds": 15.046531,
+      "nearest_frame": 451,
+      "strength": 1,
+      "label_frames": [
+        451,
+        452,
+        453,
+        454,
+        455
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 27,
+      "timestamp_seconds": 15.650249,
+      "nearest_frame": 470,
+      "strength": 1,
+      "label_frames": [
+        470,
+        471,
+        472,
+        473,
+        474
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 28,
+      "timestamp_seconds": 16.253967,
+      "nearest_frame": 488,
+      "strength": 1,
+      "label_frames": [
+        488,
+        489,
+        490,
+        491,
+        492
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 29,
+      "timestamp_seconds": 16.857687,
+      "nearest_frame": 506,
+      "strength": 1,
+      "label_frames": [
+        506,
+        507,
+        508,
+        509,
+        510
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 30,
+      "timestamp_seconds": 17.461405,
+      "nearest_frame": 524,
+      "strength": 1,
+      "label_frames": [
+        524,
+        525,
+        526,
+        527,
+        528
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 31,
+      "timestamp_seconds": 18.053514,
+      "nearest_frame": 542,
+      "strength": 1,
+      "label_frames": [
+        542,
+        543,
+        544,
+        545,
+        546
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 32,
+      "timestamp_seconds": 18.645624,
+      "nearest_frame": 559,
+      "strength": 1,
+      "label_frames": [
+        559,
+        560,
+        561,
+        562,
+        563
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 33,
+      "timestamp_seconds": 19.249342,
+      "nearest_frame": 577,
+      "strength": 1,
+      "label_frames": [
+        577,
+        578,
+        579,
+        580,
+        581
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 34,
+      "timestamp_seconds": 19.853062,
+      "nearest_frame": 596,
+      "strength": 1,
+      "label_frames": [
+        596,
+        597,
+        598,
+        599,
+        600
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 35,
+      "timestamp_seconds": 20.456779,
+      "nearest_frame": 614,
+      "strength": 1,
+      "label_frames": [
+        614,
+        615,
+        616,
+        617,
+        618
+      ],
+      "source": "detected"
+    },
+    {
+      "number": 36,
+      "timestamp_seconds": 21.060499,
+      "nearest_frame": 632,
+      "strength": 1,
+      "label_frames": [
+        632,
+        633,
+        634,
+        635,
+        636
+      ],
+      "source": "detected"
+    }
+  ],
+  "detected_count": 35,
+  "inferred_count": 1
+}

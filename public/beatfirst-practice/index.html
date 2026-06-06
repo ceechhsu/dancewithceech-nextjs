@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BeatFirst Practice</title>
+    <link rel="stylesheet" href="src/styles.css?v=product-cleanup">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="player-column" aria-label="Video player">
+        <div class="video-stage">
+          <video
+            data-video
+            preload="metadata"
+            src="edit/Marching%20-%208%20bars_clean.mp4"
+            playsinline
+          ></video>
+          <video
+            data-reference-ghost-video
+            class="reference-ghost-video"
+            preload="metadata"
+            muted
+            playsinline
+            hidden
+          ></video>
+          <canvas data-pose-canvas class="pose-canvas" aria-hidden="true"></canvas>
+          <div data-waveform-overlay class="waveform-overlay" aria-hidden="true">
+            <img data-waveform-image src="edit/Marching%20-%208%20bars_waveform.png" alt="">
+            <div data-waveform-playhead class="waveform-playhead"></div>
+          </div>
+          <div class="beat-overlay" data-beat-overlay data-reference-contact-overlay hidden></div>
+          <div class="contact-overlay" data-contact-overlay data-user-contact-overlay hidden></div>
+          <div class="review-score-prompt" data-review-score-prompt hidden>Review your score below</div>
+          <div data-analysis-loading class="analysis-loading-overlay" role="status" aria-live="polite">
+            Loading timing analysis...
+          </div>
+          <button data-play-toggle class="video-play-toggle" type="button" aria-label="Play video" title="Play video"></button>
+        </div>
+
+        <div class="timeline-wrap">
+          <div class="beat-rail" data-beat-rail aria-hidden="true"></div>
+          <input data-timeline class="timeline" type="range" min="0" value="0" step="0.0166667" aria-label="Timeline">
+        </div>
+
+        <div class="controls" aria-label="Playback controls">
+          <button data-prev-beat type="button">Prev Ref</button>
+          <button data-prev-frame type="button">-1</button>
+          <button data-next-frame type="button">+1</button>
+          <button data-next-beat type="button">Next Ref</button>
+        </div>
+
+        <div class="toggles" aria-label="Overlay toggles">
+          <label data-waveform-toggle-wrap hidden>
+            <input data-toggle-waveform type="checkbox" checked>
+            Waveform
+          </label>
+          <label>
+            <input data-toggle-beats type="checkbox" checked>
+            <span data-beat-toggle-label>Reference Contacts</span>
+          </label>
+          <label>
+            <input data-toggle-pose type="checkbox" checked>
+            Lower Body Tracking
+          </label>
+          <label data-reference-ghost-toggle-wrap hidden>
+            <input data-toggle-reference-ghost type="checkbox" checked>
+            Reference Ghost
+          </label>
+        </div>
+
+        <div class="range-panel" data-range-panel hidden aria-label="Analysis range">
+          <p data-range-prompt>Scrub to the first frame where your full body and both feet are clearly visible, then click Set Start.</p>
+          <div class="range-controls">
+            <button data-set-range-start type="button">Set Start</button>
+            <button data-set-range-end type="button" disabled>Set End</button>
+            <button data-analyze-range type="button" disabled>Analyze Range</button>
+          </div>
+          <dl class="range-values">
+            <div>
+              <dt>Start</dt>
+              <dd data-range-start>not set</dd>
+            </div>
+            <div>
+              <dt>End</dt>
+              <dd data-range-end>not set</dd>
+            </div>
+            <div>
+              <dt>Range</dt>
+              <dd data-range-duration>not set</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="timing-panel" aria-label="Timing feedback">
+        <div class="timing-panel-header">
+          <h2>Your Rhythm Score</h2>
+          <p>Each step is compared with the demo. Tap a row to jump to that moment.</p>
+        </div>
+        <div data-score-summary class="score-summary" hidden></div>
+        <div class="timing-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Step</th>
+                <th>Your Timing</th>
+                <th>Offset</th>
+                <th>Score</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody data-timing-table>
+              <tr>
+                <td colspan="5">Loading timing analysis...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <details class="advanced-details" data-advanced-details>
+        <summary>Advanced Details</summary>
+        <aside class="inspector" aria-label="Advanced playback data">
+          <div class="status" data-status>Ready</div>
+          <dl>
+            <div>
+              <dt>Time</dt>
+              <dd data-current-time>00:00.000</dd>
+            </div>
+            <div>
+              <dt>Frame</dt>
+              <dd data-current-frame>0</dd>
+            </div>
+            <div>
+              <dt data-active-beat-title>Active Beat</dt>
+              <dd data-active-beat>none</dd>
+            </div>
+            <div>
+              <dt>Active Contact</dt>
+              <dd data-active-contact>none</dd>
+            </div>
+            <div>
+              <dt data-nearest-beat-title>Nearest Beat</dt>
+              <dd data-nearest-beat>none</dd>
+            </div>
+            <div>
+              <dt>FPS</dt>
+              <dd data-fps>loading</dd>
+            </div>
+            <div>
+              <dt>Total Frames</dt>
+              <dd data-total-frames>loading</dd>
+            </div>
+            <div>
+              <dt>Beat Grid</dt>
+              <dd data-total-beats>loading</dd>
+            </div>
+            <div>
+              <dt>Beat Phase</dt>
+              <dd data-beat-phase>not calibrated</dd>
+            </div>
+            <div>
+              <dt>Detected Contacts</dt>
+              <dd data-total-contacts>loading</dd>
+            </div>
+            <div>
+              <dt>Pose Frames</dt>
+              <dd data-pose-frames>loading</dd>
+            </div>
+          </dl>
+        </aside>
+      </details>
+
+      <nav class="result-actions" data-result-actions aria-label="Result actions">
+        <button data-try-again class="primary-action" type="button">Try Again</button>
+        <button data-choose-another type="button">Choose Another Move</button>
+      </nav>
+    </main>
+
+    <script type="module" src="src/app.mjs?v=product-cleanup"></script>
+  </body>
+</html>

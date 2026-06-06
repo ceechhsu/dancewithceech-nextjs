@@ -1,0 +1,476 @@
+{
+  "source": "/Volumes/ACASIS4T/Movies/Raw Footages/2025/03/11 reference/Marching - 8 bars.mov",
+  "fps": 60.0,
+  "duration_seconds": 21.6,
+  "frame_count": 1296,
+  "beats": [
+    {
+      "number": 1,
+      "timestamp_seconds": 0.010667,
+      "nearest_frame": 1,
+      "strength": 1.0,
+      "label_frames": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "number": 2,
+      "timestamp_seconds": 0.581333,
+      "nearest_frame": 35,
+      "strength": 0.5797,
+      "label_frames": [
+        35,
+        36,
+        37,
+        38,
+        39
+      ]
+    },
+    {
+      "number": 3,
+      "timestamp_seconds": 1.178667,
+      "nearest_frame": 71,
+      "strength": 0.6075,
+      "label_frames": [
+        71,
+        72,
+        73,
+        74,
+        75
+      ]
+    },
+    {
+      "number": 4,
+      "timestamp_seconds": 1.781333,
+      "nearest_frame": 107,
+      "strength": 0.5848,
+      "label_frames": [
+        107,
+        108,
+        109,
+        110,
+        111
+      ]
+    },
+    {
+      "number": 5,
+      "timestamp_seconds": 2.378667,
+      "nearest_frame": 143,
+      "strength": 0.6731,
+      "label_frames": [
+        143,
+        144,
+        145,
+        146,
+        147
+      ]
+    },
+    {
+      "number": 6,
+      "timestamp_seconds": 2.981333,
+      "nearest_frame": 179,
+      "strength": 0.581,
+      "label_frames": [
+        179,
+        180,
+        181,
+        182,
+        183
+      ]
+    },
+    {
+      "number": 7,
+      "timestamp_seconds": 3.578667,
+      "nearest_frame": 215,
+      "strength": 0.602,
+      "label_frames": [
+        215,
+        216,
+        217,
+        218,
+        219
+      ]
+    },
+    {
+      "number": 8,
+      "timestamp_seconds": 4.181333,
+      "nearest_frame": 251,
+      "strength": 0.5833,
+      "label_frames": [
+        251,
+        252,
+        253,
+        254,
+        255
+      ]
+    },
+    {
+      "number": 9,
+      "timestamp_seconds": 4.778667,
+      "nearest_frame": 287,
+      "strength": 0.6685,
+      "label_frames": [
+        287,
+        288,
+        289,
+        290,
+        291
+      ]
+    },
+    {
+      "number": 10,
+      "timestamp_seconds": 5.381333,
+      "nearest_frame": 323,
+      "strength": 0.5803,
+      "label_frames": [
+        323,
+        324,
+        325,
+        326,
+        327
+      ]
+    },
+    {
+      "number": 11,
+      "timestamp_seconds": 5.978667,
+      "nearest_frame": 359,
+      "strength": 0.6048,
+      "label_frames": [
+        359,
+        360,
+        361,
+        362,
+        363
+      ]
+    },
+    {
+      "number": 12,
+      "timestamp_seconds": 6.581333,
+      "nearest_frame": 395,
+      "strength": 0.585,
+      "label_frames": [
+        395,
+        396,
+        397,
+        398,
+        399
+      ]
+    },
+    {
+      "number": 13,
+      "timestamp_seconds": 7.178667,
+      "nearest_frame": 431,
+      "strength": 0.6731,
+      "label_frames": [
+        431,
+        432,
+        433,
+        434,
+        435
+      ]
+    },
+    {
+      "number": 14,
+      "timestamp_seconds": 7.781333,
+      "nearest_frame": 467,
+      "strength": 0.581,
+      "label_frames": [
+        467,
+        468,
+        469,
+        470,
+        471
+      ]
+    },
+    {
+      "number": 15,
+      "timestamp_seconds": 8.378667,
+      "nearest_frame": 503,
+      "strength": 0.602,
+      "label_frames": [
+        503,
+        504,
+        505,
+        506,
+        507
+      ]
+    },
+    {
+      "number": 16,
+      "timestamp_seconds": 8.981333,
+      "nearest_frame": 539,
+      "strength": 0.5833,
+      "label_frames": [
+        539,
+        540,
+        541,
+        542,
+        543
+      ]
+    },
+    {
+      "number": 17,
+      "timestamp_seconds": 9.578667,
+      "nearest_frame": 575,
+      "strength": 0.6685,
+      "label_frames": [
+        575,
+        576,
+        577,
+        578,
+        579
+      ]
+    },
+    {
+      "number": 18,
+      "timestamp_seconds": 10.181333,
+      "nearest_frame": 611,
+      "strength": 0.5803,
+      "label_frames": [
+        611,
+        612,
+        613,
+        614,
+        615
+      ]
+    },
+    {
+      "number": 19,
+      "timestamp_seconds": 10.778667,
+      "nearest_frame": 647,
+      "strength": 0.6048,
+      "label_frames": [
+        647,
+        648,
+        649,
+        650,
+        651
+      ]
+    },
+    {
+      "number": 20,
+      "timestamp_seconds": 11.381333,
+      "nearest_frame": 683,
+      "strength": 0.585,
+      "label_frames": [
+        683,
+        684,
+        685,
+        686,
+        687
+      ]
+    },
+    {
+      "number": 21,
+      "timestamp_seconds": 11.978667,
+      "nearest_frame": 719,
+      "strength": 0.6731,
+      "label_frames": [
+        719,
+        720,
+        721,
+        722,
+        723
+      ]
+    },
+    {
+      "number": 22,
+      "timestamp_seconds": 12.581333,
+      "nearest_frame": 755,
+      "strength": 0.581,
+      "label_frames": [
+        755,
+        756,
+        757,
+        758,
+        759
+      ]
+    },
+    {
+      "number": 23,
+      "timestamp_seconds": 13.178667,
+      "nearest_frame": 791,
+      "strength": 0.602,
+      "label_frames": [
+        791,
+        792,
+        793,
+        794,
+        795
+      ]
+    },
+    {
+      "number": 24,
+      "timestamp_seconds": 13.781333,
+      "nearest_frame": 827,
+      "strength": 0.5833,
+      "label_frames": [
+        827,
+        828,
+        829,
+        830,
+        831
+      ]
+    },
+    {
+      "number": 25,
+      "timestamp_seconds": 14.378667,
+      "nearest_frame": 863,
+      "strength": 0.6685,
+      "label_frames": [
+        863,
+        864,
+        865,
+        866,
+        867
+      ]
+    },
+    {
+      "number": 26,
+      "timestamp_seconds": 14.981333,
+      "nearest_frame": 899,
+      "strength": 0.5803,
+      "label_frames": [
+        899,
+        900,
+        901,
+        902,
+        903
+      ]
+    },
+    {
+      "number": 27,
+      "timestamp_seconds": 15.578667,
+      "nearest_frame": 935,
+      "strength": 0.6048,
+      "label_frames": [
+        935,
+        936,
+        937,
+        938,
+        939
+      ]
+    },
+    {
+      "number": 28,
+      "timestamp_seconds": 16.181333,
+      "nearest_frame": 971,
+      "strength": 0.585,
+      "label_frames": [
+        971,
+        972,
+        973,
+        974,
+        975
+      ]
+    },
+    {
+      "number": 29,
+      "timestamp_seconds": 16.778667,
+      "nearest_frame": 1007,
+      "strength": 0.6731,
+      "label_frames": [
+        1007,
+        1008,
+        1009,
+        1010,
+        1011
+      ]
+    },
+    {
+      "number": 30,
+      "timestamp_seconds": 17.381333,
+      "nearest_frame": 1043,
+      "strength": 0.581,
+      "label_frames": [
+        1043,
+        1044,
+        1045,
+        1046,
+        1047
+      ]
+    },
+    {
+      "number": 31,
+      "timestamp_seconds": 17.978667,
+      "nearest_frame": 1079,
+      "strength": 0.602,
+      "label_frames": [
+        1079,
+        1080,
+        1081,
+        1082,
+        1083
+      ]
+    },
+    {
+      "number": 32,
+      "timestamp_seconds": 18.581333,
+      "nearest_frame": 1115,
+      "strength": 0.5833,
+      "label_frames": [
+        1115,
+        1116,
+        1117,
+        1118,
+        1119
+      ]
+    },
+    {
+      "number": 33,
+      "timestamp_seconds": 19.178667,
+      "nearest_frame": 1151,
+      "strength": 0.6685,
+      "label_frames": [
+        1151,
+        1152,
+        1153,
+        1154,
+        1155
+      ]
+    },
+    {
+      "number": 34,
+      "timestamp_seconds": 19.781333,
+      "nearest_frame": 1187,
+      "strength": 0.5803,
+      "label_frames": [
+        1187,
+        1188,
+        1189,
+        1190,
+        1191
+      ]
+    },
+    {
+      "number": 35,
+      "timestamp_seconds": 20.378667,
+      "nearest_frame": 1223,
+      "strength": 0.6048,
+      "label_frames": [
+        1223,
+        1224,
+        1225,
+        1226,
+        1227
+      ]
+    },
+    {
+      "number": 36,
+      "timestamp_seconds": 20.981333,
+      "nearest_frame": 1259,
+      "strength": 0.585,
+      "label_frames": [
+        1259,
+        1260,
+        1261,
+        1262,
+        1263
+      ]
+    }
+  ]
+}

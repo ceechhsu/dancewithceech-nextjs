@@ -1,0 +1,302 @@
+{
+  "source": "edit/2step_8_bars_clean.mp4",
+  "fps": 30,
+  "frame_count": 648,
+  "pose_source": "edit/2step_8_bars_reference_pose_30fps.json",
+  "beat_source": "edit/2step_8_bars_detected_beats.json",
+  "scoring_start_beat": 5,
+  "frameRange": {
+    "startFrame": 69,
+    "endFrame": 637
+  },
+  "contacts": [
+    {
+      "number": 1,
+      "foot": "right",
+      "frame": 71,
+      "timestamp_seconds": 2.366667,
+      "confidence": 0.871042,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 2,
+      "foot": "left",
+      "frame": 92,
+      "timestamp_seconds": 3.066667,
+      "confidence": 0.672463,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 3,
+      "foot": "left",
+      "frame": 108,
+      "timestamp_seconds": 3.6,
+      "confidence": 0.707917,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 4,
+      "foot": "right",
+      "frame": 130,
+      "timestamp_seconds": 4.333333,
+      "confidence": 0.713174,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 5,
+      "foot": "right",
+      "frame": 146,
+      "timestamp_seconds": 4.866667,
+      "confidence": 0.565165,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 6,
+      "foot": "left",
+      "frame": 165,
+      "timestamp_seconds": 5.5,
+      "confidence": 0.389057,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 7,
+      "foot": "left",
+      "frame": 180,
+      "timestamp_seconds": 6,
+      "confidence": 0.613017,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 8,
+      "foot": "right",
+      "frame": 201,
+      "timestamp_seconds": 6.7,
+      "confidence": 0.759089,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 9,
+      "foot": "right",
+      "frame": 216,
+      "timestamp_seconds": 7.2,
+      "confidence": 0.6244,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "foot": "left",
+      "frame": 237,
+      "timestamp_seconds": 7.9,
+      "confidence": 0.41056,
+      "source": "approved_reference_contact",
+      "manually_adjusted": true,
+      "number": 10
+    },
+    {
+      "number": 11,
+      "foot": "left",
+      "frame": 252,
+      "timestamp_seconds": 8.4,
+      "confidence": 0.760033,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 12,
+      "foot": "right",
+      "frame": 272,
+      "timestamp_seconds": 9.066667,
+      "confidence": 0.806806,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 13,
+      "foot": "right",
+      "frame": 288,
+      "timestamp_seconds": 9.6,
+      "confidence": 0.6498,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 14,
+      "foot": "left",
+      "frame": 306,
+      "timestamp_seconds": 10.2,
+      "confidence": 0.361529,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 15,
+      "foot": "left",
+      "frame": 323,
+      "timestamp_seconds": 10.766667,
+      "confidence": 0.874167,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 16,
+      "foot": "right",
+      "frame": 343,
+      "timestamp_seconds": 11.433333,
+      "confidence": 0.776652,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 17,
+      "foot": "right",
+      "frame": 360,
+      "timestamp_seconds": 12,
+      "confidence": 0.612275,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 18,
+      "foot": "left",
+      "frame": 380,
+      "timestamp_seconds": 12.666667,
+      "confidence": 0.64781,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 19,
+      "foot": "left",
+      "frame": 396,
+      "timestamp_seconds": 13.2,
+      "confidence": 0.906758,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 20,
+      "foot": "right",
+      "frame": 414,
+      "timestamp_seconds": 13.8,
+      "confidence": 0.795133,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 21,
+      "foot": "right",
+      "frame": 436,
+      "timestamp_seconds": 14.533333,
+      "confidence": 0.702745,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 22,
+      "foot": "left",
+      "frame": 451,
+      "timestamp_seconds": 15.033333,
+      "confidence": 0.523755,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 23,
+      "foot": "left",
+      "frame": 468,
+      "timestamp_seconds": 15.6,
+      "confidence": 0.718975,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 24,
+      "foot": "right",
+      "frame": 488,
+      "timestamp_seconds": 16.266667,
+      "confidence": 0.744414,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 25,
+      "foot": "right",
+      "frame": 504,
+      "timestamp_seconds": 16.8,
+      "confidence": 0.870892,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 26,
+      "foot": "left",
+      "frame": 522,
+      "timestamp_seconds": 17.4,
+      "confidence": 0.652325,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 27,
+      "foot": "left",
+      "frame": 539,
+      "timestamp_seconds": 17.966667,
+      "confidence": 0.634925,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 28,
+      "foot": "right",
+      "frame": 559,
+      "timestamp_seconds": 18.633333,
+      "confidence": 0.649697,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 29,
+      "foot": "right",
+      "frame": 577,
+      "timestamp_seconds": 19.233333,
+      "confidence": 0.993655,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 30,
+      "foot": "left",
+      "frame": 596,
+      "timestamp_seconds": 19.866667,
+      "confidence": 0.807949,
+      "source": "beat_guided_front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 31,
+      "foot": "left",
+      "frame": 612,
+      "timestamp_seconds": 20.4,
+      "confidence": 0.937208,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    },
+    {
+      "number": 32,
+      "foot": "right",
+      "frame": 630,
+      "timestamp_seconds": 21,
+      "confidence": 0.68085,
+      "source": "front_foot_contact",
+      "manually_adjusted": false
+    }
+  ]
+}
