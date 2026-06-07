@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 
 const ACADEMY_WAITLIST_TAG_ID = 1943652
 
-export const revalidate = 30 // cache for 30 seconds
+export const revalidate = 3600 // cache the displayed count for 1 hour
 
 export async function GET() {
   const apiKey = process.env.SYSTEME_API_KEY

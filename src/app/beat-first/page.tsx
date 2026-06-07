@@ -39,7 +39,7 @@ export default async function BeatFirstPage() {
 
   return (
     <>
-      <Nav />
+      <Nav user={session?.user ?? null} />
       <BeatFirstGame user={session?.user ?? null} unlockedCount={unlockedCount} />
       <Footer />
     </>

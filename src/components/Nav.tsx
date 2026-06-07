@@ -1,12 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
-import { auth, signIn } from "@/auth";
 import MobileMenu from "@/components/MobileMenu";
 import UserMenu from "@/components/UserMenu";
+import SignInButton from "@/components/SignInButton";
 
-export default async function Nav() {
-  const session = await auth();
+type NavUser = {
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+};
 
+type Props = {
+  user?: NavUser | null;
+};
+
+export default function Nav({ user }: Props = {}) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4" style={{ backgroundColor: "var(--background)", borderBottom: "1px solid #1f1f1f" }}>
       <Link href="/" className="flex items-center gap-2" style={{ textDecoration: "none" }}>
@@ -27,14 +35,10 @@ export default async function Nav() {
         <Link href="/academy" className="hover:text-white transition-colors">Academy</Link>
         <Link href="/private-lessons" className="hover:text-white transition-colors">Private Lessons</Link>
         <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
-        {session ? (
-          <UserMenu name={session.user?.name} email={session.user?.email} image={session.user?.image} />
+        {user ? (
+          <UserMenu name={user.name} email={user.email} image={user.image} />
         ) : (
-          <form action={async () => { "use server"; await signIn("google"); }}>
-            <button type="submit" className="hover:text-white transition-colors">
-              Sign In
-            </button>
-          </form>
+          <SignInButton />
         )}
         <Link href="/beat-first" className="px-4 py-2 rounded-full text-white text-sm font-medium transition-colors hover:opacity-90" style={{ backgroundColor: "var(--accent-primary)" }}>
           Play Free
