@@ -55,6 +55,7 @@ const RECORD_CAPTURE_CONTROLS_SPACE = 156;
 const PRODUCTION_ANALYSIS_API_PREFIX = "/api/beatfirst-practice";
 const LOCAL_ANALYSIS_API_PREFIX = "/api";
 const ANALYSIS_UNAVAILABLE_MESSAGE = "Automated analysis is not enabled on this private beta yet. You can still record and save your take to your phone.";
+const ANALYSIS_PROGRESS_POLL_INTERVAL_MS = 1500;
 
 let mediaStream = null;
 let mediaRecorder = null;
@@ -85,6 +86,7 @@ let activeChallenge = marchingOnBeatChallenge;
 let timeline = buildTimelineForChallenge(activeChallenge);
 let stopTimer = null;
 let countdownTimers = [];
+let analysisProgressPollTimer = null;
 let analysisBackendAvailable = false;
 
 function buildTimelineForChallenge(challenge) {
@@ -152,6 +154,11 @@ function setActiveChallenge(challenge) {
 function clearCountdownTimers() {
   for (const timer of countdownTimers) window.clearTimeout(timer);
   countdownTimers = [];
+}
+
+function stopAnalysisProgressPolling() {
+  window.clearTimeout(analysisProgressPollTimer);
+  analysisProgressPollTimer = null;
 }
 
 function clearReadinessRecheckTimer() {
@@ -841,6 +848,7 @@ async function handleRecordingStop() {
 }
 
 async function handleRetry() {
+  stopAnalysisProgressPolling();
   clearReview();
   savedLinks.hidden = true;
   savedLinks.innerHTML = "";
@@ -859,6 +867,7 @@ function resetToChallengeLibrary() {
   window.clearTimeout(stopTimer);
   clearCountdownTimers();
   clearReadinessRecheckTimer();
+  stopAnalysisProgressPolling();
   clearRecordingAudioGraph();
   stopCurrentStream();
   clearReview();
@@ -996,6 +1005,51 @@ async function createDirectUploadSession(metadata) {
   };
 }
 
+async function fetchAnalysisProgress(submissionId) {
+  const response = await fetch(`${getAnalysisApiPrefix()}/submissions/${submissionId}/analyze/progress`, {
+    cache: "no-store",
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || `Progress check failed with ${response.status}`);
+  return payload;
+}
+
+function applyAnalysisProgress(payload = {}) {
+  const label = payload.message || payload.stage || "Analyzing video";
+  setUploadProgress({ label, percent: payload.percent });
+}
+
+function startAnalysisProgressPolling(submissionId) {
+  stopAnalysisProgressPolling();
+
+  const poll = async () => {
+    try {
+      const payload = await fetchAnalysisProgress(submissionId);
+      applyAnalysisProgress(payload);
+      if (payload.status === "complete" && payload.playerUrl) {
+        stopAnalysisProgressPolling();
+        window.location.href = payload.playerUrl;
+        return;
+      }
+      if (payload.status === "rejected" && payload.rejectionMessage) {
+        stopAnalysisProgressPolling();
+        renderSubmissionRejection(payload.rejectionMessage);
+        return;
+      }
+      if (payload.status === "error" && payload.error) {
+        stopAnalysisProgressPolling();
+        renderSubmissionRejection(payload.error);
+        return;
+      }
+    } catch {
+      // Keep polling; the progress file may not exist during the first second.
+    }
+    analysisProgressPollTimer = window.setTimeout(poll, ANALYSIS_PROGRESS_POLL_INTERVAL_MS);
+  };
+
+  void poll();
+}
+
 async function uploadSelectedSavedTake(file) {
   const mimeType = getRecordingMimeTypeForFile(file);
   const metadata = buildSubmissionMetadata({
@@ -1088,7 +1142,9 @@ function handleSaveToPhone() {
 async function analyzeSavedSubmission() {
   if (!savedSubmissionId) return;
   setMode("analyzing");
-  setStatus("Analyzing video. Checking full-body framing and foot contacts...");
+  setUploadProgress({ label: "Preparing analysis", percent: 0 });
+  setStatus("Preparing analysis...");
+  startAnalysisProgressPolling(savedSubmissionId);
 
   try {
     const response = await fetch(`${getAnalysisApiPrefix()}/submissions/${savedSubmissionId}/analyze`, {
@@ -1100,12 +1156,16 @@ async function analyzeSavedSubmission() {
     }
 
     if (payload.rejected) {
+      stopAnalysisProgressPolling();
       renderSubmissionRejection(payload.rejectionMessage);
       return;
     }
 
+    stopAnalysisProgressPolling();
+    setUploadProgress({ label: "Loading results", percent: 100 });
     window.location.href = payload.playerUrl;
   } catch (error) {
+    stopAnalysisProgressPolling();
     renderSubmissionRejection(error.message);
   }
 }

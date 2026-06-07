@@ -249,7 +249,7 @@ export function getRecordingModeVisibility(mode) {
     compareSavedTake: mode === "detail",
     analyzeRecording: false,
     analyzingSpinner: isAnalyzing,
-    uploadProgress: isUploading,
+    uploadProgress: isUploading || isAnalyzing,
     backToChallenges: showBackToChallenges,
   };
 }

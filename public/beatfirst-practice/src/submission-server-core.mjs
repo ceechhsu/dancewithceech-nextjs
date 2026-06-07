@@ -36,6 +36,15 @@ export function parseSubmissionAnalyzePath(urlPath) {
   return { submissionId };
 }
 
+export function parseSubmissionAnalyzeProgressPath(urlPath) {
+  const path = (urlPath || "").split("?")[0];
+  const match = /^\/api\/submissions\/([^/]+)\/analyze\/progress$/.exec(path);
+  if (!match) return null;
+  const [, submissionId] = match;
+  if (!isSafeSubmissionId(submissionId)) return null;
+  return { submissionId };
+}
+
 export function validateSubmissionMetadata(metadata) {
   const errors = [];
   if (!isSafeSubmissionId(metadata?.submissionId)) {
