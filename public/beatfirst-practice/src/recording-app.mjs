@@ -52,6 +52,8 @@ const captureStatus = document.querySelector("[data-capture-recording-status]");
 const savedLinks = document.querySelector("[data-saved-links]");
 const DEMO_VIDEO_CACHE_NAME = "dancewithceech-reference-v2";
 const RECORD_CAPTURE_CONTROLS_SPACE = 156;
+const PRODUCTION_ANALYSIS_API_PREFIX = "/api/beatfirst-practice";
+const LOCAL_ANALYSIS_API_PREFIX = "/api";
 const ANALYSIS_UNAVAILABLE_MESSAGE = "Automated analysis is not enabled on this private beta yet. You can still record and save your take to your phone.";
 
 let mediaStream = null;
@@ -109,6 +111,12 @@ function currentMode() {
   return recordShell.dataset.mode || "library";
 }
 
+function getAnalysisApiPrefix() {
+  return window.location.pathname.startsWith("/beatfirst-practice")
+    ? PRODUCTION_ANALYSIS_API_PREFIX
+    : LOCAL_ANALYSIS_API_PREFIX;
+}
+
 function setAnalysisBackendAvailability(available) {
   analysisBackendAvailable = Boolean(available);
   if (currentMode() === "detail") setMode("detail");
@@ -116,7 +124,7 @@ function setAnalysisBackendAvailability(available) {
 
 async function refreshAnalysisBackendStatus() {
   try {
-    const response = await fetch("/api/beatfirst-practice/status", {
+    const response = await fetch(`${getAnalysisApiPrefix()}/status`, {
       cache: "no-store",
     });
     const payload = await response.json().catch(() => ({}));
@@ -880,11 +888,14 @@ function parseUploadResponse(xhr) {
   }
 }
 
-function uploadRequest(url, { body, contentType, onProgress } = {}) {
+function uploadRequest(url, { body, contentType, headers = {}, onProgress } = {}) {
   return new Promise((resolveUpload, rejectUpload) => {
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", url);
-    xhr.setRequestHeader("Content-Type", contentType);
+    if (contentType) xhr.setRequestHeader("Content-Type", contentType);
+    for (const [key, value] of Object.entries(headers)) {
+      xhr.setRequestHeader(key, value);
+    }
     xhr.upload.addEventListener("progress", (event) => {
       if (event.lengthComputable) onProgress?.(event.loaded, event.total);
     });
@@ -907,18 +918,20 @@ function uploadRequest(url, { body, contentType, onProgress } = {}) {
   });
 }
 
-async function uploadJson(url, payload, { label = "Finalizing upload", onProgress } = {}) {
+async function uploadJson(url, payload, { headers = {}, label = "Finalizing upload", onProgress } = {}) {
   return uploadRequest(url, {
     contentType: "application/json",
+    headers,
     body: JSON.stringify(payload),
     onProgress,
     label,
   });
 }
 
-async function uploadBlob(url, blob, { label = "Uploading file", onProgress, contentType = "" } = {}) {
+async function uploadBlob(url, blob, { headers = {}, label = "Uploading file", onProgress, contentType = "" } = {}) {
   return uploadRequest(url, {
     contentType: contentType || blob.type || "video/webm",
+    headers,
     body: blob,
     onProgress,
     label,
@@ -936,6 +949,13 @@ function buildPhaseUploadProgress({ label, startPercent, spanPercent }) {
   };
 }
 
+function formatUploadSize(bytes) {
+  const size = Number(bytes) || 0;
+  if (size >= 1024 * 1024) return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  if (size >= 1024) return `${(size / 1024).toFixed(1)} KB`;
+  return `${size} bytes`;
+}
+
 function handleCompareSavedTake() {
   if (!analysisBackendAvailable) {
     setStatus(ANALYSIS_UNAVAILABLE_MESSAGE, "warning");
@@ -943,6 +963,37 @@ function handleCompareSavedTake() {
   }
   savedTakeInput.value = "";
   savedTakeInput.click();
+}
+
+async function createDirectUploadSession(metadata) {
+  const apiPrefix = getAnalysisApiPrefix();
+  if (apiPrefix === LOCAL_ANALYSIS_API_PREFIX) {
+    return {
+      uploadBaseUrl: `/api/submissions/${metadata.submissionId}`,
+      uploadHeaders: {},
+    };
+  }
+
+  const response = await fetch(`${PRODUCTION_ANALYSIS_API_PREFIX}/upload-session`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      submissionId: metadata.submissionId,
+    }),
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(payload.error || `Upload session failed with ${response.status}`);
+  }
+  return {
+    uploadBaseUrl: payload.uploadBaseUrl,
+    uploadHeaders: {
+      "x-beatfirst-upload-token": payload.uploadToken,
+    },
+    maxUploadBytes: Number(payload.maxUploadBytes || 0),
+  };
 }
 
 async function uploadSelectedSavedTake(file) {
@@ -968,9 +1019,17 @@ async function uploadSelectedSavedTake(file) {
     savedSubmissionId = metadata.submissionId;
     setMode("uploading");
     setUploadProgress({ label: "Preparing saved take", percent: 0 });
-    const baseUrl = `/api/beatfirst-practice/submissions/${metadata.submissionId}`;
+    const uploadSession = await createDirectUploadSession(metadata);
+    if (uploadSession.maxUploadBytes && file.size > uploadSession.maxUploadBytes) {
+      throw new Error(
+        `Selected video is ${formatUploadSize(file.size)}. This beta uploader supports up to ${formatUploadSize(uploadSession.maxUploadBytes)}. Use a saved take from this page or trim the video first.`,
+      );
+    }
+    const baseUrl = uploadSession.uploadBaseUrl;
+    const uploadHeaders = uploadSession.uploadHeaders;
     await uploadBlob(`${baseUrl}/recording`, file, {
       contentType: mimeType,
+      headers: uploadHeaders,
       label: "Uploading saved take",
       onProgress: buildPhaseUploadProgress({
         label: "Uploading saved take",
@@ -979,6 +1038,7 @@ async function uploadSelectedSavedTake(file) {
       }),
     });
     await uploadJson(`${baseUrl}/metadata`, metadata, {
+      headers: uploadHeaders,
       label: "Finalizing upload",
       onProgress: buildPhaseUploadProgress({
         label: "Finalizing upload",
@@ -1031,7 +1091,7 @@ async function analyzeSavedSubmission() {
   setStatus("Analyzing video. Checking full-body framing and foot contacts...");
 
   try {
-    const response = await fetch(`/api/beatfirst-practice/submissions/${savedSubmissionId}/analyze`, {
+    const response = await fetch(`${getAnalysisApiPrefix()}/submissions/${savedSubmissionId}/analyze`, {
       method: "POST",
     });
     const payload = await response.json().catch(() => ({}));
