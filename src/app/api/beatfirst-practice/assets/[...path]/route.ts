@@ -4,6 +4,15 @@ function getBackendOrigin() {
   return process.env.BEATFIRST_ANALYSIS_ORIGIN?.replace(/\/$/, "") || "";
 }
 
+function getBackendToken() {
+  return process.env.BEATFIRST_ANALYSIS_TOKEN?.trim() || "";
+}
+
+function applyBackendAuth(headers: Headers) {
+  const token = getBackendToken();
+  if (token) headers.set("authorization", `Bearer ${token}`);
+}
+
 function rejectUnconfigured() {
   return NextResponse.json(
     {
@@ -100,6 +109,7 @@ export async function GET(req: NextRequest, context: RouteContext) {
   const headers = new Headers();
   const range = req.headers.get("range");
   if (range) headers.set("range", range);
+  applyBackendAuth(headers);
 
   const backendResponse = await fetch(backendUrl, {
     headers,

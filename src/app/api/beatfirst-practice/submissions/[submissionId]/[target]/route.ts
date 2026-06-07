@@ -10,6 +10,15 @@ function getBackendOrigin() {
   return process.env.BEATFIRST_ANALYSIS_ORIGIN?.replace(/\/$/, "") || "";
 }
 
+function getBackendToken() {
+  return process.env.BEATFIRST_ANALYSIS_TOKEN?.trim() || "";
+}
+
+function applyBackendAuth(headers: Headers) {
+  const token = getBackendToken();
+  if (token) headers.set("authorization", `Bearer ${token}`);
+}
+
 function rejectUnconfigured() {
   return NextResponse.json(
     {
@@ -39,6 +48,7 @@ async function proxyToBackend(
   const backendUrl = `${origin}/api/submissions/${encodeURIComponent(submissionId)}/${target}`;
   const headers = new Headers(req.headers);
   headers.delete("host");
+  applyBackendAuth(headers);
 
   const backendResponse = await fetch(backendUrl, {
     method: req.method,
