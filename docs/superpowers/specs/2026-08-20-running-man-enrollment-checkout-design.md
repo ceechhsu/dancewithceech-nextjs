@@ -59,7 +59,7 @@ While coaching capacity remains, the enrollment page displays an unchecked optio
 - One private 20-minute check-in during Week 3
 - A current availability message: “3 coaching spots available,” “Only 2 left,” or “Only 1 left”
 
-Selecting coaching updates the total shown beside the enrollment button. If all remaining coaching spots are temporarily reserved, disable the option and say “Coaching spots are currently held in checkout,” with a refresh action. Reserve “sold out” for three completed coaching purchases. The student may still purchase the cohort without coaching.
+Selecting coaching updates the total shown beside the enrollment button. If all remaining coaching spots are temporarily reserved, disable the option and say “Coaching spots are currently held in checkout,” with a refresh action. Reserve “sold out” for three active paid coaching purchases. If a refunded or disputed coaching allocation retains capacity, describe the affected spot as unavailable while its status is under review; never present it as a paid purchase. The student may still purchase the cohort without coaching.
 
 ### Stripe Checkout
 
@@ -69,7 +69,7 @@ Clicking the single enrollment button opens Stripe Checkout with the server-sele
 - $247 enrollment plus coaching: $347
 - $297 enrollment plus coaching: $397
 
-If the student leaves the option unchecked, only the cohort price is charged. After three confirmed coaching purchases, the option is removed from new enrollment attempts and shown as sold out wherever availability is mentioned. Stripe does not offer a second opportunity to add or remove coaching after the Dance With Ceech page creates the Checkout Session.
+If the student leaves the option unchecked, only the cohort price is charged. After three active paid coaching purchases, the option is removed from new enrollment attempts and shown as sold out wherever availability is mentioned. If a later refund or dispute retains one of those slots, the option remains unavailable but the copy changes to under review rather than paid or sold out. Stripe does not offer a second opportunity to add or remove coaching after the Dance With Ceech page creates the Checkout Session.
 
 The Stripe product name and description identify the purchase as “The Running Man Method — Founding Cohort, September 24–October 22, 2026.” Customer-facing copy explains that the program includes four weekly training sessions on September 24, October 1, October 8, and October 15, followed by the live Graduation Challenge on the fifth Thursday, October 22. Enrollment is paid in full.
 
@@ -106,10 +106,10 @@ A narrowly scoped Postgres function atomically:
 4. Compares the server's current tier, coaching availability, and terms version with the state the student explicitly confirmed.
 5. If any confirmed value is stale, returns the current state without creating a reservation so the page can request reconfirmation.
 6. Counts active reservations inside the confirmed current tier.
-7. Reserves a current-tier seat only when paid enrollments plus active current-tier holds remain below that tier’s capacity.
+7. Reserves a current-tier seat only when unreopened completed-payment tier allocations plus active current-tier holds remain below that tier’s cumulative ceiling of three, six, or 12. Active paid-student count is never used for tier-capacity arithmetic.
 8. If every remaining seat in the current tier is held, returns `current_tier_temporarily_held` and does not advance to the next tier.
-9. Counts paid coaching upgrades and active coaching reservations.
-10. If the student selected coaching, reserves one coaching slot only when fewer than three coaching slots are paid or actively reserved. If coaching became unavailable, returns the current state without reserving either item. A cohort-only checkout never consumes coaching capacity.
+9. Counts all capacity-consuming coaching allocations (`paid`, `refund_review`, and `disputed`) plus active coaching reservations.
+10. If the student selected coaching, reserves one coaching slot only when fewer than three coaching slots are capacity-consuming or actively reserved. If coaching became unavailable, returns the current state without reserving either item. A cohort-only checkout never consumes coaching capacity.
 11. Returns the reservation ID, reserved base Price, whether coaching was reserved, the accepted server-owned terms version and timestamp, and the reservation expiry.
 
 The function must not be publicly callable. If implemented as `SECURITY DEFINER`, set an empty `search_path`, fully qualify every relation, revoke execution from `PUBLIC`, `anon`, and `authenticated`, and grant execution only to the server role.
@@ -150,22 +150,22 @@ Create a server-only enrollment-state module backed by the inventory tables. It 
 - active price tier;
 - claimed and remaining counts for the tier;
 - temporary reservation state when the last seat in a tier is currently held;
-- coaching paid and temporarily reserved counts;
+- coaching active-paid, capacity-under-review, and temporarily reserved counts;
 - current button copy;
 - sold-out and waitlist state;
 - an `asOf` timestamp.
 
-Marketing copy reports completed paid purchases as “claimed.” Active reservations never advance the public price ladder and are never described as completed purchases. If every remaining $197 seat is temporarily reserved, show that the current discount is “currently held in checkout” and pause new checkout attempts; do not expose $247 until three $197 enrollments are paid. When a hold is verified expired and released, $197 reopens.
+Marketing copy reports active paid purchases as “claimed.” Active reservations never advance the public price ladder and are never described as completed purchases. Unreopened refund or dispute allocations preserve tier capacity but are labeled unavailable under review, not paid. If every remaining $197 seat is temporarily reserved, show that the current discount is “currently held in checkout” and pause new checkout attempts; do not expose $247 until three completed-payment allocations consume the first tier. When a hold is verified expired and released, $197 reopens.
 
 The page may cache this public view model for no more than 15 seconds and should refresh it while the enrollment section is visible. Stripe webhooks invalidate the cached state immediately. The internal checkout endpoint always performs an uncached atomic reservation.
 
 If the price available at click time differs from the price last rendered, the atomic comparison returns the newly available amount without reserving anything. Show an interstitial and require explicit confirmation before retrying. Never silently reprice a customer.
 
-If the student selected coaching but the last coaching spot became unavailable before the atomic reservation, return without reserving anything. Do not silently remove the upgrade or open a lower-total Checkout. If three purchases are complete, explain that private coaching has sold out; if the spots are only reserved, explain that they are currently held in checkout. Ask the student to confirm cohort-only enrollment.
+If the student selected coaching but the last coaching spot became unavailable before the atomic reservation, return without reserving anything. Do not silently remove the upgrade or open a lower-total Checkout. If three active paid purchases consume the slots, explain that private coaching has sold out; if the spots are reserved, explain that they are currently held in checkout; if a refund or dispute retains a slot, explain that availability is under review. Ask the student to confirm cohort-only enrollment.
 
 ### Coaching availability before Stripe
 
-The Dance With Ceech page calculates currently available coaching capacity from three total slots minus paid coaching purchases and active coaching reservations. The availability message may change as holds are created or released, so describe it as currently available rather than as a completed-purchase count. The checkout endpoint always rechecks capacity atomically.
+The Dance With Ceech page calculates currently available coaching capacity from three total slots minus all capacity-consuming coaching allocations (`paid`, `refund_review`, and `disputed`) and active coaching reservations. It separately reports active paid coaching purchases so a refunded or disputed allocation is never called paid or sold out. The availability message may change as holds are created, reviewed, reopened, or released, so describe it as currently available rather than as a completed-purchase count. The checkout endpoint always rechecks capacity atomically.
 
 Stripe receives the $100 coaching line item only after the student selected coaching and the server reserved it. Webhook validation accepts only the single allowlisted coaching Price ID. The Stripe page shows the selected purchase and total; it does not display a second coaching checkbox or claim continuously changing availability.
 
@@ -245,6 +245,7 @@ Automated tests must cover:
 - removal of the coaching option after the third completed coaching purchase;
 - coaching sellout between page render and click requires cohort-only reconfirmation;
 - atomic concurrent attempts for the final cohort and coaching slots;
+- seat-tier capacity uses unreopened completed-payment allocations plus active holds, never active paid-student count;
 - abandoned and expired Checkout Sessions release holds;
 - all current-tier seats held without advancing the public price;
 - 12 held seats never produce a sold-out or waitlist claim before 12 payments;
@@ -266,6 +267,8 @@ Automated tests must cover:
 - seven paid students plus one open pre-deadline Session evaluates as eight if that Session pays during its valid hold, and as seven only after verified expiry;
 - refunded or disputed capacity is never presented as an active paid student;
 - active-paid, capacity-consumed, and tier-allocation counts remain distinct through refunds and owner reopening;
+- refunded or disputed coaching remains capacity-consuming until owner-approved reopening and can never expose a fourth coaching slot;
+- coaching copy distinguishes active paid, temporarily held, and unavailable-under-review slots;
 - full cancellation or postponement refund includes selected coaching;
 - Day 5 refund boundary uses the Gmail received timestamp for requests sent to `dancewithceech@gmail.com` through September 28 at 11:59 p.m. Pacific, including immediately-before and immediately-after cases;
 - Stripe API errors, cache invalidation, polling, and timestamped stale-display handling;
