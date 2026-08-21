@@ -68,11 +68,11 @@ Use fixed, one-time USD Stripe Prices for:
 - $197 cohort enrollment
 - $247 cohort enrollment
 - $297 cohort enrollment
-- $100 private coaching
+- $100 private coaching, represented by three allowlisted customer-visible Product/Price variants whose descriptions say “3 spots available,” “Only 2 left,” or “Only 1 left”
 
 Every Checkout Session contains exactly one non-adjustable cohort unit. Coaching, when available, is an optional item with a maximum quantity of one. Promotion codes and adjustable quantities remain disabled. Keep automatic tax collection disabled until Ceech receives tax guidance and intentionally enables it. Enable Stripe’s standard successful-payment receipt email and do not send a duplicate custom receipt.
 
-Restrict the founding-cohort Checkout Sessions to immediate card-based payment methods so the inventory predicate can be unambiguous: a purchase counts only when the Session is complete and `payment_status` is `paid`. Wallets backed by card may appear through Stripe’s card configuration. Do not count pending, failed, expired, refunded, or disputed payments as paid inventory.
+Restrict the founding-cohort Checkout Sessions to immediate card-based payment methods so the inventory predicate can be unambiguous: a purchase first becomes inventory-consuming when the Session is complete and `payment_status` is `paid`. Wallets backed by card may appear through Stripe’s card configuration. Pending, failed, and expired Sessions never count as paid. A paid seat continues consuming inventory during refunds or disputes until an explicit owner-approved reopen transition occurs.
 
 ### Transactional reservations in Supabase
 
@@ -82,17 +82,33 @@ Create server-only inventory and reservation records for the named cohort. Table
 
 A narrowly scoped Postgres function atomically:
 
-1. Removes expired reservations.
-2. Locks the cohort inventory row for the transaction.
-3. Counts paid enrollments and active seat reservations.
-4. Reserves the next available cohort seat at $197, $247, or $297.
-5. Counts paid coaching upgrades and active coaching reservations.
-6. Reserves one coaching opportunity for that Checkout Session when fewer than three coaching slots are paid or reserved.
-7. Returns the reserved base Price, whether the coaching option is available, and the reservation expiry.
+1. Locks the cohort inventory row for the transaction.
+2. Counts paid enrollments using the inventory-consuming states.
+3. Selects the current tier from paid enrollments only: $197 until three are paid, $247 until six are paid, and $297 until 12 are paid.
+4. Counts active reservations inside that current tier.
+5. Reserves a current-tier seat only when paid enrollments plus active current-tier holds remain below that tier’s capacity.
+6. If every remaining seat in the current tier is held, returns `current_tier_temporarily_held` and does not advance to the next tier.
+7. Counts paid coaching upgrades and active coaching reservations.
+8. Reserves one coaching opportunity for that Checkout Session when fewer than three coaching slots are paid or reserved.
+9. Returns the reservation ID, reserved base Price, selected $100 coaching availability variant, and reservation expiry.
 
 The function must not be publicly callable. If implemented as `SECURITY DEFINER`, set an empty `search_path`, fully qualify every relation, revoke execution from `PUBLIC`, `anon`, and `authenticated`, and grant execution only to the server role.
 
-Checkout Sessions expire after 30 minutes. If Stripe Session creation fails, release the database reservation immediately. If a customer pays for the cohort but does not select coaching, finalize the seat and release the coaching reservation. If the Session expires or is canceled, release both reservations. A scheduled cleanup runs at least every five minutes as a backstop for missed expiration events.
+### Reservation and Checkout state machine
+
+Reservation states are `creating_checkout`, `checkout_open`, `paid`, `release_pending`, `released`, `refund_review`, `reopened`, and `disputed`. Legal transitions are ordered and conditional; an older or lower-priority event cannot move a record backward. A verified paid transition always wins over an expiry transition.
+
+The checkout workflow is:
+
+1. Create a reservation ID through the atomic function with state `creating_checkout`.
+2. Create Stripe Checkout using that reservation ID as both metadata and the Stripe idempotency key.
+3. Persist the Stripe Session ID and move the reservation to `checkout_open` before returning the Stripe URL.
+4. If Session creation fails, move the reservation to `release_pending` and release it.
+5. If the database write fails after Stripe creates the Session, retry the same idempotent Stripe request to recover the same Session, persist it, and do not create another hold. Reconciliation also scans recent cohort Sessions by allowlisted metadata and repairs an unlinked reservation.
+
+Store a signed, HttpOnly checkout-attempt identifier in the browser and reuse an existing active attempt when the customer clicks repeatedly. Rate-limit the checkout endpoint by attempt identifier and network signals so repeated clicks or a malicious client cannot hold all seats or coaching opportunities.
+
+Checkout Sessions expire after 30 minutes. If a customer pays for the cohort but does not select coaching, finalize the seat and release the coaching reservation. An expiry webhook first locks the reservation and confirms the Stripe Session is expired and unpaid before releasing it. Scheduled cleanup never releases by database time alone: it retrieves the associated Stripe Session, keeps the hold during Stripe outages or ambiguous status, finalizes a verified paid Session, and releases only a verified expired or unpaid Session. A protected reconciliation runs at least every five minutes as a backstop.
 
 Because each open Checkout Session owns a temporary coaching reservation, no more than three simultaneous Sessions can offer coaching. This preserves the approved checkbox experience without allowing a fourth coaching purchase. A reservation can make coaching temporarily unavailable while another student decides; it automatically returns when that Session completes without coaching or expires.
 
@@ -109,7 +125,7 @@ Create a server-only enrollment-state module backed by the inventory tables. It 
 - sold-out and waitlist state;
 - an `asOf` timestamp.
 
-Marketing copy reports completed paid purchases as “claimed.” Active reservations affect which price can be offered but are never described as completed purchases. If the last $197 seat is temporarily reserved, show that it is “currently held in checkout” rather than falsely reporting another purchase. When the hold expires, the $197 offer may reopen.
+Marketing copy reports completed paid purchases as “claimed.” Active reservations never advance the public price ladder and are never described as completed purchases. If every remaining $197 seat is temporarily reserved, show that the current discount is “currently held in checkout” and pause new checkout attempts; do not expose $247 until three $197 enrollments are paid. When a hold is verified expired and released, $197 reopens.
 
 The page may cache this public view model for no more than 15 seconds and should refresh it while the enrollment section is visible. Stripe webhooks invalidate the cached state immediately. The internal checkout endpoint always performs an uncached atomic reservation.
 
@@ -117,7 +133,7 @@ If the price available at click time differs from the price last rendered, show 
 
 ### Coaching availability inside Stripe
 
-The Checkout Session includes the optional $100 coaching item only when that Session owns a coaching reservation. Use customer-visible coaching Product variants or supported Stripe custom text so the optional item truthfully says “3 coaching spots available,” “Only 2 left,” or “Only 1 left” at Session creation. Do not claim that an already-open Checkout page is continuously live; its reservation makes the displayed availability valid for that Session until it completes or expires.
+The Checkout Session includes an optional $100 coaching item only when that Session owns a coaching reservation. Choose one of the three allowlisted $100 coaching Product/Price variants so the optional item truthfully says “3 coaching spots available,” “Only 2 left,” or “Only 1 left” at Session creation. The number includes the spot reserved for the customer viewing that Session. Webhook validation accepts only these three coaching Price IDs and treats them as the same service. Do not claim that an already-open Checkout page is continuously live; its reservation makes the displayed availability valid for that Session until it completes or expires.
 
 ### Stripe webhook and reconciliation
 
@@ -128,12 +144,12 @@ Handle at minimum:
 - `checkout.session.completed` with `payment_status=paid`;
 - `checkout.session.expired`;
 - `checkout.session.async_payment_succeeded` defensively, even though delayed methods are disabled;
-- full refunds;
-- disputes.
+- `charge.refunded` for successful full refunds;
+- `charge.dispute.created` and `charge.dispute.closed`.
 
 Webhook processing is idempotent by Stripe Session or Event ID, tolerates duplicate and out-of-order delivery, retrieves all paginated line items, finalizes or releases reservations, invalidates the public state cache, and records an audit trail. A protected scheduled reconciliation compares active reservations with Stripe at least every five minutes and alerts Ceech when it detects a mismatch.
 
-A full refund before the cohort begins reopens the cohort seat after owner confirmation. A coaching refund reopens coaching capacity only if the coaching service has not begun and Ceech confirms the slot can be resold. Disputes trigger an alert and do not automatically reopen inventory.
+Inventory-consuming purchase states are `paid`, `refund_review`, and `disputed`. `charge.refunded` moves an eligible purchase to `refund_review` and alerts Ceech but does not free capacity. An authenticated owner action may move it to `reopened` when the full refund is confirmed and the seat can be resold. A coaching refund may reopen coaching capacity only if the service has not begun and Ceech approves it. Disputes remain capacity-consuming, trigger an alert, and never reopen inventory automatically.
 
 ### Confirmation route
 
@@ -141,7 +157,7 @@ Redirect Stripe to a Dance With Ceech confirmation route containing `{CHECKOUT_S
 
 ### Waitlist
 
-When all 12 seats are paid or actively reserved, replace the purchase action with “Join the Next Cohort Waitlist.” Submit name, email, and explicit marketing consent to a dedicated `/api/running-man-waitlist` endpoint using the existing Systeme.io integration and a Running Man-specific tag configured by environment variable.
+When all 12 seats are paid, replace the purchase action with “Join the Next Cohort Waitlist.” If fewer than 12 are paid but all remaining final-tier seats are temporarily held, show “Remaining seats are currently held in checkout” with a refresh action—not the waitlist. Submit waitlist name, email, and explicit marketing consent to a dedicated `/api/running-man-waitlist` endpoint using the existing Systeme.io integration and a Running Man-specific tag configured by environment variable.
 
 Validate and normalize email, make duplicate submissions idempotent, include a hidden honeypot and server-side rate limit, return accessible success and error states, and log delivery failures for owner follow-up. The copy must state that joining the waitlist is not a paid reservation.
 
@@ -151,7 +167,7 @@ Validate and normalize email, make duplicate submissions idempotent, include a h
 - The checkout endpoint fails closed if it cannot atomically reserve a seat.
 - If the displayed tier changed before click, require explicit confirmation of the new amount.
 - Never display fabricated scarcity, estimated purchasers, checkout starts as purchases, or stale counts labeled as live.
-- If all seats are paid or temporarily reserved, show the waitlist. If a hold expires, enrollment may reopen automatically.
+- Show the waitlist only after 12 paid enrollments. When current-tier seats are only held, show a temporary-hold state and refresh option without advancing the tier.
 - If Stripe Session creation fails after a database hold, release the hold and show a recoverable error.
 - If webhook signature verification or reconciliation fails, log the error, alert the owner, and do not mutate inventory from an untrusted payload.
 
@@ -172,6 +188,12 @@ Automated tests must cover:
 - atomic concurrent attempts for the final cohort and coaching slots;
 - abandoned and expired Checkout Sessions release holds;
 - a paid enrollment without coaching releases its coaching reservation;
+- all current-tier seats held without advancing the public price;
+- 12 held seats never produce a sold-out or waitlist claim before 12 payments;
+- payment-versus-expiry races always preserve a verified paid seat;
+- cleanup during a Stripe outage keeps the reservation;
+- failure after Session creation but before Session-ID persistence repairs the same idempotent attempt;
+- repeated checkout requests reuse or rate-limit the attempt rather than multiplying holds;
 - card-only and paid-status enforcement;
 - fixed quantities, exact USD Price IDs, amounts, and promotion-code settings;
 - direct attempts to submit client-selected Price IDs are ignored or rejected;
@@ -181,6 +203,7 @@ Automated tests must cover:
 - duplicate and out-of-order Stripe events remain idempotent;
 - paginated line-item retrieval;
 - refund and dispute behavior;
+- owner-approved full-refund reopening;
 - confirmation Session-ID tampering and pending status;
 - waitlist validation, deduplication, spam protection, and delivery failure.
 
