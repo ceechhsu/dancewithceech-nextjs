@@ -18,7 +18,7 @@ All three tiers remain visible, but only the currently available tier is highlig
 
 The highlighted tier, price, supporting copy, and button label update automatically from completed Stripe purchases.
 
-Enrollment closes September 17, 2026, at 11:59 p.m. Pacific Time, or earlier when all 12 seats have been purchased. The server—not the visitor's device—enforces the deadline. After the deadline, the page shows “Enrollment closed” and cannot create a new Checkout Session. A waitlist is not shown merely because the deadline passed; the approved next-cohort waitlist appears when the 12 paid seats sell out.
+New checkout attempts close September 17, 2026, at 11:59 p.m. Pacific Time, or earlier when all 12 seats have been purchased. The server—not the visitor's device—enforces the deadline. A Checkout Session successfully opened before the deadline keeps its original 30-minute reservation, which is disclosed beside the deadline. After the deadline, the page shows “Enrollment closed” and cannot create a new Checkout Session. A waitlist is not shown merely because the deadline passed; the approved next-cohort waitlist appears when the 12 paid seats sell out.
 
 ### Initial state before the first purchase
 
@@ -50,7 +50,7 @@ Enrollment remains direct purchase rather than application-first, but the studen
 - the student is at least 18 and can practice safely or has obtained appropriate medical clearance; and
 - the student has reviewed the refund, cancellation, and postponement terms.
 
-Record the accepted terms version and timestamp with the reservation. The page still has only one purchase button; the required commitment confirmation is not a second price or enrollment choice.
+The checkout endpoint rejects a missing or stale commitment acknowledgment even if someone bypasses the page controls. The server owns the current terms version and records that version and the server timestamp with the reservation. If the terms have changed since the page was rendered, require the student to review and accept the current version. The page still has only one purchase button; the required commitment confirmation is not a second price or enrollment choice.
 
 While coaching capacity remains, the enrollment page displays an unchecked option:
 
@@ -59,7 +59,7 @@ While coaching capacity remains, the enrollment page displays an unchecked optio
 - One private 20-minute check-in during Week 3
 - A current availability message: “3 coaching spots available,” “Only 2 left,” or “Only 1 left”
 
-Selecting coaching updates the total shown beside the enrollment button. If all coaching spots are paid or temporarily reserved, the option becomes unavailable and is shown as sold out. The student may still purchase the cohort without coaching.
+Selecting coaching updates the total shown beside the enrollment button. If all remaining coaching spots are temporarily reserved, disable the option and say “Coaching spots are currently held in checkout,” with a refresh action. Reserve “sold out” for three completed coaching purchases. The student may still purchase the cohort without coaching.
 
 ### Stripe Checkout
 
@@ -103,12 +103,14 @@ A narrowly scoped Postgres function atomically:
 1. Locks the cohort inventory row for the transaction.
 2. Counts paid enrollments using the inventory-consuming states.
 3. Selects the current tier from paid enrollments only: $197 until three are paid, $247 until six are paid, and $297 until 12 are paid.
-4. Counts active reservations inside that current tier.
-5. Reserves a current-tier seat only when paid enrollments plus active current-tier holds remain below that tier’s capacity.
-6. If every remaining seat in the current tier is held, returns `current_tier_temporarily_held` and does not advance to the next tier.
-7. Counts paid coaching upgrades and active coaching reservations.
-8. If the student selected coaching, reserves one coaching slot only when fewer than three coaching slots are paid or actively reserved. A cohort-only checkout never consumes coaching capacity.
-9. Returns the reservation ID, reserved base Price, whether coaching was reserved, and the reservation expiry.
+4. Compares the server's current tier, coaching availability, and terms version with the state the student explicitly confirmed.
+5. If any confirmed value is stale, returns the current state without creating a reservation so the page can request reconfirmation.
+6. Counts active reservations inside the confirmed current tier.
+7. Reserves a current-tier seat only when paid enrollments plus active current-tier holds remain below that tier’s capacity.
+8. If every remaining seat in the current tier is held, returns `current_tier_temporarily_held` and does not advance to the next tier.
+9. Counts paid coaching upgrades and active coaching reservations.
+10. If the student selected coaching, reserves one coaching slot only when fewer than three coaching slots are paid or actively reserved. If coaching became unavailable, returns the current state without reserving either item. A cohort-only checkout never consumes coaching capacity.
+11. Returns the reservation ID, reserved base Price, whether coaching was reserved, the accepted server-owned terms version and timestamp, and the reservation expiry.
 
 The function must not be publicly callable. If implemented as `SECURITY DEFINER`, set an empty `search_path`, fully qualify every relation, revoke execution from `PUBLIC`, `anon`, and `authenticated`, and grant execution only to the server role.
 
@@ -118,11 +120,13 @@ Reservation states are `creating_checkout`, `checkout_open`, `paid`, `release_pe
 
 The checkout workflow is:
 
-1. Create a reservation ID through the atomic function with state `creating_checkout`.
-2. Create Stripe Checkout using that reservation ID as both metadata and the Stripe idempotency key.
-3. Persist the Stripe Session ID and move the reservation to `checkout_open` before returning the Stripe URL.
-4. If Session creation fails, move the reservation to `release_pending` and release it.
-5. If the database write fails after Stripe creates the Session, retry the same idempotent Stripe request to recover the same Session, persist it, and do not create another hold. Reconciliation also scans recent cohort Sessions by allowlisted metadata and repairs an unlinked reservation.
+1. Send the server the tier, coaching choice, and terms version the student explicitly confirmed. Do not accept amounts or Price IDs from the client.
+2. In one atomic function, compare those expected values with current state. If they differ, return the new state without creating any reservation and require reconfirmation.
+3. When the confirmed values still match, create a reservation ID with state `creating_checkout`.
+4. Create Stripe Checkout using that reservation ID as both metadata and the Stripe idempotency key.
+5. Persist the Stripe Session ID and move the reservation to `checkout_open` before returning the Stripe URL.
+6. If Session creation fails, move the reservation to `release_pending` and release it.
+7. If the database write fails after Stripe creates the Session, retry the same idempotent Stripe request to recover the same Session, persist it, and do not create another hold. Reconciliation also scans recent cohort Sessions by allowlisted metadata and repairs an unlinked reservation.
 
 Store a signed, HttpOnly checkout-attempt identifier in the browser and reuse an existing active attempt when the customer repeats the same checkout selection. Bind the attempt to the selected cohort and coaching choice. If a customer returns from Stripe and changes the coaching selection, the server must first verify and expire or finalize the earlier unpaid Session before replacing its reservation; it must never create overlapping holds for one browser attempt. Rate-limit the checkout endpoint by attempt identifier and network signals so repeated clicks or a malicious client cannot hold all seats or coaching opportunities.
 
@@ -147,9 +151,9 @@ Marketing copy reports completed paid purchases as “claimed.” Active reserva
 
 The page may cache this public view model for no more than 15 seconds and should refresh it while the enrollment section is visible. Stripe webhooks invalidate the cached state immediately. The internal checkout endpoint always performs an uncached atomic reservation.
 
-If the price available at click time differs from the price last rendered, show an interstitial with the newly available amount and require explicit confirmation before creating Checkout. Never silently reprice a customer.
+If the price available at click time differs from the price last rendered, the atomic comparison returns the newly available amount without reserving anything. Show an interstitial and require explicit confirmation before retrying. Never silently reprice a customer.
 
-If the student selected coaching but the last coaching spot became unavailable before the atomic reservation, do not silently remove the upgrade or open a lower-total Checkout. Explain that private coaching has just sold out and ask the student to confirm cohort-only enrollment.
+If the student selected coaching but the last coaching spot became unavailable before the atomic reservation, return without reserving anything. Do not silently remove the upgrade or open a lower-total Checkout. If three purchases are complete, explain that private coaching has sold out; if the spots are only reserved, explain that they are currently held in checkout. Ask the student to confirm cohort-only enrollment.
 
 ### Coaching availability before Stripe
 
@@ -159,15 +163,17 @@ Stripe receives the $100 coaching line item only after the student selected coac
 
 ### Enrollment deadline, minimum, and refunds
 
-Store the September 17, 2026, 11:59 p.m. Pacific enrollment cutoff as a server-owned cohort timestamp. The atomic reservation function refuses new reservations after that instant, even if a visitor has an older page open. A Checkout Session created before the cutoff may remain valid only through its original 30-minute expiration; the system never creates or extends a Session after the deadline.
+Store the September 17, 2026, 11:59 p.m. Pacific new-checkout cutoff as a server-owned cohort timestamp. The atomic reservation function refuses new reservations after that instant, even if a visitor has an older page open. A Checkout Session created before the cutoff may remain valid only through its original 30-minute expiration; the system never creates or extends a Session after the deadline. Customer-facing deadline copy states that a checkout successfully opened before 11:59 p.m. retains its displayed 30-minute reservation.
 
 The cohort requires at least eight paid students. At the enrollment cutoff, notify Ceech if fewer than eight students have paid so Ceech can cancel or postpone the cohort. Do not automatically change dates, issue refunds, or transfer students without Ceech's decision.
 
-The customer-facing terms remain:
+The customer-facing terms, disclosed before commitment confirmation, are:
 
-- full refund through Day 5 of the program;
+- a written refund request received by Dance With Ceech no later than September 28, 2026, at 11:59 p.m. Pacific Time—the end of Day 5—receives a full refund, including any coaching add-on;
 - no refunds after Day 5, including for missed sessions or unfinished assignments; and
 - if Ceech cancels or postpones the cohort, the student may choose a full refund—including any coaching add-on—or transfer after the next cohort dates are confirmed.
+
+The pre-purchase disclosure also states that the cohort requires eight paid students and may be canceled or postponed if that minimum is not reached. At the cutoff, notify affected students by email after Ceech decides whether to run, postpone, or cancel the cohort. Refund eligibility is based on the server-recorded receipt time of the written request, not when Ceech later reads or processes it.
 
 Refund and transfer administration remains an owner action. The inventory state rules below prevent an issued refund from accidentally overselling a seat before Ceech decides whether it should reopen.
 
@@ -200,10 +206,10 @@ Validate and normalize email, make duplicate submissions idempotent, include a h
 ## Error and Fallback Behavior
 
 - If the inventory service cannot be reached, show the most recent non-sensitive snapshot with its “as of” time and label it as recently updated, not live. If no snapshot exists, show “Check current availability” without a price or scarcity claim.
-- After the September 17 cutoff, fail closed and show “Enrollment closed,” even if a cached snapshot still shows seats.
+- After the September 17 new-checkout cutoff, fail closed and show “Enrollment closed,” even if a cached snapshot still shows seats. Previously opened Sessions retain only their original 30-minute reservation.
 - The checkout endpoint fails closed if it cannot atomically reserve a seat.
 - If the displayed tier changed before click, require explicit confirmation of the new amount.
-- If selected coaching became unavailable, require explicit confirmation before continuing without it.
+- If selected coaching became unavailable, create no reservation and require explicit confirmation before continuing without it.
 - Never display fabricated scarcity, estimated purchasers, checkout starts as purchases, or stale counts labeled as live.
 - Show the waitlist only after 12 paid enrollments. When current-tier seats are only held, show a temporary-hold state and refresh option without advancing the tier.
 - If Stripe Session creation fails after a database hold, release the hold and show a recoverable error.
@@ -215,6 +221,8 @@ Automated tests must cover:
 
 - initial $197 state with benefit-led copy and no “0 claimed” message;
 - required commitment confirmation and recorded terms version before checkout;
+- direct checkout-endpoint calls without current commitment acknowledgment are rejected;
+- a terms-version change requires re-acceptance and creates no reservation;
 - one and two completed $197 purchases;
 - automatic transition from $197 to $247 after three purchases;
 - automatic transition from $247 to $297 after six total purchases;
@@ -223,6 +231,7 @@ Automated tests must cover:
 - full three-tier ladder remains visible and future tiers are non-interactive;
 - coaching totals for all three base prices;
 - coaching availability at three, two, one, and zero remaining on the enrollment page;
+- temporary coaching holds display “currently held,” while only three paid upgrades display “sold out”;
 - cohort-only checkout never reserves or charges coaching;
 - selected coaching is reserved atomically and appears as one fixed $100 Stripe line item;
 - removal of the coaching option after the third completed coaching purchase;
@@ -240,10 +249,13 @@ Automated tests must cover:
 - fixed quantities, exact USD Price IDs, amounts, and promotion-code settings;
 - direct attempts to submit client-selected Price IDs are ignored or rejected;
 - price-change interstitial and explicit reconfirmation;
+- stale tier or coaching preflight returns without creating a reservation;
 - server-enforced September 17 deadline, including a visitor with a stale open page;
+- a Checkout Session opened before the deadline retains only its disclosed original 30-minute hold;
 - no automatic waitlist or sold-out claim when the deadline passes below 12 paid seats;
 - minimum-eight enrollment notification and owner-controlled cancellation or postponement;
 - full cancellation or postponement refund includes selected coaching;
+- Day 5 refund boundary uses written-request receipt time through September 28 at 11:59 p.m. Pacific;
 - Stripe API errors, cache invalidation, polling, and timestamped stale-display handling;
 - webhook raw-body signature rejection;
 - duplicate and out-of-order Stripe events remain idempotent;
