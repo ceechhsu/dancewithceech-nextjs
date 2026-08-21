@@ -101,8 +101,8 @@ Create server-only inventory and reservation records for the named cohort. Table
 A narrowly scoped Postgres function atomically:
 
 1. Locks the cohort inventory row for the transaction.
-2. Counts paid enrollments using the inventory-consuming states.
-3. Selects the current tier from paid enrollments only: $197 until three are paid, $247 until six are paid, and $297 until 12 are paid.
+2. Counts completed-payment seat allocations using the inventory-consuming states and separately counts currently paid students using only the `paid` state.
+3. Selects the current tier from completed-payment allocations that have not been explicitly reopened: $197 until three allocations are consumed, $247 until six are consumed, and $297 until 12 are consumed.
 4. Compares the server's current tier, coaching availability, and terms version with the state the student explicitly confirmed.
 5. If any confirmed value is stale, returns the current state without creating a reservation so the page can request reconfirmation.
 6. Counts active reservations inside the confirmed current tier.
@@ -113,6 +113,14 @@ A narrowly scoped Postgres function atomically:
 11. Returns the reservation ID, reserved base Price, whether coaching was reserved, the accepted server-owned terms version and timestamp, and the reservation expiry.
 
 The function must not be publicly callable. If implemented as `SECURITY DEFINER`, set an empty `search_path`, fully qualify every relation, revoke execution from `PUBLIC`, `anon`, and `authenticated`, and grant execution only to the server role.
+
+Keep three counts distinct throughout the implementation:
+
+- **active paid students:** reservations currently in `paid`; used for the eight-student minimum and never includes a fully refunded enrollment;
+- **capacity consumed:** `paid`, `refund_review`, and `disputed`; used to prevent overselling the 12 physical seats; and
+- **completed-payment tier allocations:** capacity-consuming seats that originated from a successful payment and have not been owner-reopened; used to preserve the founding-price ladder after a refund or dispute.
+
+Public “claimed” copy reports only active `paid` enrollments. If a refunded or disputed allocation affects availability before the deadline, describe that seat as unavailable while its status is being reviewed; do not present it as a paid student. Ceech may explicitly reopen the allocation after a confirmed full refund, at which point it no longer consumes capacity or a pricing-tier allocation.
 
 ### Reservation and Checkout state machine
 
@@ -165,15 +173,15 @@ Stripe receives the $100 coaching line item only after the student selected coac
 
 Store the September 17, 2026, 11:59 p.m. Pacific new-checkout cutoff as a server-owned cohort timestamp. The atomic reservation function refuses new reservations after that instant, even if a visitor has an older page open. A Checkout Session created before the cutoff may remain valid only through its original 30-minute expiration; the system never creates or extends a Session after the deadline. Customer-facing deadline copy states that a checkout successfully opened before 11:59 p.m. retains its displayed 30-minute reservation.
 
-The cohort requires at least eight paid students. At the enrollment cutoff, notify Ceech if fewer than eight students have paid so Ceech can cancel or postpone the cohort. Do not automatically change dates, issue refunds, or transfer students without Ceech's decision.
+The cohort requires at least eight active paid students. After the enrollment cutoff, wait until every valid pre-deadline Checkout Session is either verified paid or verified expired before evaluating the minimum and notifying Ceech. A fully refunded enrollment does not count toward eight. If fewer than eight active paid students remain at that evaluation point, Ceech can cancel or postpone the cohort. Do not automatically change dates, issue refunds, or transfer students without Ceech's decision.
 
 The customer-facing terms, disclosed before commitment confirmation, are:
 
-- a written refund request received by Dance With Ceech no later than September 28, 2026, at 11:59 p.m. Pacific Time—the end of Day 5—receives a full refund, including any coaching add-on;
+- a written refund request emailed to `dancewithceech@gmail.com` from the address used to purchase, with the subject “Running Man Method Refund Request,” and received no later than September 28, 2026, at 11:59 p.m. Pacific Time—the end of Day 5—receives a full refund, including any coaching add-on;
 - no refunds after Day 5, including for missed sessions or unfinished assignments; and
 - if Ceech cancels or postpones the cohort, the student may choose a full refund—including any coaching add-on—or transfer after the next cohort dates are confirmed.
 
-The pre-purchase disclosure also states that the cohort requires eight paid students and may be canceled or postponed if that minimum is not reached. At the cutoff, notify affected students by email after Ceech decides whether to run, postpone, or cancel the cohort. Refund eligibility is based on the server-recorded receipt time of the written request, not when Ceech later reads or processes it.
+The pre-purchase disclosure also states that the cohort requires eight paid students and may be canceled or postponed if that minimum is not reached. After all valid pre-deadline Sessions resolve, notify affected students by email after Ceech decides whether to run, postpone, or cancel the cohort. Refund eligibility is based on the received timestamp shown in the Dance With Ceech Gmail mailbox, not when Ceech later reads or processes it. Preserve the request email with the enrollment record as the audit evidence.
 
 Refund and transfer administration remains an owner action. The inventory state rules below prevent an issued refund from accidentally overselling a seat before Ceech decides whether it should reopen.
 
@@ -191,7 +199,7 @@ Handle at minimum:
 
 Webhook delivery is deduplicated only by Stripe Event ID. Stripe Session ID is the inventory aggregate key governed by the ordered state machine, so later legitimate refund or dispute events for an already-paid Session are still processed. The handler tolerates duplicate and out-of-order delivery, retrieves all paginated line items, finalizes or releases reservations, invalidates the public state cache, and records an audit trail. A protected scheduled reconciliation compares active reservations with Stripe at least every five minutes and alerts Ceech when it detects a mismatch.
 
-Inventory-consuming purchase states are `paid`, `refund_review`, and `disputed`. `charge.refunded` moves an eligible purchase to `refund_review` and alerts Ceech but does not free capacity. An authenticated owner action may move it to `reopened` when the full refund is confirmed and the seat can be resold. A coaching refund may reopen coaching capacity only if the service has not begun and Ceech approves it. Disputes remain capacity-consuming, trigger an alert, and never reopen inventory automatically.
+Inventory-consuming purchase states are `paid`, `refund_review`, and `disputed`, but only `paid` counts as an active paid student. `charge.refunded` moves an eligible purchase to `refund_review` and alerts Ceech but does not free capacity or its tier allocation. An authenticated owner action may move it to `reopened` when the full refund is confirmed and the seat can be resold. A coaching refund may reopen coaching capacity only if the service has not begun and Ceech approves it. Disputes remain capacity-consuming, trigger an alert, and never reopen inventory automatically.
 
 ### Confirmation route
 
@@ -254,8 +262,12 @@ Automated tests must cover:
 - a Checkout Session opened before the deadline retains only its disclosed original 30-minute hold;
 - no automatic waitlist or sold-out claim when the deadline passes below 12 paid seats;
 - minimum-eight enrollment notification and owner-controlled cancellation or postponement;
+- minimum-eight evaluation waits for every valid pre-deadline Session to become paid or verified expired;
+- seven paid students plus one open pre-deadline Session evaluates as eight if that Session pays during its valid hold, and as seven only after verified expiry;
+- refunded or disputed capacity is never presented as an active paid student;
+- active-paid, capacity-consumed, and tier-allocation counts remain distinct through refunds and owner reopening;
 - full cancellation or postponement refund includes selected coaching;
-- Day 5 refund boundary uses written-request receipt time through September 28 at 11:59 p.m. Pacific;
+- Day 5 refund boundary uses the Gmail received timestamp for requests sent to `dancewithceech@gmail.com` through September 28 at 11:59 p.m. Pacific, including immediately-before and immediately-after cases;
 - Stripe API errors, cache invalidation, polling, and timestamped stale-display handling;
 - webhook raw-body signature rejection;
 - duplicate and out-of-order Stripe events remain idempotent;
