@@ -40,6 +40,7 @@
 | `src/app/running-man-method/confirmation/page.tsx` | Server-side Stripe Session verification and post-payment confirmation. |
 | `src/app/api/running-man-waitlist/route.ts` | Validated, rate-limited Systeme.io next-cohort waitlist submission. |
 | `src/app/api/cron/running-man-reconcile/route.ts` | Protected reconciliation of active holds against Stripe. |
+| `src/app/api/running-man/admin/reopen/route.ts` | Authenticated, audited owner-only reopening after a confirmed full refund. |
 | `src/app/running-man-method/RunningManMethodPage.tsx` | Replace static checkout links/enrollment cards with `EnrollmentPanel`; retain approved page copy. |
 | `src/app/running-man-method/page.tsx` | Adjust structured Offer availability only if it can be sourced truthfully without making the page dynamic. |
 | `supabase/migrations/<generated>_running_man_enrollment.sql` | Tables, RLS, privileges, atomic reservation RPC, mutation RPCs, indexes, and seed cohort. Create filename only through Supabase CLI. |
@@ -58,6 +59,8 @@ Do this before creating any live Checkout Session. Do not place secret values in
 - `RUNNING_MAN_STRIPE_PRICE_197`, `RUNNING_MAN_STRIPE_PRICE_247`, `RUNNING_MAN_STRIPE_PRICE_297`, `RUNNING_MAN_STRIPE_PRICE_COACHING`: four allowlisted **test-mode** Price IDs during development; configure parallel live values only during launch cutover.
 - `RUNNING_MAN_SYSTEME_WAITLIST_TAG_ID`: dedicated Systeme.io tag created for the next Running Man cohort.
 - `RUNNING_MAN_CRON_SECRET`: random server-only value required by the reconciliation route.
+- `RUNNING_MAN_ATTEMPT_SECRET`: random server-only HMAC secret for opaque checkout-attempt cookies.
+- `RUNNING_MAN_OWNER_EMAIL`: Ceech’s authorized email for audited refund reopening and minimum-enrollment alerts.
 - `NEXT_PUBLIC_APP_URL`: canonical base URL for Checkout success/cancel URLs.
 - Existing `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` remain server/client scoped exactly as they are today.
 
@@ -172,12 +175,18 @@ Accept a normalized aggregate:
 type EnrollmentAggregate = {
   now: Date;
   activePaidStudents: number;
-  tierAllocations: number;
-  activeTierHolds: number;
   capacityConsumed: number;
-  coachingActivePaid: number;
-  coachingUnderReview: number;
-  coachingHolds: number;
+  tiers: Record<1 | 2 | 3, {
+    activePaid: number;
+    allocationConsumed: number;
+    underReview: number;
+    activeHolds: number;
+  }>;
+  coaching: {
+    activePaid: number;
+    underReview: number;
+    activeHolds: number;
+  };
   hasOpenPreDeadlineSession: boolean;
 };
 ```
@@ -226,9 +235,11 @@ test("a direct client Price ID is ignored", async () => { /* ... */ });
 The migration must create:
 
 - `running_man_cohorts` with immutable dates, cutoff, seat caps, and terms version;
-- `running_man_reservations` with UUID, cohort FK, tier index, base amount, coaching selection, accepted terms version/timestamp, attempt hash, Stripe Session ID, state, expiry, and audit timestamps;
+- `running_man_reservations` with UUID, cohort FK, tier index, base amount, coaching selection, accepted terms version/timestamp, attempt hash, Stripe Session ID, PaymentIntent ID, Charge ID, state, expiry, and audit timestamps;
 - `running_man_stripe_events` keyed by Stripe Event ID for idempotency; and
 - `running_man_audit_events` for state transitions and error evidence.
+- `running_man_checkout_attempts` with a hashed opaque cookie ID, selected coaching state, first/last request time, request-count window, and optional active reservation ID; and
+- owner-action and minimum-evaluation fields on `running_man_cohorts` so the system records when the eight-student decision was evaluated and when Ceech was notified.
 
 Enable RLS on all four tables. Create **no** `anon` or `authenticated` policies. Revoke public execution from all new functions.
 
@@ -239,11 +250,24 @@ Create a non-public, `SECURITY DEFINER` RPC named `private.reserve_running_man_c
  p_expected_tier smallint,
  p_include_coaching boolean,
  p_terms_version text,
- p_attempt_hash text,
- p_now timestamptz)
+ p_attempt_hash text)
 ```
 
-Within one transaction, lock the cohort row with `FOR UPDATE`; reject a post-cutoff call; compare expected tier and terms; compute unreopened tier allocations plus active holds against the current tier ceiling; compute coaching capacity from `paid`, `refund_review`, `disputed`, and active holds; return a stale/held/sold-out result without inserting a reservation when appropriate; otherwise insert a 30-minute `creating_checkout` reservation. Seed the single Fall 2026 cohort by slug.
+Within one transaction, lock the cohort row with `FOR UPDATE`; use database `now()` rather than client time; reject a post-cutoff call; compare expected tier and terms; compute **per-tier** unreopened allocations plus active holds against the current tier ceiling; compute coaching capacity from `paid`, `refund_review`, `disputed`, and active holds; return a stale/held/sold-out result without inserting a reservation when appropriate; otherwise insert a 30-minute `creating_checkout` reservation. Seed the single Fall 2026 cohort by slug.
+
+Also create these narrowly scoped private RPCs, each with one transaction, row locks where needed, empty `search_path`, full relation qualification, and explicit `service_role` grants only:
+
+```sql
+private.attach_running_man_session(p_reservation_id uuid, p_session_id text)
+private.apply_running_man_stripe_event(p_event_id text, p_event_type text, p_session_id text, p_payment_intent_id text, p_charge_id text, p_payload jsonb)
+private.reconcile_running_man_reservation(p_reservation_id uuid, p_stripe_status text, p_payment_status text, p_session_id text, p_payment_intent_id text, p_charge_id text)
+private.evaluate_running_man_minimum(p_cohort_slug text)
+private.reopen_running_man_reservation(p_reservation_id uuid, p_actor_email text, p_reason text)
+```
+
+`apply_running_man_stripe_event` must insert the Event ID under a uniqueness constraint, lock the reservation, apply the legal ordered transition, persist Session/PaymentIntent/Charge IDs, and write the audit row **in the same transaction**. If any transition fails, the Event ID insert must roll back so Stripe can retry. `reopen_running_man_reservation` must accept only a fully refunded `refund_review` reservation and append an owner audit event.
+
+Expose the `private` schema to PostgREST only as needed for server calls, then grant `USAGE` on `private` and `EXECUTE` on the listed RPCs exclusively to `service_role`; grant neither privilege to `PUBLIC`, `anon`, nor `authenticated`. Call the functions only through `supabaseAdmin.schema("private").rpc(...)`. Add an integration test proving that exact path succeeds with the service role while anon and authenticated requests are denied.
 
 - [ ] **Step 4: Run RLS/security checks before exposing any server code.**
 
@@ -256,10 +280,13 @@ Use `supabaseAdmin` only. Its public functions should be narrow:
 ```ts
 reserveCheckout(input): Promise<ReservationDecision>
 attachStripeSession(reservationId, sessionId): Promise<void>
-findActiveAttempt(attemptHash, selection): Promise<Reservation | null>
-recordStripeEvent(eventId, payload): Promise<"new" | "duplicate">
-applyStripeTransition(input): Promise<TransitionResult>
-getEnrollmentAggregate(now): Promise<EnrollmentAggregate>
+getOrCreateCheckoutAttempt(input): Promise<CheckoutAttempt>
+replaceUnpaidAttemptSelection(input): Promise<CheckoutAttempt>
+applyStripeEventAtomically(input): Promise<TransitionResult>
+recoverCreatingReservation(input): Promise<RecoveryResult>
+evaluateMinimumEnrollment(cohortSlug): Promise<MinimumEvaluation>
+reopenRefundedReservation(input): Promise<void>
+getEnrollmentAggregate(): Promise<EnrollmentAggregate>
 ```
 
 Do not return customer email, Stripe metadata, or service credentials to the browser.
@@ -268,7 +295,7 @@ Do not return customer email, Stripe metadata, or service credentials to the bro
 
 Run: `npm run test:running-man && npx tsc --noEmit && npm run build`
 
-Expected: PASS. Also manually verify the reservation RPC under two concurrent connections for the last $197 and last coaching slots.
+Expected: PASS. Also manually verify the reservation RPC under two concurrent connections for the last $197 and last coaching slots, the service-role/anon/authenticated privilege boundary, and per-tier counts after a refund review and reopen.
 
 - [ ] **Step 7: Commit.**
 
@@ -295,6 +322,8 @@ test("creates exactly one fixed cohort line item for a valid $197 reservation", 
 test("adds the fixed coaching line item only when the reservation selected coaching", async () => { /* ... */ });
 test("uses reservation ID as Stripe idempotency key and metadata", async () => { /* ... */ });
 test("reuses a matching active browser attempt without a second hold", async () => { /* ... */ });
+test("issues a new signed attempt cookie before first checkout", async () => { /* ... */ });
+test("changing coaching selection expires the prior unpaid session before creating a replacement", async () => { /* ... */ });
 test("returns reconfirmation without a reservation when current tier or coaching changed", async () => { /* ... */ });
 test("rejects missing acknowledgment, stale terms, and post-cutoff requests", async () => { /* ... */ });
 ```
@@ -311,13 +340,14 @@ Expected: FAIL because the Stripe client and checkout service do not exist.
 
 `createRunningManCheckout` must:
 
-1. validate a server-issued, signed HttpOnly attempt cookie and rate-limit the attempt;
-2. call the atomic repository reservation function with tier/coaching/terms expectations;
-3. return a typed reconfirmation result before any reservation on stale input;
-4. create a Stripe hosted `mode: "payment"` Session with only card-based immediate payment methods, fixed quantities, no promotion codes, automatic tax disabled, name/email collection enabled, `expires_at` 30 minutes ahead, metadata containing only trusted identifiers, and success/cancel URLs on Dance With Ceech;
-5. use reservation ID as Stripe idempotency key;
-6. attach the returned Session ID before returning `{ checkoutUrl }`; and
-7. release the reservation if Session creation fails, while retrying the same idempotent request if the database write after Session creation fails.
+1. issue a 256-bit opaque attempt ID when absent, store only its HMAC hash, and set a signed `HttpOnly`, `Secure`, `SameSite=Lax`, `Path=/api/running-man`, 30-minute cookie; rate-limit by attempt hash plus a hashed network signal in `running_man_checkout_attempts`;
+2. reuse a same-selection open Session for repeated clicks; if coaching selection changes, retrieve the prior Session, finalize if paid, otherwise expire it in Stripe, mark/release its reservation only after Stripe verifies expiry/unpaid, and then create one replacement hold;
+3. call the atomic repository reservation function with tier/coaching/terms expectations;
+4. return a typed reconfirmation result before any reservation on stale input;
+5. create a Stripe hosted `mode: "payment"` Session with only card-based immediate payment methods, fixed quantities, no promotion codes, automatic tax disabled, name/email collection enabled, `expires_at` 30 minutes ahead, metadata containing only trusted identifiers, and success/cancel URLs on Dance With Ceech;
+6. use reservation ID as Stripe idempotency key;
+7. attach the returned Session ID before returning `{ checkoutUrl }`; and
+8. release the reservation if Session creation fails, while retrying the same idempotent request if the database write after Session creation fails.
 
 The route accepts only:
 
@@ -361,6 +391,10 @@ test("checkout.session.completed with paid status finalizes only allowlisted lin
 test("expiry never releases a Session that Stripe still reports open or paid", async () => { /* ... */ });
 test("refund review and dispute retain base and coaching capacity", async () => { /* ... */ });
 test("reconciliation finalizes a paid orphaned session and preserves holds during Stripe outage", async () => { /* ... */ });
+test("a crash after reservation but before session attachment recovers the matching metadata session", async () => { /* ... */ });
+test("a creating reservation with no recoverable Stripe session is released after the recovery grace window", async () => { /* ... */ });
+test("a partial refund does not enter refund review and full refund does", async () => { /* ... */ });
+test("refund and dispute events find the reservation through persisted Charge and PaymentIntent IDs", async () => { /* ... */ });
 ```
 
 - [ ] **Step 2: Run the tests to verify they fail.**
@@ -381,11 +415,11 @@ Handle:
 - `charge.refunded` as `refund_review`; and
 - `charge.dispute.created` / `charge.dispute.closed` as ordered dispute transitions.
 
-The webhook records the Event ID before transition, then uses the reservation’s ordered state rules so a verified paid transition wins over expiration. It must return a 2xx quickly after durable processing and log/alert invalid payloads rather than trusting them.
+Pass every verified event to `apply_running_man_stripe_event`, which atomically deduplicates by Event ID, locks and transitions the reservation, saves Charge/PaymentIntent mappings, and records its audit row. A verified paid transition wins over expiration. For a `charge.refunded` event, retrieve the Charge and verify that `amount_refunded === amount` before moving to `refund_review`; partial refunds are audited and alert Ceech without changing enrollment capacity. Refund/dispute lookups must use the persisted Charge ID first and PaymentIntent ID second, not an untrusted metadata guess. The handler must return a 2xx quickly after durable processing and log/alert invalid payloads rather than trusting them.
 
 - [ ] **Step 4: Add the protected five-minute reconciliation route.**
 
-Require `Authorization: Bearer ${RUNNING_MAN_CRON_SECRET}`. For each `creating_checkout` or `checkout_open` reservation, retrieve Stripe, finalize verified paid Sessions, retain open/ambiguous Sessions, and release only verified expired/unpaid Sessions. Configure a five-minute Vercel cron only after confirming the current Vercel plan supports it; otherwise configure an equivalent authenticated scheduler before launch.
+Require `Authorization: Bearer ${RUNNING_MAN_CRON_SECRET}`. For each `creating_checkout` reservation with no Session ID past a short recovery grace period, scan recent Stripe Checkout Sessions for trusted `reservation_id` metadata and attach a match; if none exists after the grace period, record the failed recovery and release the hold. For every `checkout_open` reservation, retrieve Stripe, finalize verified paid Sessions, retain open/ambiguous Sessions, and release only verified expired/unpaid Sessions. After all valid pre-deadline Sessions resolve, call `evaluate_running_man_minimum`; it records the result once and sends Ceech an owner notification through Resend if active paid students are fewer than eight. Configure a five-minute Vercel cron only after confirming the current Vercel plan supports it; otherwise configure an equivalent authenticated scheduler before launch.
 
 - [ ] **Step 5: Run local Stripe CLI forwarding and test events.**
 
@@ -469,6 +503,7 @@ git commit -m "feat: add running man enrollment panel"
 
 - Create: `src/app/running-man-method/confirmation/page.tsx`
 - Create: `src/app/api/running-man-waitlist/route.ts`
+- Create: `src/app/api/running-man/admin/reopen/route.ts`
 - Modify: `src/components/running-man/EnrollmentPanel.tsx`
 - Modify: `tests/running-man-checkout.test.ts`
 
@@ -479,6 +514,8 @@ test("confirmation rejects a tampered or pending Checkout Session without custom
 test("confirmation derives coaching only from trusted Stripe line items", async () => { /* ... */ });
 test("waitlist validates email, rejects a honeypot, and is idempotent", async () => { /* ... */ });
 test("waitlist is unavailable before true sold out capacity", async () => { /* ... */ });
+test("only the configured owner can reopen a fully refunded reservation and the action is audited", async () => { /* ... */ });
+test("owner reopening rejects non-refunded, disputed, and non-owner requests", async () => { /* ... */ });
 ```
 
 - [ ] **Step 2: Run tests and confirm failure.**
@@ -495,16 +532,20 @@ Read `{CHECKOUT_SESSION_ID}` server-side, retrieve the Session and paginated lin
 
 Follow the existing `academy-waitlist` pattern but require name, email, explicit marketing consent, an empty honeypot, and a rate limit. Use the `RUNNING_MAN_SYSTEME_WAITLIST_TAG_ID` environment variable instead of a hard-coded tag. Normalize email and make repeated requests idempotent. The panel must state that the waitlist is not a paid reservation.
 
-- [ ] **Step 5: Run tests and manual flow checks.**
+- [ ] **Step 5: Implement the owner-only reopening route.**
+
+Require the existing NextAuth session and compare `session.user.email` to a server-only `RUNNING_MAN_OWNER_EMAIL` value. Accept a reservation UUID and a reason, then invoke `private.reopen_running_man_reservation`; never let the browser set a target state directly. The RPC records actor email, reason, timestamp, old state, and new state in the audit table. There is no public owner interface in this release; Ceech can use the protected endpoint only after a confirmed full Stripe refund.
+
+- [ ] **Step 6: Run tests and manual flow checks.**
 
 Run: `npm run test:running-man && npm run build`
 
 Manually test confirmation with a valid Stripe test Session, a bad Session ID, a pending Session, and a sold-out mock state. Verify waitlist submission creates/tags one Systeme.io contact in a non-production test context.
 
-- [ ] **Step 6: Commit.**
+- [ ] **Step 7: Commit.**
 
 ```bash
-git add src/app/running-man-method/confirmation/page.tsx src/app/api/running-man-waitlist/route.ts src/components/running-man/EnrollmentPanel.tsx tests/running-man-checkout.test.ts
+git add src/app/running-man-method/confirmation/page.tsx src/app/api/running-man-waitlist/route.ts src/app/api/running-man/admin/reopen/route.ts src/components/running-man/EnrollmentPanel.tsx tests/running-man-checkout.test.ts
 git commit -m "feat: add running man confirmation and waitlist"
 ```
 
