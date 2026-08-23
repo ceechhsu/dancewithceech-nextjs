@@ -274,7 +274,29 @@ export function createRunningManRepository(client: RunningManRpcClient) {
       return asRecord(data);
     },
 
-    async claimRunningManOwnerAlert(input: { dedupeKey: string; kind: string; payload: Record<string, unknown> }): Promise<"send" | "sent"> {
+    async listStaleUnattachedRunningManHolds(): Promise<Array<{ reservationId: string }>> {
+      const { data, error } = await privateRpc("list_stale_unattached_running_man_holds", {
+        p_cohort_slug: COHORT.slug,
+        p_age_seconds: 604800,
+        p_limit: 100,
+      });
+      if (error) throwForError(error);
+      if (!Array.isArray(data)) throw new RunningManRepositoryError("The enrollment service did not return stale recovery holds.");
+      return data.map((value) => ({ reservationId: asString(asRecord(value).reservation_id, "a stale recovery reservation ID") }));
+    },
+
+    async releaseStaleUnattachedRunningManHold(reservationId: string): Promise<Record<string, unknown>> {
+      const { data, error } = await privateRpc("release_stale_unattached_running_man_hold", {
+        p_reservation_id: reservationId,
+        p_age_seconds: 604800,
+      });
+      if (error) throwForError(error);
+      return asRecord(data);
+    },
+
+    async claimRunningManOwnerAlert(input: { dedupeKey: string; kind: string; payload: Record<string, unknown> }): Promise<
+      { action: "leased"; leaseToken: string } | { action: "sent" } | { action: "leased_by_other" }
+    > {
       const { data, error } = await privateRpc("claim_running_man_owner_alert", {
         p_dedupe_key: input.dedupeKey,
         p_kind: input.kind,
@@ -283,13 +305,23 @@ export function createRunningManRepository(client: RunningManRpcClient) {
       if (error) throwForError(error);
       const result = asRecord(data);
       const action = asString(result.action, "an owner-alert action");
-      if (action === "send" || action === "sent") return action;
+      if (action === "sent" || action === "leased_by_other") return { action };
+      if (action === "leased") return { action, leaseToken: asString(result.lease_token, "an owner-alert lease token") };
       throw new RunningManRepositoryError("The enrollment service did not return a valid owner-alert action.");
     },
 
-    async markRunningManOwnerAlertSent(dedupeKey: string): Promise<void> {
+    async markRunningManOwnerAlertSent(input: { dedupeKey: string; leaseToken: string }): Promise<void> {
       const { error } = await privateRpc("mark_running_man_owner_alert_sent", {
-        p_dedupe_key: dedupeKey,
+        p_dedupe_key: input.dedupeKey,
+        p_lease_token: input.leaseToken,
+      });
+      if (error) throwForError(error);
+    },
+
+    async releaseRunningManOwnerAlertLease(input: { dedupeKey: string; leaseToken: string }): Promise<void> {
+      const { error } = await privateRpc("release_running_man_owner_alert_lease", {
+        p_dedupe_key: input.dedupeKey,
+        p_lease_token: input.leaseToken,
       });
       if (error) throwForError(error);
     },

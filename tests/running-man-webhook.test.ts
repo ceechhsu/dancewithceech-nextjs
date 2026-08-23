@@ -5,6 +5,8 @@ import {
   RunningManWebhookValidationError,
   finalizeRunningManStripeEvent,
   hasRunningManCronAuthorization,
+  assertRunningManOwnerAlertConfiguration,
+  notifyRunningManOwner,
   parseRunningManStripeLivemode,
   reconcileRunningManStripeSessions,
   type RunningManWebhookDependencies,
@@ -24,6 +26,14 @@ test("requires an explicit true/false Stripe livemode configuration", () => {
   assert.equal(parseRunningManStripeLivemode("false"), false);
   assert.throws(() => parseRunningManStripeLivemode(undefined), RunningManWebhookValidationError);
   assert.throws(() => parseRunningManStripeLivemode("test"), RunningManWebhookValidationError);
+});
+
+test("requires configured Resend owner-alert delivery in live mode but permits test no-op", () => {
+  assert.doesNotThrow(() => assertRunningManOwnerAlertConfiguration(false, { apiKey: undefined, from: undefined, to: undefined }));
+  assert.throws(
+    () => assertRunningManOwnerAlertConfiguration(true, { apiKey: "api", from: "sender@example.com", to: undefined }),
+    RunningManWebhookValidationError,
+  );
 });
 
 function session(overrides: Record<string, unknown> = {}) {
@@ -238,6 +248,30 @@ test("uses a persisted charge identity before falling back to PaymentIntent meta
   assert.equal(applyCalls.length, 1);
 });
 
+test("does not send a refund-review alert for a dispute event", async () => {
+  const alerts: unknown[] = [];
+  const { deps } = dependencies();
+  Object.assign(deps as object, { notifyOwner: async (alert: unknown) => { alerts.push(alert); } });
+
+  await finalizeRunningManStripeEvent(deps, {
+    id: "evt_dispute_no_refund_alert", type: "charge.dispute.created", livemode: false,
+    data: { object: { id: "dp_1", charge: "ch_running_man", payment_intent: "pi_running_man" } },
+  });
+  assert.deepEqual(alerts, []);
+});
+
+test("does not deliver an alert while another worker holds its durable lease", async () => {
+  const alerts: unknown[] = [];
+  const { deps } = dependencies();
+  Object.assign(deps.repository as object, {
+    async claimRunningManOwnerAlert() { return { action: "leased_by_other" }; },
+  });
+  Object.assign(deps as object, { notifyOwner: async (alert: unknown) => { alerts.push(alert); } });
+
+  await notifyRunningManOwner(deps, { kind: "refund_review", eventId: "evt_leased", partial: true });
+  assert.deepEqual(alerts, []);
+});
+
 test("reconciliation scans paginated Stripe metadata, preserves uncertain holds, and waits to evaluate the minimum", async () => {
   const { deps, reconcileCalls, listCalls } = dependencies({
     stripe: {
@@ -347,6 +381,30 @@ test("releases only an aged creating hold that is absent after a completed Strip
   assert.deepEqual(released, ["b0a98f51-59de-4cbb-9bdf-9d6bf9c74c3d"]);
   assert.equal(evaluated, 1);
   assert.deepEqual(result, { scanned: 1, reconciled: 2, minimumEvaluated: true });
+});
+
+test("releases separately-listed stale unattached holds after the bounded Stripe scan", async () => {
+  const released: string[] = [];
+  const { deps } = dependencies({
+    repository: {
+      async applyStripeEventAtomically() { return { result_code: "applied" }; },
+      async reconcileRunningManReservation() { return { result_code: "reconciled" }; },
+      async listRecoverableRunningManHolds() { return []; },
+      async releaseMissingRunningManHold() { return { result_code: "released" }; },
+      async listStaleUnattachedRunningManHolds() { return [{ reservationId: "d0a98f51-59de-4cbb-9bdf-9d6bf9c74c3d" }]; },
+      async releaseStaleUnattachedRunningManHold(id) { released.push(id); return { result_code: "released" }; },
+      async evaluateMinimumEnrollment() { return { result_code: "minimum_met" }; },
+    },
+    stripe: {
+      checkout: { sessions: { async retrieve() { return session(); }, async listLineItems() { return lineItems(); }, async list() { return { data: [], has_more: false }; } } },
+      paymentIntents: { async retrieve() { return { id: "pi_running_man", metadata: {} }; } },
+      charges: { async retrieve() { return { id: "ch_running_man", payment_intent: "pi_running_man", metadata: {}, amount: 19700, amount_refunded: 19700 }; } },
+    },
+  });
+
+  const result = await reconcileRunningManStripeSessions(deps);
+  assert.deepEqual(released, ["d0a98f51-59de-4cbb-9bdf-9d6bf9c74c3d"]);
+  assert.deepEqual(result, { scanned: 0, reconciled: 1, minimumEvaluated: true });
 });
 
 test("does not release a missing hold when an identified session cannot be fully verified", async () => {

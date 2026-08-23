@@ -4,6 +4,7 @@ import { Resend } from "resend";
 import {
   hasRunningManCronAuthorization,
   parseRunningManStripeLivemode,
+  assertRunningManOwnerAlertConfiguration,
   reconcileRunningManStripeSessions,
   type RunningManWebhookDependencies,
   type RunningManOwnerAlert,
@@ -14,6 +15,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import { getStripeClient } from "@/lib/stripe";
 
 export const runtime = "nodejs";
+export const maxDuration = 60;
 
 function price(variable: string): string {
   const value = process.env[variable];
@@ -21,10 +23,11 @@ function price(variable: string): string {
   return value;
 }
 
-function ownerNotifier(): RunningManWebhookDependencies["notifyOwner"] {
+function ownerNotifier(livemode: boolean): RunningManWebhookDependencies["notifyOwner"] {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RUNNING_MAN_NOTIFICATION_FROM;
   const to = process.env.RUNNING_MAN_OWNER_EMAIL;
+  assertRunningManOwnerAlertConfiguration(livemode, { apiKey, from, to });
   if (!apiKey || !from || !to) return undefined;
   const resend = new Resend(apiKey);
   return async (alert: RunningManOwnerAlert) => {
@@ -53,17 +56,18 @@ function cronSecret(): string | undefined {
 }
 
 function productionDependencies(): RunningManWebhookDependencies {
+  const livemode = parseRunningManStripeLivemode(process.env.RUNNING_MAN_STRIPE_LIVEMODE);
   return {
     repository: createRunningManRepository(supabaseAdmin as unknown as RunningManRpcClient),
-    stripe: getStripeClient(parseRunningManStripeLivemode(process.env.RUNNING_MAN_STRIPE_LIVEMODE)) as unknown as RunningManWebhookDependencies["stripe"],
+    stripe: getStripeClient(livemode) as unknown as RunningManWebhookDependencies["stripe"],
     priceIds: {
       1: price(COHORT.tiers[0].priceEnv),
       2: price(COHORT.tiers[1].priceEnv),
       3: price(COHORT.tiers[2].priceEnv),
       coaching: price(COHORT.coaching.priceEnv),
     },
-    expectedLivemode: parseRunningManStripeLivemode(process.env.RUNNING_MAN_STRIPE_LIVEMODE),
-    notifyOwner: ownerNotifier(),
+    expectedLivemode: livemode,
+    notifyOwner: ownerNotifier(livemode),
   };
 }
 

@@ -46,10 +46,15 @@ type RecoveryRepository = {
   listRecoverableRunningManHolds?: () => Promise<Array<{ reservationId: string }>>;
   releaseMissingRunningManHold?: (reservationId: string) => Promise<Record<string, unknown>>;
   attachRecoveredRunningManSession?: (input: { reservationId: string; sessionId: string }) => Promise<Record<string, unknown>>;
+  listStaleUnattachedRunningManHolds?: () => Promise<Array<{ reservationId: string }>>;
+  releaseStaleUnattachedRunningManHold?: (reservationId: string) => Promise<Record<string, unknown>>;
 };
 type OwnerAlertRepository = {
-  claimRunningManOwnerAlert?: (input: { dedupeKey: string; kind: string; payload: Record<string, unknown> }) => Promise<"send" | "sent">;
-  markRunningManOwnerAlertSent?: (dedupeKey: string) => Promise<void>;
+  claimRunningManOwnerAlert?: (input: { dedupeKey: string; kind: string; payload: Record<string, unknown> }) => Promise<
+    { action: "leased"; leaseToken: string } | { action: "sent" } | { action: "leased_by_other" }
+  >;
+  markRunningManOwnerAlertSent?: (input: { dedupeKey: string; leaseToken: string }) => Promise<void>;
+  releaseRunningManOwnerAlertLease?: (input: { dedupeKey: string; leaseToken: string }) => Promise<void>;
 };
 
 export type RunningManOwnerAlert =
@@ -98,6 +103,15 @@ export function parseRunningManStripeLivemode(value: string | undefined): boolea
   throw new RunningManWebhookValidationError("RUNNING_MAN_STRIPE_LIVEMODE must be explicitly true or false.");
 }
 
+export function assertRunningManOwnerAlertConfiguration(
+  livemode: boolean,
+  configuration: { apiKey: string | undefined; from: string | undefined; to: string | undefined },
+): void {
+  if (livemode && (!configuration.apiKey || !configuration.from || !configuration.to)) {
+    throw new RunningManWebhookValidationError("Live Running Man payments require configured Resend owner alerts.");
+  }
+}
+
 const RESERVATION_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const SUPPORTED_EVENT_TYPES = new Set([
   "checkout.session.completed",
@@ -109,6 +123,27 @@ const SUPPORTED_EVENT_TYPES = new Set([
 ]);
 const MAX_RECONCILIATION_PAGES = 10;
 const RECONCILIATION_LOOKBACK_SECONDS = 7 * 24 * 60 * 60;
+const OWNER_ALERT_DELIVERY_TIMEOUT_MS = 45_000;
+
+class OwnerAlertDeliveryTimeoutError extends Error {
+  override name = "OwnerAlertDeliveryTimeoutError";
+}
+
+function deliverOwnerAlert(notify: NonNullable<RunningManWebhookDependencies["notifyOwner"]>, alert: RunningManOwnerAlert): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new OwnerAlertDeliveryTimeoutError("Running Man owner alert delivery timed out.")), OWNER_ALERT_DELIVERY_TIMEOUT_MS);
+    Promise.resolve()
+      .then(() => notify(alert))
+      .then(() => {
+        clearTimeout(timeout);
+        resolve();
+      })
+      .catch((error: unknown) => {
+        clearTimeout(timeout);
+        reject(error);
+      });
+  });
+}
 
 function requiredReservationId(metadata: Metadata): string {
   const reservationId = metadata.running_man_reservation_id;
@@ -248,9 +283,20 @@ export async function notifyRunningManOwner(dependencies: RunningManWebhookDepen
       kind: alert.kind,
       payload: alert as Record<string, unknown>,
     });
-    if (claim === "sent") return;
-    await dependencies.notifyOwner(alert);
-    await dependencies.repository.markRunningManOwnerAlertSent?.(dedupeKey);
+    if (claim.action === "sent" || claim.action === "leased_by_other") return;
+    try {
+      await deliverOwnerAlert(dependencies.notifyOwner, alert);
+      await dependencies.repository.markRunningManOwnerAlertSent?.({ dedupeKey, leaseToken: claim.leaseToken });
+    } catch (error) {
+      // A timed-out request may still be in flight until this function's
+      // 60-second max duration ends. Keep the lease until its expiry so no
+      // retry can start a concurrent delivery; explicit provider failures are
+      // released immediately for retry.
+      if (!(error instanceof OwnerAlertDeliveryTimeoutError)) {
+        await dependencies.repository.releaseRunningManOwnerAlertLease?.({ dedupeKey, leaseToken: claim.leaseToken });
+      }
+      throw error;
+    }
     return;
   }
   await dependencies.notifyOwner(alert);
@@ -322,10 +368,9 @@ async function finalizeSupportedRunningManStripeEvent(
     chargeId: charge.id,
     payload: eventPayload({ id: charge.id, amount: charge.amount, amountRefunded: charge.amount_refunded }),
   });
-  // The outbox claim deduplicates delivered alerts and allows a pending alert
-  // to be retried after a delivery failure, even when Stripe redelivers an
-  // event the inventory RPC has already deduplicated.
-  await notifyRunningManOwner(dependencies, { kind: "refund_review", eventId: event.id, partial: isPartialRefund });
+  if (event.type === "charge.refunded") {
+    await notifyRunningManOwner(dependencies, { kind: "refund_review", eventId: event.id, partial: isPartialRefund });
+  }
   return { kind: isPartialRefund ? "audit_only" : "applied" };
 }
 
@@ -408,6 +453,12 @@ export async function reconcileRunningManStripeSessions(
         await dependencies.repository.releaseMissingRunningManHold(candidate.reservationId);
         reconciled += 1;
       }
+    }
+  }
+  if (dependencies.repository.listStaleUnattachedRunningManHolds && dependencies.repository.releaseStaleUnattachedRunningManHold) {
+    for (const candidate of await dependencies.repository.listStaleUnattachedRunningManHolds()) {
+      await dependencies.repository.releaseStaleUnattachedRunningManHold(candidate.reservationId);
+      reconciled += 1;
     }
   }
   if (unsettled) return { scanned, reconciled, minimumEvaluated: false };
