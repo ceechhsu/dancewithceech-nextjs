@@ -9,6 +9,8 @@ import {
 import {
   createRunningManCheckout,
   createSignedAttemptCookie,
+  isRunningManCheckoutRequest,
+  trustedNetworkSignal,
   type CheckoutServiceDependencies,
 } from "../src/lib/running-man/checkout";
 import { CURRENT_TERMS_VERSION } from "../src/lib/running-man/terms";
@@ -56,7 +58,10 @@ function checkoutDependencies(overrides: Partial<CheckoutServiceDependencies> = 
         return {
           kind: "reserved",
           reservationId,
-          expiresAt: "2026-09-01T00:30:00.000Z",
+          expiresAt: "2026-09-01T00:31:00.000Z",
+          tierIndex: 1,
+          baseAmountCents: 19700,
+          includeCoaching: input.includeCoaching,
         };
       },
       async attachStripeSession(id, sessionId) {
@@ -79,10 +84,10 @@ function checkoutDependencies(overrides: Partial<CheckoutServiceDependencies> = 
         sessions: {
           async create(params, options) {
             createCalls.push({ params: params as Record<string, unknown>, options: options as Record<string, unknown> });
-            return { id: "cs_created", url: "https://checkout.stripe.test/cs_created", status: "open", payment_status: "unpaid", metadata: {} };
+            return { id: "cs_created", url: "https://checkout.stripe.test/cs_created", status: "open", payment_status: "unpaid", metadata: { running_man_reservation_id: reservationId, running_man_cohort_slug: "running-man-method-fall-2026" } };
           },
           async retrieve() {
-            return { id: "cs_created", url: "https://checkout.stripe.test/cs_created", status: "open", payment_status: "unpaid", metadata: {} };
+            return { id: "cs_created", url: "https://checkout.stripe.test/cs_created", status: "open", payment_status: "unpaid", metadata: { running_man_reservation_id: reservationId, running_man_cohort_slug: "running-man-method-fall-2026" } };
           },
           async expire() {
             return { id: "cs_created", url: null, status: "expired", payment_status: "unpaid", metadata: {} };
@@ -113,6 +118,10 @@ test("creates exactly one fixed cohort line item for a valid $197 reservation", 
     setAttemptCookie: result.setAttemptCookie,
   });
   assert.deepEqual(createCalls[0].params.line_items, [{ price: "price_197", quantity: 1 }]);
+  assert.equal(
+    createCalls[0].params.success_url,
+    "https://dancewithceech.com/running-man-method/confirmation?session_id={CHECKOUT_SESSION_ID}",
+  );
   assert.equal(attachCalls.length, 1);
 });
 
@@ -159,6 +168,49 @@ test("writes trusted reservation metadata to the PaymentIntent for pre-completio
       running_man_cohort_slug: "running-man-method-fall-2026",
     },
   });
+});
+
+test("uses the trusted reservation tier instead of a stale browser tier to choose the Stripe price", async () => {
+  const { dependencies, createCalls } = checkoutDependencies({
+    repository: {
+      async reserveCheckout() {
+        return { kind: "reserved", reservationId, expiresAt: "2026-09-01T00:31:00.000Z", tierIndex: 2, baseAmountCents: 24700, includeCoaching: false };
+      },
+      async attachStripeSession() {},
+      async replaceUnpaidAttemptSelection() { return { result_code: "selection_updated" }; },
+      async recoverCreatingReservation() { return { result_code: "scan_required" }; },
+      async reconcileRunningManReservation() { return { result_code: "reconciled" }; },
+    },
+  });
+
+  await createRunningManCheckout(dependencies, {
+    request: checkoutRequest({ expectedTier: 1 }),
+    networkSignal: "203.0.113.10|test-agent",
+  });
+
+  assert.deepEqual(createCalls[0].params.line_items, [{ price: "price_247", quantity: 1 }]);
+});
+
+test("uses the database reservation expiry with a Stripe-valid latency buffer", async () => {
+  const { dependencies, createCalls } = checkoutDependencies({
+    repository: {
+      async reserveCheckout() {
+        return { kind: "reserved", reservationId, expiresAt: "2026-09-01T00:31:00.000Z", tierIndex: 1, baseAmountCents: 19700, includeCoaching: false };
+      },
+      async attachStripeSession() {},
+      async replaceUnpaidAttemptSelection() { return { result_code: "selection_updated" }; },
+      async recoverCreatingReservation() { return { result_code: "scan_required" }; },
+      async reconcileRunningManReservation() { return { result_code: "reconciled" }; },
+    },
+    now: () => new Date("2026-09-01T00:00:20.000Z"),
+  });
+
+  await createRunningManCheckout(dependencies, {
+    request: checkoutRequest(),
+    networkSignal: "203.0.113.10|test-agent",
+  });
+
+  assert.equal(createCalls[0].params.expires_at, 1788222660);
 });
 
 test("reuses a matching active browser attempt without a second hold", async () => {
@@ -208,7 +260,7 @@ test("changing coaching selection expires the prior unpaid session before creati
       async reserveCheckout() {
         reserveCount += 1;
         if (reserveCount === 1) return { kind: "reconfirm", enrollmentState: { activeTier: 1 } };
-        return { kind: "reserved", reservationId: "replacement-reservation", expiresAt: "2026-09-01T00:30:00.000Z" };
+        return { kind: "reserved", reservationId: "replacement-reservation", expiresAt: "2026-09-01T00:31:00.000Z", tierIndex: 1, baseAmountCents: 19700, includeCoaching: true };
       },
       async attachStripeSession() {},
       async replaceUnpaidAttemptSelection(input) {
@@ -234,10 +286,13 @@ test("changing coaching selection expires the prior unpaid session before creati
         sessions: {
           async create(params, options) {
             createCalls.push({ params: params as Record<string, unknown>, options: options as Record<string, unknown> });
-            return { id: "cs_replacement", url: "https://checkout.stripe.test/cs_replacement", status: "open", payment_status: "unpaid", metadata: {} };
+            return { id: "cs_replacement", url: "https://checkout.stripe.test/cs_replacement", status: "open", payment_status: "unpaid", metadata: { running_man_reservation_id: "replacement-reservation", running_man_cohort_slug: "running-man-method-fall-2026" } };
           },
-          async retrieve() {
-            return { id: "cs_old", url: null, status: "expired", payment_status: "unpaid", metadata: { running_man_reservation_id: reservationId } };
+          async retrieve(sessionId) {
+            if (sessionId === "cs_replacement") {
+              return { id: "cs_replacement", url: "https://checkout.stripe.test/cs_replacement", status: "open", payment_status: "unpaid", metadata: { running_man_reservation_id: "replacement-reservation", running_man_cohort_slug: "running-man-method-fall-2026" } };
+            }
+            return { id: "cs_old", url: null, status: "expired", payment_status: "unpaid", metadata: { running_man_reservation_id: reservationId, running_man_cohort_slug: "running-man-method-fall-2026" } };
           },
           async expire() {
             return { id: "cs_old", url: null, status: "expired", payment_status: "unpaid", metadata: {} };
@@ -307,6 +362,65 @@ test("rejects missing acknowledgment, stale terms, and post-cutoff requests", as
   assert.deepEqual(afterCutoff, { kind: "error", code: "closed", message: "Enrollment is closed." });
 });
 
+test("rejects checkout JSON with unexpected fields", () => {
+  assert.equal(isRunningManCheckoutRequest({ ...checkoutRequest(), priceId: "price_attacker" }), false);
+  assert.equal(isRunningManCheckoutRequest(checkoutRequest()), true);
+});
+
+test("a paid checkout attempt returns a terminal confirmation without a second Stripe session", async () => {
+  const { dependencies, createCalls } = checkoutDependencies({
+    repository: {
+      async reserveCheckout() { return { kind: "terminal", sessionId: "cs_paid" }; },
+      async attachStripeSession() {},
+      async replaceUnpaidAttemptSelection() { return { result_code: "selection_updated" }; },
+      async recoverCreatingReservation() { return { result_code: "scan_required" }; },
+      async reconcileRunningManReservation() { return { result_code: "reconciled" }; },
+    },
+  });
+
+  const result = await createRunningManCheckout(dependencies, {
+    request: checkoutRequest(),
+    attemptCookie: createSignedAttemptCookie("paid-attempt", checkoutAttemptSecret, fixedNow),
+    networkSignal: "203.0.113.10|test-agent",
+  });
+
+  assert.deepEqual(result, { kind: "confirmation", confirmationUrl: "https://dancewithceech.com/running-man-method/confirmation?session_id=cs_paid" });
+  assert.equal(createCalls.length, 0);
+});
+
+test("a failed reservation attach retries idempotently and verifies Stripe ownership before returning", async () => {
+  let attachCount = 0;
+  const { dependencies, createCalls } = checkoutDependencies({
+    repository: {
+      async reserveCheckout() { return { kind: "reserved", reservationId, expiresAt: "2026-09-01T00:31:00.000Z", tierIndex: 1, baseAmountCents: 19700, includeCoaching: false }; },
+      async attachStripeSession() {
+        attachCount += 1;
+        if (attachCount === 1) throw new Error("temporary database failure");
+      },
+      async replaceUnpaidAttemptSelection() { return { result_code: "selection_updated" }; },
+      async recoverCreatingReservation() { return { result_code: "scan_required" }; },
+      async reconcileRunningManReservation() { return { result_code: "reconciled" }; },
+    },
+  });
+
+  const result = await createRunningManCheckout(dependencies, {
+    request: checkoutRequest(),
+    networkSignal: "203.0.113.10|test-agent",
+  });
+
+  assert.equal(result.kind, "checkout");
+  assert.equal(attachCount, 2);
+  assert.equal(createCalls.length, 2);
+  assert.equal(createCalls[1].options?.idempotencyKey, reservationId);
+});
+
+test("only uses a platform-trusted forwarding header for the network rate-limit signal", () => {
+  const headers = new Headers({ "x-forwarded-for": "203.0.113.5, 10.0.0.2", "user-agent": "test-agent" });
+
+  assert.equal(trustedNetworkSignal(headers, false), "unverified-network|test-agent");
+  assert.equal(trustedNetworkSignal(headers, true), "203.0.113.5|test-agent");
+});
+
 type RpcCall = { fn: string; args: Record<string, unknown> };
 
 function fakeClient(results: unknown[]): { client: RunningManRpcClient; calls: RpcCall[] } {
@@ -351,11 +465,26 @@ test("a stale confirmed tier returns the latest state without a reservation", as
   assert.equal(calls[0].fn, "reserve_running_man_checkout");
 });
 
+test("a paid checkout attempt is terminal at the repository boundary", async () => {
+  const { client } = fakeClient([{
+    result_code: "paid_terminal",
+    session_id: "cs_paid",
+  }]);
+  const repository = createRunningManRepository(client);
+
+  const result = await repository.reserveCheckout(reservationInput);
+
+  assert.deepEqual(result, { kind: "terminal", sessionId: "cs_paid" });
+});
+
 test("a cohort-only checkout never reserves coaching", async () => {
   const { client, calls } = fakeClient([{
     result_code: "reserved",
     reservation_id: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9",
     expires_at: "2026-09-01T00:30:00.000Z",
+    tier_index: 1,
+    base_amount_cents: 19700,
+    include_coaching: false,
   }]);
   const repository = createRunningManRepository(client);
 
@@ -370,6 +499,9 @@ test("the final coaching slot allows one concurrent reservation only", async () 
       result_code: "reserved",
       reservation_id: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9",
       expires_at: "2026-09-01T00:30:00.000Z",
+      tier_index: 1,
+      base_amount_cents: 19700,
+      include_coaching: true,
     },
     { result_code: "coaching_held", enrollment_state: { coachingStatus: "held" } },
   ]);
@@ -390,6 +522,9 @@ test("parallel requests from one checkout-attempt cookie create one active reser
     result_code: "reserved",
     reservation_id: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9",
     expires_at: "2026-09-01T00:30:00.000Z",
+    tier_index: 1,
+    base_amount_cents: 19700,
+    include_coaching: false,
   };
   const { client } = fakeClient([reservation, reservation]);
   const repository = createRunningManRepository(client);
@@ -409,6 +544,9 @@ test("a direct client Price ID is ignored", async () => {
     result_code: "reserved",
     reservation_id: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9",
     expires_at: "2026-09-01T00:30:00.000Z",
+    tier_index: 1,
+    base_amount_cents: 19700,
+    include_coaching: false,
   }]);
   const repository = createRunningManRepository(client);
 
@@ -430,6 +568,9 @@ test("the repository sends the hashed network signal to the only atomic reservat
     result_code: "reserved",
     reservation_id: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9",
     expires_at: "2026-09-01T00:30:00.000Z",
+    tier_index: 1,
+    base_amount_cents: 19700,
+    include_coaching: false,
   }]);
   const repository = createRunningManRepository(client);
 
@@ -469,6 +610,9 @@ test("a valid pre-deadline session can be reused after the cutoff", async () => 
     result_code: "existing_open",
     reservation_id: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9",
     expires_at: "2026-09-18T07:28:00.000Z",
+    tier_index: 1,
+    base_amount_cents: 19700,
+    include_coaching: false,
   }]);
   const repository = createRunningManRepository(client);
 
@@ -478,6 +622,9 @@ test("a valid pre-deadline session can be reused after the cutoff", async () => 
     kind: "reserved",
     reservationId: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9",
     expiresAt: "2026-09-18T07:28:00.000Z",
+    tierIndex: 1,
+    baseAmountCents: 19700,
+    includeCoaching: false,
   });
 });
 

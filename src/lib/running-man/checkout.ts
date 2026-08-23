@@ -54,11 +54,34 @@ export type CheckoutServiceDependencies = {
 
 export type RunningManCheckoutResult =
   | { kind: "checkout"; checkoutUrl: string; setAttemptCookie?: string }
+  | { kind: "confirmation"; confirmationUrl: string; setAttemptCookie?: string }
   | { kind: "reconfirm"; enrollmentState: Record<string, unknown>; setAttemptCookie?: string }
   | { kind: "error"; code: "invalid_request" | "closed" | "unavailable"; message: string; setAttemptCookie?: string };
 
 function validTier(value: unknown): value is TierIndex {
   return value === 1 || value === 2 || value === 3;
+}
+
+export function isRunningManCheckoutRequest(value: unknown): value is RunningManCheckoutRequest {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const body = value as Record<string, unknown>;
+  const allowedKeys = ["expectedTier", "includeCoaching", "termsVersion", "acknowledged"];
+  if (Object.keys(body).some((key) => !allowedKeys.includes(key))) return false;
+  return validTier(body.expectedTier)
+    && typeof body.includeCoaching === "boolean"
+    && typeof body.termsVersion === "string"
+    && body.acknowledged === true;
+}
+
+/**
+ * Vercel rewrites x-forwarded-for at its edge. Outside that known platform,
+ * it is attacker-controlled and deliberately excluded from rate-limit input.
+ */
+export function trustedNetworkSignal(headers: Headers, isTrustedPlatform: boolean): string {
+  const forwarded = isTrustedPlatform
+    ? headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unverified-network"
+    : "unverified-network";
+  return `${forwarded}|${headers.get("user-agent") ?? "unknown-agent"}`;
 }
 
 function hmac(value: string, secret: string): string {
@@ -147,14 +170,24 @@ function checkoutMetadata(reservationId: string): Record<string, string> {
 
 function checkoutSessionParams(input: {
   reservationId: string;
-  expectedTier: TierIndex;
+  tierIndex: TierIndex;
+  baseAmountCents: number;
   includeCoaching: boolean;
   priceIds: CheckoutPriceIds;
   attemptHash: string;
-  now: Date;
+  reservationExpiresAt: string;
+  stripeCreatedAt: Date;
 }): Record<string, unknown> {
   const metadata = checkoutMetadata(input.reservationId);
-  const lineItems = [{ price: input.priceIds[input.expectedTier], quantity: 1 }];
+  const trustedTier = COHORT.tiers[input.tierIndex - 1];
+  if (input.baseAmountCents !== trustedTier.priceCents) {
+    throw new RunningManCheckoutConfigurationError("The checkout reservation has an invalid price.");
+  }
+  const expiresAt = Math.floor(new Date(input.reservationExpiresAt).getTime() / 1000);
+  if (!Number.isFinite(expiresAt) || expiresAt < Math.floor(input.stripeCreatedAt.getTime() / 1000) + ATTEMPT_TTL_SECONDS) {
+    throw new RunningManCheckoutConfigurationError("The checkout reservation is too close to expiry.");
+  }
+  const lineItems = [{ price: input.priceIds[input.tierIndex], quantity: 1 }];
   if (input.includeCoaching) lineItems.push({ price: input.priceIds.coaching, quantity: 1 });
 
   return {
@@ -169,10 +202,14 @@ function checkoutSessionParams(input: {
     client_reference_id: attemptReference(input.attemptHash, input.includeCoaching),
     metadata,
     payment_intent_data: { metadata },
-    expires_at: Math.floor(input.now.getTime() / 1000) + ATTEMPT_TTL_SECONDS,
-    success_url: `${CHECKOUT_ORIGIN}/running-man-method?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+    expires_at: expiresAt,
+    success_url: `${CHECKOUT_ORIGIN}/running-man-method/confirmation?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${CHECKOUT_ORIGIN}/running-man-method#enroll`,
   };
+}
+
+export class RunningManCheckoutConfigurationError extends Error {
+  override name = "RunningManCheckoutConfigurationError";
 }
 
 function reservationIdFrom(session: StripeSession): string | null {
@@ -244,12 +281,22 @@ async function attachSessionWithIdempotentRetry(input: {
   session: StripeSession;
   params: Record<string, unknown>;
 }): Promise<void> {
+  const verifyOwnership = async (session: StripeSession) => {
+    const verified = await input.stripe.checkout.sessions.retrieve(session.id);
+    if (reservationIdFrom(verified) !== input.reservationId || verified.metadata.running_man_cohort_slug !== COHORT.slug) {
+      throw new Error("Stripe returned a checkout session for another reservation.");
+    }
+    return verified;
+  };
+
+  await verifyOwnership(input.session);
   try {
     await input.repository.attachStripeSession(input.reservationId, input.session.id);
   } catch (error) {
     const retry = await input.stripe.checkout.sessions.create(input.params, { idempotencyKey: input.reservationId });
-    if (retry.id !== input.session.id) throw error;
-    await input.repository.attachStripeSession(input.reservationId, retry.id);
+    const verified = await verifyOwnership(retry);
+    if (verified.id !== input.session.id) throw error;
+    await input.repository.attachStripeSession(input.reservationId, verified.id);
   }
 }
 
@@ -293,10 +340,24 @@ export async function createRunningManCheckout(
   });
 
   let decision = await reserve();
+  if (decision.kind === "terminal") {
+    return {
+      kind: "confirmation",
+      confirmationUrl: `${CHECKOUT_ORIGIN}/running-man-method/confirmation?session_id=${encodeURIComponent(decision.sessionId)}`,
+      ...(setAttemptCookie ? { setAttemptCookie } : {}),
+    };
+  }
   if (decision.kind === "reconfirm") {
     const changed = await resolveSelectionChange(dependencies, attemptHash, request.includeCoaching, networkHash);
     if (!changed) return { ...decision, ...(setAttemptCookie ? { setAttemptCookie } : {}) };
     decision = await reserve();
+  }
+  if (decision.kind === "terminal") {
+    return {
+      kind: "confirmation",
+      confirmationUrl: `${CHECKOUT_ORIGIN}/running-man-method/confirmation?session_id=${encodeURIComponent(decision.sessionId)}`,
+      ...(setAttemptCookie ? { setAttemptCookie } : {}),
+    };
   }
   if (decision.kind === "reconfirm") return { ...decision, ...(setAttemptCookie ? { setAttemptCookie } : {}) };
 
@@ -307,18 +368,29 @@ export async function createRunningManCheckout(
 
   const findSession = dependencies.findSessionByAttempt ?? ((hash: string) => findSessionByAttemptFromStripe(dependencies.stripe, hash));
   const existingSession = await findSession(attemptHash);
-  if (existingSession && existingSession.includeCoaching === request.includeCoaching && sessionIsOpenAndUnpaid(existingSession)) {
+  if (existingSession
+    && reservationIdFrom(existingSession) === reservationId
+    && existingSession.includeCoaching === decision.includeCoaching
+    && sessionIsOpenAndUnpaid(existingSession)) {
     return { kind: "checkout", checkoutUrl: existingSession.url!, ...(setAttemptCookie ? { setAttemptCookie } : {}) };
   }
 
-  const params = checkoutSessionParams({
-    reservationId,
-    expectedTier: request.expectedTier,
-    includeCoaching: request.includeCoaching,
-    priceIds: dependencies.priceIds,
-    attemptHash,
-    now,
-  });
+  let params: Record<string, unknown>;
+  try {
+    params = checkoutSessionParams({
+      reservationId,
+      tierIndex: decision.tierIndex,
+      baseAmountCents: decision.baseAmountCents,
+      includeCoaching: decision.includeCoaching,
+      priceIds: dependencies.priceIds,
+      attemptHash,
+      reservationExpiresAt: decision.expiresAt,
+      stripeCreatedAt: dependencies.now?.() ?? new Date(),
+    });
+  } catch {
+    await dependencies.repository.recoverCreatingReservation(reservationId);
+    return { kind: "error", code: "unavailable", message: "Checkout is temporarily unavailable.", ...(setAttemptCookie ? { setAttemptCookie } : {}) };
+  }
 
   let session: StripeSession;
   try {

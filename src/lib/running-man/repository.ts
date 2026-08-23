@@ -18,7 +18,15 @@ export type ReserveCheckoutInput = {
 };
 
 export type ReservationDecision =
-  | { kind: "reserved"; reservationId: string; expiresAt: string }
+  | {
+    kind: "reserved";
+    reservationId: string;
+    expiresAt: string;
+    tierIndex: TierIndex;
+    baseAmountCents: number;
+    includeCoaching: boolean;
+  }
+  | { kind: "terminal"; sessionId: string }
   | { kind: "reconfirm"; enrollmentState: Record<string, unknown> };
 
 export type EnrollmentAggregateRecord = Record<string, unknown> & {
@@ -38,6 +46,25 @@ function asRecord(value: unknown): Record<string, unknown> {
 
 function asString(value: unknown, field: string): string {
   if (typeof value !== "string" || value.length === 0) {
+    throw new RunningManRepositoryError(`The enrollment service did not return ${field}.`);
+  }
+  return value;
+}
+
+function asTierIndex(value: unknown): TierIndex {
+  if (value === 1 || value === 2 || value === 3) return value;
+  throw new RunningManRepositoryError("The enrollment service did not return a valid tier.");
+}
+
+function asReservationAmount(value: unknown, field: string): number {
+  if (typeof value !== "number" || !Number.isSafeInteger(value) || ![19700, 24700, 29700].includes(value)) {
+    throw new RunningManRepositoryError(`The enrollment service did not return a valid ${field}.`);
+  }
+  return value;
+}
+
+function asBoolean(value: unknown, field: string): boolean {
+  if (typeof value !== "boolean") {
     throw new RunningManRepositoryError(`The enrollment service did not return ${field}.`);
   }
   return value;
@@ -97,7 +124,14 @@ export function createRunningManRepository(client: RunningManRpcClient) {
           kind: "reserved",
           reservationId: asString(result.reservation_id, "a reservation ID"),
           expiresAt: asString(result.expires_at, "a reservation expiry"),
+          tierIndex: asTierIndex(result.tier_index),
+          baseAmountCents: asReservationAmount(result.base_amount_cents, "reservation amount"),
+          includeCoaching: asBoolean(result.include_coaching, "the coaching selection"),
         };
+      }
+
+      if (resultCode === "paid_terminal") {
+        return { kind: "terminal", sessionId: asString(result.session_id, "a completed checkout session") };
       }
 
       if (["stale", "tier_held", "coaching_held", "coaching_sold_out", "coaching_under_review", "capacity_under_review", "sold_out", "closed", "selection_change_required", "stripe_expiry_verification_required", "rate_limited"].includes(resultCode)) {

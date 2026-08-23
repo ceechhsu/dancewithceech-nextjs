@@ -149,6 +149,7 @@ declare
   v_cohort private.running_man_cohorts%rowtype;
   v_attempt_id uuid;
   v_existing private.running_man_reservations%rowtype;
+  v_paid private.running_man_reservations%rowtype;
   v_tier smallint;
   v_capacity integer;
   v_allocations integer;
@@ -210,7 +211,10 @@ begin
     return jsonb_build_object(
       'result_code', 'existing_open',
       'reservation_id', v_existing.id,
-      'expires_at', v_existing.expires_at
+      'expires_at', v_existing.expires_at,
+      'tier_index', v_existing.tier_index,
+      'base_amount_cents', v_existing.base_amount_cents,
+      'include_coaching', v_existing.include_coaching
     );
   end if;
   if found and v_existing.expires_at > v_now
@@ -225,6 +229,14 @@ begin
       'result_code', 'stripe_expiry_verification_required',
       'enrollment_state', jsonb_build_object('activeTier', v_existing.tier_index)
     );
+  end if;
+  select * into v_paid
+  from private.running_man_reservations
+  where checkout_attempt_id = v_attempt_id and state = 'paid'
+  order by created_at desc limit 1
+  for update;
+  if found then
+    return jsonb_build_object('result_code', 'paid_terminal', 'session_id', v_paid.stripe_session_id);
   end if;
   if v_now >= v_cohort.checkout_cutoff_at then
     return jsonb_build_object('result_code', 'closed', 'enrollment_state', jsonb_build_object('status', 'closed'));
@@ -322,7 +334,7 @@ begin
   ) values (
     v_cohort.id, v_attempt_id, p_attempt_hash, v_active_tier, v_price,
     p_include_coaching, case when p_include_coaching then 10000 else 0 end,
-    p_terms_version, 'creating_checkout', v_now + interval '30 minutes'
+    p_terms_version, 'creating_checkout', v_now + interval '31 minutes'
   ) returning id into v_reservation_id;
 
   update private.running_man_checkout_attempts
@@ -332,7 +344,14 @@ begin
   insert into private.running_man_audit_events (cohort_id, reservation_id, action, new_state, evidence)
   values (v_cohort.id, v_reservation_id, 'reservation_created', 'creating_checkout', jsonb_build_object('tier', v_active_tier));
 
-  return jsonb_build_object('result_code', 'reserved', 'reservation_id', v_reservation_id, 'expires_at', v_now + interval '30 minutes');
+  return jsonb_build_object(
+    'result_code', 'reserved',
+    'reservation_id', v_reservation_id,
+    'expires_at', v_now + interval '31 minutes',
+    'tier_index', v_active_tier,
+    'base_amount_cents', v_price,
+    'include_coaching', p_include_coaching
+  );
 end;
 $$;
 

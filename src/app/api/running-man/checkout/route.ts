@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 
 import {
   createRunningManCheckout,
+  isRunningManCheckoutRequest,
+  trustedNetworkSignal,
   type CheckoutServiceDependencies,
-  type RunningManCheckoutRequest,
 } from "@/lib/running-man/checkout";
 import { COHORT } from "@/lib/running-man/config";
 import { createRunningManRepository, type RunningManRpcClient } from "@/lib/running-man/repository";
@@ -13,17 +14,7 @@ import { getStripeClient } from "@/lib/stripe";
 export const runtime = "nodejs";
 
 function networkSignal(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown-network";
-  return `${forwarded}|${request.headers.get("user-agent") ?? "unknown-agent"}`;
-}
-
-function isCheckoutRequest(value: unknown): value is RunningManCheckoutRequest {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
-  const body = value as Record<string, unknown>;
-  return (body.expectedTier === 1 || body.expectedTier === 2 || body.expectedTier === 3)
-    && typeof body.includeCoaching === "boolean"
-    && typeof body.termsVersion === "string"
-    && body.acknowledged === true;
+  return trustedNetworkSignal(request.headers, process.env.VERCEL === "1");
 }
 
 function productionDependencies(): CheckoutServiceDependencies {
@@ -55,7 +46,7 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json({ error: "Invalid checkout request." }, { status: 400 });
   }
-  if (!isCheckoutRequest(body)) {
+  if (!isRunningManCheckoutRequest(body)) {
     return NextResponse.json({ error: "Invalid checkout request." }, { status: 400 });
   }
 
@@ -67,6 +58,8 @@ export async function POST(request: Request) {
     });
     const response = result.kind === "checkout"
       ? NextResponse.json({ checkoutUrl: result.checkoutUrl })
+      : result.kind === "confirmation"
+        ? NextResponse.json({ confirmationUrl: result.confirmationUrl, terminal: true })
       : result.kind === "reconfirm"
         ? NextResponse.json({ enrollmentState: result.enrollmentState, reconfirmationRequired: true }, { status: 409 })
         : NextResponse.json({ error: result.message, code: result.code }, { status: result.code === "closed" ? 410 : 400 });
