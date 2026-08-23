@@ -17,7 +17,7 @@
 - The private-coaching checkbox lives on the Dance With Ceech page, not in Stripe. It adds exactly $100 and includes two 20-minute sessions, one in Week 1 and one in Week 3. At most three capacity-consuming coaching allocations may exist.
 - The page requires a commitment acknowledgment before creating checkout. The server verifies the current terms version.
 - New checkout attempts stop September 17, 2026, at 11:59 p.m. Pacific. A Session successfully created before that time retains its displayed 30-minute hold.
-- After 12 capacity-consuming seat allocations, show the sold-out next-cohort waitlist. If the deadline passes with fewer than 12, show “Enrollment closed,” not “sold out.”
+- Show the sold-out next-cohort waitlist only after 12 active paid enrollments. If fewer than 12 active paid students remain but capacity is full because a refund or dispute is under review, show “Enrollment availability is under review,” not sold out or the waitlist. If the deadline passes with fewer than 12 active paid students, show “Enrollment closed,” not “sold out.”
 - A student must email `dancewithceech@gmail.com` from their purchase email with subject `Running Man Method Refund Request` by September 28, 2026, 11:59 p.m. Pacific for a Day-5 full refund, including coaching.
 
 ## File structure
@@ -159,6 +159,7 @@ test("a held final first-tier seat pauses checkout instead of exposing $247", ()
 test("refund review consumes capacity but is not shown as a paid student", () => { /* ... */ });
 test("three active paid coaching upgrades are sold out while a reviewed upgrade is under review", () => { /* ... */ });
 test("deadline closes new checkout but a pre-deadline session state can remain pending", () => { /* ... */ });
+test("eleven paid students plus one under-review allocation shows capacity under review, not waitlist", () => { /* ... */ });
 ```
 
 - [ ] **Step 2: Run the test to verify each assertion fails.**
@@ -227,6 +228,7 @@ The tests must require the repository boundary to call one atomic reservation op
 test("a stale confirmed tier returns the latest state without a reservation", async () => { /* ... */ });
 test("cohort-only checkout never reserves coaching", async () => { /* ... */ });
 test("the final coaching slot allows one concurrent reservation only", async () => { /* ... */ });
+test("parallel requests from one checkout-attempt cookie create one active reservation only", async () => { /* ... */ });
 test("a direct client Price ID is ignored", async () => { /* ... */ });
 ```
 
@@ -241,7 +243,7 @@ The migration must create:
 - `running_man_checkout_attempts` with a hashed opaque cookie ID, selected coaching state, first/last request time, request-count window, and optional active reservation ID; and
 - owner-action and minimum-evaluation fields on `running_man_cohorts` so the system records when the eight-student decision was evaluated and when Ceech was notified.
 
-Enable RLS on all four tables. Create **no** `anon` or `authenticated` policies. Revoke public execution from all new functions.
+Enable RLS on all five tables. Create **no** `anon` or `authenticated` policies or table grants. Revoke public execution from all new functions.
 
 Create a non-public, `SECURITY DEFINER` RPC named `private.reserve_running_man_checkout(...)` with `SET search_path = ''`, fully qualified table names, and parameters:
 
@@ -253,7 +255,7 @@ Create a non-public, `SECURITY DEFINER` RPC named `private.reserve_running_man_c
  p_attempt_hash text)
 ```
 
-Within one transaction, lock the cohort row with `FOR UPDATE`; use database `now()` rather than client time; reject a post-cutoff call; compare expected tier and terms; compute **per-tier** unreopened allocations plus active holds against the current tier ceiling; compute coaching capacity from `paid`, `refund_review`, `disputed`, and active holds; return a stale/held/sold-out result without inserting a reservation when appropriate; otherwise insert a 30-minute `creating_checkout` reservation. Seed the single Fall 2026 cohort by slug.
+Within one transaction, insert-or-lock the checkout-attempt row by its HMAC hash with `FOR UPDATE`, then lock the cohort row with `FOR UPDATE`; use database `now()` rather than client time; reject a post-cutoff call; compare expected tier and terms; compute **per-tier** unreopened allocations plus active holds against the current tier ceiling; compute coaching capacity from `paid`, `refund_review`, `disputed`, and active holds; return a stale/held/sold-out result without inserting a reservation when appropriate; otherwise insert a 30-minute `creating_checkout` reservation. Add a partial unique index that permits only one reservation in `creating_checkout` or `checkout_open` state per checkout-attempt row. Seed the single Fall 2026 cohort by slug.
 
 Also create these narrowly scoped private RPCs, each with one transaction, row locks where needed, empty `search_path`, full relation qualification, and explicit `service_role` grants only:
 
@@ -267,7 +269,7 @@ private.reopen_running_man_reservation(p_reservation_id uuid, p_actor_email text
 
 `apply_running_man_stripe_event` must insert the Event ID under a uniqueness constraint, lock the reservation, apply the legal ordered transition, persist Session/PaymentIntent/Charge IDs, and write the audit row **in the same transaction**. If any transition fails, the Event ID insert must roll back so Stripe can retry. `reopen_running_man_reservation` must accept only a fully refunded `refund_review` reservation and append an owner audit event.
 
-Expose the `private` schema to PostgREST only as needed for server calls, then grant `USAGE` on `private` and `EXECUTE` on the listed RPCs exclusively to `service_role`; grant neither privilege to `PUBLIC`, `anon`, nor `authenticated`. Call the functions only through `supabaseAdmin.schema("private").rpc(...)`. Add an integration test proving that exact path succeeds with the service role while anon and authenticated requests are denied.
+Expose the `private` schema to PostgREST only as needed for server calls, then grant `USAGE` on `private` and `EXECUTE` on the listed RPCs exclusively to `service_role`; grant neither privilege to `PUBLIC`, `anon`, nor `authenticated`. Call the functions only through `supabaseAdmin.schema("private").rpc(...)`. Add an integration test proving that exact path succeeds with the service role while anon and authenticated requests cannot read any of the five tables or call private RPCs.
 
 - [ ] **Step 4: Run RLS/security checks before exposing any server code.**
 
@@ -395,6 +397,8 @@ test("a crash after reservation but before session attachment recovers the match
 test("a creating reservation with no recoverable Stripe session is released after the recovery grace window", async () => { /* ... */ });
 test("a partial refund does not enter refund review and full refund does", async () => { /* ... */ });
 test("refund and dispute events find the reservation through persisted Charge and PaymentIntent IDs", async () => { /* ... */ });
+test("a refund or dispute arriving before completion is not deduplicated until its reservation is resolved", async () => { /* ... */ });
+test("a closed dispute remains capacity-consuming and never reopens inventory automatically", async () => { /* ... */ });
 ```
 
 - [ ] **Step 2: Run the tests to verify they fail.**
@@ -415,7 +419,7 @@ Handle:
 - `charge.refunded` as `refund_review`; and
 - `charge.dispute.created` / `charge.dispute.closed` as ordered dispute transitions.
 
-Pass every verified event to `apply_running_man_stripe_event`, which atomically deduplicates by Event ID, locks and transitions the reservation, saves Charge/PaymentIntent mappings, and records its audit row. A verified paid transition wins over expiration. For a `charge.refunded` event, retrieve the Charge and verify that `amount_refunded === amount` before moving to `refund_review`; partial refunds are audited and alert Ceech without changing enrollment capacity. Refund/dispute lookups must use the persisted Charge ID first and PaymentIntent ID second, not an untrusted metadata guess. The handler must return a 2xx quickly after durable processing and log/alert invalid payloads rather than trusting them.
+Pass every verified event to `apply_running_man_stripe_event`, which atomically deduplicates by Event ID, locks and transitions the reservation, saves Charge/PaymentIntent mappings, and records its audit row. A verified paid transition wins over expiration. For a `charge.refunded` event, retrieve the Charge and verify that `amount_refunded === amount` before moving to `refund_review`; partial refunds are audited and alert Ceech without changing enrollment capacity. Refund/dispute lookups must use the persisted Charge ID first and PaymentIntent ID second. If neither mapping exists, retrieve the Stripe PaymentIntent and resolve only an allowlisted, server-written reservation ID in its metadata; if it still cannot resolve, do **not** persist the Event ID and return a retryable 5xx so Stripe redelivers. `charge.dispute.closed` remains capacity-consuming and never reopens inventory automatically. The handler must return a 2xx quickly after durable processing and log/alert invalid payloads rather than trusting them.
 
 - [ ] **Step 4: Add the protected five-minute reconciliation route.**
 
@@ -476,7 +480,8 @@ The component must:
 - disable the one CTA until the commitment is acknowledged and current state allows checkout;
 - POST only the allowed payload to `/api/running-man/checkout`, redirect to the returned hosted Checkout URL, and prevent double clicks;
 - show a clear reconfirmation panel if the price or coaching availability changed; and
-- show the sold-out waitlist only at true capacity, not while seats are held or after a non-sold-out deadline closure.
+- show the sold-out waitlist only after 12 active paid enrollments, not while seats are held, while a refund/dispute allocation is under review, or after a non-sold-out deadline closure; and
+- show an “Enrollment availability is under review” state when physical capacity is full but fewer than 12 students remain actively paid.
 
 Keep keyboard focus, status announcements (`aria-live`), visible focus states, and non-JavaScript fallback copy intact.
 
