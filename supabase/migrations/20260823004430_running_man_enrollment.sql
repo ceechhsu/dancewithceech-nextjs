@@ -221,18 +221,10 @@ begin
     );
   end if;
   if found and v_existing.expires_at <= v_now then
-    if v_existing.state = 'creating_checkout' and v_existing.stripe_session_id is null then
-      update private.running_man_reservations
-      set state = 'released', released_at = v_now, updated_at = v_now
-      where id = v_existing.id;
-      insert into private.running_man_audit_events (cohort_id, reservation_id, action, old_state, new_state)
-      values (v_cohort.id, v_existing.id, 'expired_unattached_reservation_released', 'creating_checkout', 'released');
-    else
-      return jsonb_build_object(
-        'result_code', 'stripe_expiry_verification_required',
-        'enrollment_state', jsonb_build_object('activeTier', v_existing.tier_index)
-      );
-    end if;
+    return jsonb_build_object(
+      'result_code', 'stripe_expiry_verification_required',
+      'enrollment_state', jsonb_build_object('activeTier', v_existing.tier_index)
+    );
   end if;
   if v_now >= v_cohort.checkout_cutoff_at then
     return jsonb_build_object('result_code', 'closed', 'enrollment_state', jsonb_build_object('status', 'closed'));
@@ -438,15 +430,8 @@ begin
   if found and v_reservation.include_coaching = p_include_coaching then
     return jsonb_build_object('result_code', 'unchanged', 'reservation_id', v_reservation.id);
   end if;
-  if found and v_reservation.state = 'checkout_open' then
-    return jsonb_build_object('result_code', 'stripe_expiry_verification_required', 'reservation_id', v_reservation.id);
-  end if;
   if found then
-    update private.running_man_reservations
-    set state = 'released', released_at = now(), updated_at = now()
-    where id = v_reservation.id;
-    insert into private.running_man_audit_events (cohort_id, reservation_id, action, old_state, new_state, evidence)
-    values (v_cohort.id, v_reservation.id, 'unattached_reservation_replaced', v_reservation.state, 'released', jsonb_build_object('includeCoaching', p_include_coaching));
+    return jsonb_build_object('result_code', 'stripe_expiry_verification_required', 'reservation_id', v_reservation.id);
   end if;
   update private.running_man_checkout_attempts
   set network_hash = p_network_hash, selected_coaching = p_include_coaching, active_reservation_id = null, last_requested_at = now(), updated_at = now()
@@ -472,13 +457,10 @@ begin
   if v_reservation.stripe_session_id is not null then
     return jsonb_build_object('result_code', 'session_attached', 'session_id', v_reservation.stripe_session_id);
   end if;
-  if v_reservation.created_at > now() - interval '5 minutes' then
-    return jsonb_build_object('result_code', 'scan_required');
-  end if;
-  update private.running_man_reservations set state = 'released', released_at = now(), updated_at = now() where id = p_reservation_id;
-  insert into private.running_man_audit_events (cohort_id, reservation_id, action, old_state, new_state)
-  values (v_reservation.cohort_id, p_reservation_id, 'creating_reservation_recovery_failed', 'creating_checkout', 'released');
-  return jsonb_build_object('result_code', 'released_after_recovery_grace');
+  return jsonb_build_object(
+    'result_code', case when v_reservation.created_at > now() - interval '5 minutes' then 'scan_required' else 'stripe_scan_required' end,
+    'reservation_id', v_reservation.id
+  );
 end;
 $$;
 
@@ -508,6 +490,12 @@ as $$
     'now', now(),
     'activePaidStudents', coalesce((select sum(active_paid) from reservation_counts), 0),
     'capacityConsumed', coalesce((select sum(allocation_consumed) from reservation_counts), 0),
+    'hasOpenPreDeadlineSession', exists(
+      select 1 from private.running_man_reservations r join cohort c on c.id = r.cohort_id
+      where r.state in ('creating_checkout', 'checkout_open')
+        and r.created_at < c.checkout_cutoff_at
+        and r.expires_at > now()
+    ),
     'tiers', jsonb_build_object(
       '1', jsonb_build_object('activePaid', coalesce((select active_paid from reservation_counts where tier_index = 1), 0), 'allocationConsumed', coalesce((select allocation_consumed from reservation_counts where tier_index = 1), 0), 'underReview', coalesce((select under_review from reservation_counts where tier_index = 1), 0), 'activeHolds', coalesce((select active_holds from reservation_counts where tier_index = 1), 0)),
       '2', jsonb_build_object('activePaid', coalesce((select active_paid from reservation_counts where tier_index = 2), 0), 'allocationConsumed', coalesce((select allocation_consumed from reservation_counts where tier_index = 2), 0), 'underReview', coalesce((select under_review from reservation_counts where tier_index = 2), 0), 'activeHolds', coalesce((select active_holds from reservation_counts where tier_index = 2), 0)),

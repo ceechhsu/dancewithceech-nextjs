@@ -21,6 +21,10 @@ export type ReservationDecision =
   | { kind: "reserved"; reservationId: string; expiresAt: string }
   | { kind: "reconfirm"; enrollmentState: Record<string, unknown> };
 
+export type EnrollmentAggregateRecord = Record<string, unknown> & {
+  hasOpenPreDeadlineSession: boolean;
+};
+
 export class RunningManRepositoryError extends Error {
   override name = "RunningManRepositoryError";
 }
@@ -49,6 +53,20 @@ function reconfirmation(data: Record<string, unknown>): ReservationDecision {
     throw new RunningManRepositoryError("The enrollment service did not return current availability.");
   }
   return { kind: "reconfirm", enrollmentState: enrollmentState as Record<string, unknown> };
+}
+
+function asEnrollmentAggregate(data: unknown): EnrollmentAggregateRecord {
+  const aggregate = asRecord(data);
+  if (typeof aggregate.hasOpenPreDeadlineSession === "boolean") {
+    return aggregate as EnrollmentAggregateRecord;
+  }
+  if (typeof aggregate.has_open_pre_deadline_session === "boolean") {
+    return {
+      ...aggregate,
+      hasOpenPreDeadlineSession: aggregate.has_open_pre_deadline_session,
+    } as EnrollmentAggregateRecord;
+  }
+  throw new RunningManRepositoryError("The enrollment service did not return the open-session state.");
 }
 
 /**
@@ -135,12 +153,12 @@ export function createRunningManRepository(client: RunningManRpcClient) {
       return asRecord(data);
     },
 
-    async getEnrollmentAggregate(): Promise<Record<string, unknown>> {
+    async getEnrollmentAggregate(): Promise<EnrollmentAggregateRecord> {
       const { data, error } = await privateRpc("get_running_man_enrollment_aggregate", {
         p_cohort_slug: COHORT.slug,
       });
       if (error) throwForError(error);
-      return asRecord(data);
+      return asEnrollmentAggregate(data);
     },
 
     async applyStripeEventAtomically(input: {

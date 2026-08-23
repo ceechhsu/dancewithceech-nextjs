@@ -144,14 +144,14 @@ test("the repository has private recovery, attempt, selection, and aggregate bou
     { attempt_id: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9" },
     { attempt_id: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9", selected_coaching: true },
     { result_code: "recovered" },
-    { active_paid_students: 2 },
+    { active_paid_students: 2, has_open_pre_deadline_session: true },
   ]);
   const repository = createRunningManRepository(client);
 
   await repository.getOrCreateCheckoutAttempt({ attemptHash: "attempt", networkHash: "network", includeCoaching: false });
   await repository.replaceUnpaidAttemptSelection({ attemptHash: "attempt", networkHash: "network", includeCoaching: true });
   await repository.recoverCreatingReservation("c7211c55-0e09-4a2f-b1cb-8d98b9501ee9");
-  await repository.getEnrollmentAggregate();
+  const aggregate = await repository.getEnrollmentAggregate();
 
   assert.deepEqual(calls.map((call) => call.fn), [
     "get_or_create_running_man_checkout_attempt",
@@ -161,6 +161,7 @@ test("the repository has private recovery, attempt, selection, and aggregate bou
   ]);
   assert.equal(calls[0].args.p_network_hash, "network");
   assert.equal(calls[1].args.p_include_coaching, true);
+  assert.equal(aggregate.hasOpenPreDeadlineSession, true);
 });
 
 test("a valid pre-deadline session can be reused after the cutoff", async () => {
@@ -200,4 +201,27 @@ test("the migration records refund review only after a full trusted refund signa
   assert.match(migration, /v_full_refund := coalesce\(\(p_payload ->> 'amount_refunded'\)::bigint/);
   assert.match(migration, /if v_full_refund and v_old_state/);
   assert.match(migration, /v_reservation\.state <> 'refund_review' or v_reservation\.fully_refunded_at is null/);
+});
+
+test("the migration preserves unattached checkout holds until trusted Stripe verification", async () => {
+  const migration = await readFile(new URL("../supabase/migrations/20260823004430_running_man_enrollment.sql", import.meta.url), "utf8");
+  const replacement = migration.slice(
+    migration.indexOf("create or replace function private.replace_running_man_unpaid_attempt_selection"),
+    migration.indexOf("create or replace function private.recover_running_man_creating_reservation"),
+  );
+  const recovery = migration.slice(
+    migration.indexOf("create or replace function private.recover_running_man_creating_reservation"),
+    migration.indexOf("create or replace function private.get_running_man_enrollment_aggregate"),
+  );
+
+  assert.doesNotMatch(replacement, /set state = 'released'/);
+  assert.match(replacement, /stripe_expiry_verification_required/);
+  assert.doesNotMatch(recovery, /set state = 'released'/);
+  assert.match(recovery, /scan_required/);
+});
+
+test("the aggregate contract includes a pre-deadline open-session signal", async () => {
+  const migration = await readFile(new URL("../supabase/migrations/20260823004430_running_man_enrollment.sql", import.meta.url), "utf8");
+
+  assert.match(migration, /'hasOpenPreDeadlineSession'/);
 });
