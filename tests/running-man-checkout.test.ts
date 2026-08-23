@@ -192,17 +192,21 @@ test("uses the trusted reservation tier instead of a stale browser tier to choos
 });
 
 test("uses the database reservation expiry with a Stripe-valid latency buffer", async () => {
+  let clockCall = 0;
   const { dependencies, createCalls } = checkoutDependencies({
     repository: {
       async reserveCheckout() {
-        return { kind: "reserved", reservationId, expiresAt: "2026-09-01T00:31:00.000Z", tierIndex: 1, baseAmountCents: 19700, includeCoaching: false };
+        return { kind: "reserved", reservationId, expiresAt: "2026-09-01T00:30:01.100Z", tierIndex: 1, baseAmountCents: 19700, includeCoaching: false };
       },
       async attachStripeSession() {},
       async replaceUnpaidAttemptSelection() { return { result_code: "selection_updated" }; },
       async recoverCreatingReservation() { return { result_code: "scan_required" }; },
       async reconcileRunningManReservation() { return { result_code: "reconciled" }; },
     },
-    now: () => new Date("2026-09-01T00:00:20.000Z"),
+    now: () => {
+      clockCall += 1;
+      return new Date(clockCall === 1 ? "2026-09-01T00:00:00.100Z" : "2026-09-01T00:00:00.900Z");
+    },
   });
 
   await createRunningManCheckout(dependencies, {
@@ -210,7 +214,7 @@ test("uses the database reservation expiry with a Stripe-valid latency buffer", 
     networkSignal: "203.0.113.10|test-agent",
   });
 
-  assert.equal(createCalls[0].params.expires_at, 1788222660);
+  assert.equal(createCalls[0].params.expires_at, 1788222601);
 });
 
 test("reuses a matching active browser attempt without a second hold", async () => {
@@ -250,7 +254,7 @@ test("issues a new signed attempt cookie before first checkout", async () => {
 
   assert.equal(result.kind, "checkout");
   if (result.kind !== "checkout") return;
-  assert.match(result.setAttemptCookie ?? "", /^running_man_checkout_attempt=[^;]+; HttpOnly; Secure; SameSite=Lax; Path=\/api\/running-man; Max-Age=1800$/);
+  assert.match(result.setAttemptCookie ?? "", /^running_man_checkout_attempt=[^;]+; HttpOnly; Secure; SameSite=Lax; Path=\/api\/running-man; Max-Age=1801$/);
 });
 
 test("changing coaching selection expires the prior unpaid session before creating a replacement", async () => {
@@ -412,6 +416,57 @@ test("a failed reservation attach retries idempotently and verifies Stripe owner
   assert.equal(attachCount, 2);
   assert.equal(createCalls.length, 2);
   assert.equal(createCalls[1].options?.idempotencyKey, reservationId);
+});
+
+test("a reused session stays unavailable until a prior attachment failure is repaired", async () => {
+  let attachCount = 0;
+  const { dependencies, createCalls } = checkoutDependencies({
+    repository: {
+      async reserveCheckout() { return { kind: "reserved", reservationId, expiresAt: "2026-09-01T00:30:01.000Z", tierIndex: 1, baseAmountCents: 19700, includeCoaching: false }; },
+      async attachStripeSession() {
+        attachCount += 1;
+        if (attachCount <= 2) throw new Error("database is briefly unavailable");
+      },
+      async replaceUnpaidAttemptSelection() { return { result_code: "selection_updated" }; },
+      async recoverCreatingReservation() { return { result_code: "scan_required" }; },
+      async reconcileRunningManReservation() { return { result_code: "reconciled" }; },
+    },
+    findSessionByAttempt: async () => ({
+      id: "cs_existing",
+      url: "https://checkout.stripe.test/cs_existing",
+      status: "open",
+      payment_status: "unpaid",
+      includeCoaching: false,
+      metadata: { running_man_reservation_id: reservationId, running_man_cohort_slug: "running-man-method-fall-2026" },
+    }),
+    stripe: {
+      checkout: {
+        sessions: {
+          async create(params, options) {
+            createCalls.push({ params: params as Record<string, unknown>, options: options as Record<string, unknown> });
+            return { id: "cs_existing", url: "https://checkout.stripe.test/cs_existing", status: "open", payment_status: "unpaid", metadata: { running_man_reservation_id: reservationId, running_man_cohort_slug: "running-man-method-fall-2026" } };
+          },
+          async retrieve() {
+            return { id: "cs_existing", url: "https://checkout.stripe.test/cs_existing", status: "open", payment_status: "unpaid", metadata: { running_man_reservation_id: reservationId, running_man_cohort_slug: "running-man-method-fall-2026" } };
+          },
+          async expire() { return { id: "cs_existing", url: null, status: "expired", payment_status: "unpaid", metadata: {} }; },
+          async list() { return { data: [], has_more: false }; },
+        },
+      },
+    },
+  });
+  const attemptCookie = createSignedAttemptCookie("recover-attach-attempt", checkoutAttemptSecret, fixedNow);
+
+  const first = await createRunningManCheckout(dependencies, {
+    request: checkoutRequest(), attemptCookie, networkSignal: "203.0.113.10|test-agent",
+  });
+  const second = await createRunningManCheckout(dependencies, {
+    request: checkoutRequest(), attemptCookie, networkSignal: "203.0.113.10|test-agent",
+  });
+
+  assert.equal(first.kind, "error");
+  assert.equal(second.kind, "checkout");
+  assert.equal(createCalls.length, 1);
 });
 
 test("only uses a platform-trusted forwarding header for the network rate-limit signal", () => {

@@ -334,7 +334,7 @@ begin
   ) values (
     v_cohort.id, v_attempt_id, p_attempt_hash, v_active_tier, v_price,
     p_include_coaching, case when p_include_coaching then 10000 else 0 end,
-    p_terms_version, 'creating_checkout', v_now + interval '31 minutes'
+    p_terms_version, 'creating_checkout', v_now + interval '1801 seconds'
   ) returning id into v_reservation_id;
 
   update private.running_man_checkout_attempts
@@ -347,7 +347,7 @@ begin
   return jsonb_build_object(
     'result_code', 'reserved',
     'reservation_id', v_reservation_id,
-    'expires_at', v_now + interval '31 minutes',
+    'expires_at', v_now + interval '1801 seconds',
     'tier_index', v_active_tier,
     'base_amount_cents', v_price,
     'include_coaching', p_include_coaching

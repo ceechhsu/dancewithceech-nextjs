@@ -6,7 +6,9 @@ import { CURRENT_TERMS_VERSION } from "./terms";
 import type { TierIndex } from "./types";
 
 const ATTEMPT_COOKIE_NAME = "running_man_checkout_attempt";
-const ATTEMPT_TTL_SECONDS = 30 * 60;
+// One second absorbs Stripe's second-granularity expiry requirement while all
+// three artifacts still enforce the same practical 30-minute checkout window.
+const ATTEMPT_TTL_SECONDS = 30 * 60 + 1;
 const CHECKOUT_ORIGIN = "https://dancewithceech.com";
 
 type StripeSession = {
@@ -366,15 +368,6 @@ export async function createRunningManCheckout(
     return { kind: "error", code: "unavailable", message: "Checkout is temporarily unavailable.", ...(setAttemptCookie ? { setAttemptCookie } : {}) };
   }
 
-  const findSession = dependencies.findSessionByAttempt ?? ((hash: string) => findSessionByAttemptFromStripe(dependencies.stripe, hash));
-  const existingSession = await findSession(attemptHash);
-  if (existingSession
-    && reservationIdFrom(existingSession) === reservationId
-    && existingSession.includeCoaching === decision.includeCoaching
-    && sessionIsOpenAndUnpaid(existingSession)) {
-    return { kind: "checkout", checkoutUrl: existingSession.url!, ...(setAttemptCookie ? { setAttemptCookie } : {}) };
-  }
-
   let params: Record<string, unknown>;
   try {
     params = checkoutSessionParams({
@@ -390,6 +383,26 @@ export async function createRunningManCheckout(
   } catch {
     await dependencies.repository.recoverCreatingReservation(reservationId);
     return { kind: "error", code: "unavailable", message: "Checkout is temporarily unavailable.", ...(setAttemptCookie ? { setAttemptCookie } : {}) };
+  }
+
+  const findSession = dependencies.findSessionByAttempt ?? ((hash: string) => findSessionByAttemptFromStripe(dependencies.stripe, hash));
+  const existingSession = await findSession(attemptHash);
+  if (existingSession
+    && reservationIdFrom(existingSession) === reservationId
+    && existingSession.includeCoaching === decision.includeCoaching
+    && sessionIsOpenAndUnpaid(existingSession)) {
+    try {
+      await attachSessionWithIdempotentRetry({
+        repository: dependencies.repository,
+        stripe: dependencies.stripe,
+        reservationId,
+        session: existingSession,
+        params,
+      });
+    } catch {
+      return { kind: "error", code: "unavailable", message: "We’re confirming your checkout. Please try again shortly.", ...(setAttemptCookie ? { setAttemptCookie } : {}) };
+    }
+    return { kind: "checkout", checkoutUrl: existingSession.url!, ...(setAttemptCookie ? { setAttemptCookie } : {}) };
   }
 
   let session: StripeSession;
