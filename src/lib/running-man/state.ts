@@ -1,6 +1,21 @@
 import { COHORT } from "./config";
+import type {
+  CoachingStatus,
+  EnrollmentState,
+  EnrollmentStatus,
+  EnrollmentTier,
+  TierIndex,
+  TierLadderStatus,
+} from "./types";
 
-export type TierIndex = 1 | 2 | 3;
+export type {
+  CoachingStatus,
+  EnrollmentState,
+  EnrollmentStatus,
+  EnrollmentTier,
+  TierIndex,
+  TierLadderStatus,
+} from "./types";
 
 export type EnrollmentAggregate = {
   now: Date;
@@ -21,51 +36,6 @@ export type EnrollmentAggregate = {
     activeHolds: number;
   };
   hasOpenPreDeadlineSession: boolean;
-};
-
-export type EnrollmentStatus =
-  | "open"
-  | "tier_held"
-  | "capacity_under_review"
-  | "sold_out"
-  | "closed";
-
-export type CoachingStatus = "available" | "held" | "under_review" | "sold_out";
-
-export type TierLadderStatus =
-  | "active"
-  | "complete"
-  | "held"
-  | "upcoming"
-  | "under_review"
-  | "unavailable";
-
-export type EnrollmentTier = {
-  index: TierIndex;
-  ceiling: number;
-  priceCents: number;
-  status: TierLadderStatus;
-};
-
-export type EnrollmentState = {
-  cohortSlug: string;
-  checkoutCutoffIso: string;
-  enrollmentStatus: EnrollmentStatus;
-  coachingStatus: CoachingStatus;
-  seatsTotal: number;
-  seatsRemaining: number | null;
-  activePaidStudents: number;
-  capacityConsumed: number;
-  coachingSeatsTotal: number;
-  coachingSeatsRemaining: number | null;
-  activeTier: EnrollmentTier;
-  tierLadder: readonly EnrollmentTier[];
-  currentCta: {
-    label: string;
-    supportingCopy: string;
-  };
-  canStartCheckout: boolean;
-  requiresPriceReconfirmation: boolean;
 };
 
 export class EnrollmentAggregateError extends Error {
@@ -155,6 +125,7 @@ function assertValidAggregate(aggregate: EnrollmentAggregate): void {
 
 function activeTierIndex(aggregate: EnrollmentAggregate): TierIndex {
   for (const index of tierIndexes) {
+    if (aggregate.tiers[index].underReview > 0) return index;
     if (aggregate.tiers[index].allocationConsumed < tierCapacity(index)) return index;
   }
   return 3;
@@ -168,8 +139,11 @@ function coachingStatusFor(coaching: EnrollmentAggregate["coaching"]): CoachingS
 }
 
 function currentStatus(aggregate: EnrollmentAggregate, tierIndex: TierIndex): EnrollmentStatus {
-  if (aggregate.now >= checkoutCutoff) return "closed";
   if (aggregate.activePaidStudents === COHORT.seats) return "sold_out";
+  if (aggregate.now >= checkoutCutoff) return "closed";
+  if (tierIndexes.some((index) => aggregate.tiers[index].underReview > 0)) {
+    return "capacity_under_review";
+  }
   if (aggregate.capacityConsumed === COHORT.seats) return "capacity_under_review";
 
   const tier = aggregate.tiers[tierIndex];
@@ -237,6 +211,19 @@ function ctaFor(
     return {
       label: `Claim your seat — $${tier.priceCents / 100}`,
       supportingCopy: `${tierAggregate.activePaid} of ${capacity} claimed · availability is under review.`,
+    };
+  }
+  if (tierAggregate.activeHolds > 0) {
+    const available = capacity - tierAggregate.allocationConsumed - tierAggregate.activeHolds;
+    if (tierAggregate.activePaid === 0) {
+      return {
+        label: `Claim your seat — $${tier.priceCents / 100}`,
+        supportingCopy: `${tierAggregate.activeHolds} of ${capacity} seats currently held · ${available} left.`,
+      };
+    }
+    return {
+      label: `Claim your seat — $${tier.priceCents / 100}`,
+      supportingCopy: `${tierAggregate.activePaid} of ${capacity} claimed · ${available} left (${tierAggregate.activeHolds} currently held).`,
     };
   }
   if (tierAggregate.activePaid === 0) {

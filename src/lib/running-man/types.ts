@@ -1,16 +1,54 @@
+export type TierIndex = 1 | 2 | 3;
+
+export type EnrollmentStatus =
+  | "open"
+  | "tier_held"
+  | "capacity_under_review"
+  | "sold_out"
+  | "closed";
+
+export type CoachingStatus = "available" | "held" | "under_review" | "sold_out";
+
+export type TierLadderStatus =
+  | "active"
+  | "complete"
+  | "held"
+  | "upcoming"
+  | "under_review"
+  | "unavailable";
+
+export type EnrollmentTier = {
+  index: TierIndex;
+  ceiling: number;
+  priceCents: number;
+  status: TierLadderStatus;
+};
+
+/** Client-safe derived enrollment view; it contains no customer or payment data. */
 export type EnrollmentState = {
   cohortSlug: string;
-  seatsTotal: number;
-  seatsRemaining: number;
-  coachingSeatsTotal: number;
-  coachingSeatsRemaining: number;
   checkoutCutoffIso: string;
-  isOpen: boolean;
+  enrollmentStatus: EnrollmentStatus;
+  coachingStatus: CoachingStatus;
+  seatsTotal: number;
+  seatsRemaining: number | null;
+  activePaidStudents: number;
+  capacityConsumed: number;
+  coachingSeatsTotal: number;
+  coachingSeatsRemaining: number | null;
+  activeTier: EnrollmentTier;
+  tierLadder: readonly EnrollmentTier[];
+  currentCta: {
+    label: string;
+    supportingCopy: string;
+  };
+  canStartCheckout: boolean;
+  requiresPriceReconfirmation: boolean;
 };
 
 export type CheckoutRequest = {
   cohortSlug: string;
-  tierIndex: 1 | 2 | 3;
+  tierIndex: TierIndex;
   coaching: boolean;
   termsVersion: string;
   commitments: Record<string, boolean>;

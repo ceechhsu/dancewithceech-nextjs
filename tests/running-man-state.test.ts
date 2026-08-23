@@ -11,6 +11,7 @@ import {
   deriveEnrollmentState,
   type EnrollmentAggregate,
 } from "../src/lib/running-man/state";
+import type { EnrollmentState } from "../src/lib/running-man/types";
 
 const CHECKOUT_OPEN = new Date("2026-09-18T06:58:59.999Z");
 
@@ -87,6 +88,26 @@ test("a completed unreopened tier advances to the next price", () => {
   assert.equal(state.tierLadder[0].status, "complete");
 });
 
+test("a reviewed first-tier allocation pauses checkout instead of advancing to the next price", () => {
+  const state = deriveEnrollmentState(aggregate({
+    activePaidStudents: 2,
+    capacityConsumed: 3,
+    tiers: {
+      1: { activePaid: 2, allocationConsumed: 3, underReview: 1, activeHolds: 0 },
+      2: { activePaid: 0, allocationConsumed: 0, underReview: 0, activeHolds: 0 },
+      3: { activePaid: 0, allocationConsumed: 0, underReview: 0, activeHolds: 0 },
+    },
+  }));
+
+  assert.equal(state.enrollmentStatus, "capacity_under_review");
+  assert.equal(state.activeTier.index, 1);
+  assert.equal(state.activeTier.priceCents, 19700);
+  assert.equal(state.canStartCheckout, false);
+  assert.equal(state.tierLadder[0].status, "under_review");
+  assert.equal(state.tierLadder[1].status, "upcoming");
+  assert.match(state.currentCta.supportingCopy, /unavailable while enrollment is under review/i);
+});
+
 test("a hold on the last first-tier allocation pauses enrollment without advancing the price", () => {
   const state = deriveEnrollmentState(aggregate({
     activePaidStudents: 2,
@@ -103,6 +124,23 @@ test("a hold on the last first-tier allocation pauses enrollment without advanci
   assert.equal(state.activeTier.priceCents, 19700);
   assert.equal(state.canStartCheckout, false);
   assert.equal(state.currentCta.supportingCopy, "The final founding-price seat is temporarily held.");
+});
+
+test("a partial tier hold reduces CTA availability and identifies the held seat", () => {
+  const state = deriveEnrollmentState(aggregate({
+    activePaidStudents: 1,
+    capacityConsumed: 1,
+    tiers: {
+      1: { activePaid: 1, allocationConsumed: 1, underReview: 0, activeHolds: 1 },
+      2: { activePaid: 0, allocationConsumed: 0, underReview: 0, activeHolds: 0 },
+      3: { activePaid: 0, allocationConsumed: 0, underReview: 0, activeHolds: 0 },
+    },
+  }));
+
+  assert.equal(state.enrollmentStatus, "open");
+  assert.equal(state.canStartCheckout, true);
+  assert.equal(state.seatsRemaining, 10);
+  assert.equal(state.currentCta.supportingCopy, "1 of 3 claimed · 1 left (1 currently held).");
 });
 
 test("reviewed allocations consume capacity without being presented as paid students", () => {
@@ -154,6 +192,31 @@ test("the cutoff closes new enrollment even while a valid pre-cutoff session rem
   assert.equal(state.canStartCheckout, false);
   assert.equal(state.requiresPriceReconfirmation, true);
   assert.match(state.currentCta.supportingCopy, /new enrollment is closed/i);
+});
+
+test("a cohort filled by a resolved pre-deadline session remains sold out after the cutoff", () => {
+  const state = deriveEnrollmentState(aggregate({
+    now: new Date("2026-09-18T07:00:00.000Z"),
+    activePaidStudents: 12,
+    capacityConsumed: 12,
+    tiers: {
+      1: { activePaid: 3, allocationConsumed: 3, underReview: 0, activeHolds: 0 },
+      2: { activePaid: 3, allocationConsumed: 3, underReview: 0, activeHolds: 0 },
+      3: { activePaid: 6, allocationConsumed: 6, underReview: 0, activeHolds: 0 },
+    },
+    hasOpenPreDeadlineSession: false,
+  }));
+
+  assert.equal(state.enrollmentStatus, "sold_out");
+  assert.equal(state.currentCta.label, "Join the waitlist");
+  assert.equal(state.canStartCheckout, false);
+});
+
+test("the shared enrollment state contract exposes the client-safe derived state", () => {
+  const state: EnrollmentState = deriveEnrollmentState(aggregate());
+
+  assert.equal(state.activeTier.priceCents, 19700);
+  assert.equal(state.coachingStatus, "available");
 });
 
 test("eleven paid students and one reviewed allocation never becomes sold out or waitlist", () => {
