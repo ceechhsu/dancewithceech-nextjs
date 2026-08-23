@@ -14,6 +14,7 @@ export type ReserveCheckoutInput = {
   includeCoaching: boolean;
   termsVersion: string;
   attemptHash: string;
+  networkHash: string;
 };
 
 export type ReservationDecision =
@@ -67,6 +68,7 @@ export function createRunningManRepository(client: RunningManRpcClient) {
         p_include_coaching: input.includeCoaching,
         p_terms_version: input.termsVersion,
         p_attempt_hash: input.attemptHash,
+        p_network_hash: input.networkHash,
       });
       if (error) throwForError(error);
 
@@ -80,7 +82,7 @@ export function createRunningManRepository(client: RunningManRpcClient) {
         };
       }
 
-      if (["stale", "tier_held", "coaching_held", "capacity_under_review", "sold_out", "closed"].includes(resultCode)) {
+      if (["stale", "tier_held", "coaching_held", "coaching_sold_out", "coaching_under_review", "capacity_under_review", "sold_out", "closed", "selection_change_required", "stripe_expiry_verification_required", "rate_limited"].includes(resultCode)) {
         return reconfirmation(result);
       }
 
@@ -93,6 +95,52 @@ export function createRunningManRepository(client: RunningManRpcClient) {
         p_session_id: sessionId,
       });
       if (error) throwForError(error);
+    },
+
+    async getOrCreateCheckoutAttempt(input: {
+      attemptHash: string;
+      networkHash: string;
+      includeCoaching: boolean;
+    }): Promise<Record<string, unknown>> {
+      const { data, error } = await privateRpc("get_or_create_running_man_checkout_attempt", {
+        p_cohort_slug: COHORT.slug,
+        p_attempt_hash: input.attemptHash,
+        p_network_hash: input.networkHash,
+        p_include_coaching: input.includeCoaching,
+      });
+      if (error) throwForError(error);
+      return asRecord(data);
+    },
+
+    async replaceUnpaidAttemptSelection(input: {
+      attemptHash: string;
+      networkHash: string;
+      includeCoaching: boolean;
+    }): Promise<Record<string, unknown>> {
+      const { data, error } = await privateRpc("replace_running_man_unpaid_attempt_selection", {
+        p_cohort_slug: COHORT.slug,
+        p_attempt_hash: input.attemptHash,
+        p_network_hash: input.networkHash,
+        p_include_coaching: input.includeCoaching,
+      });
+      if (error) throwForError(error);
+      return asRecord(data);
+    },
+
+    async recoverCreatingReservation(reservationId: string): Promise<Record<string, unknown>> {
+      const { data, error } = await privateRpc("recover_running_man_creating_reservation", {
+        p_reservation_id: reservationId,
+      });
+      if (error) throwForError(error);
+      return asRecord(data);
+    },
+
+    async getEnrollmentAggregate(): Promise<Record<string, unknown>> {
+      const { data, error } = await privateRpc("get_running_man_enrollment_aggregate", {
+        p_cohort_slug: COHORT.slug,
+      });
+      if (error) throwForError(error);
+      return asRecord(data);
     },
 
     async applyStripeEventAtomically(input: {

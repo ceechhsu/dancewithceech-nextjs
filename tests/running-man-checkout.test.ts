@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
@@ -33,6 +34,7 @@ const reservationInput = {
   includeCoaching: false,
   termsVersion: "running-man-2026-08-22",
   attemptHash: "test-attempt-hash",
+  networkHash: "test-network-hash",
 };
 
 test("a stale confirmed tier returns the latest state without a reservation", async () => {
@@ -118,6 +120,84 @@ test("a direct client Price ID is ignored", async () => {
     "p_cohort_slug",
     "p_expected_tier",
     "p_include_coaching",
+    "p_network_hash",
     "p_terms_version",
   ]);
+});
+
+test("the repository sends the hashed network signal to the only atomic reservation RPC", async () => {
+  const { client, calls } = fakeClient([{
+    result_code: "reserved",
+    reservation_id: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9",
+    expires_at: "2026-09-01T00:30:00.000Z",
+  }]);
+  const repository = createRunningManRepository(client);
+
+  await repository.reserveCheckout(reservationInput);
+
+  assert.equal(calls[0].fn, "reserve_running_man_checkout");
+  assert.equal(calls[0].args.p_network_hash, "test-network-hash");
+});
+
+test("the repository has private recovery, attempt, selection, and aggregate boundaries", async () => {
+  const { client, calls } = fakeClient([
+    { attempt_id: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9" },
+    { attempt_id: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9", selected_coaching: true },
+    { result_code: "recovered" },
+    { active_paid_students: 2 },
+  ]);
+  const repository = createRunningManRepository(client);
+
+  await repository.getOrCreateCheckoutAttempt({ attemptHash: "attempt", networkHash: "network", includeCoaching: false });
+  await repository.replaceUnpaidAttemptSelection({ attemptHash: "attempt", networkHash: "network", includeCoaching: true });
+  await repository.recoverCreatingReservation("c7211c55-0e09-4a2f-b1cb-8d98b9501ee9");
+  await repository.getEnrollmentAggregate();
+
+  assert.deepEqual(calls.map((call) => call.fn), [
+    "get_or_create_running_man_checkout_attempt",
+    "replace_running_man_unpaid_attempt_selection",
+    "recover_running_man_creating_reservation",
+    "get_running_man_enrollment_aggregate",
+  ]);
+  assert.equal(calls[0].args.p_network_hash, "network");
+  assert.equal(calls[1].args.p_include_coaching, true);
+});
+
+test("a valid pre-deadline session can be reused after the cutoff", async () => {
+  const { client } = fakeClient([{
+    result_code: "existing_open",
+    reservation_id: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9",
+    expires_at: "2026-09-18T07:28:00.000Z",
+  }]);
+  const repository = createRunningManRepository(client);
+
+  const result = await repository.reserveCheckout(reservationInput);
+
+  assert.deepEqual(result, {
+    kind: "reserved",
+    reservationId: "c7211c55-0e09-4a2f-b1cb-8d98b9501ee9",
+    expiresAt: "2026-09-18T07:28:00.000Z",
+  });
+});
+
+test("the migration keeps an earlier tier held and never advances its price", async () => {
+  const migration = await readFile(new URL("../supabase/migrations/20260823004430_running_man_enrollment.sql", import.meta.url), "utf8");
+
+  assert.match(migration, /v_allocations \+ v_holds = v_capacity and v_allocations < v_capacity[\s\S]*?result_code', 'tier_held'/);
+  assert.match(migration, /v_active_tier := v_tier;[\s\S]*?exit;/);
+});
+
+test("the migration lets a paid completion win over expiry without overwriting review states", async () => {
+  const migration = await readFile(new URL("../supabase/migrations/20260823004430_running_man_enrollment.sql", import.meta.url), "utf8");
+
+  assert.match(migration, /v_old_state in \('creating_checkout', 'checkout_open', 'released'\).*?v_new_state := 'paid'/);
+  assert.match(migration, /p_payment_status = 'paid' and v_reservation\.state in \('creating_checkout', 'checkout_open', 'released'\)/);
+});
+
+test("the migration records refund review only after a full trusted refund signal", async () => {
+  const migration = await readFile(new URL("../supabase/migrations/20260823004430_running_man_enrollment.sql", import.meta.url), "utf8");
+
+  assert.match(migration, /v_full_refund := coalesce\(\(p_payload ->> 'amount_refunded'\)::bigint/);
+  assert.match(migration, /if v_full_refund and v_old_state/);
+  assert.match(migration, /v_reservation\.state <> 'refund_review' or v_reservation\.fully_refunded_at is null/);
 });

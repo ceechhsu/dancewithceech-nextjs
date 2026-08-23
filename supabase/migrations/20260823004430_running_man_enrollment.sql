@@ -27,6 +27,7 @@ create table if not exists private.running_man_checkout_attempts (
   id uuid primary key default gen_random_uuid(),
   cohort_id uuid not null references private.running_man_cohorts(id) on delete restrict,
   attempt_hash text not null,
+  network_hash text not null,
   selected_coaching boolean not null default false,
   first_requested_at timestamptz not null default now(),
   last_requested_at timestamptz not null default now(),
@@ -136,7 +137,8 @@ create or replace function private.reserve_running_man_checkout(
   p_expected_tier smallint,
   p_include_coaching boolean,
   p_terms_version text,
-  p_attempt_hash text
+  p_attempt_hash text,
+  p_network_hash text
 ) returns jsonb
 language plpgsql
 security definer
@@ -154,11 +156,16 @@ declare
   v_under_review integer;
   v_active_tier smallint := null;
   v_active_paid integer;
-  v_coaching_used integer;
+  v_coaching_paid integer;
+  v_coaching_under_review integer;
+  v_coaching_holds integer;
+  v_network_request_count integer;
   v_reservation_id uuid;
   v_price integer;
 begin
-  if p_expected_tier not between 1 and 3 or length(trim(p_attempt_hash)) < 32 then
+  if p_expected_tier not between 1 and 3
+    or length(trim(p_attempt_hash)) < 32
+    or length(trim(p_network_hash)) < 32 then
     raise exception 'invalid checkout reservation request' using errcode = '22023';
   end if;
 
@@ -169,18 +176,16 @@ begin
   if not found then
     raise exception 'unknown cohort' using errcode = 'P0002';
   end if;
-  if v_now >= v_cohort.checkout_cutoff_at then
-    return jsonb_build_object('result_code', 'closed', 'enrollment_state', jsonb_build_object('status', 'closed'));
-  end if;
   if p_terms_version <> v_cohort.terms_version then
     return jsonb_build_object('result_code', 'stale', 'enrollment_state', jsonb_build_object('termsVersion', v_cohort.terms_version));
   end if;
 
   insert into private.running_man_checkout_attempts (
-    cohort_id, attempt_hash, selected_coaching, last_requested_at, request_window_started_at, request_count_in_window
-  ) values (v_cohort.id, p_attempt_hash, p_include_coaching, v_now, v_now, 1)
+    cohort_id, attempt_hash, network_hash, selected_coaching, last_requested_at, request_window_started_at, request_count_in_window
+  ) values (v_cohort.id, p_attempt_hash, p_network_hash, p_include_coaching, v_now, v_now, 1)
   on conflict (cohort_id, attempt_hash) do update
-  set selected_coaching = excluded.selected_coaching,
+  set network_hash = excluded.network_hash,
+      selected_coaching = excluded.selected_coaching,
       last_requested_at = v_now,
       request_count_in_window = case
         when private.running_man_checkout_attempts.request_window_started_at <= v_now - interval '5 minutes'
@@ -208,6 +213,39 @@ begin
       'expires_at', v_existing.expires_at
     );
   end if;
+  if found and v_existing.expires_at > v_now
+    and v_existing.include_coaching <> p_include_coaching then
+    return jsonb_build_object(
+      'result_code', 'selection_change_required',
+      'enrollment_state', jsonb_build_object('activeTier', v_existing.tier_index)
+    );
+  end if;
+  if found and v_existing.expires_at <= v_now then
+    if v_existing.state = 'creating_checkout' and v_existing.stripe_session_id is null then
+      update private.running_man_reservations
+      set state = 'released', released_at = v_now, updated_at = v_now
+      where id = v_existing.id;
+      insert into private.running_man_audit_events (cohort_id, reservation_id, action, old_state, new_state)
+      values (v_cohort.id, v_existing.id, 'expired_unattached_reservation_released', 'creating_checkout', 'released');
+    else
+      return jsonb_build_object(
+        'result_code', 'stripe_expiry_verification_required',
+        'enrollment_state', jsonb_build_object('activeTier', v_existing.tier_index)
+      );
+    end if;
+  end if;
+  if v_now >= v_cohort.checkout_cutoff_at then
+    return jsonb_build_object('result_code', 'closed', 'enrollment_state', jsonb_build_object('status', 'closed'));
+  end if;
+
+  select coalesce(sum(request_count_in_window), 0) into v_network_request_count
+  from private.running_man_checkout_attempts
+  where cohort_id = v_cohort.id
+    and network_hash = p_network_hash
+    and request_window_started_at > v_now - interval '5 minutes';
+  if v_network_request_count > 12 then
+    return jsonb_build_object('result_code', 'rate_limited', 'enrollment_state', jsonb_build_object('status', 'unavailable'));
+  end if;
 
   for v_tier in 1..3 loop
     v_capacity := case v_tier when 1 then 3 when 2 then 3 else 6 end;
@@ -219,6 +257,12 @@ begin
     from private.running_man_reservations
     where cohort_id = v_cohort.id and tier_index = v_tier;
 
+    if v_allocations + v_holds = v_capacity and v_allocations < v_capacity then
+      if v_under_review > 0 then
+        return jsonb_build_object('result_code', 'capacity_under_review', 'enrollment_state', jsonb_build_object('activeTier', v_tier));
+      end if;
+      return jsonb_build_object('result_code', 'tier_held', 'enrollment_state', jsonb_build_object('activeTier', v_tier));
+    end if;
     if v_allocations + v_holds < v_capacity then
       v_active_tier := v_tier;
       exit;
@@ -256,7 +300,11 @@ begin
   end if;
 
   if p_include_coaching then
-    select count(*) into v_coaching_used
+    select
+      count(*) filter (where state = 'paid'),
+      count(*) filter (where state in ('refund_review', 'disputed')),
+      count(*) filter (where state in ('creating_checkout', 'checkout_open') and expires_at > v_now)
+    into v_coaching_paid, v_coaching_under_review, v_coaching_holds
     from private.running_man_reservations
     where cohort_id = v_cohort.id
       and include_coaching
@@ -264,7 +312,13 @@ begin
         state in ('paid', 'refund_review', 'disputed')
         or (state in ('creating_checkout', 'checkout_open') and expires_at > v_now)
       );
-    if v_coaching_used >= v_cohort.coaching_seat_capacity then
+    if v_coaching_paid >= v_cohort.coaching_seat_capacity then
+      return jsonb_build_object('result_code', 'coaching_sold_out', 'enrollment_state', jsonb_build_object('coachingStatus', 'sold_out'));
+    end if;
+    if v_coaching_under_review > 0 and v_coaching_paid + v_coaching_under_review >= v_cohort.coaching_seat_capacity then
+      return jsonb_build_object('result_code', 'coaching_under_review', 'enrollment_state', jsonb_build_object('coachingStatus', 'under_review'));
+    end if;
+    if v_coaching_holds > 0 and v_coaching_paid + v_coaching_holds >= v_cohort.coaching_seat_capacity then
       return jsonb_build_object('result_code', 'coaching_held', 'enrollment_state', jsonb_build_object('coachingStatus', 'held'));
     end if;
   end if;
@@ -317,6 +371,152 @@ begin
 end;
 $$;
 
+create or replace function private.get_or_create_running_man_checkout_attempt(
+  p_cohort_slug text,
+  p_attempt_hash text,
+  p_network_hash text,
+  p_include_coaching boolean
+) returns jsonb
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_now timestamptz := now();
+  v_cohort private.running_man_cohorts%rowtype;
+  v_attempt private.running_man_checkout_attempts%rowtype;
+  v_network_request_count integer;
+begin
+  if length(trim(p_attempt_hash)) < 32 or length(trim(p_network_hash)) < 32 then
+    raise exception 'invalid checkout attempt' using errcode = '22023';
+  end if;
+  select * into v_cohort from private.running_man_cohorts where slug = p_cohort_slug for update;
+  if not found then raise exception 'unknown cohort' using errcode = 'P0002'; end if;
+  insert into private.running_man_checkout_attempts (
+    cohort_id, attempt_hash, network_hash, selected_coaching, last_requested_at, request_window_started_at, request_count_in_window
+  ) values (v_cohort.id, p_attempt_hash, p_network_hash, p_include_coaching, v_now, v_now, 1)
+  on conflict (cohort_id, attempt_hash) do update
+  set network_hash = excluded.network_hash,
+      selected_coaching = excluded.selected_coaching,
+      last_requested_at = v_now,
+      request_count_in_window = case when private.running_man_checkout_attempts.request_window_started_at <= v_now - interval '5 minutes' then 1 else private.running_man_checkout_attempts.request_count_in_window + 1 end,
+      request_window_started_at = case when private.running_man_checkout_attempts.request_window_started_at <= v_now - interval '5 minutes' then v_now else private.running_man_checkout_attempts.request_window_started_at end,
+      updated_at = v_now
+  returning * into v_attempt;
+  select coalesce(sum(request_count_in_window), 0) into v_network_request_count
+  from private.running_man_checkout_attempts
+  where cohort_id = v_cohort.id and network_hash = p_network_hash and request_window_started_at > v_now - interval '5 minutes';
+  if v_network_request_count > 12 then
+    return jsonb_build_object('result_code', 'rate_limited');
+  end if;
+  return jsonb_build_object('result_code', 'attempt_ready', 'attempt_id', v_attempt.id, 'selected_coaching', v_attempt.selected_coaching);
+end;
+$$;
+
+create or replace function private.replace_running_man_unpaid_attempt_selection(
+  p_cohort_slug text,
+  p_attempt_hash text,
+  p_network_hash text,
+  p_include_coaching boolean
+) returns jsonb
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_cohort private.running_man_cohorts%rowtype;
+  v_attempt private.running_man_checkout_attempts%rowtype;
+  v_reservation private.running_man_reservations%rowtype;
+begin
+  select * into v_cohort from private.running_man_cohorts where slug = p_cohort_slug for update;
+  if not found then raise exception 'unknown cohort' using errcode = 'P0002'; end if;
+  select * into v_attempt from private.running_man_checkout_attempts
+  where cohort_id = v_cohort.id and attempt_hash = p_attempt_hash for update;
+  if not found then raise exception 'checkout attempt not found' using errcode = 'P0002'; end if;
+  select * into v_reservation from private.running_man_reservations
+  where checkout_attempt_id = v_attempt.id and state in ('creating_checkout', 'checkout_open') for update;
+  if found and v_reservation.include_coaching = p_include_coaching then
+    return jsonb_build_object('result_code', 'unchanged', 'reservation_id', v_reservation.id);
+  end if;
+  if found and v_reservation.state = 'checkout_open' then
+    return jsonb_build_object('result_code', 'stripe_expiry_verification_required', 'reservation_id', v_reservation.id);
+  end if;
+  if found then
+    update private.running_man_reservations
+    set state = 'released', released_at = now(), updated_at = now()
+    where id = v_reservation.id;
+    insert into private.running_man_audit_events (cohort_id, reservation_id, action, old_state, new_state, evidence)
+    values (v_cohort.id, v_reservation.id, 'unattached_reservation_replaced', v_reservation.state, 'released', jsonb_build_object('includeCoaching', p_include_coaching));
+  end if;
+  update private.running_man_checkout_attempts
+  set network_hash = p_network_hash, selected_coaching = p_include_coaching, active_reservation_id = null, last_requested_at = now(), updated_at = now()
+  where id = v_attempt.id;
+  return jsonb_build_object('result_code', 'selection_updated');
+end;
+$$;
+
+create or replace function private.recover_running_man_creating_reservation(p_reservation_id uuid)
+returns jsonb
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_reservation private.running_man_reservations%rowtype;
+begin
+  select * into v_reservation from private.running_man_reservations where id = p_reservation_id for update;
+  if not found then raise exception 'reservation not found' using errcode = 'P0002'; end if;
+  if v_reservation.state <> 'creating_checkout' then
+    return jsonb_build_object('result_code', 'not_creating', 'state', v_reservation.state);
+  end if;
+  if v_reservation.stripe_session_id is not null then
+    return jsonb_build_object('result_code', 'session_attached', 'session_id', v_reservation.stripe_session_id);
+  end if;
+  if v_reservation.created_at > now() - interval '5 minutes' then
+    return jsonb_build_object('result_code', 'scan_required');
+  end if;
+  update private.running_man_reservations set state = 'released', released_at = now(), updated_at = now() where id = p_reservation_id;
+  insert into private.running_man_audit_events (cohort_id, reservation_id, action, old_state, new_state)
+  values (v_reservation.cohort_id, p_reservation_id, 'creating_reservation_recovery_failed', 'creating_checkout', 'released');
+  return jsonb_build_object('result_code', 'released_after_recovery_grace');
+end;
+$$;
+
+create or replace function private.get_running_man_enrollment_aggregate(p_cohort_slug text)
+returns jsonb
+language sql
+security definer
+set search_path = ''
+as $$
+  with cohort as (
+    select * from private.running_man_cohorts where slug = p_cohort_slug
+  ), reservation_counts as (
+    select r.tier_index,
+      count(*) filter (where r.state = 'paid') as active_paid,
+      count(*) filter (where r.state in ('paid', 'refund_review', 'disputed')) as allocation_consumed,
+      count(*) filter (where r.state in ('refund_review', 'disputed')) as under_review,
+      count(*) filter (where r.state in ('creating_checkout', 'checkout_open') and r.expires_at > now()) as active_holds
+    from private.running_man_reservations r join cohort c on c.id = r.cohort_id
+    group by r.tier_index
+  ), coaching_counts as (
+    select count(*) filter (where r.state = 'paid' and r.include_coaching) as active_paid,
+      count(*) filter (where r.state in ('refund_review', 'disputed') and r.include_coaching) as under_review,
+      count(*) filter (where r.state in ('creating_checkout', 'checkout_open') and r.expires_at > now() and r.include_coaching) as active_holds
+    from private.running_man_reservations r join cohort c on c.id = r.cohort_id
+  )
+  select jsonb_build_object(
+    'now', now(),
+    'activePaidStudents', coalesce((select sum(active_paid) from reservation_counts), 0),
+    'capacityConsumed', coalesce((select sum(allocation_consumed) from reservation_counts), 0),
+    'tiers', jsonb_build_object(
+      '1', jsonb_build_object('activePaid', coalesce((select active_paid from reservation_counts where tier_index = 1), 0), 'allocationConsumed', coalesce((select allocation_consumed from reservation_counts where tier_index = 1), 0), 'underReview', coalesce((select under_review from reservation_counts where tier_index = 1), 0), 'activeHolds', coalesce((select active_holds from reservation_counts where tier_index = 1), 0)),
+      '2', jsonb_build_object('activePaid', coalesce((select active_paid from reservation_counts where tier_index = 2), 0), 'allocationConsumed', coalesce((select allocation_consumed from reservation_counts where tier_index = 2), 0), 'underReview', coalesce((select under_review from reservation_counts where tier_index = 2), 0), 'activeHolds', coalesce((select active_holds from reservation_counts where tier_index = 2), 0)),
+      '3', jsonb_build_object('activePaid', coalesce((select active_paid from reservation_counts where tier_index = 3), 0), 'allocationConsumed', coalesce((select allocation_consumed from reservation_counts where tier_index = 3), 0), 'underReview', coalesce((select under_review from reservation_counts where tier_index = 3), 0), 'activeHolds', coalesce((select active_holds from reservation_counts where tier_index = 3), 0))
+    ),
+    'coaching', jsonb_build_object('activePaid', (select active_paid from coaching_counts), 'underReview', (select under_review from coaching_counts), 'activeHolds', (select active_holds from coaching_counts))
+  );
+$$;
+
 create or replace function private.apply_running_man_stripe_event(
   p_event_id text,
   p_event_type text,
@@ -334,6 +534,7 @@ declare
   v_old_state text;
   v_new_state text;
   v_event_inserted boolean;
+  v_full_refund boolean := false;
 begin
   select * into v_reservation
   from private.running_man_reservations
@@ -354,11 +555,16 @@ begin
   v_old_state := v_reservation.state;
   v_new_state := v_old_state;
   if p_event_type in ('checkout.session.completed', 'checkout.session.async_payment_succeeded') then
-    if v_old_state in ('creating_checkout', 'checkout_open') then v_new_state := 'paid'; end if;
+    if v_old_state in ('creating_checkout', 'checkout_open', 'released') then v_new_state := 'paid'; end if;
   elsif p_event_type = 'checkout.session.expired' then
     if v_old_state in ('creating_checkout', 'checkout_open') then v_new_state := 'released'; end if;
   elsif p_event_type = 'charge.refunded' then
-    if v_old_state in ('creating_checkout', 'checkout_open', 'paid') then v_new_state := 'refund_review'; end if;
+    v_full_refund := coalesce((p_payload ->> 'amount_refunded')::bigint, -1)
+      = coalesce((p_payload ->> 'amount')::bigint, -2)
+      and coalesce((p_payload ->> 'amount')::bigint, 0) > 0;
+    if v_full_refund and v_old_state in ('creating_checkout', 'checkout_open', 'paid', 'released') then
+      v_new_state := 'refund_review';
+    end if;
   elsif p_event_type in ('charge.dispute.created', 'charge.dispute.closed') then
     if v_old_state in ('creating_checkout', 'checkout_open', 'paid', 'refund_review') then v_new_state := 'disputed'; end if;
   else
@@ -370,7 +576,7 @@ begin
       stripe_payment_intent_id = coalesce(p_payment_intent_id, stripe_payment_intent_id),
       stripe_charge_id = coalesce(p_charge_id, stripe_charge_id),
       state = v_new_state,
-      fully_refunded_at = case when p_event_type = 'charge.refunded' and v_new_state = 'refund_review' then now() else fully_refunded_at end,
+      fully_refunded_at = case when p_event_type = 'charge.refunded' and v_full_refund and v_new_state = 'refund_review' then now() else fully_refunded_at end,
       released_at = case when v_new_state = 'released' then now() else released_at end,
       updated_at = now()
   where id = v_reservation.id;
@@ -400,7 +606,7 @@ begin
   select * into v_reservation from private.running_man_reservations where id = p_reservation_id for update;
   if not found then raise exception 'reservation not found' using errcode = 'P0002'; end if;
   v_new_state := v_reservation.state;
-  if p_payment_status = 'paid' then v_new_state := 'paid';
+  if p_payment_status = 'paid' and v_reservation.state in ('creating_checkout', 'checkout_open', 'released') then v_new_state := 'paid';
   elsif p_stripe_status = 'expired' and p_payment_status = 'unpaid' and v_reservation.state in ('creating_checkout', 'checkout_open') then v_new_state := 'released';
   end if;
   update private.running_man_reservations
@@ -477,15 +683,23 @@ begin
 end;
 $$;
 
-revoke all on function private.reserve_running_man_checkout(text, smallint, boolean, text, text) from public, anon, authenticated;
+revoke all on function private.reserve_running_man_checkout(text, smallint, boolean, text, text, text) from public, anon, authenticated;
 revoke all on function private.attach_running_man_session(uuid, text) from public, anon, authenticated;
+revoke all on function private.get_or_create_running_man_checkout_attempt(text, text, text, boolean) from public, anon, authenticated;
+revoke all on function private.replace_running_man_unpaid_attempt_selection(text, text, text, boolean) from public, anon, authenticated;
+revoke all on function private.recover_running_man_creating_reservation(uuid) from public, anon, authenticated;
+revoke all on function private.get_running_man_enrollment_aggregate(text) from public, anon, authenticated;
 revoke all on function private.apply_running_man_stripe_event(text, text, text, text, text, jsonb) from public, anon, authenticated;
 revoke all on function private.reconcile_running_man_reservation(uuid, text, text, text, text, text) from public, anon, authenticated;
 revoke all on function private.evaluate_running_man_minimum(text) from public, anon, authenticated;
 revoke all on function private.reopen_running_man_reservation(uuid, text, text) from public, anon, authenticated;
 
-grant execute on function private.reserve_running_man_checkout(text, smallint, boolean, text, text) to service_role;
+grant execute on function private.reserve_running_man_checkout(text, smallint, boolean, text, text, text) to service_role;
 grant execute on function private.attach_running_man_session(uuid, text) to service_role;
+grant execute on function private.get_or_create_running_man_checkout_attempt(text, text, text, boolean) to service_role;
+grant execute on function private.replace_running_man_unpaid_attempt_selection(text, text, text, boolean) to service_role;
+grant execute on function private.recover_running_man_creating_reservation(uuid) to service_role;
+grant execute on function private.get_running_man_enrollment_aggregate(text) to service_role;
 grant execute on function private.apply_running_man_stripe_event(text, text, text, text, text, jsonb) to service_role;
 grant execute on function private.reconcile_running_man_reservation(uuid, text, text, text, text, text) to service_role;
 grant execute on function private.evaluate_running_man_minimum(text) to service_role;
