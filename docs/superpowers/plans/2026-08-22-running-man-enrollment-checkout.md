@@ -323,6 +323,7 @@ Test these exact cases:
 test("creates exactly one fixed cohort line item for a valid $197 reservation", async () => { /* ... */ });
 test("adds the fixed coaching line item only when the reservation selected coaching", async () => { /* ... */ });
 test("uses reservation ID as Stripe idempotency key and metadata", async () => { /* ... */ });
+test("writes trusted reservation metadata to the PaymentIntent for pre-completion refund recovery", async () => { /* ... */ });
 test("reuses a matching active browser attempt without a second hold", async () => { /* ... */ });
 test("issues a new signed attempt cookie before first checkout", async () => { /* ... */ });
 test("changing coaching selection expires the prior unpaid session before creating a replacement", async () => { /* ... */ });
@@ -346,7 +347,7 @@ Expected: FAIL because the Stripe client and checkout service do not exist.
 2. reuse a same-selection open Session for repeated clicks; if coaching selection changes, retrieve the prior Session, finalize if paid, otherwise expire it in Stripe, mark/release its reservation only after Stripe verifies expiry/unpaid, and then create one replacement hold;
 3. call the atomic repository reservation function with tier/coaching/terms expectations;
 4. return a typed reconfirmation result before any reservation on stale input;
-5. create a Stripe hosted `mode: "payment"` Session with only card-based immediate payment methods, fixed quantities, no promotion codes, automatic tax disabled, name/email collection enabled, `expires_at` 30 minutes ahead, metadata containing only trusted identifiers, and success/cancel URLs on Dance With Ceech;
+5. create a Stripe hosted `mode: "payment"` Session with only card-based immediate payment methods, fixed quantities, no promotion codes, automatic tax disabled, name/email collection enabled, `expires_at` 30 minutes ahead, metadata containing only trusted identifiers, **and the same server-generated reservation ID/cohort slug in `payment_intent_data.metadata`** so pre-completion refund/dispute events can be resolved safely; use Dance With Ceech success/cancel URLs;
 6. use reservation ID as Stripe idempotency key;
 7. attach the returned Session ID before returning `{ checkoutUrl }`; and
 8. release the reservation if Session creation fails, while retrying the same idempotent request if the database write after Session creation fails.
