@@ -265,6 +265,35 @@ export function createRunningManRepository(client: RunningManRpcClient) {
       return asRecord(data);
     },
 
+    async attachRecoveredRunningManSession(input: { reservationId: string; sessionId: string }): Promise<Record<string, unknown>> {
+      const { data, error } = await privateRpc("attach_recovered_running_man_session", {
+        p_reservation_id: input.reservationId,
+        p_session_id: input.sessionId,
+      });
+      if (error) throwForError(error);
+      return asRecord(data);
+    },
+
+    async claimRunningManOwnerAlert(input: { dedupeKey: string; kind: string; payload: Record<string, unknown> }): Promise<"send" | "sent"> {
+      const { data, error } = await privateRpc("claim_running_man_owner_alert", {
+        p_dedupe_key: input.dedupeKey,
+        p_kind: input.kind,
+        p_payload: input.payload,
+      });
+      if (error) throwForError(error);
+      const result = asRecord(data);
+      const action = asString(result.action, "an owner-alert action");
+      if (action === "send" || action === "sent") return action;
+      throw new RunningManRepositoryError("The enrollment service did not return a valid owner-alert action.");
+    },
+
+    async markRunningManOwnerAlertSent(dedupeKey: string): Promise<void> {
+      const { error } = await privateRpc("mark_running_man_owner_alert_sent", {
+        p_dedupe_key: dedupeKey,
+      });
+      if (error) throwForError(error);
+    },
+
     async findRunningManReservationByStripe(input: {
       chargeId?: string | null;
       paymentIntentId?: string | null;

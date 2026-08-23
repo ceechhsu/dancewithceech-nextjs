@@ -45,18 +45,29 @@ type StripeLookupRepository = {
 type RecoveryRepository = {
   listRecoverableRunningManHolds?: () => Promise<Array<{ reservationId: string }>>;
   releaseMissingRunningManHold?: (reservationId: string) => Promise<Record<string, unknown>>;
+  attachRecoveredRunningManSession?: (input: { reservationId: string; sessionId: string }) => Promise<Record<string, unknown>>;
 };
+type OwnerAlertRepository = {
+  claimRunningManOwnerAlert?: (input: { dedupeKey: string; kind: string; payload: Record<string, unknown> }) => Promise<"send" | "sent">;
+  markRunningManOwnerAlertSent?: (dedupeKey: string) => Promise<void>;
+};
+
+export type RunningManOwnerAlert =
+  | { kind: "refund_review"; eventId: string; partial: boolean }
+  | { kind: "minimum_enrollment_under_8"; activePaid: number }
+  | { kind: "invalid_stripe_payload"; eventId: string; eventType: string };
 
 export type RunningManWebhookDependencies = {
   priceIds: Record<TierIndex, string> & { coaching: string };
-  repository: WebhookRepository & RecoveryRepository & StripeLookupRepository;
+  repository: WebhookRepository & RecoveryRepository & StripeLookupRepository & OwnerAlertRepository;
   expectedLivemode?: boolean;
+  notifyOwner?: (alert: RunningManOwnerAlert) => Promise<void>;
   stripe: {
     checkout: {
       sessions: {
         retrieve(sessionId: string): Promise<StripeSession>;
         listLineItems(sessionId: string, params?: { limit: number; starting_after?: string }): Promise<{ data: StripeLineItem[]; has_more: boolean }>;
-        list(params?: { limit: number; starting_after?: string }): Promise<{ data: StripeSession[]; has_more: boolean }>;
+        list(params?: { limit: number; starting_after?: string; created?: { gte: number } }): Promise<{ data: StripeSession[]; has_more: boolean }>;
       };
     };
     charges: { retrieve(chargeId: string): Promise<StripeCharge> };
@@ -81,6 +92,12 @@ export function hasRunningManCronAuthorization(headers: Headers, secret: string 
   return actualBuffer.length === expectedBuffer.length && timingSafeEqual(actualBuffer, expectedBuffer);
 }
 
+export function parseRunningManStripeLivemode(value: string | undefined): boolean {
+  if (value === "true") return true;
+  if (value === "false") return false;
+  throw new RunningManWebhookValidationError("RUNNING_MAN_STRIPE_LIVEMODE must be explicitly true or false.");
+}
+
 const RESERVATION_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const SUPPORTED_EVENT_TYPES = new Set([
   "checkout.session.completed",
@@ -90,6 +107,8 @@ const SUPPORTED_EVENT_TYPES = new Set([
   "charge.dispute.created",
   "charge.dispute.closed",
 ]);
+const MAX_RECONCILIATION_PAGES = 10;
+const RECONCILIATION_LOOKBACK_SECONDS = 7 * 24 * 60 * 60;
 
 function requiredReservationId(metadata: Metadata): string {
   const reservationId = metadata.running_man_reservation_id;
@@ -210,8 +229,31 @@ function eventPayload(input: { id: string; paymentStatus?: string; amountTotal?:
 
 function validateMode(dependencies: RunningManWebhookDependencies, event: StripeEvent): void {
   if (dependencies.expectedLivemode !== undefined && event.livemode !== dependencies.expectedLivemode) {
-    throw new RunningManWebhookValidationError("Stripe event mode does not match this deployment.", true);
+    throw new RunningManWebhookValidationError("Stripe event mode does not match this deployment.");
   }
+}
+
+function ownerAlertKey(alert: RunningManOwnerAlert): string {
+  if (alert.kind === "minimum_enrollment_under_8") return `minimum:${COHORT.slug}`;
+  if (alert.kind === "refund_review") return `refund:${alert.eventId}`;
+  return `invalid:${alert.eventId}`;
+}
+
+export async function notifyRunningManOwner(dependencies: RunningManWebhookDependencies, alert: RunningManOwnerAlert): Promise<void> {
+  if (!dependencies.notifyOwner) return;
+  const dedupeKey = ownerAlertKey(alert);
+  if (dependencies.repository.claimRunningManOwnerAlert) {
+    const claim = await dependencies.repository.claimRunningManOwnerAlert({
+      dedupeKey,
+      kind: alert.kind,
+      payload: alert as Record<string, unknown>,
+    });
+    if (claim === "sent") return;
+    await dependencies.notifyOwner(alert);
+    await dependencies.repository.markRunningManOwnerAlertSent?.(dedupeKey);
+    return;
+  }
+  await dependencies.notifyOwner(alert);
 }
 
 export async function finalizeRunningManStripeEvent(
@@ -219,6 +261,25 @@ export async function finalizeRunningManStripeEvent(
   event: StripeEvent,
 ): Promise<{ kind: "applied" | "audit_only" | "ignored" }> {
   if (!SUPPORTED_EVENT_TYPES.has(event.type)) return { kind: "ignored" };
+  if (dependencies.expectedLivemode !== undefined && event.livemode !== dependencies.expectedLivemode) return { kind: "ignored" };
+  try {
+    return await finalizeSupportedRunningManStripeEvent(dependencies, event);
+  } catch (error) {
+    // Checkout sessions expose their own metadata, so an unmarked one is
+    // conclusively another product. Charge/dispute objects often do not carry
+    // that metadata; those remain retryable until their PaymentIntent or the
+    // persisted Stripe identifiers can resolve them safely.
+    if (error instanceof RunningManWebhookValidationError && !error.identifiedRunningMan && event.type.startsWith("checkout.session.")) {
+      return { kind: "ignored" };
+    }
+    throw error;
+  }
+}
+
+async function finalizeSupportedRunningManStripeEvent(
+  dependencies: RunningManWebhookDependencies,
+  event: StripeEvent,
+): Promise<{ kind: "applied" | "audit_only" | "ignored" }> {
   validateMode(dependencies, event);
 
   if (event.type.startsWith("checkout.session.")) {
@@ -227,10 +288,10 @@ export async function finalizeRunningManStripeEvent(
     const { session } = await verifiedRunningManSession(dependencies, sessionId);
     if (event.type === "checkout.session.expired") {
       if (session.status !== "expired" || session.payment_status !== "unpaid") {
-        throw new RunningManWebhookValidationError("Stripe session expiry is not verified as expired and unpaid.", true);
+        throw new RunningManWebhookValidationError("Stripe session expiry is not verified as expired and unpaid.", true, true);
       }
     } else if (session.status !== "complete" || session.payment_status !== "paid") {
-      throw new RunningManWebhookValidationError("Stripe checkout completion is not verified as paid.", true);
+      throw new RunningManWebhookValidationError("Stripe checkout completion is not verified as paid.", true, true);
     }
     await dependencies.repository.applyStripeEventAtomically({
       eventId: event.id,
@@ -261,6 +322,10 @@ export async function finalizeRunningManStripeEvent(
     chargeId: charge.id,
     payload: eventPayload({ id: charge.id, amount: charge.amount, amountRefunded: charge.amount_refunded }),
   });
+  // The outbox claim deduplicates delivered alerts and allows a pending alert
+  // to be retried after a delivery failure, even when Stripe redelivers an
+  // event the inventory RPC has already deduplicated.
+  await notifyRunningManOwner(dependencies, { kind: "refund_review", eventId: event.id, partial: isPartialRefund });
   return { kind: isPartialRefund ? "audit_only" : "applied" };
 }
 
@@ -279,9 +344,11 @@ export async function reconcileRunningManStripeSessions(
   let unsettled = false;
   const observedReservationIds = new Set<string>();
   let completedScan = false;
-  for (let page = 0; page < 100; page += 1) {
+  const reconcileAfter = Math.floor(Date.now() / 1000) - RECONCILIATION_LOOKBACK_SECONDS;
+  for (let page = 0; page < MAX_RECONCILIATION_PAGES; page += 1) {
     const response = await dependencies.stripe.checkout.sessions.list({
       limit: 100,
+      created: { gte: reconcileAfter },
       ...(startingAfter ? { starting_after: startingAfter } : {}),
     });
     for (const listed of response.data) {
@@ -315,6 +382,11 @@ export async function reconcileRunningManStripeSessions(
         });
         reconciled += 1;
       } else {
+        await dependencies.repository.attachRecoveredRunningManSession?.({
+          reservationId,
+          sessionId: session.id,
+        });
+        reconciled += 1;
         unsettled = true;
       }
     }
@@ -339,6 +411,9 @@ export async function reconcileRunningManStripeSessions(
     }
   }
   if (unsettled) return { scanned, reconciled, minimumEvaluated: false };
-  await dependencies.repository.evaluateMinimumEnrollment();
+  const minimum = await dependencies.repository.evaluateMinimumEnrollment();
+  if (minimum.result_code === "owner_notification_required" && typeof minimum.activePaid === "number" && minimum.activePaid < 8) {
+    await notifyRunningManOwner(dependencies, { kind: "minimum_enrollment_under_8", activePaid: minimum.activePaid });
+  }
   return { scanned, reconciled, minimumEvaluated: true };
 }

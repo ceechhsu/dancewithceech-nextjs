@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
 
 import {
   hasRunningManCronAuthorization,
+  parseRunningManStripeLivemode,
   reconcileRunningManStripeSessions,
   type RunningManWebhookDependencies,
+  type RunningManOwnerAlert,
 } from "@/lib/running-man/webhook";
 import { COHORT } from "@/lib/running-man/config";
 import { createRunningManRepository, type RunningManRpcClient } from "@/lib/running-man/repository";
@@ -18,12 +21,22 @@ function price(variable: string): string {
   return value;
 }
 
-function configuredLivemode(): boolean | undefined {
-  const value = process.env.RUNNING_MAN_STRIPE_LIVEMODE;
-  if (value === undefined || value === "") return undefined;
-  if (value === "true") return true;
-  if (value === "false") return false;
-  throw new Error("RUNNING_MAN_STRIPE_LIVEMODE must be true or false.");
+function ownerNotifier(): RunningManWebhookDependencies["notifyOwner"] {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.RUNNING_MAN_NOTIFICATION_FROM;
+  const to = process.env.RUNNING_MAN_OWNER_EMAIL;
+  if (!apiKey || !from || !to) return undefined;
+  const resend = new Resend(apiKey);
+  return async (alert: RunningManOwnerAlert) => {
+    if (alert.kind !== "minimum_enrollment_under_8") return;
+    const { error } = await resend.emails.send({
+      from,
+      to,
+      subject: "Running Man minimum enrollment needs review",
+      text: `Only ${alert.activePaid} paid Running Man students are confirmed; minimum is 8.`,
+    });
+    if (error) throw new Error("Running Man owner alert could not be delivered.");
+  };
 }
 
 function cronSecret(): string | undefined {
@@ -42,14 +55,15 @@ function cronSecret(): string | undefined {
 function productionDependencies(): RunningManWebhookDependencies {
   return {
     repository: createRunningManRepository(supabaseAdmin as unknown as RunningManRpcClient),
-    stripe: getStripeClient() as unknown as RunningManWebhookDependencies["stripe"],
+    stripe: getStripeClient(parseRunningManStripeLivemode(process.env.RUNNING_MAN_STRIPE_LIVEMODE)) as unknown as RunningManWebhookDependencies["stripe"],
     priceIds: {
       1: price(COHORT.tiers[0].priceEnv),
       2: price(COHORT.tiers[1].priceEnv),
       3: price(COHORT.tiers[2].priceEnv),
       coaching: price(COHORT.coaching.priceEnv),
     },
-    expectedLivemode: configuredLivemode(),
+    expectedLivemode: parseRunningManStripeLivemode(process.env.RUNNING_MAN_STRIPE_LIVEMODE),
+    notifyOwner: ownerNotifier(),
   };
 }
 

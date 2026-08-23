@@ -10,6 +10,7 @@ import { COHORT } from "@/lib/running-man/config";
 import { createRunningManRepository, type RunningManRpcClient } from "@/lib/running-man/repository";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { getStripeClient } from "@/lib/stripe";
+import { parseRunningManStripeLivemode } from "@/lib/running-man/webhook";
 
 export const runtime = "nodejs";
 
@@ -28,7 +29,7 @@ function productionDependencies(): CheckoutServiceDependencies {
 
   return {
     repository: createRunningManRepository(supabaseAdmin as unknown as RunningManRpcClient),
-    stripe: getStripeClient() as unknown as CheckoutServiceDependencies["stripe"],
+    stripe: getStripeClient(parseRunningManStripeLivemode(process.env.RUNNING_MAN_STRIPE_LIVEMODE)) as unknown as CheckoutServiceDependencies["stripe"],
     priceIds: {
       1: price(COHORT.tiers[0].priceEnv),
       2: price(COHORT.tiers[1].priceEnv),

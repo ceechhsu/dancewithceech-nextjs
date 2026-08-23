@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/running-man-reconcile",
-      "schedule": "*/10 * * * *"
+      "schedule": "*/5 * * * *"
     }
   ]
 }

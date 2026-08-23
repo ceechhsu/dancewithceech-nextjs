@@ -5,6 +5,7 @@ import {
   RunningManWebhookValidationError,
   finalizeRunningManStripeEvent,
   hasRunningManCronAuthorization,
+  parseRunningManStripeLivemode,
   reconcileRunningManStripeSessions,
   type RunningManWebhookDependencies,
 } from "../src/lib/running-man/webhook";
@@ -16,6 +17,13 @@ test("accepts only an exact Bearer token for protected Running Man reconciliatio
   assert.equal(hasRunningManCronAuthorization(new Headers({ authorization: "Bearer cron-secret" }), "cron-secret"), true);
   assert.equal(hasRunningManCronAuthorization(new Headers({ authorization: "Bearer cron-secret-extra" }), "cron-secret"), false);
   assert.equal(hasRunningManCronAuthorization(new Headers({ authorization: "Basic cron-secret" }), "cron-secret"), false);
+});
+
+test("requires an explicit true/false Stripe livemode configuration", () => {
+  assert.equal(parseRunningManStripeLivemode("true"), true);
+  assert.equal(parseRunningManStripeLivemode("false"), false);
+  assert.throws(() => parseRunningManStripeLivemode(undefined), RunningManWebhookValidationError);
+  assert.throws(() => parseRunningManStripeLivemode("test"), RunningManWebhookValidationError);
 });
 
 function session(overrides: Record<string, unknown> = {}) {
@@ -179,6 +187,25 @@ test("keeps unknown charge events retryable instead of sending them to the dedup
   assert.equal(applyCalls.length, 0);
 });
 
+test("ignores signed events for other Stripe products without retrying or alerting", async () => {
+  const { deps, applyCalls } = dependencies({
+    stripe: {
+      checkout: { sessions: { async retrieve() { return session({ metadata: {} }); }, async listLineItems() { return lineItems(); }, async list() { return { data: [], has_more: false }; } } },
+      paymentIntents: { async retrieve() { return { id: "pi_other", metadata: {} }; } },
+      charges: { async retrieve() { return { id: "ch_other", payment_intent: "pi_other", metadata: {}, amount: 100, amount_refunded: 0 }; } },
+    },
+  });
+  const alerts: unknown[] = [];
+  Object.assign(deps as object, { notifyOwner: async (alert: unknown) => { alerts.push(alert); } });
+
+  const result = await finalizeRunningManStripeEvent(deps, {
+    id: "evt_other", type: "checkout.session.completed", livemode: false, data: { object: { id: "cs_other" } },
+  });
+  assert.deepEqual(result, { kind: "ignored" });
+  assert.equal(applyCalls.length, 0);
+  assert.deepEqual(alerts, []);
+});
+
 test("uses a persisted charge identity before falling back to PaymentIntent metadata", async () => {
   let paymentIntentRetrieved = false;
   const { deps, applyCalls } = dependencies({
@@ -232,9 +259,64 @@ test("reconciliation scans paginated Stripe metadata, preserves uncertain holds,
   });
 
   const result = await reconcileRunningManStripeSessions(deps);
-  assert.deepEqual(result, { scanned: 2, reconciled: 1, minimumEvaluated: false });
+  assert.deepEqual(result, { scanned: 2, reconciled: 2, minimumEvaluated: false });
   assert.equal(reconcileCalls.length, 1);
   assert.equal(listCalls.length, 2);
+});
+
+test("recovery attaches a trusted open Stripe session to its creating hold before preserving capacity", async () => {
+  const attached: Array<{ reservationId: string; sessionId: string }> = [];
+  const { deps } = dependencies({
+    repository: {
+      async applyStripeEventAtomically() { return { result_code: "applied" }; },
+      async reconcileRunningManReservation() { return { result_code: "reconciled" }; },
+      async attachRecoveredRunningManSession(input) { attached.push(input); return { result_code: "attached" }; },
+      async evaluateMinimumEnrollment() { return { result_code: "pending" }; },
+    },
+    stripe: {
+      checkout: {
+        sessions: {
+          async retrieve() { return session({ status: "open", payment_status: "unpaid" }); },
+          async listLineItems() { return lineItems(); },
+          async list() { return { data: [session({ status: "open", payment_status: "unpaid" })], has_more: false }; },
+        },
+      },
+      paymentIntents: { async retrieve() { return { id: "pi_running_man", metadata: {} }; } },
+      charges: { async retrieve() { return { id: "ch_running_man", payment_intent: "pi_running_man", metadata: {}, amount: 19700, amount_refunded: 19700 }; } },
+    },
+  });
+
+  const result = await reconcileRunningManStripeSessions(deps);
+  assert.deepEqual(attached, [{ reservationId, sessionId: "cs_running_man" }]);
+  assert.deepEqual(result, { scanned: 1, reconciled: 1, minimumEvaluated: false });
+});
+
+test("alerts the owner for refund review and an under-minimum cohort without sending from tests by default", async () => {
+  const alerts: unknown[] = [];
+  const { deps } = dependencies({
+    repository: {
+      async applyStripeEventAtomically() { return { result_code: "applied" }; },
+      async reconcileRunningManReservation() { return { result_code: "reconciled" }; },
+      async evaluateMinimumEnrollment() { return { result_code: "owner_notification_required", activePaid: 7 }; },
+    },
+    stripe: {
+      checkout: { sessions: { async retrieve() { return session(); }, async listLineItems() { return lineItems(); }, async list() { return { data: [session()], has_more: false }; } } },
+      paymentIntents: { async retrieve() { return { id: "pi_running_man", metadata: session().metadata }; } },
+      charges: { async retrieve() { return { id: "ch_running_man", payment_intent: "pi_running_man", metadata: {}, amount: 19700, amount_refunded: 5000 }; } },
+    },
+  });
+  Object.assign(deps as object, { notifyOwner: async (alert: unknown) => { alerts.push(alert); } });
+
+  await finalizeRunningManStripeEvent(deps, {
+    id: "evt_partial_alert", type: "charge.refunded", livemode: false,
+    data: { object: { id: "ch_running_man", payment_intent: "pi_running_man" } },
+  });
+  await reconcileRunningManStripeSessions(deps);
+
+  assert.deepEqual(alerts, [
+    { kind: "refund_review", eventId: "evt_partial_alert", partial: true },
+    { kind: "minimum_enrollment_under_8", activePaid: 7 },
+  ]);
 });
 
 test("releases only an aged creating hold that is absent after a completed Stripe scan", async () => {
