@@ -7,15 +7,20 @@ const componentPath = new URL(
   "../src/app/running-man-method/RunningManMethodPage.tsx",
   import.meta.url,
 );
+const enrollmentPanelPath = new URL(
+  "../src/components/running-man/EnrollmentPanel.tsx",
+  import.meta.url,
+);
 const sitemapPath = new URL("../src/app/sitemap.ts", import.meta.url);
 
 async function readRouteSource() {
-  const [route, component] = await Promise.all([
+  const [route, component, enrollmentPanel] = await Promise.all([
     readFile(routePath, "utf8"),
     readFile(componentPath, "utf8"),
+    readFile(enrollmentPanelPath, "utf8"),
   ]);
 
-  return `${route}\n${component}`;
+  return `${route}\n${component}\n${enrollmentPanel}`;
 }
 
 test("the Running Man Method route presents the approved founding-cohort hero", async () => {
@@ -47,9 +52,12 @@ test("the page carries the complete approved offer from problem through enrollme
     /George.*Clear Instruction and Greater Confidence/s,
     /Martin.*I.m Not a Dancer/s,
     /Jordan.*Supportive Place to Learn/s,
-    /First 3 Students.*\$197/s,
-    /Next 3 Students.*\$247/s,
-    /Remaining 6 Students.*\$297/s,
+    /First 3 Students/,
+    /Next 3 Students/,
+    /Remaining 6 Students/,
+    /price: 197/,
+    /price: 247/,
+    /price: 297/,
     /Private Coaching for \$100/,
     /Frequently Asked Questions/,
     /Graduate on October 22/,
@@ -79,15 +87,11 @@ test("the page is discoverable and uses accessible, resilient interaction patter
   assert.match(source, /"@type": "Event"/);
 });
 
-test("each enrollment option opens its matching live Stripe checkout", async () => {
+test("the page delegates enrollment to one dynamic enrollment panel", async () => {
   const component = await readFile(componentPath, "utf8");
 
-  assert.match(component, /https:\/\/buy\.stripe\.com\/3cI3cw5np5nN3FD1D99bO00/);
-  assert.match(component, /https:\/\/buy\.stripe\.com\/9B63cw035g2rekh0z59bO01/);
-  assert.match(component, /https:\/\/buy\.stripe\.com\/dRm14oeXZ4jJ1xv6Xt9bO02/);
-  assert.match(component, /https:\/\/buy\.stripe\.com\/4gMbJ2dTVdUj2BzbdJ9bO03/);
-  assert.match(component, /href=\{checkoutLinks\.firstThree\}/);
-  assert.match(component, /href=\{checkoutLinks\.nextThree\}/);
-  assert.match(component, /href=\{checkoutLinks\.remainingSix\}/);
-  assert.match(component, /href=\{checkoutLinks\.privateCoaching\}/);
+  assert.doesNotMatch(component, /buy\.stripe\.com/);
+  assert.match(component, /EnrollmentPanel/);
+  assert.equal(component.match(/Claim .*\$197/g)?.length ?? 0, 0);
+  assert.match(component, /href="#enroll"/);
 });

@@ -22,15 +22,9 @@ import {
 import Image from "next/image";
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
+import EnrollmentPanel from "@/components/running-man/EnrollmentPanel";
 
-const enrollmentHref = "#enrollment-confirmation";
-
-const checkoutLinks = {
-  firstThree: "https://buy.stripe.com/3cI3cw5np5nN3FD1D99bO00",
-  nextThree: "https://buy.stripe.com/9B63cw035g2rekh0z59bO01",
-  remainingSix: "https://buy.stripe.com/dRm14oeXZ4jJ1xv6Xt9bO02",
-  privateCoaching: "https://buy.stripe.com/4gMbJ2dTVdUj2BzbdJ9bO03",
-} as const;
+const enrollmentHref = "#enroll";
 
 const cohortFacts = [
   { icon: CalendarDays, label: "Four-week cohort", value: "September 24–October 22, 2026" },
@@ -229,7 +223,7 @@ export default function RunningManMethodPage() {
               ))}
             </div>
             <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-              <PrimaryCta label="Claim My Founding-Cohort Seat — From $197" />
+              <PrimaryCta label="View Founding-Cohort Enrollment" />
               <p className="text-sm leading-5 text-white/50">Enrollment closes September 17<br />or when all 12 seats are filled.</p>
             </div>
           </div>
@@ -380,23 +374,7 @@ export default function RunningManMethodPage() {
       <section id="enroll" className="scroll-mt-24 px-5 py-20 sm:px-8 lg:py-28">
         <div className="mx-auto max-w-6xl">
           <SectionHeading eyebrow="Founding-cohort enrollment" title="Join the First 12 Students" copy="Every student receives the complete four-week program. The only difference is how early you claim your seat. Enrollment is paid in full." />
-          <div className="mt-14 grid gap-5 lg:grid-cols-3">
-            <article className="relative rounded-3xl border-2 border-[#FDB515] bg-[#15120A] p-7 shadow-[0_20px_70px_rgba(253,181,21,0.08)]">
-              <span className="absolute -top-3 left-7 rounded-full bg-[#FDB515] px-3 py-1 text-xs font-extrabold uppercase tracking-[0.12em] text-black">Best founding price</span>
-              <p className="mt-2 text-xs font-bold uppercase tracking-[0.18em] text-[#FDB515]">First 3 Students — $197</p><p className="mt-5 font-display text-6xl font-extrabold text-white">$197</p><p className="mt-3 text-sm leading-6 text-white/55">Save $100 as one of the first three founding students.</p><div className="mt-7"><PrimaryCta label="Claim One of the First 3 Seats" href={checkoutLinks.firstThree} /></div>
-            </article>
-            <article className="rounded-3xl border border-white/12 bg-[#111] p-7">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2563EB]">Next 3 Students — $247</p><p className="mt-5 font-display text-6xl font-extrabold text-white">$247</p><p className="mt-3 text-sm leading-6 text-white/55">Save $50 by joining before the first six seats are filled.</p><div className="mt-7"><PrimaryCta label="Claim a Founding Seat" href={checkoutLinks.nextThree} /></div>
-            </article>
-            <article className="rounded-3xl border border-white/12 bg-[#111] p-7">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/50">Remaining 6 Students — $297</p><p className="mt-5 font-display text-6xl font-extrabold text-white">$297</p><p className="mt-3 text-sm leading-6 text-white/55">Standard enrollment price for the remaining available seats.</p><div className="mt-7"><PrimaryCta label="Claim a Remaining Seat" href={checkoutLinks.remainingSix} /></div>
-            </article>
-          </div>
-          <div className="mt-6 grid gap-6 rounded-3xl border border-[#2563EB]/30 bg-[#2563EB]/8 p-7 lg:grid-cols-[1fr_auto] lg:items-center sm:p-9">
-            <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2563EB]">Limited to three students</p><h3 className="mt-3 font-display text-3xl font-bold uppercase text-white">Add Private Coaching for $100</h3><ul className="mt-5 space-y-2 text-sm leading-6 text-white/65"><li>One 20-minute private check-in with Ceech during Week 1</li><li>One 20-minute private check-in with Ceech during Week 3</li><li>Individual attention focused on your specific challenges</li></ul></div>
-            <a href={checkoutLinks.privateCoaching} className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#2563EB] px-6 text-sm font-bold text-white transition hover:bg-[#2563EB]/15 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FDB515]">Add Private Coaching</a>
-          </div>
-          <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.025] p-6 text-center text-sm leading-6 text-white/55">Enrollment closes September 17, 2026, at 11:59 p.m. Pacific Time—or immediately when all 12 seats are filled. The cohort requires at least eight students. If Ceech cancels or postpones it, you may choose a full refund or transfer after the next cohort dates are confirmed.</div>
+          <EnrollmentPanel />
         </div>
       </section>
 
@@ -438,7 +416,7 @@ export default function RunningManMethodPage() {
 
       <Footer />
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#080808]/95 p-3 backdrop-blur md:hidden">
-        <a href="#enroll" className="flex min-h-12 w-full items-center justify-center rounded-full bg-[#2563EB] px-5 text-sm font-bold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FDB515]">Claim My Seat — From $197</a>
+        <a href="#enroll" className="flex min-h-12 w-full items-center justify-center rounded-full bg-[#2563EB] px-5 text-sm font-bold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FDB515]">View Enrollment</a>
       </div>
     </main>
   );

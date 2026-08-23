@@ -46,6 +46,19 @@ export type EnrollmentState = {
   requiresPriceReconfirmation: boolean;
 };
 
+/** Public response from the availability route. Never includes customer or Stripe data. */
+export type EnrollmentStateResponse =
+  | {
+    kind: "available";
+    state: EnrollmentState;
+    asOf: string;
+  }
+  | {
+    kind: "unavailable";
+    asOf: string;
+    message: string;
+  };
+
 export type CheckoutRequest = {
   cohortSlug: string;
   tierIndex: TierIndex;
