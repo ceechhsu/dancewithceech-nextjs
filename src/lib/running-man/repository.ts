@@ -243,6 +243,48 @@ export function createRunningManRepository(client: RunningManRpcClient) {
       return asRecord(data);
     },
 
+    async listRecoverableRunningManHolds(): Promise<Array<{ reservationId: string }>> {
+      const { data, error } = await privateRpc("list_recoverable_running_man_holds", {
+        p_cohort_slug: COHORT.slug,
+        p_grace_seconds: 300,
+      });
+      if (error) throwForError(error);
+      if (!Array.isArray(data)) throw new RunningManRepositoryError("The enrollment service did not return recovery holds.");
+      return data.map((value) => {
+        const hold = asRecord(value);
+        return { reservationId: asString(hold.reservation_id, "a recovery reservation ID") };
+      });
+    },
+
+    async releaseMissingRunningManHold(reservationId: string): Promise<Record<string, unknown>> {
+      const { data, error } = await privateRpc("release_missing_running_man_hold", {
+        p_reservation_id: reservationId,
+        p_grace_seconds: 300,
+      });
+      if (error) throwForError(error);
+      return asRecord(data);
+    },
+
+    async findRunningManReservationByStripe(input: {
+      chargeId?: string | null;
+      paymentIntentId?: string | null;
+    }): Promise<{ reservationId: string; sessionId: string | null; paymentIntentId: string | null; chargeId: string | null } | null> {
+      const { data, error } = await privateRpc("find_running_man_reservation_by_stripe", {
+        p_charge_id: input.chargeId ?? null,
+        p_payment_intent_id: input.paymentIntentId ?? null,
+      });
+      if (error) throwForError(error);
+      if (data === null) return null;
+      const reservation = asRecord(data);
+      const optionalString = (value: unknown, field: string) => value === null ? null : asString(value, field);
+      return {
+        reservationId: asString(reservation.reservation_id, "a Stripe reservation ID"),
+        sessionId: optionalString(reservation.session_id, "a Stripe session ID"),
+        paymentIntentId: optionalString(reservation.payment_intent_id, "a Stripe PaymentIntent ID"),
+        chargeId: optionalString(reservation.charge_id, "a Stripe charge ID"),
+      };
+    },
+
     async reopenRefundedReservation(input: {
       reservationId: string;
       actorEmail: string;
