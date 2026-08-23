@@ -22,6 +22,7 @@ import {
 import Image from "next/image";
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
+import HeroSeatStatus from "@/components/running-man/HeroSeatStatus";
 import EnrollmentPanel from "@/components/running-man/EnrollmentPanel";
 
 const enrollmentHref = "#enroll";
@@ -241,8 +242,8 @@ export default function RunningManMethodPage() {
               </div>
             </div>
             <div className="absolute -right-2 -top-5 rotate-3 rounded-xl border border-[#FDB515]/30 bg-[#15120A] px-4 py-3 shadow-xl sm:right-5">
-              <p className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-[#FDB515]">Limited enrollment</p>
-              <p className="mt-1 text-lg font-bold text-white">Only 12 students</p>
+              <p className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-[#FDB515]">Limited to 12 students</p>
+              <HeroSeatStatus />
             </div>
           </div>
         </div>
@@ -404,7 +405,10 @@ export default function RunningManMethodPage() {
           </div>
           <div className="mt-10 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
             <a href="#enroll" className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#FDB515] px-8 text-center text-base font-extrabold text-black transition hover:-translate-y-0.5 hover:bg-[#FFD15C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">I Understand and Am Ready to Enroll</a>
-            <p className="text-sm leading-6 text-white/55">From $197 · Paid in full<br />Only 12 founding students</p>
+            <div className="text-sm leading-6 text-white/55">
+              <HeroSeatStatus compact showPrice />
+              <p className="font-semibold text-white/80">Limited to 12 students</p>
+            </div>
           </div>
           <div className="mt-10 flex flex-col gap-5 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
             <div><p className="font-display text-2xl font-bold uppercase text-white">Continue Your Dance Journey</p><p className="mt-2 max-w-2xl text-sm leading-6 text-white/55">Students who graduate receive 20% off their next eligible Dance With Ceech Method, such as the Roger Rabbit Method.</p></div>

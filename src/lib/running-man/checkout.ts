@@ -9,7 +9,7 @@ const ATTEMPT_COOKIE_NAME = "running_man_checkout_attempt";
 // One second absorbs Stripe's second-granularity expiry requirement while all
 // three artifacts still enforce the same practical 30-minute checkout window.
 const ATTEMPT_TTL_SECONDS = 30 * 60 + 1;
-const CHECKOUT_ORIGIN = "https://dancewithceech.com";
+const DEFAULT_CHECKOUT_ORIGIN = "https://dancewithceech.com";
 
 type StripeSession = {
   id: string;
@@ -59,6 +59,10 @@ export type RunningManCheckoutResult =
   | { kind: "confirmation"; confirmationUrl: string; setAttemptCookie?: string }
   | { kind: "reconfirm"; enrollmentState: Record<string, unknown>; setAttemptCookie?: string }
   | { kind: "error"; code: "invalid_request" | "closed" | "unavailable"; message: string; setAttemptCookie?: string };
+
+export function runningManCheckoutOrigin(): string {
+  return (process.env.NEXT_PUBLIC_APP_URL?.trim() || DEFAULT_CHECKOUT_ORIGIN).replace(/\/+$/, "");
+}
 
 function validTier(value: unknown): value is TierIndex {
   return value === 1 || value === 2 || value === 3;
@@ -205,8 +209,8 @@ function checkoutSessionParams(input: {
     metadata,
     payment_intent_data: { metadata },
     expires_at: expiresAt,
-    success_url: `${CHECKOUT_ORIGIN}/running-man-method/confirmation?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${CHECKOUT_ORIGIN}/running-man-method#enroll`,
+    success_url: `${runningManCheckoutOrigin()}/running-man-method/confirmation?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${runningManCheckoutOrigin()}/running-man-method#enroll`,
   };
 }
 
@@ -329,9 +333,9 @@ export async function createRunningManCheckout(
   }
 
   const issued = existingAttemptId ? null : issueAttempt(dependencies.attemptSecret, now);
-  const attemptId = existingAttemptId ?? issued!.attemptId;
-  const setAttemptCookie = issued?.setAttemptCookie;
-  const attemptHash = hashCheckoutAttempt(attemptId, dependencies.attemptSecret);
+  let attemptId = existingAttemptId ?? issued!.attemptId;
+  let setAttemptCookie = issued?.setAttemptCookie;
+  let attemptHash = hashCheckoutAttempt(attemptId, dependencies.attemptSecret);
   const networkHash = hashNetworkSignal(input.networkSignal, dependencies.attemptSecret);
   const reserve = () => dependencies.repository.reserveCheckout({
     expectedTier: request.expectedTier,
@@ -343,11 +347,13 @@ export async function createRunningManCheckout(
 
   let decision = await reserve();
   if (decision.kind === "terminal") {
-    return {
-      kind: "confirmation",
-      confirmationUrl: `${CHECKOUT_ORIGIN}/running-man-method/confirmation?session_id=${encodeURIComponent(decision.sessionId)}`,
-      ...(setAttemptCookie ? { setAttemptCookie } : {}),
-    };
+    // A paid attempt is complete. Rotate the browser attempt and immediately
+    // continue into a fresh checkout so the same browser can enroll another student.
+    const nextAttempt = issueAttempt(dependencies.attemptSecret, now);
+    attemptId = nextAttempt.attemptId;
+    attemptHash = hashCheckoutAttempt(attemptId, dependencies.attemptSecret);
+    setAttemptCookie = nextAttempt.setAttemptCookie;
+    decision = await reserve();
   }
   if (decision.kind === "reconfirm") {
     const changed = await resolveSelectionChange(dependencies, attemptHash, request.includeCoaching, networkHash);
@@ -355,10 +361,11 @@ export async function createRunningManCheckout(
     decision = await reserve();
   }
   if (decision.kind === "terminal") {
+    const nextAttempt = issueAttempt(dependencies.attemptSecret, now);
     return {
       kind: "confirmation",
-      confirmationUrl: `${CHECKOUT_ORIGIN}/running-man-method/confirmation?session_id=${encodeURIComponent(decision.sessionId)}`,
-      ...(setAttemptCookie ? { setAttemptCookie } : {}),
+      confirmationUrl: `${runningManCheckoutOrigin()}/running-man-method/confirmation?session_id=${encodeURIComponent(decision.sessionId)}`,
+      setAttemptCookie: nextAttempt.setAttemptCookie,
     };
   }
   if (decision.kind === "reconfirm") return { ...decision, ...(setAttemptCookie ? { setAttemptCookie } : {}) };

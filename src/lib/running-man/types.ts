@@ -22,6 +22,9 @@ export type EnrollmentTier = {
   ceiling: number;
   priceCents: number;
   status: TierLadderStatus;
+  capacity: number;
+  claimed: number;
+  remaining: number;
 };
 
 /** Client-safe derived enrollment view; it contains no customer or payment data. */
@@ -35,6 +38,8 @@ export type EnrollmentState = {
   activePaidStudents: number;
   capacityConsumed: number;
   coachingSeatsTotal: number;
+  coachingSeatsClaimed: number;
+  coachingSeatsHeld: number;
   coachingSeatsRemaining: number | null;
   activeTier: EnrollmentTier;
   tierLadder: readonly EnrollmentTier[];

@@ -10,6 +10,7 @@ import {
   createRunningManCheckout,
   createSignedAttemptCookie,
   isRunningManCheckoutRequest,
+  runningManCheckoutOrigin,
   trustedNetworkSignal,
   type CheckoutServiceDependencies,
 } from "../src/lib/running-man/checkout";
@@ -33,6 +34,17 @@ function checkoutRequest(overrides: Partial<{
     ...overrides,
   };
 }
+
+test("uses the configured app origin for Stripe return URLs", () => {
+  const previous = process.env.NEXT_PUBLIC_APP_URL;
+  process.env.NEXT_PUBLIC_APP_URL = "http://localhost:3000/";
+  try {
+    assert.equal(runningManCheckoutOrigin(), "http://localhost:3000");
+  } finally {
+    if (previous === undefined) delete process.env.NEXT_PUBLIC_APP_URL;
+    else process.env.NEXT_PUBLIC_APP_URL = previous;
+  }
+});
 
 type CheckoutCall = { params: Record<string, unknown>; options?: Record<string, unknown> };
 
@@ -371,10 +383,16 @@ test("rejects checkout JSON with unexpected fields", () => {
   assert.equal(isRunningManCheckoutRequest(checkoutRequest()), true);
 });
 
-test("a paid checkout attempt returns a terminal confirmation without a second Stripe session", async () => {
+test("a paid checkout attempt starts a fresh checkout for another student", async () => {
+  let reserveCount = 0;
   const { dependencies, createCalls } = checkoutDependencies({
     repository: {
-      async reserveCheckout() { return { kind: "terminal", sessionId: "cs_paid" }; },
+      async reserveCheckout() {
+        reserveCount += 1;
+        return reserveCount === 1
+          ? { kind: "terminal", sessionId: "cs_paid" }
+          : { kind: "reserved", reservationId, expiresAt: "2026-09-01T00:31:00.000Z", tierIndex: 1, baseAmountCents: 19700, includeCoaching: false };
+      },
       async attachStripeSession() {},
       async replaceUnpaidAttemptSelection() { return { result_code: "selection_updated" }; },
       async recoverCreatingReservation() { return { result_code: "scan_required" }; },
@@ -388,8 +406,11 @@ test("a paid checkout attempt returns a terminal confirmation without a second S
     networkSignal: "203.0.113.10|test-agent",
   });
 
-  assert.deepEqual(result, { kind: "confirmation", confirmationUrl: "https://dancewithceech.com/running-man-method/confirmation?session_id=cs_paid" });
-  assert.equal(createCalls.length, 0);
+  assert.equal(result.kind, "checkout");
+  assert.equal(result.checkoutUrl, "https://checkout.stripe.test/cs_created");
+  assert.match(result.setAttemptCookie ?? "", /running_man_checkout_attempt=/);
+  assert.notEqual(result.setAttemptCookie, createSignedAttemptCookie("paid-attempt", checkoutAttemptSecret, fixedNow));
+  assert.equal(createCalls.length, 1);
 });
 
 test("a failed reservation attach retries idempotently and verifies Stripe ownership before returning", async () => {

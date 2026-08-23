@@ -176,10 +176,27 @@ test("coaching states distinguish sold-out, held, and under-review capacity with
 
   assert.equal(soldOut.coachingStatus, "sold_out");
   assert.equal(soldOut.coachingSeatsRemaining, 0);
+  assert.equal(soldOut.coachingSeatsClaimed, 3);
+  assert.equal(soldOut.coachingSeatsHeld, 0);
   assert.equal(held.coachingStatus, "held");
   assert.equal(held.coachingSeatsRemaining, null);
+  assert.equal(held.coachingSeatsClaimed, 2);
+  assert.equal(held.coachingSeatsHeld, 1);
   assert.equal(underReview.coachingStatus, "under_review");
   assert.equal(underReview.coachingSeatsRemaining, null);
+  assert.equal(underReview.coachingSeatsClaimed, 2);
+  assert.equal(underReview.coachingSeatsHeld, 0);
+});
+
+test("a partial coaching hold leaves the remaining coaching spots selectable", () => {
+  const state = deriveEnrollmentState(aggregate({
+    coaching: { activePaid: 0, underReview: 0, activeHolds: 1 },
+  }));
+
+  assert.equal(state.coachingStatus, "available");
+  assert.equal(state.coachingSeatsRemaining, 2);
+  assert.equal(state.coachingSeatsClaimed, 0);
+  assert.equal(state.coachingSeatsHeld, 1);
 });
 
 test("the cutoff closes new enrollment even while a valid pre-cutoff session remains pending", () => {

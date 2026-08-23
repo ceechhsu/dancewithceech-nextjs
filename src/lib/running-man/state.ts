@@ -134,7 +134,7 @@ function activeTierIndex(aggregate: EnrollmentAggregate): TierIndex {
 function coachingStatusFor(coaching: EnrollmentAggregate["coaching"]): CoachingStatus {
   if (coaching.activePaid === COHORT.coaching.seats) return "sold_out";
   if (coaching.underReview > 0) return "under_review";
-  if (coaching.activeHolds > 0) return "held";
+  if (coaching.activePaid + coaching.activeHolds >= COHORT.coaching.seats) return "held";
   return "available";
 }
 
@@ -157,10 +157,13 @@ function ladderFor(
   status: EnrollmentStatus,
 ): readonly EnrollmentTier[] {
   return COHORT.tiers.map((tier) => {
+    const previousCeiling = tier.index === 1 ? 0 : COHORT.tiers[tier.index - 2].ceiling;
+    const capacity = tier.ceiling - previousCeiling;
+    const aggregateTier = aggregate.tiers[tier.index];
     let tierStatus: TierLadderStatus;
-    if (aggregate.tiers[tier.index].underReview > 0) {
+    if (aggregateTier.underReview > 0) {
       tierStatus = "under_review";
-    } else if (aggregate.tiers[tier.index].allocationConsumed === tierCapacity(tier.index)) {
+    } else if (aggregateTier.allocationConsumed === tierCapacity(tier.index)) {
       tierStatus = "complete";
     } else if (tier.index > activeIndex) {
       tierStatus = "upcoming";
@@ -174,7 +177,15 @@ function ladderFor(
       tierStatus = "active";
     }
 
-    return { index: tier.index, ceiling: tier.ceiling, priceCents: tier.priceCents, status: tierStatus };
+    return {
+      index: tier.index,
+      ceiling: tier.ceiling,
+      priceCents: tier.priceCents,
+      status: tierStatus,
+      capacity,
+      claimed: aggregateTier.activePaid,
+      remaining: capacity - aggregateTier.allocationConsumed - aggregateTier.activeHolds,
+    };
   });
 }
 
@@ -252,7 +263,7 @@ export function deriveEnrollmentState(aggregate: EnrollmentAggregate): Enrollmen
   const coachingStatus = coachingStatusFor(aggregate.coaching);
   const canStartCheckout = enrollmentStatus === "open";
   const coachingSeatsRemaining = coachingStatus === "available"
-    ? COHORT.coaching.seats - aggregate.coaching.activePaid
+    ? COHORT.coaching.seats - aggregate.coaching.activePaid - aggregate.coaching.activeHolds
     : coachingStatus === "sold_out"
       ? 0
       : null;
@@ -272,6 +283,8 @@ export function deriveEnrollmentState(aggregate: EnrollmentAggregate): Enrollmen
     activePaidStudents: aggregate.activePaidStudents,
     capacityConsumed: aggregate.capacityConsumed,
     coachingSeatsTotal: COHORT.coaching.seats,
+    coachingSeatsClaimed: aggregate.coaching.activePaid,
+    coachingSeatsHeld: aggregate.coaching.activeHolds,
     coachingSeatsRemaining,
     activeTier,
     tierLadder,

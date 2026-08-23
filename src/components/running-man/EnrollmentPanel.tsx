@@ -1,7 +1,9 @@
 "use client";
 
 import { Check, CircleAlert, LoaderCircle, LockKeyhole, Sparkles } from "lucide-react";
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { FormEvent } from "react";
 
 import { CURRENT_TERMS_VERSION, REQUIRED_COMMITMENTS } from "@/lib/running-man/terms";
 import type { EnrollmentState, EnrollmentStateResponse, EnrollmentTier } from "@/lib/running-man/types";
@@ -15,7 +17,7 @@ const TIER_COPY = {
 function tierNote(tier: EnrollmentTier, state: EnrollmentState | null): string {
   if (!state) return "Availability is being confirmed.";
   if (tier.status === "active") return "Current enrollment price";
-  if (tier.status === "complete") return "This price tier is filled.";
+  if (tier.status === "complete") return "Sold out — this price is no longer available.";
   if (tier.status === "held") return "This price tier is currently held.";
   if (tier.status === "under_review") return "Availability is under review.";
   if (tier.status === "unavailable") return "Currently unavailable.";
@@ -36,6 +38,12 @@ export default function EnrollmentPanel() {
   const [coachingSelected, setCoachingSelected] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const [waitlistName, setWaitlistName] = useState("");
+  const [waitlistEmail, setWaitlistEmail] = useState("");
+  const [waitlistConsent, setWaitlistConsent] = useState(false);
+  const [waitlistWebsite, setWaitlistWebsite] = useState("");
+  const [waitlistSubmitting, setWaitlistSubmitting] = useState(false);
+  const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
 
   const refreshState = useCallback(async () => {
     try {
@@ -84,9 +92,12 @@ export default function EnrollmentPanel() {
   }, [isVisible, refreshState]);
 
   const coachingAvailable = state?.coachingStatus === "available";
+  const coachingSoldOut = state?.coachingStatus === "sold_out";
   const selectedCoaching = coachingAvailable && coachingSelected;
-  const total = state ? state.activeTier.priceCents / 100 + (selectedCoaching ? 100 : 0) : null;
+  const total = state?.enrollmentStatus === "open" ? state.activeTier.priceCents / 100 + (selectedCoaching ? 100 : 0) : null;
   const canCheckout = Boolean(state?.canStartCheckout && acknowledged && !isSubmitting);
+  const showWaitlist = state?.enrollmentStatus === "sold_out";
+  const checkoutLabel = selectedCoaching && total !== null ? `Claim your seat — $${total}` : state?.currentCta.label ?? "Checking availability…";
 
   async function beginCheckout() {
     if (!state || !canCheckout) return;
@@ -109,6 +120,10 @@ export default function EnrollmentPanel() {
         window.location.assign(body.checkoutUrl);
         return;
       }
+      if (response.ok && body && typeof body === "object" && "confirmationUrl" in body && typeof body.confirmationUrl === "string") {
+        window.location.assign(body.confirmationUrl);
+        return;
+      }
 
       if (response.status === 409) {
         setNotice("Availability changed before checkout could open. Review the current option, then try again.");
@@ -125,15 +140,53 @@ export default function EnrollmentPanel() {
     }
   }
 
+  async function joinWaitlist(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (waitlistSubmitting || waitlistSubmitted || !waitlistName.trim() || !waitlistEmail.trim() || !waitlistConsent) return;
+    setWaitlistSubmitting(true);
+    setNotice(null);
+
+    try {
+      const response = await fetch("/api/running-man-waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: waitlistName,
+          email: waitlistEmail,
+          marketingConsent: waitlistConsent,
+          website: waitlistWebsite,
+        }),
+      });
+      const body: unknown = await response.json();
+      if (response.ok && body && typeof body === "object" && "success" in body && body.success === true) {
+        setWaitlistSubmitted(true);
+        return;
+      }
+      if (body && typeof body === "object" && "error" in body && typeof body.error === "string") {
+        setNotice(body.error);
+      } else {
+        setNotice("We could not add you to the waitlist. Please try again later.");
+      }
+    } catch {
+      setNotice("We could not add you to the waitlist. Please try again later.");
+    } finally {
+      setWaitlistSubmitting(false);
+    }
+  }
+
   const coachingCopy = !state
     ? "Coaching availability will be confirmed when live enrollment availability is available."
     : state.coachingStatus === "available"
-      ? `${state.coachingSeatsRemaining} of ${state.coachingSeatsTotal} private-coaching spots available.`
+      ? state.coachingSeatsClaimed > 0
+        ? `${state.coachingSeatsClaimed} of ${state.coachingSeatsTotal} private-coaching spots claimed · ${state.coachingSeatsRemaining} left${state.coachingSeatsHeld > 0 ? ` (${state.coachingSeatsHeld} currently held)` : ""}.`
+        : state.coachingSeatsHeld > 0
+          ? `${state.coachingSeatsHeld} of ${state.coachingSeatsTotal} private-coaching spots currently held · ${state.coachingSeatsRemaining} left.`
+          : `${state.coachingSeatsTotal} of ${state.coachingSeatsTotal} private-coaching spots available.`
       : state.coachingStatus === "held"
-        ? "Private-coaching spots are currently held. Please keep your selection flexible."
+        ? `${state.coachingSeatsClaimed > 0 ? `${state.coachingSeatsClaimed} of ${state.coachingSeatsTotal} private-coaching spots claimed` : `${state.coachingSeatsHeld} of ${state.coachingSeatsTotal} private-coaching spots currently held`} · ${state.coachingSeatsTotal - state.coachingSeatsClaimed - state.coachingSeatsHeld} left.`
         : state.coachingStatus === "under_review"
-          ? "Private-coaching availability is under review."
-          : "Private coaching is sold out for this cohort.";
+          ? `${state.coachingSeatsClaimed} of ${state.coachingSeatsTotal} private-coaching spots claimed · availability is under review.`
+          : `${state.coachingSeatsTotal} of ${state.coachingSeatsTotal} private-coaching spots claimed · no spots remaining.`;
 
   return (
     <div ref={sectionRef} className="mt-14">
@@ -150,31 +203,47 @@ export default function EnrollmentPanel() {
             ceiling: index === 1 ? 3 : index === 2 ? 6 : 12,
             priceCents: TIER_COPY[index as 1 | 2 | 3].price * 100,
             status: "upcoming" as const,
+            capacity: index === 1 ? 3 : index === 2 ? 3 : 6,
+            claimed: 0,
+            remaining: index === 1 ? 3 : index === 2 ? 3 : 6,
           };
           const copy = TIER_COPY[index as 1 | 2 | 3];
           const active = state?.activeTier.index === index && state.enrollmentStatus === "open";
+          const tierSoldOut = tier.status === "complete";
+          const tierLabelColor = tierSoldOut ? "text-white/40" : index === 1 ? "text-[#FDB515]" : index === 2 ? "text-[#60A5FA]" : "text-white/65";
+          const tierPriceColor = tierSoldOut ? "text-white/55" : "text-white";
+          const availabilityCopy = tier.claimed > 0
+            ? `${tier.claimed} of ${tier.capacity} claimed · ${tier.remaining} spot${tier.remaining === 1 ? "" : "s"} left`
+            : active
+              ? `${tier.capacity} spots available at this price`
+              : null;
           return (
-            <article key={index} className={`relative rounded-3xl border p-7 ${active ? "border-2 border-[#FDB515] bg-[#15120A] shadow-[0_20px_70px_rgba(253,181,21,0.08)]" : "border-white/12 bg-[#111]"}`}>
-              {index === 1 ? <span className="absolute -top-3 left-7 rounded-full bg-[#FDB515] px-3 py-1 text-xs font-extrabold uppercase tracking-[0.12em] text-black">Best founding price</span> : null}
-              <p className={`mt-2 text-xs font-bold uppercase tracking-[0.18em] ${index === 1 ? "text-[#FDB515]" : index === 2 ? "text-[#60A5FA]" : "text-white/65"}`}>{copy.label} — ${copy.price}</p>
-              <p className="mt-5 font-display text-6xl font-extrabold text-white">${copy.price}</p>
-              <p className="mt-3 min-h-12 text-sm leading-6 text-white/65">{copy.saving}</p>
-              <p className={`mt-6 border-t pt-4 text-sm font-semibold ${active ? "border-[#FDB515]/25 text-[#FDB515]" : "border-white/10 text-white/55"}`}>{tierNote(tier, state)}</p>
+            <article key={index} className={`relative rounded-3xl border p-7 ${tierSoldOut ? "border-white/10 bg-[#0B0B0B]" : active ? "border-2 border-[#FDB515] bg-[#15120A] shadow-[0_20px_70px_rgba(253,181,21,0.08)]" : "border-white/12 bg-[#111]"}`}>
+              {tierSoldOut ? <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-3xl"><Image alt="SOLD OUT" src="/running-man/sold-out-stamp-option-2.png" width={2067} height={761} className="absolute left-1/2 top-16 h-auto w-[105%] -translate-x-1/2 -rotate-[12deg] object-contain opacity-80 brightness-75 contrast-125" /></div> : null}
+              {index === 1 ? <span className="absolute -top-3 left-7 z-20 rounded-full bg-[#FDB515] px-3 py-1 text-xs font-extrabold uppercase tracking-[0.12em] text-black">Best founding price</span> : null}
+              <div className="relative z-10">
+                <p className={`mt-2 text-xs font-bold uppercase tracking-[0.18em] ${tierLabelColor}`}>{copy.label} — ${copy.price}</p>
+                <p className={`mt-5 font-display text-6xl font-extrabold ${tierPriceColor}`}>${copy.price}</p>
+                <p className="mt-3 min-h-12 text-sm leading-6 text-white/65">{copy.saving}</p>
+                {availabilityCopy ? <p className={`mt-5 font-display text-xl font-bold ${active ? "text-[#FDB515]" : "text-white/80"}`}>{availabilityCopy}</p> : null}
+                <p className={`border-t pt-4 text-sm font-semibold ${availabilityCopy ? "mt-4" : "mt-6"} ${active ? "border-[#FDB515]/25 text-[#FDB515]" : "border-white/10 text-white/55"}`}>{tierNote(tier, state)}</p>
+              </div>
             </article>
           );
         })}
       </div>
 
-      <div className="mt-6 rounded-3xl border border-[#2563EB]/45 bg-[#0B1734] p-7 sm:p-9">
-        <div className="flex gap-4">
-          <Sparkles aria-hidden="true" className="mt-1 h-6 w-6 shrink-0 text-[#60A5FA]" />
+      <div className={`relative mt-6 overflow-hidden rounded-3xl border p-7 sm:p-9 ${coachingSoldOut ? "border-white/10 bg-[#101010]" : "border-[#2563EB]/45 bg-[#0B1734]"}`}>
+        {coachingSoldOut ? <Image alt="SOLD OUT" src="/running-man/sold-out-stamp-option-2.png" width={2067} height={761} className="pointer-events-none absolute right-8 top-24 z-0 h-auto w-[28rem] max-w-[62%] rotate-[10deg] object-contain opacity-80 brightness-75 contrast-125" /> : null}
+        <div className="relative z-10 flex gap-4">
+          <Sparkles aria-hidden="true" className={`mt-1 h-6 w-6 shrink-0 ${coachingSoldOut ? "text-white/40" : "text-[#60A5FA]"}`} />
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#60A5FA]">Limited to three students</p>
-            <h3 className="mt-3 font-display text-3xl font-bold uppercase text-white">Add Private Coaching for $100</h3>
+            <p className={`text-xs font-bold uppercase tracking-[0.18em] ${coachingSoldOut ? "text-white/45" : "text-[#60A5FA]"}`}>{coachingSoldOut ? "Private coaching availability" : "Limited to three students"}</p>
+            <h3 className="mt-3 font-display text-3xl font-bold uppercase text-white">{coachingSoldOut ? "Private Coaching — Sold Out" : "Add Private Coaching for $100"}</h3>
             <p className="mt-3 text-sm leading-6 text-white/70">Two 20-minute private check-ins with Ceech—one in Week 1 and one in Week 3—focused on your specific challenges.</p>
           </div>
         </div>
-        <label className={`mt-7 flex cursor-pointer gap-4 rounded-2xl border p-5 transition ${coachingAvailable ? "border-[#60A5FA]/45 bg-[#2563EB]/10 hover:bg-[#2563EB]/15" : "cursor-not-allowed border-white/10 bg-black/20"}`}>
+        <label aria-disabled={!coachingAvailable} className={`relative z-20 mt-7 flex cursor-pointer gap-4 rounded-2xl border p-5 transition ${coachingAvailable ? "border-[#60A5FA]/45 bg-[#2563EB]/10 hover:bg-[#2563EB]/15" : "cursor-not-allowed border-white/10 bg-black/20"}`}>
           <input
             type="checkbox"
             checked={selectedCoaching}
@@ -212,12 +281,36 @@ export default function EnrollmentPanel() {
       <div className="mt-6 rounded-3xl border border-[#FDB515]/30 bg-[#15120A] p-6 sm:flex sm:items-center sm:justify-between sm:gap-8 sm:p-8">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#FDB515]">Your current enrollment</p>
-          <p className="mt-2 font-display text-3xl font-bold uppercase text-white">{total ? `$${total} paid in full` : "Availability required before checkout"}</p>
+          <p className="mt-2 font-display text-3xl font-bold uppercase text-white">{total ? `$${total} paid in full` : showWaitlist ? "Cohort sold out" : "Availability required before checkout"}</p>
           <p aria-live="polite" className="mt-2 max-w-2xl text-sm leading-6 text-white/70">{state?.currentCta.supportingCopy ?? unavailableMessage ?? "Checking live enrollment availability…"}</p>
         </div>
-        <button type="button" onClick={beginCheckout} disabled={!canCheckout} className="mt-5 inline-flex min-h-14 w-full items-center justify-center rounded-full bg-[#2563EB] px-7 text-center text-base font-bold text-white shadow-[0_16px_44px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:bg-[#1D4ED8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FDB515] disabled:cursor-not-allowed disabled:bg-white/15 disabled:text-white/50 disabled:shadow-none sm:mt-0 sm:w-auto">
-          {isSubmitting ? <><LoaderCircle aria-hidden="true" className="mr-2 h-5 w-5 animate-spin" />Opening secure checkout…</> : state?.currentCta.label ?? "Checking availability…"}
-        </button>
+        {showWaitlist ? (
+          waitlistSubmitted ? (
+            <p role="status" className="mt-5 text-sm font-semibold leading-6 text-[#FDB515] sm:mt-0 sm:max-w-xs">You’re on the list. We’ll email you if a seat opens or the next cohort is announced.</p>
+          ) : (
+            <form onSubmit={joinWaitlist} className="mt-5 w-full space-y-3 sm:mt-0 sm:max-w-sm">
+              <label className="sr-only" htmlFor="running-man-waitlist-name">Your name</label>
+              <input id="running-man-waitlist-name" value={waitlistName} onChange={(event) => setWaitlistName(event.target.value)} placeholder="Your name" autoComplete="name" className="min-h-11 w-full rounded-xl border border-white/15 bg-black/20 px-4 text-sm text-white placeholder:text-white/45 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FDB515]" />
+              <label className="sr-only" htmlFor="running-man-waitlist-email">Your email</label>
+              <input id="running-man-waitlist-email" type="email" value={waitlistEmail} onChange={(event) => setWaitlistEmail(event.target.value)} placeholder="Your email" autoComplete="email" className="min-h-11 w-full rounded-xl border border-white/15 bg-black/20 px-4 text-sm text-white placeholder:text-white/45 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FDB515]" />
+              <label className="flex gap-3 text-xs leading-5 text-white/70">
+                <input type="checkbox" checked={waitlistConsent} onChange={(event) => setWaitlistConsent(event.target.checked)} className="mt-1 h-4 w-4 shrink-0 accent-[#FDB515]" />
+                <span>I agree to receive Running Man Method and Dance With Ceech updates. Joining the waitlist is not a paid reservation.</span>
+              </label>
+              <label className="absolute -left-[10000px] h-px w-px overflow-hidden" aria-hidden="true">
+                Website
+                <input tabIndex={-1} autoComplete="off" value={waitlistWebsite} onChange={(event) => setWaitlistWebsite(event.target.value)} />
+              </label>
+              <button type="submit" disabled={waitlistSubmitting || !waitlistName.trim() || !waitlistEmail.trim() || !waitlistConsent} className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[#2563EB] px-6 text-center text-sm font-bold text-white shadow-[0_16px_44px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:bg-[#1D4ED8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FDB515] disabled:cursor-not-allowed disabled:bg-white/15 disabled:text-white/50 disabled:shadow-none">
+                {waitlistSubmitting ? <><LoaderCircle aria-hidden="true" className="mr-2 h-5 w-5 animate-spin" />Joining…</> : "Join the waitlist"}
+              </button>
+            </form>
+          )
+        ) : (
+          <button type="button" onClick={beginCheckout} disabled={!canCheckout} className="mt-5 inline-flex min-h-14 w-full items-center justify-center rounded-full bg-[#2563EB] px-7 text-center text-base font-bold text-white shadow-[0_16px_44px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:bg-[#1D4ED8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FDB515] disabled:cursor-not-allowed disabled:bg-white/15 disabled:text-white/50 disabled:shadow-none sm:mt-0 sm:w-auto">
+            {isSubmitting ? <><LoaderCircle aria-hidden="true" className="mr-2 h-5 w-5 animate-spin" />Opening secure checkout…</> : checkoutLabel}
+          </button>
+        )}
       </div>
 
       {notice ? <div role="status" aria-live="polite" className="mt-5 flex gap-3 rounded-2xl border border-[#FDB515]/35 bg-[#15120A] p-5 text-sm leading-6 text-white/85"><CircleAlert aria-hidden="true" className="h-5 w-5 shrink-0 text-[#FDB515]" />{notice}</div> : null}
