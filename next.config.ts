@@ -26,6 +26,13 @@ const DEFAULT_CONTENT_SECURITY_POLICY = [
   "upgrade-insecure-requests",
 ].join("; ");
 
+// React's development diagnostics use eval to reconstruct component stacks.
+// Keep production strict while allowing the local Next.js error overlay to run.
+const DEVELOPMENT_CONTENT_SECURITY_POLICY = DEFAULT_CONTENT_SECURITY_POLICY.replace(
+  "script-src 'self' 'unsafe-inline' https:",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:",
+);
+
 const PRACTICE_CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' https:",
@@ -69,7 +76,10 @@ const securityHeaders = [
   },
   {
     key: "Content-Security-Policy",
-    value: DEFAULT_CONTENT_SECURITY_POLICY,
+    value:
+      process.env.NODE_ENV === "development"
+        ? DEVELOPMENT_CONTENT_SECURITY_POLICY
+        : DEFAULT_CONTENT_SECURITY_POLICY,
   },
   {
     key: "Permissions-Policy",
@@ -86,6 +96,7 @@ const immutableCacheHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  devIndicators: false,
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
