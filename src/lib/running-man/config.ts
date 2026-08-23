@@ -1,17 +1,17 @@
 export const COHORT = Object.freeze({
   slug: "running-man-method-fall-2026",
   seats: 12,
-  cutoffIso: "2026-09-18T06:59:00.000Z",
+  checkoutCutoffIso: "2026-09-18T06:59:00.000Z",
   tiers: Object.freeze([
     Object.freeze({
       index: 1,
-      ceiling: 4,
+      ceiling: 3,
       priceCents: 19700,
       priceEnv: "RUNNING_MAN_STRIPE_PRICE_197",
     }),
     Object.freeze({
       index: 2,
-      ceiling: 8,
+      ceiling: 6,
       priceCents: 24700,
       priceEnv: "RUNNING_MAN_STRIPE_PRICE_247",
     }),

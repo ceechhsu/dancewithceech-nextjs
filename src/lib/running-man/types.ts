@@ -4,7 +4,7 @@ export type EnrollmentState = {
   seatsRemaining: number;
   coachingSeatsTotal: number;
   coachingSeatsRemaining: number;
-  cutoffIso: string;
+  checkoutCutoffIso: string;
   isOpen: boolean;
 };
 
