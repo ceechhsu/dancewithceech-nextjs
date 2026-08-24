@@ -24,7 +24,6 @@ import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import HeroSeatStatus from "@/components/running-man/HeroSeatStatus";
 import EnrollmentPanel from "@/components/running-man/EnrollmentPanel";
-import RunningManTeaser from "@/components/RunningManTeaser";
 
 const enrollmentHref = "#enroll";
 
@@ -211,8 +210,21 @@ export default function RunningManMethodPage() {
             </div>
             <h1 className="font-display text-5xl font-extrabold uppercase leading-[0.94] tracking-[-0.025em] text-white sm:text-6xl lg:text-7xl">Learn the Running Man—and Finally Feel Ready to Join the Dance Floor</h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-white/70 sm:text-xl">A four-week online cohort for complete and frustrated adult beginners who are tired of copying choreography and guessing whether they are practicing correctly.</p>
-            <div className="mt-7 max-w-2xl border-l-2 border-[#FDB515] bg-white/[0.035] px-5 py-4 text-sm leading-6 text-white/70 sm:text-base">
-              <strong className="text-white">What is the Running Man?</strong>{" "}The iconic hip-hop move that creates the illusion of running in place—a recognizable, versatile step you can use with many different songs.
+            <div className="mt-7 max-w-2xl overflow-hidden rounded-3xl border border-white/15 bg-black shadow-2xl">
+              <video
+                className="block aspect-video w-full"
+                controls
+                playsInline
+                preload="metadata"
+                poster="/images/running-man-method-teaser-poster.jpg"
+                aria-label="Ceech and Margarita demonstrating the Running Man with step-by-step captions"
+              >
+                <source src="/videos/running-man-method-teaser.mp4" type="video/mp4" />
+                Your browser does not support video playback.
+              </video>
+              <p className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-white/70 sm:text-base">
+                <strong className="text-white">What is the Running Man?</strong>{" "}The iconic hip-hop move that creates the illusion of running in place—a recognizable, versatile step you can use with many different songs.
+              </p>
             </div>
             <p className="mt-7 max-w-2xl text-base leading-7 text-white/65 sm:text-lg">Ceech will guide you through simple, progressive drills and give you personalized feedback at key mastery checkpoints, so you know what to adjust and what to practice next.</p>
             <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-3">
@@ -249,12 +261,6 @@ export default function RunningManMethodPage() {
           </div>
         </div>
       </section>
-
-      <RunningManTeaser
-        eyebrow="Watch before you enroll"
-        title="See the move you’ll build"
-        copy="This short demonstration shows the Running Man in action and the teaching approach behind the program: clear rhythm, balance, coordination, and feedback."
-      />
 
       <section className="border-y border-white/10 bg-[#0D0D0D] px-5 py-20 sm:px-8 lg:py-28">
         <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
