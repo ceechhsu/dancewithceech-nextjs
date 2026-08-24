@@ -8,7 +8,7 @@ import CampaignNavLink from "@/components/CampaignNavLink"
 const links = [
   { label: "BeatFirst", href: "/beat-first" },
   { label: "Blog", href: "/blog" },
-  { label: "Running Man", href: "/running-man-method#enroll" },
+  { label: "Running Man", href: "/running-man-method" },
   { label: "Academy", href: "/academy" },
   { label: "Private Lessons", href: "/private-lessons" },
   { label: "Contact", href: "/contact" },
