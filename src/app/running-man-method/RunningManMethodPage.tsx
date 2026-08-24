@@ -24,6 +24,7 @@ import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import HeroSeatStatus from "@/components/running-man/HeroSeatStatus";
 import EnrollmentPanel from "@/components/running-man/EnrollmentPanel";
+import RunningManTeaser from "@/components/RunningManTeaser";
 
 const enrollmentHref = "#enroll";
 
@@ -248,6 +249,12 @@ export default function RunningManMethodPage() {
           </div>
         </div>
       </section>
+
+      <RunningManTeaser
+        eyebrow="Watch before you enroll"
+        title="See the move you’ll build"
+        copy="This short demonstration shows the Running Man in action and the teaching approach behind the program: clear rhythm, balance, coordination, and feedback."
+      />
 
       <section className="border-y border-white/10 bg-[#0D0D0D] px-5 py-20 sm:px-8 lg:py-28">
         <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">

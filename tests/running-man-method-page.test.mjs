@@ -91,6 +91,8 @@ test("the hero exposes live founding-seat urgency with a safe fallback", async (
   assert.match(heroStatus, /Only 12 students/);
   assert.match(heroStatus, /aria-live="polite"/);
   assert.match(heroStatus, /seatsRemaining/);
+  assert.match(heroStatus, /tier\.held/);
+  assert.match(heroStatus, /currently checking out/);
 });
 
 test("the final enrollment reminder repeats the live seat urgency", async () => {
@@ -144,6 +146,22 @@ test("the active price card shows live claimed and remaining seats", async () =>
 
   assert.match(enrollmentPanel, /tier\.claimed/);
   assert.match(enrollmentPanel, /tier\.remaining/);
+});
+
+test("the enrollment panel separates paid availability from active checkout holds", async () => {
+  const enrollmentPanel = await readFile(enrollmentPanelPath, "utf8");
+
+  assert.match(enrollmentPanel, /tier\.held/);
+  assert.match(enrollmentPanel, /temporarily held in checkout/);
+  assert.match(enrollmentPanel, /coachingSeatsHeld/);
+});
+
+test("the current enrollment summary separates enrollment and coaching prices", async () => {
+  const enrollmentPanel = await readFile(enrollmentPanelPath, "utf8");
+
+  assert.match(enrollmentPanel, /Enrollment price/);
+  assert.match(enrollmentPanel, /Private coaching add-on/);
+  assert.match(enrollmentPanel, /Total paid/);
 });
 
 test("sold-out offers are visibly stamped and remain non-interactive", async () => {

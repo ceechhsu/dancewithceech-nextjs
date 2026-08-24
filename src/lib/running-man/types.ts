@@ -25,6 +25,7 @@ export type EnrollmentTier = {
   capacity: number;
   claimed: number;
   remaining: number;
+  held: number;
 };
 
 /** Client-safe derived enrollment view; it contains no customer or payment data. */

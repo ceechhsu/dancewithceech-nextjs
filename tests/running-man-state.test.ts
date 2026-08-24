@@ -123,10 +123,10 @@ test("a hold on the last first-tier allocation pauses enrollment without advanci
   assert.equal(state.activeTier.index, 1);
   assert.equal(state.activeTier.priceCents, 19700);
   assert.equal(state.canStartCheckout, false);
-  assert.equal(state.currentCta.supportingCopy, "The final founding-price seat is temporarily held.");
+  assert.equal(state.currentCta.supportingCopy, "1 checkout currently in progress. The final founding-price seat is temporarily held.");
 });
 
-test("a partial tier hold reduces CTA availability and identifies the held seat", () => {
+test("a partial tier hold preserves paid seat availability and identifies the held seat", () => {
   const state = deriveEnrollmentState(aggregate({
     activePaidStudents: 1,
     capacityConsumed: 1,
@@ -139,8 +139,25 @@ test("a partial tier hold reduces CTA availability and identifies the held seat"
 
   assert.equal(state.enrollmentStatus, "open");
   assert.equal(state.canStartCheckout, true);
-  assert.equal(state.seatsRemaining, 10);
-  assert.equal(state.currentCta.supportingCopy, "1 of 3 claimed · 1 left (1 currently held).");
+  assert.equal(state.seatsRemaining, 11);
+  assert.equal(state.currentCta.supportingCopy, "1 of 3 claimed · 1 temporarily held in checkout · 2 spots remaining.");
+});
+
+test("temporary checkout holds are reported separately from paid seat availability", () => {
+  const state = deriveEnrollmentState(aggregate({
+    activePaidStudents: 1,
+    capacityConsumed: 1,
+    tiers: {
+      1: { activePaid: 1, allocationConsumed: 1, underReview: 0, activeHolds: 1 },
+      2: { activePaid: 0, allocationConsumed: 0, underReview: 0, activeHolds: 0 },
+      3: { activePaid: 0, allocationConsumed: 0, underReview: 0, activeHolds: 0 },
+    },
+  }));
+
+  assert.equal(state.seatsRemaining, 11);
+  assert.equal(state.activeTier.remaining, 2);
+  assert.equal(state.activeTier.held, 1);
+  assert.equal(state.currentCta.supportingCopy, "1 of 3 claimed · 1 temporarily held in checkout · 2 spots remaining.");
 });
 
 test("reviewed allocations consume capacity without being presented as paid students", () => {

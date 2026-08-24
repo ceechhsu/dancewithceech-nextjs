@@ -3,6 +3,7 @@ import Image from "next/image";
 import MobileMenu from "@/components/MobileMenu";
 import UserMenu from "@/components/UserMenu";
 import SignInButton from "@/components/SignInButton";
+import CampaignNavLink from "@/components/CampaignNavLink";
 
 type NavUser = {
   name?: string | null;
@@ -32,6 +33,7 @@ export default function Nav({ user }: Props = {}) {
       <div className="hidden md:flex items-center gap-6 text-sm" style={{ color: "var(--muted)" }}>
         <Link href="/beat-first" className="hover:text-white transition-colors">BeatFirst</Link>
         <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
+        <CampaignNavLink />
         <Link href="/academy" className="hover:text-white transition-colors">Academy</Link>
         <Link href="/private-lessons" className="hover:text-white transition-colors">Private Lessons</Link>
         <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>

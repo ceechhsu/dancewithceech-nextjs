@@ -28,9 +28,16 @@ function priceForState(response: Extract<EnrollmentStateResponse, { kind: "avail
   return `$${priceCents / 100} · Paid in full`;
 }
 
+function checkoutHoldCopy(response: Extract<EnrollmentStateResponse, { kind: "available" }>): string | null {
+  const totalHolds = response.state.tierLadder.reduce((total, tier) => total + tier.held, 0);
+  if (totalHolds === 0) return null;
+  return `${totalHolds} person${totalHolds === 1 ? "" : "s"} currently checking out`;
+}
+
 export default function HeroSeatStatus({ compact = false, showPrice = false }: { compact?: boolean; showPrice?: boolean }) {
   const [copy, setCopy] = useState(FALLBACK_COPY);
   const [priceCopy, setPriceCopy] = useState(FALLBACK_PRICE_COPY);
+  const [holdCopy, setHoldCopy] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
     try {
@@ -42,6 +49,7 @@ export default function HeroSeatStatus({ compact = false, showPrice = false }: {
       if (!isEnrollmentResponse(body) || body.kind === "unavailable") return;
       setCopy(copyForState(body));
       setPriceCopy(priceForState(body));
+      setHoldCopy(checkoutHoldCopy(body));
     } catch {
       // Keep the truthful 12-seat fallback if live availability is temporarily unavailable.
     }
@@ -62,6 +70,7 @@ export default function HeroSeatStatus({ compact = false, showPrice = false }: {
     <>
       {showPrice ? <p className={compact ? "text-sm leading-6 text-white/55" : statusClassName}>{priceCopy}</p> : null}
       <p aria-live="polite" className={statusClassName}>{copy}</p>
+      {holdCopy ? <p aria-live="polite" className={compact ? "mt-1 text-xs font-semibold text-[#FDB515]" : "mt-1 text-sm font-semibold text-[#FDB515]"}>{holdCopy}</p> : null}
     </>
   );
 }

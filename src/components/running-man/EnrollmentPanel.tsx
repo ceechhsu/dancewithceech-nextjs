@@ -18,7 +18,7 @@ function tierNote(tier: EnrollmentTier, state: EnrollmentState | null): string {
   if (!state) return "Availability is being confirmed.";
   if (tier.status === "active") return "Current enrollment price";
   if (tier.status === "complete") return "Sold out — this price is no longer available.";
-  if (tier.status === "held") return "This price tier is currently held.";
+  if (tier.status === "held") return "This price tier is temporarily held by another checkout.";
   if (tier.status === "under_review") return "Availability is under review.";
   if (tier.status === "unavailable") return "Currently unavailable.";
   return "Available after earlier founding seats are claimed.";
@@ -94,7 +94,8 @@ export default function EnrollmentPanel() {
   const coachingAvailable = state?.coachingStatus === "available";
   const coachingSoldOut = state?.coachingStatus === "sold_out";
   const selectedCoaching = coachingAvailable && coachingSelected;
-  const total = state?.enrollmentStatus === "open" ? state.activeTier.priceCents / 100 + (selectedCoaching ? 100 : 0) : null;
+  const enrollmentPrice = state?.enrollmentStatus === "open" ? state.activeTier.priceCents / 100 : null;
+  const total = enrollmentPrice !== null ? enrollmentPrice + (selectedCoaching ? 100 : 0) : null;
   const canCheckout = Boolean(state?.canStartCheckout && acknowledged && !isSubmitting);
   const showWaitlist = state?.enrollmentStatus === "sold_out";
   const checkoutLabel = selectedCoaching && total !== null ? `Claim your seat — $${total}` : state?.currentCta.label ?? "Checking availability…";
@@ -178,12 +179,12 @@ export default function EnrollmentPanel() {
     ? "Coaching availability will be confirmed when live enrollment availability is available."
     : state.coachingStatus === "available"
       ? state.coachingSeatsClaimed > 0
-        ? `${state.coachingSeatsClaimed} of ${state.coachingSeatsTotal} private-coaching spots claimed · ${state.coachingSeatsRemaining} left${state.coachingSeatsHeld > 0 ? ` (${state.coachingSeatsHeld} currently held)` : ""}.`
+        ? `${state.coachingSeatsClaimed} of ${state.coachingSeatsTotal} private-coaching spots claimed${state.coachingSeatsHeld > 0 ? ` · ${state.coachingSeatsHeld} temporarily held in checkout` : ""} · ${state.coachingSeatsTotal - state.coachingSeatsClaimed} spot${state.coachingSeatsTotal - state.coachingSeatsClaimed === 1 ? "" : "s"} remaining.`
         : state.coachingSeatsHeld > 0
-          ? `${state.coachingSeatsHeld} of ${state.coachingSeatsTotal} private-coaching spots currently held · ${state.coachingSeatsRemaining} left.`
+          ? `${state.coachingSeatsHeld} private-coaching spot${state.coachingSeatsHeld === 1 ? "" : "s"} temporarily held in checkout · ${state.coachingSeatsTotal} spots remaining.`
           : `${state.coachingSeatsTotal} of ${state.coachingSeatsTotal} private-coaching spots available.`
       : state.coachingStatus === "held"
-        ? `${state.coachingSeatsClaimed > 0 ? `${state.coachingSeatsClaimed} of ${state.coachingSeatsTotal} private-coaching spots claimed` : `${state.coachingSeatsHeld} of ${state.coachingSeatsTotal} private-coaching spots currently held`} · ${state.coachingSeatsTotal - state.coachingSeatsClaimed - state.coachingSeatsHeld} left.`
+        ? `${state.coachingSeatsClaimed > 0 ? `${state.coachingSeatsClaimed} of ${state.coachingSeatsTotal} private-coaching spots claimed · ` : ""}${state.coachingSeatsHeld} private-coaching spot${state.coachingSeatsHeld === 1 ? "" : "s"} temporarily held in checkout · ${state.coachingSeatsTotal - state.coachingSeatsClaimed} spot${state.coachingSeatsTotal - state.coachingSeatsClaimed === 1 ? "" : "s"} remaining after the hold expires.`
         : state.coachingStatus === "under_review"
           ? `${state.coachingSeatsClaimed} of ${state.coachingSeatsTotal} private-coaching spots claimed · availability is under review.`
           : `${state.coachingSeatsTotal} of ${state.coachingSeatsTotal} private-coaching spots claimed · no spots remaining.`;
@@ -206,6 +207,7 @@ export default function EnrollmentPanel() {
             capacity: index === 1 ? 3 : index === 2 ? 3 : 6,
             claimed: 0,
             remaining: index === 1 ? 3 : index === 2 ? 3 : 6,
+            held: 0,
           };
           const copy = TIER_COPY[index as 1 | 2 | 3];
           const active = state?.activeTier.index === index && state.enrollmentStatus === "open";
@@ -226,6 +228,7 @@ export default function EnrollmentPanel() {
                 <p className={`mt-5 font-display text-6xl font-extrabold ${tierPriceColor}`}>${copy.price}</p>
                 <p className="mt-3 min-h-12 text-sm leading-6 text-white/65">{copy.saving}</p>
                 {availabilityCopy ? <p className={`mt-5 font-display text-xl font-bold ${active ? "text-[#FDB515]" : "text-white/80"}`}>{availabilityCopy}</p> : null}
+                {tier.held > 0 ? <p className={`mt-3 text-sm font-semibold ${active ? "text-[#60A5FA]" : "text-white/70"}`}>{tier.held} checkout{tier.held === 1 ? "" : "s"} currently in progress</p> : null}
                 <p className={`border-t pt-4 text-sm font-semibold ${availabilityCopy ? "mt-4" : "mt-6"} ${active ? "border-[#FDB515]/25 text-[#FDB515]" : "border-white/10 text-white/55"}`}>{tierNote(tier, state)}</p>
               </div>
             </article>
@@ -281,8 +284,16 @@ export default function EnrollmentPanel() {
       <div className="mt-6 rounded-3xl border border-[#FDB515]/30 bg-[#15120A] p-6 sm:flex sm:items-center sm:justify-between sm:gap-8 sm:p-8">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#FDB515]">Your current enrollment</p>
-          <p className="mt-2 font-display text-3xl font-bold uppercase text-white">{total ? `$${total} paid in full` : showWaitlist ? "Cohort sold out" : "Availability required before checkout"}</p>
-          <p aria-live="polite" className="mt-2 max-w-2xl text-sm leading-6 text-white/70">{state?.currentCta.supportingCopy ?? unavailableMessage ?? "Checking live enrollment availability…"}</p>
+          <p className="mt-2 font-display text-3xl font-bold uppercase text-white">{total ? `$${total} total paid in full` : showWaitlist ? "Cohort sold out" : "Availability required before checkout"}</p>
+          {total !== null && enrollmentPrice !== null ? (
+            <div aria-live="polite" className="mt-2 space-y-1 text-sm leading-6 text-white/70">
+              <p>Enrollment price: ${enrollmentPrice}</p>
+              {selectedCoaching ? <p>Private coaching add-on: $100</p> : null}
+              {selectedCoaching ? <p className="font-semibold text-white">Total paid: ${total}</p> : <p>{state?.currentCta.supportingCopy}</p>}
+            </div>
+          ) : (
+            <p aria-live="polite" className="mt-2 max-w-2xl text-sm leading-6 text-white/70">{state?.currentCta.supportingCopy ?? unavailableMessage ?? "Checking live enrollment availability…"}</p>
+          )}
         </div>
         {showWaitlist ? (
           waitlistSubmitted ? (

@@ -184,7 +184,8 @@ function ladderFor(
       status: tierStatus,
       capacity,
       claimed: aggregateTier.activePaid,
-      remaining: capacity - aggregateTier.allocationConsumed - aggregateTier.activeHolds,
+      remaining: capacity - aggregateTier.allocationConsumed,
+      held: aggregateTier.activeHolds,
     };
   });
 }
@@ -210,9 +211,10 @@ function ctaFor(
     };
   }
   if (status === "tier_held") {
+    const held = aggregate.tiers[tier.index].activeHolds;
     return {
       label: "Enrollment temporarily paused",
-      supportingCopy: `The final ${tier.index === 1 ? "founding-price" : `tier-${tier.index}`} seat is temporarily held.`,
+      supportingCopy: `${held} checkout${held === 1 ? "" : "s"} currently in progress. The final ${tier.index === 1 ? "founding-price" : `tier-${tier.index}`} seat is temporarily held.`,
     };
   }
 
@@ -225,16 +227,16 @@ function ctaFor(
     };
   }
   if (tierAggregate.activeHolds > 0) {
-    const available = capacity - tierAggregate.allocationConsumed - tierAggregate.activeHolds;
+    const remaining = capacity - tierAggregate.allocationConsumed;
     if (tierAggregate.activePaid === 0) {
       return {
         label: `Claim your seat — $${tier.priceCents / 100}`,
-        supportingCopy: `${tierAggregate.activeHolds} of ${capacity} seats currently held · ${available} left.`,
+        supportingCopy: `${tierAggregate.activeHolds} checkout${tierAggregate.activeHolds === 1 ? "" : "s"} currently in progress · ${remaining} spot${remaining === 1 ? "" : "s"} remaining at this price.`,
       };
     }
     return {
       label: `Claim your seat — $${tier.priceCents / 100}`,
-      supportingCopy: `${tierAggregate.activePaid} of ${capacity} claimed · ${available} left (${tierAggregate.activeHolds} currently held).`,
+      supportingCopy: `${tierAggregate.activePaid} of ${capacity} claimed · ${tierAggregate.activeHolds} temporarily held in checkout · ${remaining} spot${remaining === 1 ? "" : "s"} remaining.`,
     };
   }
   if (tierAggregate.activePaid === 0) {
@@ -275,10 +277,7 @@ export function deriveEnrollmentState(aggregate: EnrollmentAggregate): Enrollmen
     coachingStatus,
     seatsTotal: COHORT.seats,
     seatsRemaining: canStartCheckout
-      ? COHORT.seats - aggregate.capacityConsumed - tierIndexes.reduce(
-          (holds, index) => holds + aggregate.tiers[index].activeHolds,
-          0,
-        )
+      ? COHORT.seats - aggregate.capacityConsumed
       : null,
     activePaidStudents: aggregate.activePaidStudents,
     capacityConsumed: aggregate.capacityConsumed,
