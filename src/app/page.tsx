@@ -4,7 +4,6 @@ import Nav from "@/components/Nav";
 import ScrollyHero from "@/components/ScrollyHero";
 import StatsBar from "@/components/StatsBar";
 import RunningManCampaignBanner from "@/components/RunningManCampaignBanner";
-import RunningManTeaser from "@/components/RunningManTeaser";
 import TestimonialsMarquee from "@/components/TestimonialsMarquee";
 import { CircularGallery } from "@/components/ui/circular-gallery";
 import { RainbowBorderButton } from "@/components/ui/rainbow-border-button";
@@ -71,13 +70,6 @@ export default function Home() {
 
       {/* TEMPORARY FOUNDING-COHORT CAMPAIGN */}
       <RunningManCampaignBanner />
-
-      {/* RUNNING MAN VIDEO TEASER */}
-      <RunningManTeaser
-        eyebrow="New · Founding Cohort"
-        title="See exactly what you’ll learn"
-        copy="Watch the move, hear the method, and see how Ceech breaks the Running Man down step by step for beginners."
-      />
 
       {/* CREDIBILITY */}
       <section className="py-16 px-6">
