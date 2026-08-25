@@ -99,11 +99,11 @@ Run: `git add src/components/DeferredAnalytics.tsx tests/running-man-analytics.t
 
 - [ ] **Step 1: Write failing source-level tests**
 
-Assert that homepage campaign and teaser use the two new tracked components with fixed placements: `homepage_campaign_banner` and `homepage_teaser`. Assert that the CTA destination is `enrollment_section`.
+Assert that homepage campaign and teaser use the two new tracked components with fixed placements: `homepage_campaign_banner` and `homepage_teaser`. Assert that the CTA destination is `enrollment_section`. In the focused analytics test, add behavioral coverage for the video milestone controller: first play emits start once, normal playback crossing 50% emits midpoint once, a seek past 50% emits no midpoint, `ended` emits completion, and replay during the same mounted view adds no duplicate milestones.
 
 - [ ] **Step 2: Run the discovery test to confirm failure**
 
-Run: `npm exec tsx --test tests/running-man-discovery.test.mjs`
+Run: `npm exec tsx --test tests/running-man-discovery.test.mjs tests/running-man-analytics.test.ts`
 
 Expected: FAIL because the tracked components are absent.
 
@@ -113,7 +113,7 @@ The video component must emit one start only at first play, midpoint only when n
 
 - [ ] **Step 4: Re-run the discovery test**
 
-Run: `npm exec tsx --test tests/running-man-discovery.test.mjs`
+Run: `npm exec tsx --test tests/running-man-discovery.test.mjs tests/running-man-analytics.test.ts`
 
 Expected: PASS.
 
