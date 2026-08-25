@@ -24,6 +24,8 @@ import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import HeroSeatStatus from "@/components/running-man/HeroSeatStatus";
 import EnrollmentPanel from "@/components/running-man/EnrollmentPanel";
+import TrackedRunningManLink from "@/components/running-man/TrackedRunningManLink";
+import TrackedRunningManVideo from "@/components/running-man/TrackedRunningManVideo";
 
 const enrollmentHref = "#enroll";
 
@@ -171,11 +173,11 @@ function SectionHeading({ eyebrow, title, copy, align = "center" }: { eyebrow: s
   );
 }
 
-function PrimaryCta({ label = "Claim My Founding-Cohort Seat", href = enrollmentHref }: { label?: string; href?: string }) {
+function PrimaryCta({ label = "Claim My Founding-Cohort Seat", href = enrollmentHref, placement = "method_page_hero" }: { label?: string; href?: string; placement?: "method_page_hero" | "method_page_enrollment" }) {
   return (
-    <a href={href} className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#2563EB] px-7 text-center text-base font-bold text-white shadow-[0_16px_44px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:bg-[#1D4ED8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FDB515]">
+    <TrackedRunningManLink href={href} placement={placement} destination="enrollment_section" className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#2563EB] px-7 text-center text-base font-bold text-white shadow-[0_16px_44px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:bg-[#1D4ED8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FDB515]">
       {label}
-    </a>
+    </TrackedRunningManLink>
   );
 }
 
@@ -211,7 +213,8 @@ export default function RunningManMethodPage() {
             <h1 className="font-display text-5xl font-extrabold uppercase leading-[0.94] tracking-[-0.025em] text-white sm:text-6xl lg:text-7xl">Learn the Running Man—and Finally Feel Ready to Join the Dance Floor</h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-white/70 sm:text-xl">A four-week online cohort for complete and frustrated adult beginners who are tired of copying choreography and guessing whether they are practicing correctly.</p>
             <div className="mt-7 max-w-2xl overflow-hidden rounded-3xl border border-white/15 bg-black shadow-2xl">
-              <video
+              <TrackedRunningManVideo
+                placement="method_page_hero"
                 className="block aspect-video w-full"
                 controls
                 playsInline
@@ -221,7 +224,7 @@ export default function RunningManMethodPage() {
               >
                 <source src="/videos/running-man-method-teaser.mp4" type="video/mp4" />
                 Your browser does not support video playback.
-              </video>
+              </TrackedRunningManVideo>
               <p className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-white/70 sm:text-base">
                 <strong className="text-white">What is the Running Man?</strong>{" "}The iconic hip-hop move that creates the illusion of running in place—a recognizable, versatile step you can use with many different songs.
               </p>
@@ -417,7 +420,7 @@ export default function RunningManMethodPage() {
             ))}
           </div>
           <div className="mt-10 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
-            <a href="#enroll" className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#FDB515] px-8 text-center text-base font-extrabold text-black transition hover:-translate-y-0.5 hover:bg-[#FFD15C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">I Understand and Am Ready to Enroll</a>
+            <TrackedRunningManLink href="#enroll" placement="method_page_enrollment" destination="enrollment_section" className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#FDB515] px-8 text-center text-base font-extrabold text-black transition hover:-translate-y-0.5 hover:bg-[#FFD15C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">I Understand and Am Ready to Enroll</TrackedRunningManLink>
             <div className="text-sm leading-6 text-white/55">
               <HeroSeatStatus compact showPrice />
               <p className="font-semibold text-white/80">Limited to 12 students</p>
@@ -433,7 +436,7 @@ export default function RunningManMethodPage() {
 
       <Footer />
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#080808]/95 p-3 backdrop-blur md:hidden">
-        <a href="#enroll" className="flex min-h-12 w-full items-center justify-center rounded-full bg-[#2563EB] px-5 text-sm font-bold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FDB515]">View Enrollment</a>
+        <TrackedRunningManLink href="#enroll" placement="method_page_enrollment" destination="enrollment_section" className="flex min-h-12 w-full items-center justify-center rounded-full bg-[#2563EB] px-5 text-sm font-bold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FDB515]">View Enrollment</TrackedRunningManLink>
       </div>
     </main>
   );

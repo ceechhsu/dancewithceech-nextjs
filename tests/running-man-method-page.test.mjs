@@ -141,6 +141,23 @@ test("the enrollment panel handles a completed attempt response", async () => {
   assert.match(enrollmentPanel, /window\.location\.assign\(body\.confirmationUrl\)/);
 });
 
+test("the Method page reports video, enrollment, checkout, coaching, and waitlist funnel actions", async () => {
+  const [component, enrollmentPanel] = await Promise.all([
+    readFile(componentPath, "utf8"),
+    readFile(enrollmentPanelPath, "utf8"),
+  ]);
+
+  assert.match(component, /TrackedRunningManVideo/);
+  assert.match(component, /placement="method_page_hero"/);
+  assert.match(component, /TrackedRunningManLink/);
+  assert.match(component, /placement="method_page_enrollment"/);
+  assert.match(component, /destination="enrollment_section"/);
+  assert.match(enrollmentPanel, /trackRunningManCheckoutThen/);
+  assert.match(enrollmentPanel, /trackRunningManEvent\(RUNNING_MAN_EVENTS\.privateCoachingSelected/);
+  assert.match(enrollmentPanel, /trackRunningManEvent\(RUNNING_MAN_EVENTS\.waitlistJoined/);
+  assert.match(enrollmentPanel, /placement: "method_page_enrollment"/);
+});
+
 test("the active price card shows live claimed and remaining seats", async () => {
   const enrollmentPanel = await readFile(enrollmentPanelPath, "utf8");
 

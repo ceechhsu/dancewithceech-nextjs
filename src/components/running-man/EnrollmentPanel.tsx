@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 
+import { RUNNING_MAN_EVENTS, trackRunningManCheckoutThen, trackRunningManEvent } from "@/lib/analytics/client";
 import { CURRENT_TERMS_VERSION, REQUIRED_COMMITMENTS } from "@/lib/running-man/terms";
 import type { EnrollmentState, EnrollmentStateResponse, EnrollmentTier } from "@/lib/running-man/types";
 
@@ -12,6 +13,12 @@ const TIER_COPY = {
   1: { label: "First 3 Students", price: 197, saving: "Save $100 as one of the first three founding students." },
   2: { label: "Next 3 Students", price: 247, saving: "Save $50 by joining before the first six seats are filled." },
   3: { label: "Remaining 6 Students", price: 297, saving: "Standard enrollment price for the remaining available seats." },
+} as const;
+
+const ANALYTICS_TIER = {
+  1: "founding_197",
+  2: "founding_247",
+  3: "standard_297",
 } as const;
 
 function tierNote(tier: EnrollmentTier, state: EnrollmentState | null): string {
@@ -118,7 +125,12 @@ export default function EnrollmentPanel() {
       });
       const body: unknown = await response.json();
       if (response.ok && body && typeof body === "object" && "checkoutUrl" in body && typeof body.checkoutUrl === "string") {
-        window.location.assign(body.checkoutUrl);
+        trackRunningManCheckoutThen({
+          tier: ANALYTICS_TIER[state.activeTier.index],
+          coachingSelected: selectedCoaching,
+          value: total ?? state.activeTier.priceCents / 100 + (selectedCoaching ? 100 : 0),
+          redirect: () => window.location.assign(body.checkoutUrl),
+        });
         return;
       }
       if (response.ok && body && typeof body === "object" && "confirmationUrl" in body && typeof body.confirmationUrl === "string") {
@@ -160,6 +172,7 @@ export default function EnrollmentPanel() {
       });
       const body: unknown = await response.json();
       if (response.ok && body && typeof body === "object" && "success" in body && body.success === true) {
+        trackRunningManEvent(RUNNING_MAN_EVENTS.waitlistJoined, { placement: "method_page_enrollment" });
         setWaitlistSubmitted(true);
         return;
       }
@@ -251,7 +264,10 @@ export default function EnrollmentPanel() {
             type="checkbox"
             checked={selectedCoaching}
             disabled={!coachingAvailable || isSubmitting}
-            onChange={(event) => setCoachingSelected(event.target.checked)}
+            onChange={(event) => {
+              setCoachingSelected(event.target.checked);
+              if (event.target.checked) trackRunningManEvent(RUNNING_MAN_EVENTS.privateCoachingSelected, { placement: "method_page_enrollment" });
+            }}
             className="mt-1 h-5 w-5 shrink-0 accent-[#2563EB]"
           />
           <span>
