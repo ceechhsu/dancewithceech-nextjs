@@ -44,7 +44,7 @@ Expected: FAIL because the shared client analytics module does not exist.
 
 - [ ] **Step 3: Implement the smallest shared analytics module**
 
-Export a `trackRunningManEvent` function that initializes `dataLayer`/`gtag` only as needed and pushes an event with only approved properties. Export a `trackRunningManCheckoutThen` helper that sends `running_man_checkout_opened`, waits for GA's callback or 250 milliseconds, and then invokes the supplied redirect function. If GA is unavailable or blocked, the redirect must still occur.
+Export a `trackRunningManEvent` function that initializes `dataLayer`/`gtag` only as needed and pushes an event with only approved properties. Export a `trackRunningManCheckoutThen` helper that forces the existing GA initializer and script load before dispatching `running_man_checkout_opened`, then waits for GA's `event_callback` or an independent 250-millisecond one-shot fallback before invoking the supplied redirect function. Tests must cover callback-first and timeout-first paths and prove each redirects exactly once. If GA is unavailable or blocked, the fallback redirect must still occur.
 
 - [ ] **Step 4: Re-run the focused test**
 
@@ -65,7 +65,7 @@ Run: `git add src/lib/analytics/client.ts tests/running-man-analytics.test.ts &&
 
 - [ ] **Step 1: Add a failing test for deferred loading compatibility**
 
-Assert the analytics initializer used by the shared module retains the existing measurement ID `G-BS0RYYMYHZ`, and that the global deferred component schedules it on first interaction or idle timeout rather than importing an analytics package into the server bundle.
+Assert the analytics initializer used by the shared module retains the existing measurement ID `G-BS0RYYMYHZ`, and that the global deferred component retains its actual behavior: a first interaction schedules an idle callback (with a 1.5-second deadline), while no interaction triggers loading after three seconds. Do not import an analytics package into the server bundle.
 
 - [ ] **Step 2: Run the test to confirm failure**
 
@@ -131,7 +131,7 @@ Run: `git add src/components/running-man/TrackedRunningManVideo.tsx src/componen
 
 - [ ] **Step 1: Write failing source-level tests**
 
-Assert the Method hero uses a tracked video with placement `method_page_hero`, its primary CTA is tracked with destination `enrollment_section`, coaching opt-in is recorded only on selection, and successful `checkoutUrl` handling calls the bounded checkout tracker before `window.location.assign`. Assert a successful waitlist response records `running_man_waitlist_joined` with placement `method_page_enrollment`.
+Assert the Method hero uses a tracked video with placement `method_page_hero`. Enumerate and instrument all current Method-page enrollment CTAs: the hero `PrimaryCta`, the final “I Understand and Am Ready to Enroll” CTA, and the mobile “View Enrollment” CTA. The hero uses placement `method_page_hero`; the final and mobile CTAs use placement `method_page_enrollment`; all use destination `enrollment_section`. Also assert coaching opt-in is recorded only on selection and successful `checkoutUrl` handling calls the bounded checkout tracker before `window.location.assign`. Assert a successful waitlist response records `running_man_waitlist_joined` with placement `method_page_enrollment`.
 
 - [ ] **Step 2: Run the Method-page test to confirm failure**
 
@@ -141,7 +141,7 @@ Expected: FAIL because those event call sites are absent.
 
 - [ ] **Step 3: Implement the minimal event call sites**
 
-Replace only the existing hero video/CTA and add event calls after successful state transitions. Preserve the checkout request payload, availability algorithm, acknowledgement gate, privacy copy, and all error messages. A checkout that returns `confirmationUrl` must continue exactly as it does today and must not be mislabeled as a new Stripe checkout opening.
+Replace only the existing hero video/CTA, the two remaining enrollment CTAs, and add event calls after successful state transitions. Preserve the checkout request payload, availability algorithm, acknowledgement gate, privacy copy, and all error messages. A checkout that returns `confirmationUrl` must continue exactly as it does today and must not be mislabeled as a new Stripe checkout opening.
 
 - [ ] **Step 4: Re-run the Method-page test**
 
