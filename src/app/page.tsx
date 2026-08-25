@@ -3,8 +3,7 @@ import Image from "next/image";
 import Nav from "@/components/Nav";
 import ScrollyHero from "@/components/ScrollyHero";
 import StatsBar from "@/components/StatsBar";
-import TestimonialsMarquee from "@/components/TestimonialsMarquee";
-import { CircularGallery } from "@/components/ui/circular-gallery";
+import DeferredHomeTestimonials from "@/components/DeferredHomeTestimonials";
 import { RainbowBorderButton } from "@/components/ui/rainbow-border-button";
 import { CATEGORY_LABELS, CATEGORY_PATHS, getFeaturedTutorialsByCategory } from "@/lib/posts";
 
@@ -130,13 +129,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* REVIEWS MARQUEE */}
-      <TestimonialsMarquee />
-
       {/* BEATFIRST TEASER */}
       <section className="py-24 px-6" style={{ backgroundColor: "var(--surface)" }}>
         <div className="max-w-4xl mx-auto text-center">
-          <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
+          <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary-accessible)" }}>
             BeatFirst Rhythm Trainer
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-6">
@@ -190,7 +186,7 @@ export default function Home() {
       <section className="py-20 px-6" style={{ backgroundColor: "var(--surface)", borderTop: "1px solid #1f1f1f" }}>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
-            <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
+            <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary-accessible)" }}>
               Start Learning
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Start with these dance tutorials</h2>
@@ -203,8 +199,9 @@ export default function Home() {
               <div key={category} className="rounded-2xl p-5" style={{ backgroundColor: "var(--background)", border: "1px solid #1f1f1f" }}>
                 <Link
                   href={CATEGORY_PATHS[category] ?? "/blog"}
+                  prefetch={false}
                   className="block text-sm font-bold uppercase tracking-widest mb-4 hover:text-blue-400 transition-colors"
-                  style={{ color: "var(--accent-primary)" }}
+                  style={{ color: "var(--accent-primary-accessible)" }}
                 >
                   {CATEGORY_LABELS[category] ?? category}
                 </Link>
@@ -213,6 +210,7 @@ export default function Home() {
                     <Link
                       key={post.slug}
                       href={`/blog/${post.slug}`}
+                      prefetch={false}
                       className="text-sm leading-snug hover:text-white transition-colors"
                       style={{ color: "var(--muted)" }}
                     >
@@ -226,29 +224,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="py-24 overflow-x-hidden" style={{ backgroundColor: "var(--surface)" }}>
-        <div className="px-6 text-center mb-12">
-          <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
-            Student Results
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold">What Students Say on Video</h2>
-          <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}>Hover to pause · Click any card to watch</p>
-        </div>
-        <div style={{ height: "480px" }}>
-          <CircularGallery
-            items={[
-              { videoId: "PppnU3oHvlQ" },
-              { videoId: "J4_XpORtTfQ" },
-              { videoId: "bdSEa_S85-c" },
-              { videoId: "I68OCXhkaEo" },
-              { videoId: "0DKQ1PPW7Ag" },
-              { videoId: "CgB1N_nx5vo" },
-              { videoId: "h32DyBzyi4Q" },
-            ]}
-          />
-        </div>
-      </section>
+      <DeferredHomeTestimonials
+        items={[
+          { videoId: "PppnU3oHvlQ" },
+          { videoId: "J4_XpORtTfQ" },
+          { videoId: "bdSEa_S85-c" },
+          { videoId: "I68OCXhkaEo" },
+          { videoId: "0DKQ1PPW7Ag" },
+          { videoId: "CgB1N_nx5vo" },
+          { videoId: "h32DyBzyi4Q" },
+        ]}
+      />
 
       {/* ACADEMY TEASER */}
       <section className="py-24 px-6" style={{ backgroundColor: "var(--background)" }}>

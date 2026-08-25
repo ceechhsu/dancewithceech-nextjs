@@ -12,6 +12,7 @@
 
   /* Accent colors */
   --accent-primary: #2563EB;   /* Electric blue — CTAs, links, highlights */
+  --accent-primary-accessible: #60A5FA; /* Accessible blue for small text on dark surfaces */
   --accent-secondary: #FDB515; /* Cal Gold — milestones, achievements, badges */
   --accent-gold: #FDB515;      /* Alias for accent-secondary */
 }

@@ -25,7 +25,7 @@ export default function Nav({ user }: Props = {}) {
           height={36}
         />
         <span style={{ fontSize: "1.05rem", fontWeight: 700, letterSpacing: "-0.02em", color: "#F9F9F9" }}>
-          Dance With <span style={{ color: "#2563EB" }}>Ceech</span>
+          Dance With <span style={{ color: "var(--accent-primary-accessible)" }}>Ceech</span>
         </span>
       </Link>
       {/* Desktop nav links */}

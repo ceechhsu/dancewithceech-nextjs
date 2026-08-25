@@ -7,6 +7,9 @@ import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 
 const CLOUD_NAME = "dedxm1lig";
 const TOTAL_FRAMES = 197;
+const INITIAL_FRAME_COUNT = 8;
+const PRELOAD_BEHIND = 2;
+const PRELOAD_AHEAD = 6;
 const FRAME_URL = (i: number) =>
   `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/hero-frames/frame_${String(i).padStart(4, "0")}.jpg`;
 
@@ -55,7 +58,8 @@ export default function ScrollyHero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameIndexRef = useRef({ value: 0 });
-  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const imagesRef = useRef<(HTMLImageElement | undefined)[]>([]);
+  const requestedFramesRef = useRef<Set<number>>(new Set());
   const phase0Ref = useRef<HTMLDivElement>(null);
   const phase1Ref = useRef<HTMLDivElement>(null);
   const phase2Ref = useRef<HTMLDivElement>(null);
@@ -116,16 +120,26 @@ export default function ScrollyHero() {
       ctx.drawImage(img, dx, dy, iw * scale, ih * scale);
     };
 
-    const images: HTMLImageElement[] = [];
+    const loadFrame = (index: number) => {
+      if (index < 0 || index >= TOTAL_FRAMES || requestedFramesRef.current.has(index)) return;
 
-    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+      requestedFramesRef.current.add(index);
       const img = new Image();
       img.crossOrigin = "anonymous";
-      img.src = FRAME_URL(i);
+      img.src = FRAME_URL(index + 1);
       img.onload = () => drawFrame(frameIndexRef.current.value);
-      images.push(img);
-    }
-    imagesRef.current = images;
+      imagesRef.current[index] = img;
+    };
+
+    loadFrame(0);
+    const idleCallback = window.requestIdleCallback?.(() => {
+      for (let i = 1; i < INITIAL_FRAME_COUNT; i++) loadFrame(i);
+    });
+    const idleFallback = idleCallback === undefined
+      ? window.setTimeout(() => {
+        for (let i = 1; i < INITIAL_FRAME_COUNT; i++) loadFrame(i);
+      }, 0)
+      : undefined;
 
     setSize();
     window.addEventListener("resize", setSize);
@@ -139,6 +153,7 @@ export default function ScrollyHero() {
         const frame = Math.min(TOTAL_FRAMES - 1, Math.floor(self.progress * TOTAL_FRAMES));
         if (frame !== frameIndexRef.current.value) {
           frameIndexRef.current.value = frame;
+          for (let i = frame - PRELOAD_BEHIND; i <= frame + PRELOAD_AHEAD; i++) loadFrame(i);
           drawFrame(frame);
         }
       },
@@ -195,6 +210,8 @@ export default function ScrollyHero() {
       st.kill();
       phaseTriggers.forEach((t) => t.kill());
       window.removeEventListener("resize", setSize);
+      if (idleCallback !== undefined && window.cancelIdleCallback) window.cancelIdleCallback(idleCallback);
+      if (idleFallback !== undefined) window.clearTimeout(idleFallback);
     };
     };
 
@@ -208,7 +225,6 @@ export default function ScrollyHero() {
 
   return (
     <>
-      {/* DESKTOP: scroll-driven canvas animation */}
       <div ref={containerRef} className="hidden md:block" style={{ height: "600vh", position: "relative" }}>
         <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", backgroundColor: "#0A0A0A" }}>
           <canvas
@@ -263,7 +279,7 @@ export default function ScrollyHero() {
           <div style={{ fontSize: "clamp(2.2rem, 9vw, 3.5rem)", fontWeight: 800, color: "#F9F9F9", letterSpacing: "-0.02em", lineHeight: 1.1, textShadow: "0 2px 20px rgba(0,0,0,0.6)", marginBottom: "2rem" }}>
             It&apos;s a skill —<br />not a gift.
           </div>
-          <div style={{ fontSize: "0.85rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#F9F9F9",marginBottom: "20px", textShadow: "0 1px 10px rgba(0,0,0,0.9)" }}>
+          <div style={{ fontSize: "0.85rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#F9F9F9", marginBottom: "20px", textShadow: "0 1px 10px rgba(0,0,0,0.9)" }}>
             Rhythm First. Then Dance.
           </div>
           {CTA_BUTTONS}

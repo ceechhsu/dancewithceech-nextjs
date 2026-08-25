@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server";
 
 const WORDPRESS_SEARCH_PLACEHOLDER = "{search_term_string}";
 const WORDPRESS_PHP_PROBE = /^\/wp-[^/]*\.php$/;
+const LEGACY_QUERY_PARAMS = ["et_blog"] as const;
+const LEGACY_REFERRERS: readonly string[] = ["aftership"];
 const LEGACY_ARCHIVE_DESTINATIONS = [
   ["/locking-dance-moves/page/", "/locking-dance-moves"],
   ["/funk-style-dance-moves/page/", "/funk-style-dance-moves"],
@@ -40,6 +42,26 @@ function getLegacyArchiveDestination(pathname: string) {
   return null;
 }
 
+function getCleanQueryUrl(request: NextRequest) {
+  const cleanUrl = request.nextUrl.clone();
+  let changed = false;
+
+  for (const param of LEGACY_QUERY_PARAMS) {
+    if (cleanUrl.searchParams.has(param)) {
+      cleanUrl.searchParams.delete(param);
+      changed = true;
+    }
+  }
+
+  const referrers = cleanUrl.searchParams.getAll("ref");
+  if (referrers.some((referrer) => LEGACY_REFERRERS.includes(referrer))) {
+    cleanUrl.searchParams.delete("ref");
+    changed = true;
+  }
+
+  return changed ? cleanUrl : null;
+}
+
 export function proxy(request: NextRequest) {
   if (isLegacyWordPressProbe(request.nextUrl.pathname)) {
     return new Response("Gone", {
@@ -62,6 +84,11 @@ export function proxy(request: NextRequest) {
     cleanUrl.search = "";
 
     return NextResponse.redirect(cleanUrl, 308);
+  }
+
+  const cleanQueryUrl = getCleanQueryUrl(request);
+  if (cleanQueryUrl) {
+    return NextResponse.redirect(cleanQueryUrl, 308);
   }
 
   return NextResponse.next();
