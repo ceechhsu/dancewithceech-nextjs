@@ -2,13 +2,12 @@
 
 import { useEffect } from 'react';
 
-const GA_MEASUREMENT_ID = 'G-BS0RYYMYHZ';
+import { initializeGoogleAnalytics } from '@/lib/analytics/client';
+
 const META_PIXEL_ID = '2022647098670106';
-const ANALYTICS_MARKER = 'data-dwc-analytics';
+const META_ANALYTICS_MARKER = 'data-dwc-meta-analytics';
 
 type AnalyticsWindow = Window & {
-  dataLayer?: unknown[];
-  gtag?: (...args: unknown[]) => void;
   fbq?: Fbq;
   _fbq?: Fbq;
 };
@@ -21,24 +20,11 @@ type Fbq = ((...args: unknown[]) => void) & {
 };
 
 function loadAnalytics() {
+  initializeGoogleAnalytics();
+
   const win = window as AnalyticsWindow;
-  if (document.documentElement.hasAttribute(ANALYTICS_MARKER)) return;
-  document.documentElement.setAttribute(ANALYTICS_MARKER, 'loaded');
-
-  win.dataLayer = win.dataLayer || [];
-  win.gtag = (...args: unknown[]) => {
-    win.dataLayer?.push(args);
-  };
-  win.gtag('js', new Date());
-  win.gtag('config', GA_MEASUREMENT_ID);
-
-  if (!document.getElementById('dwc-ga-script')) {
-    const gaScript = document.createElement('script');
-    gaScript.id = 'dwc-ga-script';
-    gaScript.async = true;
-    gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-    document.head.appendChild(gaScript);
-  }
+  if (document.documentElement.hasAttribute(META_ANALYTICS_MARKER)) return;
+  document.documentElement.setAttribute(META_ANALYTICS_MARKER, 'loaded');
 
   if (!win.fbq) {
     const fbq = ((...args: unknown[]) => {

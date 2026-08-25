@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
@@ -124,4 +125,13 @@ test("video midpoint does not count when a visitor seeks past it", () => {
   tracker.onTimeUpdate({ currentTime: 10, duration: 15, seeking: false });
 
   assert.deepEqual(events, ["running_man_video_started"]);
+});
+
+test("deferred analytics uses the shared Google initializer after interaction or idle time", async () => {
+  const componentPath = new URL("../src/components/DeferredAnalytics.tsx", import.meta.url);
+  const source = await readFile(componentPath, "utf8");
+
+  assert.match(source, /initializeGoogleAnalytics/);
+  assert.match(source, /requestIdleCallback\(run, \{ timeout: 1500 \}\)/);
+  assert.match(source, /setTimeout\(scheduleLoad, 3000\)/);
 });
