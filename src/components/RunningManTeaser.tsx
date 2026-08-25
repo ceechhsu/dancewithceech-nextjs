@@ -1,4 +1,5 @@
-import Link from "next/link";
+import TrackedRunningManLink from "@/components/running-man/TrackedRunningManLink";
+import TrackedRunningManVideo from "@/components/running-man/TrackedRunningManVideo";
 
 type Props = {
   eyebrow?: string;
@@ -20,16 +21,19 @@ export default function RunningManTeaser({
             {title}
           </h2>
           <p className="mt-5 max-w-xl text-lg leading-8 text-white/65">{copy}</p>
-          <Link
+          <TrackedRunningManLink
             href="/running-man-method#enroll"
+            placement="homepage_teaser"
+            destination="enrollment_section"
             className="mt-7 inline-flex min-h-12 items-center justify-center rounded-full bg-[#2563EB] px-6 text-sm font-bold text-white shadow-[0_16px_44px_rgba(37,99,235,0.25)] transition hover:-translate-y-0.5 hover:bg-[#1D4ED8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FDB515]"
           >
             View the Founding Cohort
-          </Link>
+          </TrackedRunningManLink>
         </div>
 
         <div className="order-1 overflow-hidden rounded-3xl border border-white/15 bg-black shadow-2xl lg:order-2">
-          <video
+          <TrackedRunningManVideo
+            placement="homepage_teaser"
             className="block aspect-video w-full"
             controls
             playsInline
@@ -39,7 +43,7 @@ export default function RunningManTeaser({
           >
             <source src="/videos/running-man-method-teaser.mp4" type="video/mp4" />
             Your browser does not support video playback.
-          </video>
+          </TrackedRunningManVideo>
         </div>
       </div>
     </section>
