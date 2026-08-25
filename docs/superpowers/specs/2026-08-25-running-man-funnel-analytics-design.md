@@ -50,9 +50,9 @@ The coaching-selection event is emitted only when the visitor opts in, not when 
 4. Instrument the checkout, coaching selection, and waitlist-success moments in the enrollment panel.
 5. Add focused automated source-level behavior tests and run the existing Running Man test suite, lint, and production build.
 
-## GA4 reporting setup
+## GA4 reporting setup and launch prerequisite
 
-Before evaluating the first results, register these event-scoped custom dimensions in the existing GA4 property: `placement`, `destination`, `tier`, and `coaching_selected` as text; `value` already follows GA4's monetary-event convention alongside `currency`. This is a one-time GA4 dashboard setting and can take 24–48 hours before parameter breakdowns appear.
+Before these production events are deployed, register these event-scoped custom dimensions in the existing GA4 property: `placement`, `destination`, `tier`, and `coaching_selected` as text; `value` already follows GA4's monetary-event convention alongside `currency`. This is a one-time GA4 dashboard setting and can take 24–48 hours before parameter breakdowns appear. GA4 custom dimensions are not retroactive, so this setup must be complete before launch traffic is sent. Verify the named events and their parameters in GA4 DebugView or Realtime after deployment.
 
 Use an open funnel with a 30-day window for general interest:
 
@@ -62,10 +62,4 @@ Use an open funnel with a 30-day window for general interest:
 
 Use a separate same-session funnel for immediate conversion behavior. Paid enrollment counts come from Stripe/Supabase; they are compared to, rather than mixed into, GA4's checkout-start counts. This also covers checkout starts from either the method page or the homepage CTA.
 
-## Measurement
-
-In GA4, use a funnel exploration with:
-
-`page_view` for `/running-man-method` → `running_man_video_started` → `running_man_checkout_opened`
-
-Compare that to completed paid enrollments in Stripe or the enrollment database. After enough traffic accumulates, this reveals whether the main friction is page interest, video engagement, checkout intent, or payment completion.
+Compare GA4's checkout-opened count to completed paid enrollments in Stripe or the enrollment database. After enough traffic accumulates, this reveals whether the main friction is page interest, video engagement, checkout intent, or payment completion.
