@@ -7,6 +7,7 @@ const IMAGES_DIR = path.join(process.cwd(), "public/images/posts");
 
 export interface PostMeta {
   title: string;
+  seoTitle?: string;
   slug: string;
   date: string;
   category: string;
@@ -65,6 +66,7 @@ export function getAllPosts(): PostMeta[] {
       const slug = data.slug ?? filename.replace(".md", "");
       return {
         title: data.title ?? "Untitled",
+        seoTitle: data.seoTitle,
         slug,
         date: data.date ?? "",
         category: data.category ?? "general",
@@ -85,6 +87,7 @@ export function getPostBySlug(slug: string): Post | null {
   const resolvedSlug = data.slug ?? slug;
   return {
     title: data.title ?? "Untitled",
+    seoTitle: data.seoTitle,
     slug: resolvedSlug,
     date: data.date ?? "",
     category: data.category ?? "general",

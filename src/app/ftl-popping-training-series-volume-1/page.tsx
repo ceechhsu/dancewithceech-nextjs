@@ -3,7 +3,22 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "FTL Popping Training Series Volume 1 | Dance With Ceech",
   description:
-    "This 30 days popping training program is designed for beginners to get started with popping.",
+    "A 30-day beginner popping program with progressive arm, leg, chest, and neck-pop drills plus guided practice sessions.",
+  alternates: { canonical: "https://dancewithceech.com/ftl-popping-training-series-volume-1" },
+  openGraph: {
+    title: "FTL Popping Training Series Volume 1 | Dance With Ceech",
+    description: "A 30-day beginner popping program with progressive drills and guided practice sessions.",
+    url: "https://dancewithceech.com/ftl-popping-training-series-volume-1",
+    siteName: "DanceWithCeech",
+    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Popping training with Ceech" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FTL Popping Training Series Volume 1 | Dance With Ceech",
+    description: "A 30-day beginner popping program with progressive drills and guided practice sessions.",
+    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+  },
 };
 
 type VideoItem = {

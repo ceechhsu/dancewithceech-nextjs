@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Hip Hop Dance Lessons in San Jose — Private 1-on-1 with Ceech",
-  description: "Private hip-hop dance lessons in San Jose, CA — in-person at Get Down Dance Studios in Japantown. Taught by Ceech, a 25-year instructor with Electric Boogaloos lineage. Free 15-min consultation.",
+  description: "Private hip-hop dance lessons in San Jose with Ceech at Get Down Dance Studios. Beginner-friendly training, personal feedback, and a free consultation.",
   alternates: { canonical: "https://dancewithceech.com/private-lessons/san-jose" },
   openGraph: {
     title: "Hip Hop Dance Lessons in San Jose — Private 1-on-1 with Ceech",
@@ -25,6 +25,7 @@ export const metadata = {
 const danceSchoolSchema = {
   "@context": "https://schema.org",
   "@type": "DanceSchool",
+  "@id": "https://dancewithceech.com/#organization",
   "name": "DanceWithCeech — San Jose Private Lessons",
   "url": "https://dancewithceech.com/private-lessons/san-jose",
   "telephone": "+14086573771",
@@ -39,8 +40,8 @@ const danceSchoolSchema = {
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": 37.3382,
-    "longitude": -121.8863
+    "latitude": 37.3488633,
+    "longitude": -121.8944247
   },
   "areaServed": [
     { "@type": "City", "name": "San Jose" },
@@ -151,7 +152,7 @@ export default function SanJosePrivateLessonsPage() {
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-balance">Why train with Ceech in San Jose</h2>
           <div className="space-y-5 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
             <p>
-              San Jose has a surprisingly deep dance scene for a tech-heavy city, but finding an instructor who actually teaches the <em>foundation</em> — not just copy-the-choreography — is rare. I&apos;ve taught at De Anza, Evergreen Valley College, West Valley College, and Mission College in the Bay Area for over 25 years, and my teaching approach comes from engineering: diagnose the movement problem, apply the right technique, build up systematically.
+              San Jose has a surprisingly deep dance scene for a tech-heavy city, but finding an instructor who actually teaches the <em>foundation</em> — not just copy-the-choreography — is rare. I&apos;ve held college faculty positions at Mission College, West Valley College, Gavilan College, and Cabrillo College. I&apos;ve also guest taught at Stanford, UC Berkeley, UC Santa Cruz, Santa Clara University, De Anza College, San Jose City College, and Ohlone College. My teaching approach comes from engineering: diagnose the movement problem, apply the right technique, and build up systematically.
             </p>
             <p>
               My funk styles lineage traces directly to the Electric Boogaloos (Pop&apos;in Pete, Skeeter Rabbit) — the crew that invented popping. That means when you learn popping, waving, or boogaloo from me, you&apos;re learning the real thing, not a watered-down studio version.
@@ -265,7 +266,7 @@ export default function SanJosePrivateLessonsPage() {
           </div>
           <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3172.3!2d-121.8863!3d37.3382!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s196+Jackson+St%2C+San+Jose%2C+CA+95112!5e0!3m2!1sen!2sus!4v1"
+              src="https://www.google.com/maps?q=37.3488633,-121.8944247&output=embed"
               width="100%"
               height="300"
               style={{ border: 0 }}

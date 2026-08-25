@@ -6,7 +6,7 @@ import { getAllPosts, CATEGORY_LABELS } from "@/lib/posts";
 
 export const metadata = {
   title: "House Dance Moves — DanceWithCeech",
-  description: "Learn house dance moves step by step. Jacking, footwork, and club dance tutorials from instructor Ceech.",
+  description: "Learn house dance moves step by step with Ceech. Explore jacking, foundational footwork, club-dance history, practice tips, and beginner tutorials.",
   alternates: { canonical: "https://dancewithceech.com/house-dance" },
   keywords: ["house dance moves", "house dance tutorials", "learn house dance", "jacking dance", "house footwork", "club dance"],
   openGraph: {

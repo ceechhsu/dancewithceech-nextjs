@@ -9,7 +9,7 @@ import VideoEvalForm from "@/components/VideoEvalForm";
 
 export const metadata = {
   title: "Private Lessons — DanceWithCeech",
-  description: "Book a private 1-on-1 dance lesson with Ceech — in-person at Get Down Dance Studios in San Jose, or virtually via Zoom. Personalized hip-hop instruction for all levels.",
+  description: "Book a private dance lesson with Ceech in San Jose or online. Get personalized hip-hop instruction, real-time corrections, and a clear practice plan.",
   alternates: { canonical: "https://dancewithceech.com/private-lessons" },
   openGraph: {
     title: "Private Lessons — DanceWithCeech",
@@ -62,6 +62,9 @@ export default function PrivateLessonsPage() {
                 View Pricing
               </a>
             </div>
+            <p className="mt-6 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
+              Explore details for <Link href="/private-lessons/san-jose" className="hover:text-white" style={{ color: "var(--accent-primary)" }}>San Jose private lessons</Link> or <Link href="/private-lessons/bay-area" className="hover:text-white" style={{ color: "var(--accent-primary)" }}>Bay Area dance lessons</Link>.
+            </p>
           </div>
           <div className="flex justify-center md:justify-end">
             <Image

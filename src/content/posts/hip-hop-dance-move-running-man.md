@@ -1,5 +1,6 @@
 ---
 title: "Running Man Dance: How to Do the 80s Hip Hop Move (Origin & Steps)"
+seoTitle: "Running Man Dance Tutorial for Beginners | Ceech"
 slug: "hip-hop-dance-move-running-man"
 date: "2024-06-18 09:18:44"
 category: "hip-hop-dance-moves"
@@ -12,6 +13,8 @@ The Running Man is a simple yet energetic dance move that mimics the motion of r
 ## Video Demonstration
 
 [Watch: Tutorial](https://youtu.be/CmCVTuKZeQo)
+
+Want Ceech to correct your timing, balance, and coordination instead of leaving you to guess? [Explore the four-week Running Man Method](/running-man-method), a beginner cohort built around progressive drills and personalized feedback.
 
 ## Dance History of The Running Man
 
