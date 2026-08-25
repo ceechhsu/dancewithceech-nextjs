@@ -125,11 +125,12 @@ export default function EnrollmentPanel() {
       });
       const body: unknown = await response.json();
       if (response.ok && body && typeof body === "object" && "checkoutUrl" in body && typeof body.checkoutUrl === "string") {
+        const checkoutUrl = body.checkoutUrl;
         trackRunningManCheckoutThen({
           tier: ANALYTICS_TIER[state.activeTier.index],
           coachingSelected: selectedCoaching,
           value: total ?? state.activeTier.priceCents / 100 + (selectedCoaching ? 100 : 0),
-          redirect: () => window.location.assign(body.checkoutUrl),
+          redirect: () => window.location.assign(checkoutUrl),
         });
         return;
       }

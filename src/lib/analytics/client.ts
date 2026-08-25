@@ -23,7 +23,7 @@ type AnalyticsWindow = Window & {
   gtag?: Gtag;
 };
 
-type Timer = ReturnType<typeof setTimeout>;
+type Timer = number;
 
 type RunningManAnalyticsDependencies = {
   ensureReady: () => void;
@@ -89,15 +89,14 @@ export function createRunningManAnalytics(dependencies: RunningManAnalyticsDepen
     trackCheckoutThen(input: CheckoutInput & { redirect: () => void }) {
       dependencies.ensureReady();
       let redirected = false;
-      let timeout: Timer | undefined;
       const redirectOnce = () => {
         if (redirected) return;
         redirected = true;
-        if (timeout !== undefined) dependencies.clearTimeout(timeout);
+        dependencies.clearTimeout(timeout);
         input.redirect();
       };
 
-      timeout = dependencies.setTimeout(redirectOnce, CHECKOUT_EVENT_TIMEOUT_MS);
+      const timeout = dependencies.setTimeout(redirectOnce, CHECKOUT_EVENT_TIMEOUT_MS);
       dependencies.send(RUNNING_MAN_EVENTS.checkoutOpened, {
         ...checkoutParameters(input),
         event_callback: redirectOnce,
