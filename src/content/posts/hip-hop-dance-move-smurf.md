@@ -1,17 +1,19 @@
 ---
-title: "The Smurf Dance: How to Do the 80s Hip Hop Move (Step by Step)"
+title: "How to Do the Smurf Dance: Beginner 80s Hip-Hop Tutorial"
 slug: "hip-hop-dance-move-smurf"
 date: "2024-06-18 10:11:12"
 category: "hip-hop-dance-moves"
-description: "The Smurf dance tutorial — the classic 80s hip hop move with bouncing footwork and circular arm swings. 5 simple steps to master this retro dance craze."
+description: "Learn how to do the Smurf dance with a beginner-friendly, step-by-step tutorial for the classic 80s hip-hop move, including the bounce and alternating arm swings."
 ---
-## Introduction
+## What Is the Smurf Dance?
 
-The Smurf, also known as "Doing the Smurf," is a fun and simple hip hop dance move that became a craze in the 80s and 90s. It gets its name from the resemblance of the arm movements to the little blue Smurf characters from the Belgian comic and cartoon series. Despite its playful name, the Smurf is a legitimate hip hop dance move that requires coordination and rhythm.
+The Smurf, also known as "Doing the Smurf," is a beginner-friendly hip-hop dance move built on a steady bounce and alternating circular arm swings. It became popular in the 1980s, and its playful name comes from the arm movements' resemblance to the little blue Smurf characters. This tutorial breaks the move into simple parts so you can practice the bounce, coordinate your arms, and stay on the beat.
 
-## Video Demonstration
+If you are new to hip-hop dance, browse our [hip-hop dance moves](/hip-hop-dance-moves). After you build this bounce-and-arm coordination, explore [The Running Man Method](/running-man-method) for another foundational move.
 
-[Watch: Tutorial](https://youtu.be/0A6t9uUWPBQ)
+## See the Smurf Dance
+
+[Watch the Smurf Dance Tutorial](https://youtu.be/0A6t9uUWPBQ)
 
 ## Dance History of The Smurf
 
@@ -19,7 +21,7 @@ The Smurf dance move is believed to have evolved from an earlier 1960s dance cal
 
 In the 1980s, the dance resurfaced in a variation that became known as "The Smurf" due to its popularity coinciding with the Smurfs cartoon series.
 
-## Step By Step Instruction
+## How To Do the Smurf Dance
 
 1. Start with your feet shoulder-width apart and knees bent.
 

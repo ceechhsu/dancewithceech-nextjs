@@ -1,23 +1,25 @@
 ---
-title: "Waving Dance: How to Do the Funk Style Arm Wave (10 Steps)"
+title: "How to Do the Waving Dance: Beginner Arm Wave Tutorial"
 slug: "mastering-the-art-of-waving-a-fluid-funk-style-dance-move"
 date: "2024-06-21 21:30:08"
 category: "funk-style-dance-moves"
-description: "Waving tutorial — the fluid funk style move pioneered by the Electric Boogaloos that creates a body illusion. 10 steps for arm, hand, and full-body waves."
+description: "Learn the waving dance with a beginner-friendly, step-by-step tutorial for a smooth funk-style arm wave, including 10 drills for your shoulders, elbows, wrists, and fingers."
 ---
-## Introduction
+## What Is Waving?
 
-Waving is a mesmerizing dance move that has captivated audiences for decades. This iconic element of funk style dancing creates an illusion of a wave passing through the dancer's body, resulting in a fluid and hypnotic visual effect. Originating from the streets of California, waving has become a cornerstone of various urban dance styles, particularly in popping and animation. The beauty of waving lies in its versatility; it can be performed with arms, hands, legs, or even the entire body, allowing dancers to express their creativity and showcase their control over isolated muscle movements. As a fundamental technique in funk styles, mastering the wave can elevate a dancer's performance, adding a smooth and dynamic quality to their repertoire.
+Waving is a funk-style dance move that creates the illusion of a ripple traveling through your arm or body. If you are learning waving dance for the first time, start with a simple arm wave: isolate your shoulder, elbow, forearm, wrist, and fingers, then connect them in sequence. This beginner-friendly tutorial explains what to practice, what to watch for, and how to make each transition look smooth instead of rushed.
 
-## Video Demonstration
+If you are new to funk-style dance, browse our [funk-style dance moves](/funk-style-dance-moves). After you build this isolation control, explore [The Running Man Method](/running-man-method) to train rhythm and coordination with another foundational hip-hop move.
 
-[Watch: Tutorial](https://youtu.be/VzlPUvL7XPg)
+## See the Waving Dance
+
+[Watch the Waving Tutorial](https://youtu.be/VzlPUvL7XPg)
 
 ## Dance History
 
 Waving emerged in the 1970s as part of the broader funk styles dance movement in California. While it's challenging to attribute its creation to a single individual, the move gained significant popularity through pioneering dancers in Fresno and Los Angeles. Boogaloo Sam, founder of the Electric Boogaloos, is often credited with popularizing and refining the technique. The move evolved alongside other funk style elements like popping and locking, becoming an integral part of street dance culture. By the 1980s, waving had spread beyond the West Coast, influencing dancers worldwide and becoming a staple in music videos, movies, and dance competitions.
 
-## Step By Step Instruction
+## How To Do the Waving Dance
 
 1. Start with your arm extended to one side, palm facing down.
 2. Begin by lifting your shoulder slightly.
