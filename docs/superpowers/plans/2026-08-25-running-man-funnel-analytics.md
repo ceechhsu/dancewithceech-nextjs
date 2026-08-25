@@ -96,6 +96,7 @@ Run: `git add src/components/DeferredAnalytics.tsx tests/running-man-analytics.t
 - Modify: `src/components/RunningManCampaignBanner.tsx`
 - Modify: `src/components/RunningManTeaser.tsx`
 - Modify: `tests/running-man-discovery.test.mjs`
+- Modify: `tests/running-man-analytics.test.ts`
 
 - [ ] **Step 1: Write failing source-level tests**
 
@@ -119,7 +120,7 @@ Expected: PASS.
 
 - [ ] **Step 5: Commit**
 
-Run: `git add src/components/running-man/TrackedRunningManVideo.tsx src/components/running-man/TrackedRunningManLink.tsx src/components/RunningManCampaignBanner.tsx src/components/RunningManTeaser.tsx tests/running-man-discovery.test.mjs && git commit -m "Track Running Man video and homepage CTA engagement"`
+Run: `git add src/components/running-man/TrackedRunningManVideo.tsx src/components/running-man/TrackedRunningManLink.tsx src/components/RunningManCampaignBanner.tsx src/components/RunningManTeaser.tsx tests/running-man-discovery.test.mjs tests/running-man-analytics.test.ts && git commit -m "Track Running Man video and homepage CTA engagement"`
 
 ### Task 4: Instrument the Method page and enrollment funnel
 
