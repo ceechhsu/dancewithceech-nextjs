@@ -43,5 +43,8 @@ next-env.d.ts
 # hero frames (large PNG sequence — served from Cloudinary post-launch)
 /public/hero-frames/
 
+# source footage and editing exports (keep on the external drive; deploy only /public/videos/)
+/videos/
+
 # superpowers temp files
 .superpowers/

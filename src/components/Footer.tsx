@@ -18,6 +18,8 @@ export default function Footer() {
             <li><Link href="/beat-first" className="hover:text-white transition-colors">BeatFirst</Link></li>
             <li><Link href="/academy" className="hover:text-white transition-colors">Academy</Link></li>
             <li><Link href="/private-lessons" className="hover:text-white transition-colors">Private Lessons</Link></li>
+            <li><Link href="/private-lessons/san-jose" className="hover:text-white transition-colors">San Jose Lessons</Link></li>
+            <li><Link href="/private-lessons/bay-area" className="hover:text-white transition-colors">Bay Area Lessons</Link></li>
           </ul>
         </div>
         <div>

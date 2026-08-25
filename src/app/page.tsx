@@ -4,12 +4,14 @@ import Nav from "@/components/Nav";
 import ScrollyHero from "@/components/ScrollyHero";
 import StatsBar from "@/components/StatsBar";
 import DeferredHomeTestimonials from "@/components/DeferredHomeTestimonials";
+import RunningManCampaignBanner from "@/components/RunningManCampaignBanner";
 import { RainbowBorderButton } from "@/components/ui/rainbow-border-button";
 import { CATEGORY_LABELS, CATEGORY_PATHS, getFeaturedTutorialsByCategory } from "@/lib/posts";
 
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": "https://dancewithceech.com/#organization",
   "name": "DanceWithCeech",
   "alternateName": "Dance With Ceech",
   "url": "https://dancewithceech.com",
@@ -29,7 +31,7 @@ const organizationSchema = {
 
 export const metadata = {
   title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
-  description: "Learn hip-hop, locking, popping, breaking, and house dance from Ceech — America's Got Talent performer, Body Rock champion, and Bay Area dance instructor. Private lessons in San Jose or online.",
+  description: "Learn hip-hop, locking, popping, breaking, and house dance with Ceech through beginner-friendly online training and private lessons in San Jose.",
   alternates: { canonical: "https://dancewithceech.com" },
   openGraph: {
     title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
@@ -65,6 +67,9 @@ export default function Home() {
 
       {/* SOCIAL PROOF BAR */}
       <StatsBar />
+
+      {/* TEMPORARY FOUNDING-COHORT CAMPAIGN */}
+      <RunningManCampaignBanner />
 
       {/* CREDIBILITY */}
       <section className="py-16 px-6">
@@ -123,8 +128,8 @@ export default function Home() {
             <span>Also taught at</span>
             <strong style={{ color: "var(--foreground)" }}>Google</strong>
             <strong style={{ color: "var(--foreground)" }}>LinkedIn</strong>
-            <strong style={{ color: "var(--foreground)" }}>Mission College</strong>
-            <span>+ 8 Bay Area colleges</span>
+            <span>College faculty at Mission, West Valley, Gavilan &amp; Cabrillo</span>
+            <span>Guest taught at Stanford, UC Berkeley &amp; more</span>
           </div>
         </div>
       </section>
@@ -287,6 +292,8 @@ export default function Home() {
                 <Link href="/beat-first" className="hover:text-white transition-colors">BeatFirst</Link>
                 <Link href="/academy" className="hover:text-white transition-colors">Academy</Link>
                 <Link href="/private-lessons" className="hover:text-white transition-colors">Private Lessons</Link>
+                <Link href="/private-lessons/san-jose" className="hover:text-white transition-colors">San Jose Lessons</Link>
+                <Link href="/private-lessons/bay-area" className="hover:text-white transition-colors">Bay Area Lessons</Link>
               </div>
             </div>
             <div>

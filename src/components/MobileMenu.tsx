@@ -3,10 +3,12 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
+import CampaignNavLink from "@/components/CampaignNavLink"
 
 const links = [
   { label: "BeatFirst", href: "/beat-first" },
   { label: "Blog", href: "/blog" },
+  { label: "Running Man", href: "/running-man-method" },
   { label: "Academy", href: "/academy" },
   { label: "Private Lessons", href: "/private-lessons" },
   { label: "Contact", href: "/contact" },
@@ -32,15 +34,21 @@ export default function MobileMenu() {
           style={{ top: "57px", backgroundColor: "var(--background)", borderBottom: "1px solid #1f1f1f" }}
         >
           {links.map(({ label, href }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setOpen(false)}
-              className="px-6 py-4 text-sm hover:text-white transition-colors"
-              style={{ color: "var(--muted)", borderTop: "1px solid #1f1f1f" }}
-            >
-              {label}
-            </Link>
+            label === "Running Man" ? (
+              <div key={href} className="px-6 py-3" style={{ borderTop: "1px solid #1f1f1f" }} onClick={() => setOpen(false)}>
+                <CampaignNavLink />
+              </div>
+            ) : (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className="px-6 py-4 text-sm hover:text-white transition-colors"
+                style={{ color: "var(--muted)", borderTop: "1px solid #1f1f1f" }}
+              >
+                {label}
+              </Link>
+            )
           ))}
         </div>
       )}

@@ -5,8 +5,22 @@ import { CATEGORY_LABELS, CATEGORY_PATHS, getAllPosts, getFeaturedTutorialsByCat
 
 export const metadata = {
   title: "Blog — DanceWithCeech",
-  description: "Hip-hop dance tutorials, move breakdowns, and tips from Ceech.",
+  description: "Learn hip-hop, locking, popping, breaking, and house dance through step-by-step tutorials, move breakdowns, and practice guidance from Ceech.",
   alternates: { canonical: "https://dancewithceech.com/blog" },
+  openGraph: {
+    title: "Dance Move Library — DanceWithCeech",
+    description: "Step-by-step hip-hop, locking, popping, breaking, and house dance tutorials from Ceech.",
+    url: "https://dancewithceech.com/blog",
+    siteName: "DanceWithCeech",
+    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Ceech teaching hip-hop dance" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dance Move Library — DanceWithCeech",
+    description: "Step-by-step hip-hop, locking, popping, breaking, and house dance tutorials from Ceech.",
+    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+  },
 };
 
 const CATEGORIES = [

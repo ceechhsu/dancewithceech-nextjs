@@ -4,8 +4,22 @@ import Nav from "@/components/Nav";
 
 export const metadata = {
   title: "About Ceech — DanceWithCeech",
-  description: "From UC Berkeley electrical engineer to hip-hop dance educator. Ceech's story, philosophy, and 25+ years of teaching.",
+  description: "Meet Ceech, a UC Berkeley engineer turned hip-hop dance educator with 25+ years of experience teaching adults through clear, progressive training.",
   alternates: { canonical: "https://dancewithceech.com/about" },
+  openGraph: {
+    title: "About Ceech — DanceWithCeech",
+    description: "Meet Ceech, a UC Berkeley engineer turned hip-hop dance educator with 25+ years of teaching experience.",
+    url: "https://dancewithceech.com/about",
+    siteName: "DanceWithCeech",
+    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Ceech teaching hip-hop dance" }],
+    type: "profile",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Ceech — DanceWithCeech",
+    description: "Meet Ceech, a UC Berkeley engineer turned hip-hop dance educator with 25+ years of teaching experience.",
+    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+  },
 };
 
 export default function AboutPage() {

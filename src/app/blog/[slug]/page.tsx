@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const pageUrl = `https://dancewithceech.com/blog/${post.slug}`;
   const ogImage = `https://dancewithceech.com/images/posts/${post.slug}.jpg`;
   return {
-    title: `${post.title} — DanceWithCeech`,
+    title: post.seoTitle ?? `${post.title} — DanceWithCeech`,
     description,
     openGraph: {
       title: post.title,

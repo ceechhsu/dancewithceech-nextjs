@@ -4,10 +4,10 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type gsapType from "gsap";
 import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
+import { getFrameNeighborhood, getInitialFrameIndices } from "@/lib/hero-frames";
 
 const CLOUD_NAME = "dedxm1lig";
 const TOTAL_FRAMES = 197;
-const INITIAL_FRAME_COUNT = 8;
 const PRELOAD_BEHIND = 2;
 const PRELOAD_AHEAD = 6;
 const FRAME_URL = (i: number) =>
@@ -101,8 +101,17 @@ export default function ScrollyHero() {
     const drawFrame = (index: number) => {
       let img = imagesRef.current[index];
       if (!img?.complete) {
-        for (let i = index - 1; i >= 0; i--) {
-          if (imagesRef.current[i]?.complete) { img = imagesRef.current[i]; break; }
+        for (let offset = 1; offset < TOTAL_FRAMES; offset += 1) {
+          const previous = imagesRef.current[index - offset];
+          const next = imagesRef.current[index + offset];
+          if (previous?.complete) {
+            img = previous;
+            break;
+          }
+          if (next?.complete) {
+            img = next;
+            break;
+          }
         }
       }
       if (!img?.complete || !ctx) return;
@@ -126,20 +135,23 @@ export default function ScrollyHero() {
       requestedFramesRef.current.add(index);
       const img = new Image();
       img.crossOrigin = "anonymous";
-      img.src = FRAME_URL(index + 1);
       img.onload = () => drawFrame(frameIndexRef.current.value);
+      img.src = FRAME_URL(index + 1);
       imagesRef.current[index] = img;
     };
 
     loadFrame(0);
-    const idleCallback = window.requestIdleCallback?.(() => {
-      for (let i = 1; i < INITIAL_FRAME_COUNT; i++) loadFrame(i);
-    });
-    const idleFallback = idleCallback === undefined
-      ? window.setTimeout(() => {
-        for (let i = 1; i < INITIAL_FRAME_COUNT; i++) loadFrame(i);
-      }, 0)
-      : undefined;
+    const loadSparseFallbackFrames = () => {
+      getInitialFrameIndices(TOTAL_FRAMES, 12).forEach(loadFrame);
+    };
+
+    let idleCallbackId: number | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    if ("requestIdleCallback" in window) {
+      idleCallbackId = window.requestIdleCallback(loadSparseFallbackFrames, { timeout: 1500 });
+    } else {
+      timeoutId = globalThis.setTimeout(loadSparseFallbackFrames, 250);
+    }
 
     setSize();
     window.addEventListener("resize", setSize);
@@ -151,6 +163,7 @@ export default function ScrollyHero() {
       scrub: true,
       onUpdate: (self) => {
         const frame = Math.min(TOTAL_FRAMES - 1, Math.floor(self.progress * TOTAL_FRAMES));
+        getFrameNeighborhood(frame, TOTAL_FRAMES, 2, 6).forEach(loadFrame);
         if (frame !== frameIndexRef.current.value) {
           frameIndexRef.current.value = frame;
           for (let i = frame - PRELOAD_BEHIND; i <= frame + PRELOAD_AHEAD; i++) loadFrame(i);
@@ -210,8 +223,13 @@ export default function ScrollyHero() {
       st.kill();
       phaseTriggers.forEach((t) => t.kill());
       window.removeEventListener("resize", setSize);
-      if (idleCallback !== undefined && window.cancelIdleCallback) window.cancelIdleCallback(idleCallback);
-      if (idleFallback !== undefined) window.clearTimeout(idleFallback);
+      if (idleCallbackId !== undefined && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleCallbackId);
+      }
+      if (timeoutId !== undefined) globalThis.clearTimeout(timeoutId);
+      imagesRef.current.forEach((image) => {
+        if (image) image.onload = null;
+      });
     };
     };
 

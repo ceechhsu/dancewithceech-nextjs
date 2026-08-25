@@ -4,13 +4,28 @@ import ContactForm from "./ContactForm";
 
 export const metadata = {
   title: "Contact — DanceWithCeech",
-  description: "Get in touch with Ceech for questions about dance classes, private lessons, or anything else.",
+  description: "Contact Ceech about private hip-hop lessons, online dance training, or classes at Get Down Dance Studios in San Jose, California.",
   alternates: { canonical: "https://dancewithceech.com/contact" },
+  openGraph: {
+    title: "Contact Ceech — DanceWithCeech",
+    description: "Contact Ceech about private hip-hop lessons, online dance training, or San Jose classes.",
+    url: "https://dancewithceech.com/contact",
+    siteName: "DanceWithCeech",
+    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Ceech teaching hip-hop dance" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Ceech — DanceWithCeech",
+    description: "Contact Ceech about private hip-hop lessons, online dance training, or San Jose classes.",
+    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+  },
 };
 
 const schema = {
   "@context": "https://schema.org",
   "@type": "DanceSchool",
+  "@id": "https://dancewithceech.com/#organization",
   "name": "DanceWithCeech",
   "url": "https://dancewithceech.com",
   "telephone": "+14086573771",
@@ -25,8 +40,8 @@ const schema = {
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": 37.3382,
-    "longitude": -121.8863
+    "latitude": 37.3488633,
+    "longitude": -121.8944247
   },
   "sameAs": [
     "https://maps.app.goo.gl/UwJFWssFCYNC5Zyc7"
@@ -104,7 +119,7 @@ export default function ContactPage() {
             {/* MAP EMBED */}
             <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3172.3!2d-121.8863!3d37.3382!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s196+Jackson+St%2C+San+Jose%2C+CA+95112!5e0!3m2!1sen!2sus!4v1"
+                src="https://www.google.com/maps?q=37.3488633,-121.8944247&output=embed"
                 width="100%"
                 height="220"
                 style={{ border: 0, filter: "invert(90%) hue-rotate(180deg)" }}

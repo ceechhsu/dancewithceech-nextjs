@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Hip Hop Dance Classes in the Bay Area — Private Lessons with Ceech",
-  description: "Private hip-hop dance lessons serving the Bay Area — in-person in San Jose, virtual via Zoom. Electric Boogaloos-trained instructor, 25+ years teaching Bay Area community colleges. Free consultation.",
+  description: "Private hip-hop dance lessons for Bay Area adults—in person in San Jose or online. Train with Ceech through clear foundations and personal feedback.",
   alternates: { canonical: "https://dancewithceech.com/private-lessons/bay-area" },
   openGraph: {
     title: "Hip Hop Dance Classes in the Bay Area — Private Lessons with Ceech",
@@ -25,6 +25,7 @@ export const metadata = {
 const danceSchoolSchema = {
   "@context": "https://schema.org",
   "@type": "DanceSchool",
+  "@id": "https://dancewithceech.com/#organization",
   "name": "DanceWithCeech — Bay Area Private Lessons",
   "url": "https://dancewithceech.com/private-lessons/bay-area",
   "telephone": "+14086573771",
@@ -39,8 +40,8 @@ const danceSchoolSchema = {
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": 37.3382,
-    "longitude": -121.8863
+    "latitude": 37.3488633,
+    "longitude": -121.8944247
   },
   "areaServed": [
     { "@type": "City", "name": "San Jose" },
@@ -81,7 +82,7 @@ const faqSchema = {
       "name": "Which Bay Area colleges have you taught at?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "I've taught at De Anza College, Evergreen Valley College, West Valley College, and Mission College — four of the largest community colleges in the South Bay — for over 25 years. Most of my students over that period have been working adults, not pre-professional dancers."
+        "text": "I've held college faculty positions at Mission College, West Valley College, Gavilan College, and Cabrillo College. I've also guest taught at Stanford, UC Berkeley, UC Santa Cruz, Santa Clara University, De Anza College, San Jose City College, and Ohlone College. Most of my students have been working adults, not pre-professional dancers."
       }
     },
     {
@@ -159,7 +160,7 @@ export default function BayAreaPrivateLessonsPage() {
               The Bay Area has a vibrant but fragmented dance scene — studios in San Francisco focus on contemporary and jazz; South Bay options skew toward ballroom and K-pop. If you&apos;re looking for <em>actual street dance</em> — hip-hop, locking, popping, breaking, house — with an instructor who trained under the people who created the styles, the options narrow fast.
             </p>
             <p>
-              I&apos;ve taught at four Bay Area community colleges (De Anza, Evergreen Valley, West Valley, Mission) for over 25 years. My funk styles lineage traces directly to Pop&apos;in Pete and Skeeter Rabbit of the Electric Boogaloos — the crew that invented popping. When you learn from me, you&apos;re learning the real thing from someone a handshake away from the original sources.
+              I&apos;ve held college faculty positions at Mission College, West Valley College, Gavilan College, and Cabrillo College, and I&apos;ve guest taught at Stanford, UC Berkeley, UC Santa Cruz, Santa Clara University, De Anza College, San Jose City College, and Ohlone College. My funk styles lineage traces directly to Pop&apos;in Pete and Skeeter Rabbit of the Electric Boogaloos — the crew that invented popping. When you learn from me, you&apos;re learning the real thing from someone a handshake away from the original sources.
             </p>
             <p>
               In-person lessons are at <strong style={{ color: "var(--foreground)" }}>Get Down Dance Studios in San Jose Japantown</strong> — central enough for students from Sunnyvale, Cupertino, Palo Alto, Santa Clara, Mountain View, Fremont, and Milpitas. For students farther out, <strong style={{ color: "var(--foreground)" }}>virtual lessons via Zoom</strong> deliver the same personalized feedback.

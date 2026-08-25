@@ -4,6 +4,21 @@ export const metadata: Metadata = {
   title: "Locking Fundamentals Volume 1 | Dance With Ceech",
   description:
     "This 30-day locking fundamentals training program is designed for beginners to get started with locking. Master The Lock, The Wrist Twirl, The Point, and The Five.",
+  alternates: { canonical: "https://dancewithceech.com/locking-fundamentals-volume-1" },
+  openGraph: {
+    title: "Locking Fundamentals Volume 1 | Dance With Ceech",
+    description: "A 30-day beginner locking program covering The Lock, Wrist Twirl, Point, and Five through progressive practice.",
+    url: "https://dancewithceech.com/locking-fundamentals-volume-1",
+    siteName: "DanceWithCeech",
+    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Locking training with Ceech" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Locking Fundamentals Volume 1 | Dance With Ceech",
+    description: "A 30-day beginner locking program covering The Lock, Wrist Twirl, Point, and Five.",
+    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+  },
 };
 
 type VideoItem = {

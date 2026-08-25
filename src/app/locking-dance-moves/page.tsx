@@ -6,7 +6,7 @@ import { getAllPosts, CATEGORY_LABELS } from "@/lib/posts";
 
 export const metadata = {
   title: "Locking Dance Moves — DanceWithCeech",
-  description: "Learn locking dance moves step by step. Funky freezes and sharp punctuations taught by instructor Ceech.",
+  description: "Learn locking dance moves step by step with Ceech. Build foundational freezes, points, wrist twirls, rhythm, and confident funk-style movement.",
   alternates: { canonical: "https://dancewithceech.com/locking-dance-moves" },
   keywords: ["locking dance moves", "locking dance tutorials", "funk locking", "locking choreography", "learn locking", "locking freezes", "street dance locking"],
   openGraph: {
