@@ -55,11 +55,11 @@ The virtual pricing section will retain the existing three-card visual system.
 Update the following sources of public offer information:
 
 - `src/components/PrivateLessonsPricing.tsx`: replace Monthly Membership and One-Month Pack cards with the approved 5-Cycle and 10-Cycle packs; rewrite the single card as one complete cycle; remove renewal and 60-day language.
-- `src/app/private-lessons/bay-area/page.tsx`: replace old visible prices, membership terms, FAQ answers, and JSON-LD FAQ answers with the approved cycle model and expiration periods.
-- `src/app/private-lessons/page.tsx`: update directly affected virtual-service wording to Google Meet and ensure the page does not reduce the offer to a standalone 30-minute call.
+- `src/app/private-lessons/bay-area/page.tsx`: replace old visible prices, membership terms, FAQ answers, and JSON-LD FAQ answers with the approved cycle model and expiration periods. Replace Zoom-only descriptions in metadata, structured data, and visible copy with Google Meet so every representation of this service uses the approved platform.
+- `src/app/private-lessons/page.tsx`: update virtual-service wording in metadata and visible copy to Google Meet and ensure the page does not reduce the offer to a standalone 30-minute call.
 - `tests/private-lessons-free-offers.test.mjs`: replace tests for the old recurring and one-time four-session plans with assertions for all three approved cycle options, expirations, workflow language, and absence of auto-renew claims.
 
-Other sitewide references to online lessons may remain unchanged unless they state an outdated price, package, expiration, or auto-renew term. This update does not create a new virtual landing page, payment system, scheduling system, or subscription.
+Other sitewide references to online lessons may remain unchanged unless they state an outdated price, package, expiration, or auto-renew term. Every reference within the main private-lessons page, its pricing component, and the Bay Area private-lessons page must use Google Meet rather than Zoom or an ambiguous choice of platforms. This update does not create a new virtual landing page, payment system, scheduling system, or subscription.
 
 ## Preserved Content
 
@@ -72,12 +72,13 @@ Other sitewide references to online lessons may remain unchanged unless they sta
 ## Verification
 
 - Run the focused private-lessons tests.
-- Search the private-lesson pricing component and Bay Area page for `$250/month`, `$280`, `Monthly Membership`, `One-Month Pack`, `auto-renew`, and `60 days`; none may remain as current virtual offer copy.
+- Search all public source files for `$250/month`, `$280`, `Monthly Membership`, `One-Month Pack`, `auto-renew`, and `60 days`; none may remain as current virtual offer copy.
+- Search the main private-lessons page, pricing component, and Bay Area private-lessons page for Zoom references; none may remain in visible copy, metadata, or structured data.
 - Confirm that `$80`, `$300`, and `$500` appear with the correct cycle counts.
 - Confirm that the 5-Cycle and 10-Cycle expiration periods are three and six months.
 - Confirm that a complete cycle is described as video submission, recorded feedback within three business days, and one 30-minute Google Meet session.
 - Build the site successfully.
-- Review the private-lessons page at desktop and mobile widths before deployment.
+- Review both the main private-lessons page and the Bay Area private-lessons page at desktop and mobile widths before deployment.
 
 ## Deferred Decisions
 
