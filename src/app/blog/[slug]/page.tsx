@@ -1,9 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { CATEGORY_LABELS, CATEGORY_PATHS, getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/posts";
+import { addResponsiveTableLabels } from "@/lib/markdown";
 
 export async function generateStaticParams() {
   const posts = getAllPosts();
@@ -26,7 +28,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       url: pageUrl,
       type: "article",
       publishedTime: post.date,
-      images: [{ url: ogImage, width: 1280, height: 720, alt: post.title }],
+      modifiedTime: post.updated,
+      images: [{ url: ogImage, width: 1280, height: 720, alt: post.imageAlt ?? post.title }],
     },
     twitter: {
       card: "summary_large_image",
@@ -43,6 +46,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 function readingTime(content: string): number {
   const words = content.trim().split(/\s+/).length;
   return Math.max(1, Math.ceil(words / 200));
+}
+
+function displayDate(date: string): string {
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 }
 
 function extractFAQs(content: string): Array<{ question: string; answer: string }> {
@@ -79,9 +90,22 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     image: ogImage,
     url: pageUrl,
     datePublished: post.date,
-    author: { "@type": "Person", name: "Ceech", url: "https://dancewithceech.com" },
+    ...(post.updated ? { dateModified: post.updated } : {}),
+    mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
+    author: { "@type": "Person", name: "Ceech", url: "https://dancewithceech.com/about" },
     publisher: { "@type": "Organization", name: "DanceWithCeech", url: "https://dancewithceech.com" },
   };
+
+  const videoSchema = post.video ? {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: post.video.name,
+    description: post.video.description,
+    thumbnailUrl: post.video.thumbnailUrl,
+    uploadDate: post.video.uploadDate,
+    duration: post.video.duration,
+    embedUrl: post.video.embedUrl,
+  } : null;
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -106,13 +130,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const rawHtml = await marked.parse(post.content);
 
   // Convert YouTube links to embedded players (handles youtu.be, youtube.com/watch, youtube.com/shorts)
-  const html = rawHtml.replace(
+  const html = addResponsiveTableLabels(rawHtml.replace(
     /<a[^>]+href="(https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([\w-]+)[^"]*)"[^>]*>[^<]+<\/a>/g,
     (_match, _href, videoId) =>
       `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:2rem 0;border-radius:12px;">` +
-      `<iframe src="https://www.youtube.com/embed/${videoId}" title="YouTube video" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen ` +
+      `<iframe loading="lazy" src="https://www.youtube.com/embed/${videoId}" title="${post.video?.playerTitle ?? "YouTube video"}" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen ` +
       `style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></iframe></div>`
-  );
+  ));
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
@@ -120,6 +144,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
+      {videoSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema) }} />}
 
       <Nav />
 
@@ -158,26 +183,25 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           {post.title}
         </h1>
 
-        {/* Meta row — date + reading time */}
-        <div className="flex items-center gap-4 text-sm mb-10" style={{ color: "var(--muted)" }}>
-          <span>
-            {new Date(post.date).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </span>
-          <span style={{ color: "#222" }}>|</span>
+        {/* Meta row — author, dates, and reading time */}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm mb-10" style={{ color: "var(--muted)" }}>
+          <Link href="/about" className="hover:text-white transition-colors">By Ceech</Link>
+          <span>Published {displayDate(post.date)}</span>
+          {post.updated && <span>Updated {displayDate(post.updated)}</span>}
           <span>{mins} min read</span>
         </div>
 
         {/* Hero image */}
         {post.hasImage && (
-          <div className="mb-12 rounded-2xl overflow-hidden" style={{ aspectRatio: "16/9" }}>
-            <img
+          <div className="relative mb-12 rounded-2xl overflow-hidden" style={{ aspectRatio: "16/9" }}>
+            <Image
               src={`/images/posts/${post.slug}.jpg`}
-              alt={post.title}
-              className="w-full h-full object-cover"
+              alt={post.imageAlt ?? post.title}
+              title={post.imageAlt ?? post.title}
+              fill
+              sizes="(max-width: 672px) calc(100vw - 3rem), 672px"
+              priority
+              className="object-cover"
             />
           </div>
         )}
@@ -223,38 +247,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <div className="mt-16 mb-12" style={{ height: "1px", background: "linear-gradient(to right, #2563EB, transparent)" }} />
 
         {/* CTAs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-          {/* Academy waitlist */}
-          <div
-            className="p-7 rounded-2xl flex flex-col"
-            style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}
-          >
-            <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--accent-primary)" }}>
-              Online Academy
-            </div>
-            <p
-              className="font-black uppercase leading-none mb-3"
-              style={{
-                fontFamily: "var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif",
-                fontSize: "1.5rem",
-                letterSpacing: "0.03em",
-              }}
-            >
-              Learn on your schedule.
-            </p>
-            <p className="text-sm mb-6 flex-1" style={{ color: "var(--muted)" }}>
-              The DanceWithCeech academy is coming. Get early access before it opens.
-            </p>
-            <Link
-              href="/academy"
-              className="inline-block text-center px-6 py-3 rounded-full text-sm text-white font-semibold uppercase tracking-wider transition-opacity hover:opacity-80"
-              style={{ backgroundColor: "var(--accent-primary)" }}
-            >
-              Join the Waitlist
-            </Link>
-          </div>
-
+        <div className="grid grid-cols-1 gap-4">
           {/* Private lessons */}
           <div
             className="p-7 rounded-2xl flex flex-col"

@@ -243,6 +243,7 @@ textarea:-webkit-autofill {
 /* ── Table (if any) */
 .prose table {
   width: 100% !important;
+  max-width: 100% !important;
   border-collapse: collapse !important;
   margin-bottom: 1.5rem !important;
   font-size: 0.9375rem !important;
@@ -262,6 +263,50 @@ textarea:-webkit-autofill {
   padding: 0.625rem 0.875rem !important;
   border-bottom: 1px solid #1a1a1a !important;
   color: #D1D5DB !important;
+}
+
+@media (max-width: 640px) {
+  .prose table,
+  .prose tbody,
+  .prose tr,
+  .prose td {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .prose thead {
+    display: none !important;
+  }
+
+  .prose tr {
+    padding: 0.65rem 1rem !important;
+    margin-bottom: 1rem !important;
+    background: #111 !important;
+    border: 1px solid #222 !important;
+    border-radius: 12px !important;
+  }
+
+  .prose td {
+    display: grid !important;
+    grid-template-columns: minmax(6.5rem, 0.9fr) minmax(0, 1.4fr) !important;
+    gap: 0.75rem !important;
+    padding: 0.65rem 0 !important;
+  }
+
+  .prose td:last-child {
+    border-bottom: 0 !important;
+  }
+
+  .prose td::before {
+    content: attr(data-label);
+    color: #6B7280;
+    font-family: var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1.25;
+    text-transform: uppercase;
+  }
 }
 
 /* ─── RAINBOW BORDER BUTTON ─────────────────────────────────── */

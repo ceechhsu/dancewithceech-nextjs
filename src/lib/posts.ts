@@ -10,8 +10,19 @@ export interface PostMeta {
   seoTitle?: string;
   slug: string;
   date: string;
+  updated?: string;
   category: string;
   description?: string;
+  imageAlt?: string;
+  video?: {
+    name: string;
+    playerTitle?: string;
+    description: string;
+    thumbnailUrl: string;
+    uploadDate: string;
+    duration: string;
+    embedUrl: string;
+  };
   hasImage?: boolean;
 }
 
@@ -69,8 +80,11 @@ export function getAllPosts(): PostMeta[] {
         seoTitle: data.seoTitle,
         slug,
         date: data.date ?? "",
+        updated: data.updated,
         category: data.category ?? "general",
         description: data.description,
+        imageAlt: data.imageAlt,
+        video: data.video,
         hasImage: fs.existsSync(path.join(IMAGES_DIR, `${slug}.jpg`)),
       };
     })
@@ -90,8 +104,11 @@ export function getPostBySlug(slug: string): Post | null {
     seoTitle: data.seoTitle,
     slug: resolvedSlug,
     date: data.date ?? "",
+    updated: data.updated,
     category: data.category ?? "general",
     description: data.description,
+    imageAlt: data.imageAlt,
+    video: data.video,
     hasImage: fs.existsSync(path.join(IMAGES_DIR, `${resolvedSlug}.jpg`)),
     content,
   };
