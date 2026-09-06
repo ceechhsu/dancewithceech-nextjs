@@ -1,5 +1,6 @@
 ---
 title: "Party Machine Dance: How to Do This Hip Hop Kick & Hop Move"
+seoTitle: "Party Machine Dance: Hip-Hop Kick & Hop Tutorial"
 slug: "hip-hop-dance-move-party-machine"
 date: "2024-06-11 15:40:51"
 category: "hip-hop-dance-moves"

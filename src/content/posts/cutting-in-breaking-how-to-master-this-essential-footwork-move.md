@@ -1,9 +1,10 @@
 ---
 title: "Cutting in Breaking: How to Master This Essential Footwork Move"
+seoTitle: "Cutting in Breaking: Essential Footwork Tutorial"
 slug: "cutting-in-breaking-how-to-master-this-essential-footwork-move"
 date: "2024-06-21 14:59:44"
 category: "breaking-dance-moves"
-description: "Master the cutting footwork move in breaking (breakdance). Learn this essential b-boy and b-girl technique step by step to build faster, sharper floor combinations."
+description: "Learn the cutting footwork move in breaking step by step and build faster, sharper b-boy and b-girl floor combinations."
 ---
 ## Introduction
 

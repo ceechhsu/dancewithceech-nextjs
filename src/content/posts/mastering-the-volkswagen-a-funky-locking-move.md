@@ -1,5 +1,6 @@
 ---
 title: "Mastering the Volkswagen: A Funky Locking Move"
+seoTitle: "Volkswagen Locking Move Tutorial"
 slug: "mastering-the-volkswagen-a-funky-locking-move"
 date: "2024-06-20 15:34:37"
 category: "locking-dance-moves"

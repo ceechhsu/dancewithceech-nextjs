@@ -3,7 +3,7 @@ title: "House Dance | Salsa Step"
 slug: "house-salsa-step"
 date: "2024-05-22 15:47:35"
 category: "house-dance"
-description: "Learn the house dance Salsa Step step-by-step. Master this Latin-infused hip-hop house move with tap-and-shift footwork that fuses two iconic street dance styles."
+description: "Learn the house dance Salsa Step with tap-and-shift footwork that fuses Latin rhythm and classic hip-hop house style."
 ---
 ## Merging Grooves: Mastering the Hip Hop House Salsa Step
 

@@ -1,5 +1,6 @@
 ---
 title: "Jack In The Box Dance: How to Do This House Dance Move (Jacking)"
+seoTitle: "Jack in the Box: House Dance Tutorial"
 slug: "house-dance-jack-in-the-box"
 date: "2024-06-11 10:36:43"
 category: "house-dance"

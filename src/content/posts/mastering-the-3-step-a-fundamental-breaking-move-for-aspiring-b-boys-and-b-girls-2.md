@@ -1,5 +1,6 @@
 ---
 title: "3 Step Breakdance: How to Do This Foundational B-Boy Footwork"
+seoTitle: "3 Step Breakdance: Foundational Footwork Tutorial"
 slug: "mastering-the-3-step-a-fundamental-breaking-move-for-aspiring-b-boys-and-b-girls-2"
 date: "2024-06-21 14:34:31"
 category: "breaking-dance-moves"

@@ -1,5 +1,6 @@
 ---
 title: "Punching in Breaking: The Power of Precision in B-Boy Moves"
+seoTitle: "Punching in Breaking: Precision Technique Guide"
 slug: "punching-in-breaking-the-power-of-precision-in-b-boy-moves"
 date: "2024-06-21 16:23:22"
 category: "breaking-dance-moves"

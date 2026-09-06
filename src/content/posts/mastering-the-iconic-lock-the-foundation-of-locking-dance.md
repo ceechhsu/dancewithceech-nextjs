@@ -1,9 +1,10 @@
 ---
 title: "How to Do The Lock: The Foundation Move of Locking Dance"
+seoTitle: "How to Do The Lock: Locking Dance Tutorial"
 slug: "mastering-the-iconic-lock-the-foundation-of-locking-dance"
 date: "2024-06-20 15:42:57"
 category: "locking-dance-moves"
-description: "Learn The Lock — the foundation move of Locking dance, created by Don Campbell in 1969. Step-by-step freeze-and-release tutorial from a 25-year dance instructor."
+description: "Learn The Lock, the foundation of locking created by Don Campbell, with a step-by-step freeze-and-release tutorial."
 ---
 ## Introduction
 

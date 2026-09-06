@@ -1,5 +1,6 @@
 ---
 title: "Bankhead Bounce: How to Do Atlanta's 90s Hip Hop Dance"
+seoTitle: "Bankhead Bounce: How to Do the 90s Hip-Hop Move"
 slug: "bankhead-bounce"
 date: "2024-05-11 10:27:14"
 category: "hip-hop-dance-moves"

@@ -1,5 +1,6 @@
 ---
 title: "Roger Rabbit Dance: How to Do the 80s Hip Hop Move (6 Steps)"
+seoTitle: "Roger Rabbit Dance: How to Do the 80s Move"
 slug: "hip-hop-dance-move-roger-rabbit"
 date: "2024-06-18 09:09:48"
 category: "hip-hop-dance-moves"

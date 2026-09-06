@@ -1,5 +1,6 @@
 ---
 title: "Cabbage Patch Dance: How to Do the Iconic 80s Hip Hop Move"
+seoTitle: "Cabbage Patch Dance: How to Do the 80s Move"
 slug: "cabbage-patch"
 date: "2024-05-13 20:54:57"
 category: "hip-hop-dance-moves"

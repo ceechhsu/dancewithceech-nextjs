@@ -1,5 +1,6 @@
 ---
 title: "Train House Dance: How to Do This Side-to-Side Footwork Move"
+seoTitle: "Train House Dance: Side-to-Side Footwork Tutorial"
 slug: "house-dance-move-train"
 date: "2024-06-18 12:49:56"
 category: "house-dance"

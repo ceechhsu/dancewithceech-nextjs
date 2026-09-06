@@ -1,5 +1,6 @@
 ---
 title: "Brooklyn Rock (Uprock): How to Do This Breaking Battle Move"
+seoTitle: "Brooklyn Rock: Breaking Battle Move Tutorial"
 slug: "mastering-the-brooklyn-rock-a-foundational-breaking-move"
 date: "2024-06-21 14:55:34"
 category: "breaking-dance-moves"

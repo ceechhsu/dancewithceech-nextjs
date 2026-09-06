@@ -1,5 +1,6 @@
 ---
 title: "How to C-Walk: Step-by-Step Tutorial for Beginners"
+seoTitle: "How to C-Walk: Beginner Step-by-Step Tutorial"
 slug: "c-walk"
 date: "2024-05-12 08:46:26"
 category: "hip-hop-dance-moves"

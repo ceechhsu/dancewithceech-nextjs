@@ -1,9 +1,10 @@
 ---
 title: "Mastering the Baby Swipe: A Fundamental Breaking Power Move"
+seoTitle: "Baby Swipe Breakdance: Beginner Power Move Guide"
 slug: "mastering-the-baby-swipe-a-fundamental-breaking-power-move"
 date: "2024-06-21 14:48:09"
 category: "breaking-dance-moves"
-description: "Learn the Baby Swipe breakdancing power move with step-by-step instructions. Master this foundational b-boy and b-girl move to build momentum and transition into advanced moves."
+description: "Learn the Baby Swipe breakdance power move step by step and build momentum for transitions into advanced b-boy and b-girl moves."
 ---
 ## Introduction
 

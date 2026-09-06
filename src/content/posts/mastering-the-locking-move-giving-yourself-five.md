@@ -1,9 +1,10 @@
 ---
 title: "Mastering the Locking Move: Giving Yourself Five"
+seoTitle: "Giving Yourself Five: Locking Dance Tutorial"
 slug: "mastering-the-locking-move-giving-yourself-five"
 date: "2024-06-20 17:30:46"
 category: "locking-dance-moves"
-description: "Learn Giving Yourself Five, a classic locking dance move rooted in Don Campbell's style. Master this step-by-step self-acknowledging gesture to bring personality to your set."
+description: "Learn Giving Yourself Five, a classic locking move, with step-by-step timing and gesture techniques to add personality to your set."
 ---
 ## Introduction
 

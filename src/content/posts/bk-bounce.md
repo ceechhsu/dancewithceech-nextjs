@@ -3,7 +3,7 @@ title: "4 Easy Tips For The BK Bounce"
 slug: "bk-bounce"
 date: "2024-05-12 08:43:23"
 category: "hip-hop-dance-moves"
-description: "Learn the BK Bounce hip-hop dance move created by Buddha Stretch. Master Brooklyn's signature step-and-bounce with arm coordination tips and step-by-step guidance."
+description: "Learn the BK Bounce hip-hop dance move created by Buddha Stretch, with step-and-bounce technique, arm coordination, and rhythm tips."
 ---
 ## The BK Bounce Dance Move by Buddha Stretch
 

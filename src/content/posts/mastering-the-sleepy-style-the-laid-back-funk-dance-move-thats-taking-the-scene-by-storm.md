@@ -1,5 +1,6 @@
 ---
 title: "Sleepy Style Dance: How to Do This Laid-Back Funk Move"
+seoTitle: "Sleepy Style Dance: Laid-Back Funk Tutorial"
 slug: "mastering-the-sleepy-style-the-laid-back-funk-dance-move-thats-taking-the-scene-by-storm"
 date: "2024-06-21 18:28:55"
 category: "funk-style-dance-moves"

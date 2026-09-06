@@ -1,5 +1,6 @@
 ---
 title: "Mastering the Scarecrow: A Funky Popping Dance Move"
+seoTitle: "Scarecrow Popping Move: Beginner Tutorial"
 slug: "mastering-the-scarecrow-a-funky-popping-dance-move"
 date: "2024-06-21 18:25:37"
 category: "funk-style-dance-moves"

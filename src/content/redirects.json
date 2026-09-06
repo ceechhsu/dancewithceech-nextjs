@@ -708,22 +708,6 @@
     "destination": "/beat-first"
   },
   {
-    "source": "/group-classes/",
-    "destination": "/academy"
-  },
-  {
-    "source": "/group-classes",
-    "destination": "/academy"
-  },
-  {
-    "source": "/virtual-dance-programs/",
-    "destination": "/academy"
-  },
-  {
-    "source": "/virtual-dance-programs",
-    "destination": "/academy"
-  },
-  {
     "source": "/register-for-mission-college-dance-class/",
     "destination": "/private-lessons"
   },

@@ -31,16 +31,10 @@ const CORE_PAGES = [
       "Free rhythm training game that helps students tap to the beat and unlock dance tutorials.",
   },
   {
-    title: "DanceWithCeech Academy",
-    path: "/academy",
-    note:
-      "Structured online dance program for working professionals who want a clear path from rhythm to freestyle.",
-  },
-  {
     title: "Private Lessons",
     path: "/private-lessons",
     note:
-      "One-on-one dance lessons with Ceech, available in San Jose and online by Zoom.",
+      "One-on-one dance lessons with Ceech in San Jose and virtual coaching worldwide: a submitted video, recorded feedback within three business days, and the next available 30-minute Google Meet arranged with Ceech.",
   },
   {
     title: "Private Lessons in San Jose",
@@ -153,9 +147,9 @@ export function generateLlmsTxt() {
   return [
     "# DanceWithCeech",
     "",
-    "> DanceWithCeech teaches hip-hop, locking, popping, breaking, and house dance with a rhythm-first system led by Ceech Hsu, a Bay Area instructor with 24+ years of teaching experience.",
+    "> Dance With Ceech teaches hip-hop, locking, popping, breaking, and house dance with a rhythm-first approach led by Ceech Hsu, a Bay Area instructor teaching since 1998.",
     "",
-    "DanceWithCeech is for adults and beginners who want dance explained clearly instead of treated like a natural gift. The site includes a free rhythm trainer, structured online academy, private lesson booking pages, style hubs, and step-by-step dance move tutorials.",
+    "Dance With Ceech is for adults and beginners who want dance explained clearly instead of treated like a natural gift. The site includes a free rhythm trainer, private lesson booking pages, style hubs, and step-by-step dance move tutorials.",
     "",
     "AI agents should prefer canonical URLs on this domain, use the dance style hubs for topic overviews, and use individual blog posts for step-by-step move instructions. For booking or availability questions, send users to the private lesson or contact pages instead of inventing schedule details.",
     "",

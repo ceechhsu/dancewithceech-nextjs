@@ -18,18 +18,21 @@ test("homepage hero progressively loads frames without the eager all-frame loop"
 });
 
 test("approved homepage sections, hero copy, and CTAs remain present", async () => {
-  const [home, hero] = await Promise.all([
+  const [home, hero, deferredTestimonials] = await Promise.all([
     read("src/app/page.tsx"),
     read("src/components/ScrollyHero.tsx"),
+    read("src/components/DeferredHomeTestimonials.tsx"),
   ]);
   for (const component of [
     "ScrollyHero",
     "StatsBar",
     "RunningManCampaignBanner",
-    "TestimonialsMarquee",
-    "CircularGallery",
+    "DeferredHomeTestimonials",
   ]) {
     assert.match(home, new RegExp(component));
+  }
+  for (const component of ["TestimonialsMarquee", "CircularGallery"]) {
+    assert.match(deferredTestimonials, new RegExp(component));
   }
   for (const copy of [
     "You think you can't dance.",
@@ -43,7 +46,12 @@ test("approved homepage sections, hero copy, and CTAs remain present", async () 
 });
 
 test("local-business pages use the verified coordinates and stable entity identifier", async () => {
-  const sources = await Promise.all(LOCAL_PAGES.map(read));
+  const shared = await read("src/lib/private-lesson-details.ts");
+  const sources = await Promise.all(LOCAL_PAGES.map(async path => {
+    const source = await read(path);
+    assert.match(source, /businessSchema|buildLessonSchema/);
+    return source + shared;
+  }));
   for (const source of sources) {
     assert.match(source, /37\.3488633/);
     assert.match(source, /-121\.8944247/);
@@ -52,7 +60,8 @@ test("local-business pages use the verified coordinates and stable entity identi
     assert.ok(source.includes('https://dancewithceech.com/#organization'));
   }
   const home = await read("src/app/page.tsx");
-  assert.ok(home.includes('https://dancewithceech.com/#organization'));
+  assert.match(home, /businessSchema/);
+  assert.ok(shared.includes('https://dancewithceech.com/#organization'));
 });
 
 test("college history distinguishes the four employers from guest teaching", async () => {
@@ -81,10 +90,11 @@ test("college history distinguishes the four employers from guest teaching", asy
   assert.match(sanJose, /employed by|college faculty|faculty positions/i);
   assert.match(bayArea, /guest taught|guest-teaching|guest instructor/i);
 
-  // Preserve existing teaching-year claims during this scoped factual correction.
-  assert.ok(about.includes("25+ Years of Teaching"));
-  assert.ok(sanJose.includes("25-year dance instructor"));
-  assert.ok(bayArea.includes("25-year Bay Area instructor"));
+  // Teaching began before the college appointment.
+  assert.ok(about.includes("Teaching Since 1998"));
+  assert.ok(about.includes("Mission College in 2002"));
+  assert.ok(sanJose.includes("taught dance since 1998"));
+  assert.ok(bayArea.includes("teaching since 1998"));
 });
 
 test("private lesson and Running Man pages have descriptive internal links", async () => {

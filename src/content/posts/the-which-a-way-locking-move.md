@@ -1,9 +1,10 @@
 ---
 title: "Which A Way Dance: How to Do the Locking Move by Damita Jo Freeman"
+seoTitle: "Which A Way: Locking Dance Tutorial"
 slug: "the-which-a-way-locking-move"
 date: "2024-06-21 11:44:52"
 category: "locking-dance-moves"
-description: "Which A Way locking tutorial — the signature hip-and-torso rotation created by Damita Jo Freeman of Soul Train. 6 steps to master this classic 1970s locking move."
+description: "Which A Way locking tutorial: learn the signature hip-and-torso rotation created by Damita Jo Freeman."
 ---
 ## Introduction
 

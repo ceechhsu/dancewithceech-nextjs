@@ -1,9 +1,10 @@
 ---
 title: "Mastering the Freeze: A Fundamental Breaking Move"
+seoTitle: "Freeze Breakdance: Foundational Move Guide"
 slug: "mastering-the-freeze-a-fundamental-breaking-move"
 date: "2024-06-21 16:18:12"
 category: "breaking-dance-moves"
-description: "Learn the freeze, a cornerstone breaking move that demands strength and balance. Master step-by-step techniques to hold powerful b-boy poses and punctuate your routines."
+description: "Learn the freeze, a foundational breaking move, with step-by-step strength and balance techniques for powerful b-boy poses."
 ---
 ## Introduction
 

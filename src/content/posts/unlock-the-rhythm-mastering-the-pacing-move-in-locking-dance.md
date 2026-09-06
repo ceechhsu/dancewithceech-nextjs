@@ -3,7 +3,7 @@ title: "Mastering the Pacing Move in Locking Dance"
 slug: "unlock-the-rhythm-mastering-the-pacing-move-in-locking-dance"
 date: "2024-06-20 17:38:24"
 category: "locking-dance-moves"
-description: "Learn the Pacing locking move step by step. Master this rhythmic arm-extension technique from The Lockers to drive timing and groove in all your locking routines."
+description: "Learn the Pacing locking move with rhythmic arm extensions that drive timing and groove in your routines."
 ---
 ## Introduction
 

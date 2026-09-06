@@ -1,5 +1,6 @@
 ---
 title: "Mastering the 1990: A Classic Power Move in Breaking"
+seoTitle: "1990 Breakdance Move: Beginner Power Move Guide"
 slug: "mastering-the-1990-a-classic-power-move-in-breaking"
 date: "2024-06-21 14:43:51"
 category: "breaking-dance-moves"

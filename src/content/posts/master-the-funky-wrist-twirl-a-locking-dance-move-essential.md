@@ -1,9 +1,10 @@
 ---
 title: "Master the Wrist Twirl: An Essential Locking Dance Move"
+seoTitle: "Wrist Twirl: Essential Locking Dance Tutorial"
 slug: "master-the-funky-wrist-twirl-a-locking-dance-move-essential"
 date: "2024-06-20 13:38:50"
 category: "locking-dance-moves"
-description: "Learn the Wrist Twirl, a fundamental locking dance move. Master step-by-step wrist isolation and rhythm technique to add funk and flair to your locking combinations."
+description: "Learn the Wrist Twirl, a foundational locking move, with step-by-step wrist isolation, rhythm, and styling tips."
 ---
 ## Introduction
 

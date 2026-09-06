@@ -1,9 +1,10 @@
 ---
 title: "How to Do the Smurf Dance: Beginner 80s Hip-Hop Tutorial"
+seoTitle: "How to Do the Smurf Dance: Beginner Tutorial"
 slug: "hip-hop-dance-move-smurf"
 date: "2024-06-18 10:11:12"
 category: "hip-hop-dance-moves"
-description: "Learn how to do the Smurf dance with a beginner-friendly, step-by-step tutorial for the classic 80s hip-hop move, including the bounce and alternating arm swings."
+description: "Learn the Smurf dance with a beginner-friendly tutorial covering the bounce and alternating arm swings behind this classic 80s move."
 ---
 ## What Is the Smurf Dance?
 

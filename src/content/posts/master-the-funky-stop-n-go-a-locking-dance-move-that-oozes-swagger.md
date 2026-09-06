@@ -1,5 +1,6 @@
 ---
 title: "Stop N Go Dance: How to Do This Locking Move (by Scoo B Doo)"
+seoTitle: "Stop N Go Dance: Scoo B Doo Locking Tutorial"
 slug: "master-the-funky-stop-n-go-a-locking-dance-move-that-oozes-swagger"
 date: "2024-06-20 15:45:52"
 category: "locking-dance-moves"

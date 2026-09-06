@@ -3,7 +3,7 @@ title: "3 Reasons Why Private Dance Lessons Work"
 slug: "3-reasons-why-private-lessons-works"
 date: "2022-08-23 21:26:42"
 category: "general"
-description: "Discover why private dance lessons accelerate your learning. One-on-one coaching gives you personalized drills, instant feedback, and faster results than group classes."
+description: "Discover how private dance lessons accelerate learning through personalized drills, instant feedback, and coaching tailored to your goals."
 ---
 Almost every person I've talked to wants to learn to dance faster.  We can't learn fast enough.  We want to learn it yesterday. What is the fastest way to learn?
 

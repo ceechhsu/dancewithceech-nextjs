@@ -1,5 +1,6 @@
 ---
 title: "Pimp Walk Dance: How to Do the Iconic Locking Move (Step by Step)"
+seoTitle: "Pimp Walk Dance: Iconic Locking Tutorial"
 slug: "unleash-your-swagger-mastering-the-iconic-pimp-walk-in-locking"
 date: "2024-06-20 17:52:29"
 category: "locking-dance-moves"

@@ -1,5 +1,6 @@
 ---
 title: "Why Hip Hop Dance Is Hard (And How to Push Through)"
+seoTitle: "Why Hip-Hop Dance Is Hard—and How to Persist"
 slug: "i-almost-quit-dancing"
 date: "2024-04-20 18:21:57"
 category: "general"

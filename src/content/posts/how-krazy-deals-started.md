@@ -1,5 +1,6 @@
 ---
 title: "How a Dance Community Taught Me to Save Money (And Why I Built Krazy.Deals)"
+seoTitle: "How Dance Led Me to Build Krazy.Deals | Ceech"
 slug: "how-krazy-deals-started"
 date: "2026-04-13"
 category: "general"
@@ -10,7 +11,7 @@ Picture two grown men popping and breaking on a street corner in Rimini, Italy, 
 
 The funny part? We were there on a paid gig. Freddy, the Italian athletic wear brand, had flown us out to perform at a fitness convention. We had a stage, a show, the whole thing.
 
-![Ceech and Gary Kendell posing on the streets of Rimini, Italy — 2001](/images/ceech/rimini-gary-ceech.png)
+![Ceech and Gary Kendell posing on the streets of Rimini, Italy — 2001](/images/ceech/rimini-gary-ceech.webp "Ceech and Gary Kendell in Rimini, Italy in 2001")
 
 But earlier that day, we'd grabbed sandwiches near the venue. I'll never forget them. A single slice of meat so thin it was practically transparent. Gary held his up to the light and we both lost it. It was like deli paper between two pieces of bread. We finished them and were still starving.
 

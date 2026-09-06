@@ -1,5 +1,6 @@
 ---
 title: "Scooby Doo Dance: How to Do Jimmy 'Scoo B Doo' Foster's Locking Move"
+seoTitle: "Scooby Doo Dance: Jimmy Scoo B Doo Locking Move"
 slug: "master-the-funky-scooby-doo-a-locking-dance-move-with-personality"
 date: "2024-06-20 17:20:29"
 category: "locking-dance-moves"

@@ -1,9 +1,10 @@
 ---
 title: "Mastering the 4 Step: A Fundamental Breaking Move"
+seoTitle: "4 Step Breakdance: Foundational Footwork Tutorial"
 slug: "mastering-the-4-step-a-fundamental-breaking-move"
 date: "2024-06-21 14:37:36"
 category: "breaking-dance-moves"
-description: "Learn the 4 Step breaking footwork move step-by-step. Master this cornerstone b-boy pattern to build balance, rhythm, and a solid foundation for advanced breaking."
+description: "Learn the 4 Step breaking footwork pattern step by step to build balance, rhythm, and a strong foundation for advanced breaking."
 ---
 ## Introduction
 

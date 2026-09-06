@@ -1,9 +1,10 @@
 ---
 title: "Thomas Flare Breakdance: How to Do This B-Boy Power Move"
+seoTitle: "Thomas Flare Breakdance: Power Move Guide"
 slug: "mastering-the-thomas-flare-a-powerful-breaking-move"
 date: "2024-06-21 16:33:43"
 category: "breaking-dance-moves"
-description: "Thomas Flare breakdance tutorial — the gymnastics-born b-boy power move with continuous leg circles on two arms. 8-step guide with strength and flexibility tips."
+description: "Learn the Thomas Flare breakdance power move with continuous leg circles, strength preparation, and flexibility tips."
 ---
 ## Introduction
 

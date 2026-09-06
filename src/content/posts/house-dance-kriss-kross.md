@@ -1,5 +1,6 @@
 ---
 title: "Kriss Kross House Dance: How to Do This Leg-Crossing Move"
+seoTitle: "Kriss Kross House Dance Tutorial"
 slug: "house-dance-kriss-kross"
 date: "2024-06-11 10:48:38"
 category: "house-dance"

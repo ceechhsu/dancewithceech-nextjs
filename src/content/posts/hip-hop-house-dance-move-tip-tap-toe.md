@@ -1,5 +1,6 @@
 ---
 title: "Tip Tap Toe House Dance: How to Do This Footwork Move (Buddha Stretch)"
+seoTitle: "Tip Tap Toe House Dance Tutorial"
 slug: "hip-hop-house-dance-move-tip-tap-toe"
 date: "2024-06-18 12:30:58"
 category: "house-dance"

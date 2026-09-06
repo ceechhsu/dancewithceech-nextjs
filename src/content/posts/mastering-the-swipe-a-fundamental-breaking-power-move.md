@@ -1,5 +1,6 @@
 ---
 title: "Mastering the Swipe: A Fundamental Breaking Power Move"
+seoTitle: "Swipe Breakdance: Foundational Power Move Guide"
 slug: "mastering-the-swipe-a-fundamental-breaking-power-move"
 date: "2024-06-21 16:31:25"
 category: "breaking-dance-moves"

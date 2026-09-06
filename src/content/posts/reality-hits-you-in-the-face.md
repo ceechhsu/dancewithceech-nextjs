@@ -1,5 +1,6 @@
 ---
 title: "Dance Is Hard — Here's Why You Should Keep Going"
+seoTitle: "Dance Is Hard: How to Keep Going"
 slug: "reality-hits-you-in-the-face"
 date: "2022-09-08 12:49:01"
 category: "general"

@@ -1,9 +1,10 @@
 ---
 title: "How to Do the Waving Dance: Beginner Arm Wave Tutorial"
+seoTitle: "How to Do the Waving Dance: Arm Wave Tutorial"
 slug: "mastering-the-art-of-waving-a-fluid-funk-style-dance-move"
 date: "2024-06-21 21:30:08"
 category: "funk-style-dance-moves"
-description: "Learn the waving dance with a beginner-friendly, step-by-step tutorial for a smooth funk-style arm wave, including 10 drills for your shoulders, elbows, wrists, and fingers."
+description: "Learn the waving dance with a beginner-friendly arm wave tutorial and drills for your shoulders, elbows, wrists, and fingers."
 ---
 ## What Is Waving?
 

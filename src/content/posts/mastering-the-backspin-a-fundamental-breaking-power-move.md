@@ -1,5 +1,6 @@
 ---
 title: "Mastering the Backspin: A Fundamental Breaking Power Move"
+seoTitle: "Backspin Breakdance: Beginner Power Move Guide"
 slug: "mastering-the-backspin-a-fundamental-breaking-power-move"
 date: "2024-06-21 14:52:55"
 category: "breaking-dance-moves"

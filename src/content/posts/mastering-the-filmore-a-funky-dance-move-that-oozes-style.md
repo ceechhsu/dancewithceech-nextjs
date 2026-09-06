@@ -1,9 +1,10 @@
 ---
 title: "Mastering the Filmore: A Funky Dance Move That Oozes Style"
+seoTitle: "Filmore Dance: Funk-Style Tutorial"
 slug: "mastering-the-filmore-a-funky-dance-move-that-oozes-style"
 date: "2024-06-21 18:06:52"
 category: "funk-style-dance-moves"
-description: "Learn the Filmore, a smooth funk style boogaloo dance move rooted in San Francisco. Master step-by-step isolation and wave techniques to add polished style to your set."
+description: "Learn the Filmore, a San Francisco funk-style boogaloo move, with step-by-step isolation and wave techniques."
 ---
 ## Introduction
 

@@ -1,9 +1,10 @@
 ---
 title: "Mastering the Strut: Complete Guide to the Funk Strutting Move"
+seoTitle: "Funk Strut: Step-by-Step Dance Tutorial"
 slug: "mastering-the-funk-a-comprehensive-guide-to-strutting-dance-move"
 date: "2024-06-21 18:35:51"
 category: "funk-style-dance-moves"
-description: "Learn the Strut, the iconic funk style dance move born in 1970s California. Master step-by-step gliding steps and expressive arm movements to groove with confidence."
+description: "Learn the Strut, a 1970s California funk dance move, with step-by-step gliding footwork and expressive arm styling."
 ---
 ## Introduction
 

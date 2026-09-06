@@ -1,5 +1,6 @@
 ---
 title: "How to Learn the Crossroads House Dance Move"
+seoTitle: "How to Do the Crossroads House Dance Move"
 slug: "crossroads"
 date: "2024-05-22 15:46:13"
 category: "house-dance"

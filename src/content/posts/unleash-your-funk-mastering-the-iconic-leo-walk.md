@@ -1,5 +1,6 @@
 ---
 title: "Mastering the Leo Walk: An Iconic Locking Dance Move"
+seoTitle: "Leo Walk: Iconic Locking Dance Tutorial"
 slug: "unleash-your-funk-mastering-the-iconic-leo-walk"
 date: "2024-06-20 17:45:17"
 category: "locking-dance-moves"

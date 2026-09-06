@@ -1,5 +1,6 @@
 ---
 title: "Skate House Dance: How to Do the Gliding Hip Hop House Move"
+seoTitle: "Skate House Dance: Gliding Move Tutorial"
 slug: "house-skate"
 date: "2024-05-22 15:49:36"
 category: "house-dance"

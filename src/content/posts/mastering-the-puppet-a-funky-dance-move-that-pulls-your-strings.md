@@ -1,9 +1,10 @@
 ---
 title: "Mastering the Puppet: A Funky Dance Move That Pulls Your Strings"
+seoTitle: "Puppet Dance Move: Funk-Style Tutorial"
 slug: "mastering-the-puppet-a-funky-dance-move-that-pulls-your-strings"
 date: "2024-06-21 18:21:35"
 category: "funk-style-dance-moves"
-description: "Learn the Puppet, the theatrical funk style dance move that mimics a marionette. Master step-by-step sharp isolations and fluid transitions to captivate any audience."
+description: "Learn the Puppet, a theatrical funk-style move, with step-by-step sharp isolations and fluid transitions."
 ---
 ## Introduction
 

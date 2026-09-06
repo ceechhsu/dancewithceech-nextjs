@@ -1,9 +1,10 @@
 ---
 title: "Toyman Dance: How to Do This Popping Wind-Up Illusion"
+seoTitle: "Toyman Dance: Popping Wind-Up Move Tutorial"
 slug: "mastering-the-toyman-a-funky-twist-on-popping-dance"
 date: "2024-06-21 18:39:49"
 category: "funk-style-dance-moves"
-description: "Toyman popping dance tutorial — the mechanical wind-up toy illusion from Electric Boogaloos-era funk style. 8 steps covering sharp hits, stops, and toy-like motion."
+description: "Toyman popping tutorial: learn the mechanical wind-up illusion through sharp hits, stops, and toy-like motion."
 ---
 ## Introduction
 

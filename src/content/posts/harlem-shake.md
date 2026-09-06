@@ -1,9 +1,10 @@
 ---
 title: "How to Do the Harlem Shake: The Real 80s Dance (Not the Meme)"
+seoTitle: "How to Do the Real 80s Harlem Shake"
 slug: "harlem-shake"
 date: "2024-05-13 21:02:53"
 category: "hip-hop-dance-moves"
-description: "Learn the real Harlem Shake — the original 1980s Harlem street dance, not the 2013 meme. 6-step tutorial from a 25-year dance instructor: shoulder shimmy, torso shake, authentic style."
+description: "Learn the real 1980s Harlem Shake—not the 2013 meme—with a step-by-step tutorial for the shoulder shimmy, torso shake, and authentic style."
 ---
 ## The Harlem Shake and Its Enduring Hip Hop Legacy
 

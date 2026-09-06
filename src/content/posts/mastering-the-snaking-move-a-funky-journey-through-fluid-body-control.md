@@ -1,5 +1,6 @@
 ---
 title: "Mastering the Snaking Move: Fluid Funk Body Control"
+seoTitle: "Snaking Dance Move: Fluid Body Control Tutorial"
 slug: "mastering-the-snaking-move-a-funky-journey-through-fluid-body-control"
 date: "2024-06-21 18:32:35"
 category: "funk-style-dance-moves"

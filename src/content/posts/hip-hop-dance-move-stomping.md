@@ -1,9 +1,10 @@
 ---
 title: "Stomping Dance: Hip Hop Stomp Technique (Step-by-Step)"
+seoTitle: "Stomping Dance: Hip-Hop Stomp Tutorial"
 slug: "hip-hop-dance-move-stomping"
 date: "2024-06-18 12:05:31"
 category: "hip-hop-dance-moves"
-description: "Stomping in hip hop dance — learn the percussive Bronx-rooted stomp with 6-step technique. Build the floor-strike foundation used in ATL Stomp, Fila, and breaking."
+description: "Learn the Bronx-rooted hip-hop stomp with six steps and build the floor-strike foundation used in ATL Stomp, Fila, and breaking."
 ---
 ## Introduction
 

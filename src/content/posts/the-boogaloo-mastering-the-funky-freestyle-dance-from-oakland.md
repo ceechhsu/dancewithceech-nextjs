@@ -1,9 +1,10 @@
 ---
 title: "The Boogaloo: Mastering the Funky Oakland Street Dance"
+seoTitle: "The Boogaloo: Oakland Funk Dance Tutorial"
 slug: "the-boogaloo-mastering-the-funky-freestyle-dance-from-oakland"
 date: "2024-06-21 17:25:51"
 category: "funk-style-dance-moves"
-description: "Learn the Boogaloo dance step by step. Master this Oakland-born funk-style street dance—foundation of popping and Electric Boogaloos—with rolling hips and groove."
+description: "Learn the Oakland-born Boogaloo with rolling hips, groove, and the funk-style foundations that influenced popping."
 ---
 ## Introduction
 

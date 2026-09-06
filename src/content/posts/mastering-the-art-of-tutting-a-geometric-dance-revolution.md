@@ -1,5 +1,6 @@
 ---
 title: "Mastering the Art of Tutting: A Geometric Dance Revolution"
+seoTitle: "Tutting Dance: Geometric Arm and Hand Tutorial"
 slug: "mastering-the-art-of-tutting-a-geometric-dance-revolution"
 date: "2024-06-21 18:41:16"
 category: "funk-style-dance-moves"

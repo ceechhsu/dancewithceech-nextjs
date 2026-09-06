@@ -1,5 +1,6 @@
 ---
 title: "Crazy Legs Dance: How to Do Poppin' Pete's Funk Style Move"
+seoTitle: "Crazy Legs Dance: Poppin' Pete Move Tutorial"
 slug: "mastering-the-crazy-legs-a-funky-hip-hop-dance-move"
 date: "2024-06-21 18:04:42"
 category: "funk-style-dance-moves"

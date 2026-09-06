@@ -1,9 +1,10 @@
 ---
 title: "Windmill Breakdance: How to Do the B-Boy Power Move (Step by Step)"
+seoTitle: "Windmill Breakdance: Beginner Power Move Guide"
 slug: "mastering-the-windmill-the-iconic-b-boy-power-move"
 date: "2024-06-21 16:35:56"
 category: "breaking-dance-moves"
-description: "Windmill breakdance tutorial — the iconic b-boy power move created by Ken Swift of Rock Steady Crew. 9-step guide to this continuous backspin with kung-fu roots."
+description: "Windmill breakdance tutorial: learn this iconic b-boy power move with a nine-step progression and backspin technique."
 ---
 ## Introduction
 

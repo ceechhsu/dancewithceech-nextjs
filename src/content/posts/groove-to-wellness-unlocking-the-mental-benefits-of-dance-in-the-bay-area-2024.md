@@ -1,9 +1,10 @@
 ---
 title: "Groove to Wellness: Unlocking the Mental Benefits of Dance in the Bay Area (2024)"
+seoTitle: "Dance and Mental Health Benefits in the Bay Area"
 slug: "groove-to-wellness-unlocking-the-mental-benefits-of-dance-in-the-bay-area-2024"
 date: "2024-10-20 09:40:15"
 category: "general"
-description: "Discover the mental health benefits of hip-hop dance in the Bay Area. Learn how dancing reduces stress, boosts brain health, and builds social connection in 2024."
+description: "Discover how hip-hop dance in the Bay Area can reduce stress, support brain health, and build social connection."
 ---
 I vividly recall my first dance choreography class in San Francisco in the mid-1990s. Overwhelmed by the rapid pace, I struggled to synchronize my body with the rhythm. It was like juggling five unfamiliar balls - legs, arms, and head moving in discord. My brain felt like it was on the verge of explosion, akin to tackling complex math for the first time.
 

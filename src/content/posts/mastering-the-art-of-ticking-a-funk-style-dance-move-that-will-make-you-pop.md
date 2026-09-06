@@ -1,5 +1,6 @@
 ---
 title: "Ticking Dance: How to Do This Funk Style Isolation Move"
+seoTitle: "Ticking Dance: Funk-Style Isolation Tutorial"
 slug: "mastering-the-art-of-ticking-a-funk-style-dance-move-that-will-make-you-pop"
 date: "2024-06-21 18:38:05"
 category: "funk-style-dance-moves"

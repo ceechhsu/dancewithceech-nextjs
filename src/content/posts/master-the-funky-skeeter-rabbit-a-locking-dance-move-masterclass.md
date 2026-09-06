@@ -1,9 +1,10 @@
 ---
 title: "Skeeter Rabbit Dance: How to Do the Locking Footwork Move"
+seoTitle: "Skeeter Rabbit Dance: Locking Footwork Tutorial"
 slug: "master-the-funky-skeeter-rabbit-a-locking-dance-move-masterclass"
 date: "2024-06-20 15:51:58"
 category: "locking-dance-moves"
-description: "Skeeter Rabbit dance tutorial — the iconic locking move created by James 'Skeeter Rabbit' Higgins of The Lockers in the 1970s. 6 steps with kicks, hops, and arm swings."
+description: "Skeeter Rabbit locking tutorial: learn the kicks, hops, and arm swings behind this classic move from The Lockers."
 ---
 ## Introduction
 

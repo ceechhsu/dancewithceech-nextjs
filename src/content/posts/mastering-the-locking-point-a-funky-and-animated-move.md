@@ -1,9 +1,10 @@
 ---
 title: "Mastering the Locking Point: A Funky and Animated Move"
+seoTitle: "Locking Point: Funky Dance Move Tutorial"
 slug: "mastering-the-locking-point-a-funky-and-animated-move"
 date: "2024-06-20 17:48:47"
 category: "locking-dance-moves"
-description: "Learn the Locking Point, the sharp animated gesture at the heart of locking dance. Master step-by-step arm extension and timing to add funky flair to your routines."
+description: "Learn the Locking Point with step-by-step arm extension and timing techniques for sharper, funkier locking routines."
 ---
 ## Introduction
 

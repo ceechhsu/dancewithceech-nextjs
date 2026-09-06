@@ -1,5 +1,6 @@
 ---
 title: "Scribble Foot Dance: How to Do This Hip Hop House Footwork Move"
+seoTitle: "Scribble Foot Dance: Hip-Hop House Tutorial"
 slug: "hip-hop-house-dance-move-scribble-foot"
 date: "2024-06-18 09:59:59"
 category: "hip-hop-dance-moves"

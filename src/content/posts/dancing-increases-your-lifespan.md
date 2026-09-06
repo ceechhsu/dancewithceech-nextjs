@@ -3,7 +3,7 @@ title: "Dancing Increases Your Lifespan"
 slug: "dancing-increases-your-lifespan"
 date: "2022-08-23 20:46:40"
 category: "general"
-description: "Learn how dancing increases your lifespan by improving brain health, boosting social connection, and slowing aging. Discover why dancers live longer, happier lives."
+description: "Learn how dancing may support brain health, social connection, and healthy aging—and why dancers can live longer, happier lives."
 ---
 I have always thought dancers looked younger than their actual age.  Maybe it's because they live an active lifestyle. I think there is something special about dancers in general.  Could it be because the music? Could it be because the feeling that it brings to the dancers while they are dancing?
 

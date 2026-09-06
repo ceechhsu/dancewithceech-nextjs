@@ -4,7 +4,7 @@ seoTitle: "Running Man Dance Tutorial for Beginners | Ceech"
 slug: "hip-hop-dance-move-running-man"
 date: "2024-06-18 09:18:44"
 category: "hip-hop-dance-moves"
-description: "Running Man dance tutorial — the late-80s New Jersey hip hop move made famous by MC Hammer and Janet Jackson. 5 steps, origin story, and the #1 beginner mistake."
+description: "Running Man dance tutorial: learn the late-80s New Jersey move made famous by MC Hammer and Janet Jackson, including 5 beginner steps."
 ---
 ## Introduction
 

@@ -1,5 +1,6 @@
 ---
 title: "2023 Spring Dance Showcase at West Valley Mission College"
+seoTitle: "2023 Spring Dance Showcase at West Valley College | Ceech"
 slug: "2023-spring-dance-showcase-at-west-valley-mission-college"
 date: "2023-05-29 12:13:09"
 category: "general"

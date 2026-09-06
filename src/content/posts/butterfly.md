@@ -1,5 +1,6 @@
 ---
 title: "Butterfly Dance: How to Do the 90s Hip Hop Move (Step by Step)"
+seoTitle: "Butterfly Dance: How to Do the 90s Hip-Hop Move"
 slug: "butterfly"
 date: "2024-05-12 08:45:37"
 category: "hip-hop-dance-moves"

@@ -1,5 +1,6 @@
 ---
 title: "Headspin Breakdance: How to Do This B-Boy Power Move (Safely)"
+seoTitle: "Headspin Breakdance: Safe Beginner Guide"
 slug: "mastering-the-headspin-a-gravity-defying-breaking-move"
 date: "2024-06-21 16:20:59"
 category: "breaking-dance-moves"

@@ -1,5 +1,6 @@
 ---
 title: "Tone Wop Dance: How to Do the Harlem Litefeet Move (Step by Step)"
+seoTitle: "Tone Wop Dance: Harlem Litefeet Tutorial"
 slug: "hip-hop-dance-move-tone-wop"
 date: "2024-06-18 12:35:00"
 category: "hip-hop-dance-moves"

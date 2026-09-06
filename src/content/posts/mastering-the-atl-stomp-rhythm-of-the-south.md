@@ -1,9 +1,10 @@
 ---
 title: "Mastering the ATL Stomp: Atlanta's Iconic Hip-Hop Dance Move"
+seoTitle: "ATL Stomp: Atlanta Hip-Hop Dance Tutorial"
 slug: "mastering-the-atl-stomp-rhythm-of-the-south"
 date: "2024-05-12 20:44:05"
 category: "hip-hop-dance-moves"
-description: "Learn the ATL Stomp, Atlanta's iconic hip-hop dance move. Follow step-by-step instructions to master the rhythm and energy of this Southern street dance classic."
+description: "Learn Atlanta's iconic ATL Stomp with step-by-step instruction for its rhythm, energy, and Southern street dance style."
 ---
 ## Introduction
 

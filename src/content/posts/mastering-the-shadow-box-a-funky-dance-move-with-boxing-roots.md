@@ -1,5 +1,6 @@
 ---
 title: "Mastering the Shadow Box: A Funky Dance Move with Boxing Roots"
+seoTitle: "Shadow Box: Funk-Style Dance Tutorial"
 slug: "mastering-the-shadow-box-a-funky-dance-move-with-boxing-roots"
 date: "2024-06-21 18:27:24"
 category: "funk-style-dance-moves"

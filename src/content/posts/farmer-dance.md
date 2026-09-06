@@ -1,5 +1,6 @@
 ---
 title: "Farmer Dance: How to Do This House Dance Move (African Roots)"
+seoTitle: "Farmer Dance: How to Do This House Move"
 slug: "farmer-dance"
 date: "2024-05-13 20:58:00"
 category: "hip-hop-dance-moves"

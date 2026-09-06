@@ -1,5 +1,6 @@
 ---
 title: "Monastery Dance: How to Do the St. Louis Hip Hop Move"
+seoTitle: "Monastery Dance: How to Do the St. Louis Move"
 slug: "hip-hop-dance-move-monastery"
 date: "2024-06-11 11:51:05"
 category: "hip-hop-dance-moves"

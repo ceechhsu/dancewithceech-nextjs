@@ -1,5 +1,6 @@
 ---
 title: "Walk It Out Dance: Step-by-Step Tutorial (Atlanta, 2006)"
+seoTitle: "Walk It Out Dance: Atlanta Step-by-Step Tutorial"
 slug: "hip-hop-dance-move-walk-it-out"
 date: "2024-06-18 12:55:31"
 category: "hip-hop-dance-moves"

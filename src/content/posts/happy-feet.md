@@ -1,5 +1,6 @@
 ---
 title: "Happy Feet Dance: How to Do This Bouncy Hip Hop Move"
+seoTitle: "Happy Feet Dance: How to Do the Hip-Hop Move"
 slug: "happy-feet"
 date: "2024-05-13 21:01:37"
 category: "hip-hop-dance-moves"

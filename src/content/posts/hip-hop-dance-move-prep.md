@@ -1,5 +1,6 @@
 ---
 title: "The Prep Dance: How to Do This 90s Hip Hop Move (Step by Step)"
+seoTitle: "The Prep Dance: How to Do the 90s Move"
 slug: "hip-hop-dance-move-prep"
 date: "2024-06-13 17:07:49"
 category: "hip-hop-dance-moves"

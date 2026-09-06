@@ -1,5 +1,6 @@
 ---
 title: "6 Step Breakdance: How to Do the Foundation B-Boy Footwork"
+seoTitle: "6 Step Breakdance: Beginner Footwork Tutorial"
 slug: "mastering-the-6-step-the-foundation-of-breakdancing-footwork"
 date: "2024-06-21 14:40:40"
 category: "breaking-dance-moves"

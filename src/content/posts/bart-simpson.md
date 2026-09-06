@@ -3,7 +3,7 @@ title: "4 Key Tips to Mastering The Bart Simpson"
 slug: "bart-simpson"
 date: "2024-05-12 08:31:15"
 category: "hip-hop-dance-moves"
-description: "Master the Bart Simpson hip-hop dance move with step-by-step instructions. Learn the 90s classic footwork, arm pumps, and sliding technique seen in Michael Jackson videos."
+description: "Learn the Bart Simpson hip-hop dance move with step-by-step footwork, arm pumps, and sliding technique from this 90s classic."
 ---
 ## Master the Moves: Grooving with the Bart Simpson Dance
 

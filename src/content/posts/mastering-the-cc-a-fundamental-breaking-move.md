@@ -1,5 +1,6 @@
 ---
 title: "CC Breaking Move (Kickout): How to Do This Foundational Footwork"
+seoTitle: "CC Breaking Move: Kickout Footwork Tutorial"
 slug: "mastering-the-cc-a-fundamental-breaking-move"
 date: "2024-06-21 14:57:53"
 category: "breaking-dance-moves"

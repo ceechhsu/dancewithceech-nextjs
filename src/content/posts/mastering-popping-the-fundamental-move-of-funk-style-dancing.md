@@ -1,9 +1,10 @@
 ---
 title: "Mastering Popping: The Fundamental Move of Funk Style Dancing"
+seoTitle: "Popping Dance: Learn the Fundamental Technique"
 slug: "mastering-popping-the-fundamental-move-of-funk-style-dancing"
 date: "2024-06-21 18:18:52"
 category: "funk-style-dance-moves"
-description: "Learn popping, the foundational funk style dance move. Master the muscle contraction and release technique step-by-step and unlock creative combinations in street dance."
+description: "Learn popping step by step, including the contraction-and-release technique that builds control and creative street dance combinations."
 ---
 ## Introduction
 

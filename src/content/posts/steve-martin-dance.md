@@ -1,5 +1,6 @@
 ---
 title: "Steve Martin Dance: How to Do the 80s Hip Hop Move (by Stezo)"
+seoTitle: "Steve Martin Dance: 80s Hip-Hop Tutorial"
 slug: "steve-martin-dance"
 date: "2024-06-18 10:23:54"
 category: "hip-hop-dance-moves"
