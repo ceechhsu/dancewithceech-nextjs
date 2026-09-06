@@ -140,7 +140,7 @@ export const CircularTestimonials = ({
   };
 
   return (
-    <div className="w-full max-w-4xl px-4 py-8 mx-auto">
+    <div className="w-full max-w-4xl px-4 py-8 mx-auto overflow-x-clip">
       <div className="grid md:grid-cols-2 gap-12 items-center">
 
         {/* Video stack */}
@@ -170,6 +170,7 @@ export const CircularTestimonials = ({
                 <img
                   src={`https://img.youtube.com/vi/${t.videoId}/hqdefault.jpg`}
                   alt={t.name}
+                  title={`${t.name} testimonial`}
                   className="w-full h-full object-cover"
                 />
               )}

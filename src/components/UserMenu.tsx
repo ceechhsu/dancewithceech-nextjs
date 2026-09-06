@@ -44,6 +44,7 @@ export default function UserMenu({ name, image }: Props) {
           <Image
             src={image}
             alt={name ?? 'User'}
+            title={name ?? 'User profile photo'}
             width={32}
             height={32}
             style={{ borderRadius: '50%', display: 'block' }}

@@ -13,14 +13,14 @@ export const metadata = {
     description: 'Use a free online rhythm trainer to measure your timing and build the rhythm foundation dance requires.',
     url: 'https://dancewithceech.com/beat-first',
     siteName: 'DanceWithCeech',
-    images: [{ url: 'https://dancewithceech.com/images/ceech/teaching-knee-pop.jpg', width: 1200, height: 630, alt: 'BeatFirst Rhythm Trainer' }],
+    images: [{ url: 'https://dancewithceech.com/images/ceech/ceech-samy-teaching-knee-pop.jpg', width: 1200, height: 630, alt: 'BeatFirst Rhythm Trainer' }],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'BeatFirst — Rhythm Trainer | DanceWithCeech',
     description: 'Use a free online rhythm trainer to measure your timing and build the rhythm foundation dance requires.',
-    images: ['https://dancewithceech.com/images/ceech/teaching-knee-pop.jpg'],
+    images: ['https://dancewithceech.com/images/ceech/ceech-samy-teaching-knee-pop.jpg'],
   },
 }
 

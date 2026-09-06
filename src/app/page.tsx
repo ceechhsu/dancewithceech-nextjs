@@ -5,29 +5,11 @@ import ScrollyHero from "@/components/ScrollyHero";
 import StatsBar from "@/components/StatsBar";
 import DeferredHomeTestimonials from "@/components/DeferredHomeTestimonials";
 import RunningManCampaignBanner from "@/components/RunningManCampaignBanner";
-import { RainbowBorderButton } from "@/components/ui/rainbow-border-button";
+import { businessSchema } from "@/lib/private-lesson-details";
 import { CATEGORY_LABELS, CATEGORY_PATHS, getFeaturedTutorialsByCategory } from "@/lib/posts";
+import { getReviewSummary } from "@/lib/reviews";
 
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": "https://dancewithceech.com/#organization",
-  "name": "DanceWithCeech",
-  "alternateName": "Dance With Ceech",
-  "url": "https://dancewithceech.com",
-  "logo": "https://dancewithceech.com/logo-mark.png",
-  "description": "Hip-hop, locking, popping, breaking, and house dance lessons in San Jose, CA — private, academy, and online — taught by Ceech, Electric Boogaloos lineage instructor with 25+ years of teaching experience.",
-  "founder": {
-    "@type": "Person",
-    "name": "Ceech Hsu"
-  },
-  "sameAs": [
-    "https://www.instagram.com/dancewithceech",
-    "https://www.tiktok.com/@dancewithceech",
-    "https://www.youtube.com/@dancewithceech",
-    "https://www.facebook.com/dancewithceech"
-  ]
-};
+const organizationSchema = businessSchema;
 
 export const metadata = {
   title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
@@ -37,22 +19,23 @@ export const metadata = {
     title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
     description: "Learn hip-hop, locking, popping, breaking, and house dance from Ceech — America's Got Talent performer, Body Rock champion, and Bay Area dance instructor.",
     url: "https://dancewithceech.com",
-    siteName: "DanceWithCeech",
-    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Ceech teaching hip-hop dance" }],
+    siteName: "Dance With Ceech",
+    images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Ceech teaching hip-hop dance" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
     description: "Learn hip-hop, locking, popping, breaking, and house dance from Ceech — America's Got Talent performer, Body Rock champion, and Bay Area dance instructor.",
-    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+    images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"],
   },
 };
 
-export default function Home() {
+export default async function Home() {
   const featuredTutorialGroups = Object.entries(getFeaturedTutorialsByCategory()).filter(
     ([, posts]) => posts.length > 0
   );
+  const reviewSummary = await getReviewSummary();
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
@@ -80,8 +63,9 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
               <Image
-                src="/images/ceech/dsp-agt.jpg"
+                src="/images/ceech/dsplayers-performing-americas-got-talent.jpg"
                 alt="DS Players on America's Got Talent 2010"
+                title="DS Players performing on America's Got Talent in 2010"
                 width={600}
                 height={380}
                 sizes="(min-width: 640px) 33vw, 100vw"
@@ -95,8 +79,9 @@ export default function Home() {
             </div>
             <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
               <Image
-                src="/images/ceech/mindtricks.jpg"
+                src="/images/ceech/mindtricks-dance-group-photo.jpg"
                 alt="Mindtricks — original Jabbawockeez founders"
+                title="Mindtricks dance group with future Jabbawockeez founders"
                 width={600}
                 height={380}
                 sizes="(min-width: 640px) 33vw, 100vw"
@@ -110,8 +95,9 @@ export default function Home() {
             </div>
             <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
               <Image
-                src="/images/ceech/bodyrockwinner.jpg"
+                src="/images/ceech/dsplayers-2006-body-rock-winners.jpg"
                 alt="DS Players Body Rock 2007 Champions"
+                title="DS Players Body Rock dance competition winners"
                 width={600}
                 height={380}
                 sizes="(min-width: 640px) 33vw, 100vw"
@@ -172,6 +158,7 @@ export default function Home() {
                   <Image
                     src={image}
                     alt={name}
+                    title={`${name} dance style`}
                     fill
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -230,6 +217,7 @@ export default function Home() {
       </section>
 
       <DeferredHomeTestimonials
+        summary={reviewSummary}
         items={[
           { videoId: "PppnU3oHvlQ" },
           { videoId: "J4_XpORtTfQ" },
@@ -241,26 +229,6 @@ export default function Home() {
         ]}
       />
 
-      {/* ACADEMY TEASER */}
-      <section className="py-24 px-6" style={{ backgroundColor: "var(--background)" }}>
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-secondary)" }}>
-            The Academy
-          </div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">
-            When your rhythm is ready,<br />the academy unlocks.
-          </h2>
-          <p className="text-lg mb-10 leading-relaxed" style={{ color: "var(--muted)" }}>
-            A full progressive curriculum — drill by drill, move by move. Built for students who want a real system, not random YouTube clips.
-          </p>
-          <div className="flex justify-center">
-            <RainbowBorderButton href="/academy">
-              Explore the Academy
-            </RainbowBorderButton>
-          </div>
-        </div>
-      </section>
-
       {/* PRIVATE LESSONS CTA */}
       <section className="py-24 px-6" style={{ backgroundColor: "var(--surface)" }}>
         <div className="max-w-3xl mx-auto text-center">
@@ -268,7 +236,7 @@ export default function Home() {
             Want direct feedback from Ceech?
           </h2>
           <p className="text-lg mb-10 leading-relaxed" style={{ color: "var(--muted)" }}>
-            Private 1-on-1 Zoom lessons. Real-time corrections. Personalized to exactly where you are.
+            Private 1-on-1 Google Meet lessons. Real-time corrections. Personalized to exactly where you are.
           </p>
           <Link href="/private-lessons" className="inline-block px-8 py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: "var(--accent-primary)" }}>
             Book a Private Lesson
@@ -280,7 +248,7 @@ export default function Home() {
       <footer className="py-12 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between gap-8">
           <div>
-            <div className="font-bold text-lg mb-2">DanceWithCeech</div>
+            <div className="font-bold text-lg mb-2">Dance With Ceech</div>
             <p className="text-sm max-w-xs leading-relaxed" style={{ color: "var(--muted)" }}>
               Rhythm first. Then dance. Hip-hop dance education for analytical minds.
             </p>
@@ -289,34 +257,33 @@ export default function Home() {
             <div>
               <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>Learn</div>
               <div className="flex flex-col gap-2 text-sm" style={{ color: "var(--muted)" }}>
-                <Link href="/beat-first" className="hover:text-white transition-colors">BeatFirst</Link>
-                <Link href="/academy" className="hover:text-white transition-colors">Academy</Link>
-                <Link href="/private-lessons" className="hover:text-white transition-colors">Private Lessons</Link>
-                <Link href="/private-lessons/san-jose" className="hover:text-white transition-colors">San Jose Lessons</Link>
-                <Link href="/private-lessons/bay-area" className="hover:text-white transition-colors">Bay Area Lessons</Link>
+                <Link href="/beat-first" prefetch={false} className="hover:text-white transition-colors">BeatFirst</Link>
+                <Link href="/private-lessons" prefetch={false} className="hover:text-white transition-colors">Private Lessons</Link>
+                <Link href="/private-lessons/san-jose" prefetch={false} className="hover:text-white transition-colors">San Jose Lessons</Link>
+                <Link href="/private-lessons/bay-area" prefetch={false} className="hover:text-white transition-colors">Bay Area Lessons</Link>
               </div>
             </div>
             <div>
               <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>Styles</div>
               <div className="flex flex-col gap-2 text-sm" style={{ color: "var(--muted)" }}>
-                <Link href="/hip-hop-dance-moves" className="hover:text-white transition-colors">Hip-Hop</Link>
-                <Link href="/locking-dance-moves" className="hover:text-white transition-colors">Locking</Link>
-                <Link href="/breaking-dance-moves" className="hover:text-white transition-colors">Breaking</Link>
-                <Link href="/funk-style-dance-moves" className="hover:text-white transition-colors">Funk & Popping</Link>
+                <Link href="/hip-hop-dance-moves" prefetch={false} className="hover:text-white transition-colors">Hip-Hop</Link>
+                <Link href="/locking-dance-moves" prefetch={false} className="hover:text-white transition-colors">Locking</Link>
+                <Link href="/breaking-dance-moves" prefetch={false} className="hover:text-white transition-colors">Breaking</Link>
+                <Link href="/funk-style-dance-moves" prefetch={false} className="hover:text-white transition-colors">Funk & Popping</Link>
               </div>
             </div>
             <div>
               <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>Connect</div>
               <div className="flex flex-col gap-2 text-sm" style={{ color: "var(--muted)" }}>
-                <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
-                <Link href="/about" className="hover:text-white transition-colors">About</Link>
-                <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
+                <Link href="/blog" prefetch={false} className="hover:text-white transition-colors">Blog</Link>
+                <Link href="/about" prefetch={false} className="hover:text-white transition-colors">About</Link>
+                <Link href="/contact" prefetch={false} className="hover:text-white transition-colors">Contact</Link>
               </div>
             </div>
           </div>
         </div>
         <div className="max-w-5xl mx-auto mt-8 pt-8 text-xs text-center" style={{ borderTop: "1px solid #1f1f1f", color: "var(--muted)" }}>
-          © {new Date().getFullYear()} DanceWithCeech. All rights reserved.
+          © {new Date().getFullYear()} Dance With Ceech. All rights reserved.
         </div>
       </footer>
 

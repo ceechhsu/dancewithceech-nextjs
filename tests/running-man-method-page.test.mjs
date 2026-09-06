@@ -135,6 +135,15 @@ test("the page delegates enrollment to one dynamic enrollment panel", async () =
   assert.match(component, /href="#enroll"/);
 });
 
+test("the hero uses one primary enrollment CTA instead of repeating it", async () => {
+  const component = await readFile(componentPath, "utf8");
+
+  assert.equal(
+    component.match(/<PrimaryCta label="View Founding-Cohort Enrollment" \/>/g)?.length ?? 0,
+    1,
+  );
+});
+
 test("the enrollment panel handles a completed attempt response", async () => {
   const enrollmentPanel = await readFile(enrollmentPanelPath, "utf8");
 

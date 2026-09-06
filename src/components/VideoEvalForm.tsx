@@ -17,16 +17,20 @@ export default function VideoEvalForm() {
     const youtubeUrl = (form.elements.namedItem("youtubeUrl") as HTMLInputElement).value;
     const notes = (form.elements.namedItem("notes") as HTMLTextAreaElement).value;
 
-    const res = await fetch("/api/video-eval", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, youtubeUrl, notes }),
-    });
+    try {
+      const res = await fetch("/api/video-eval", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, youtubeUrl, notes }),
+      });
 
-    if (res.ok) {
-      setStatus("success");
-      form.reset();
-    } else {
+      if (res.ok) {
+        setStatus("success");
+        form.reset();
+      } else {
+        setStatus("error");
+      }
+    } catch {
       setStatus("error");
     }
   }
@@ -40,11 +44,10 @@ export default function VideoEvalForm() {
           </div>
           <h2 className="text-3xl font-bold mb-4 text-balance">Get a Free Video Evaluation</h2>
           <p className="leading-relaxed" style={{ color: "var(--muted)" }}>
-            Record a 30-second dance video, upload it to YouTube as <strong style={{ color: "var(--foreground)" }}>unlisted</strong>, and paste the link below.
-            Ceech will personally break down exactly what to improve and send you a detailed analysis — free.
+            This one-time evaluation is for prospective virtual students. Record a 30-second dance video, upload it to YouTube as <strong style={{ color: "var(--foreground)" }}>unlisted</strong>, and paste the link below.
           </p>
-          <p className="text-sm mt-3" style={{ color: "var(--accent-gold)" }}>
-            Book a session package same-day after your eval and get a special discount. Ask Ceech directly.
+          <p className="text-sm mt-3 leading-relaxed" style={{ color: "var(--muted)" }}>
+            Within three business days, Ceech will email a short recorded feedback video and a short written recap covering one thing you are doing correctly, the main problem, one corrective drill, and what to practice first.
           </p>
         </div>
 
@@ -52,7 +55,7 @@ export default function VideoEvalForm() {
           <div className="text-center p-8 rounded-2xl" style={{ backgroundColor: "var(--background)", border: "1px solid #22c55e44" }}>
             <div className="text-2xl mb-3">✓</div>
             <div className="font-bold text-lg mb-2">Video received!</div>
-            <p style={{ color: "var(--muted)" }}>Ceech will review your video and send the evaluation to your email within a few days.</p>
+            <p style={{ color: "var(--muted)" }}>Ceech will review your video and email your private evaluation within three business days.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -109,7 +112,7 @@ export default function VideoEvalForm() {
               {status === "sending" ? "Submitting..." : "Submit My Video for Free Eval"}
             </button>
             <p className="text-xs text-center" style={{ color: "var(--muted)" }}>
-              Make sure your YouTube video is set to <strong>Unlisted</strong> so only Ceech can view it. One free evaluation per person.
+              Make sure your YouTube video is set to <strong>Unlisted</strong> rather than Public. Unlisted does not mean private: anyone with the link can view or share it. One free evaluation per person.
             </p>
           </form>
         )}

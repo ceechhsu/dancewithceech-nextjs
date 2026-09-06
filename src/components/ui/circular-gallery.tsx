@@ -116,7 +116,8 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                     >
                       <Image
                         src={`https://i.ytimg.com/vi/${item.videoId}/hqdefault.jpg`}
-                        alt=""
+                        alt={`Student testimonial video ${i + 1}`}
+                        title={`Student testimonial video ${i + 1}`}
                         fill
                         sizes="200px"
                         className="object-cover"

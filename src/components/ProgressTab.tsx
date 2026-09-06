@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { signIn } from 'next-auth/react'
-import { BEATS, INTERMEDIATE_MASTERY_REQUIRED } from '@/lib/beats'
+import { BEATS } from '@/lib/beats'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -365,13 +365,6 @@ export default function ProgressTab({ userEmail }: { userEmail: string | null | 
   const inProgressCount = BEATS.filter(b => !masterySet.has(b.id) && (sessionsByBeat[b.id]?.length ?? 0) > 0).length
   const totalSessions = sessions.length
 
-  // Academy CTA threshold
-  const beginnerBeats = BEATS.filter(b => b.difficulty === 'beginner')
-  const allBeginnersMastered = beginnerBeats.every(b => masterySet.has(b.id))
-  const intermediateBeats = BEATS.filter(b => b.difficulty === 'intermediate')
-  const intermediateMasteredCount = intermediateBeats.filter(b => masterySet.has(b.id)).length
-  const showAcademyCTA = allBeginnersMastered && intermediateMasteredCount >= INTERMEDIATE_MASTERY_REQUIRED
-
   // Keep beats in the same order as the beat selection page (BEATS array order)
 
   return (
@@ -389,41 +382,6 @@ export default function ProgressTab({ userEmail }: { userEmail: string | null | 
           </div>
         ))}
       </div>
-
-      {/* Academy CTA */}
-      {showAcademyCTA && (
-        <div style={{
-          background: 'linear-gradient(135deg, #1e3a5f, #1a2a1a)',
-          border: '1px solid #2563eb44',
-          borderRadius: 8,
-          padding: '14px 18px',
-          marginBottom: 16,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 12,
-        }}>
-          <div>
-            <div style={{ fontWeight: 700, color: '#f9f9f9', fontSize: 14 }}>Your rhythm is real — you&apos;re ready for real lessons</div>
-            <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 4 }}>You&apos;ve mastered the basics. Take it to the studio.</div>
-          </div>
-          <a
-            href="/academy"
-            style={{
-              background: '#2563eb',
-              color: '#fff',
-              borderRadius: 6,
-              padding: '6px 14px',
-              fontSize: 13,
-              fontWeight: 600,
-              textDecoration: 'none',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            See Academy →
-          </a>
-        </div>
-      )}
 
       {/* Beat rows */}
       <div>

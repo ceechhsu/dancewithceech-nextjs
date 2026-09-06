@@ -38,7 +38,7 @@ export default function RunningManTeaser({
             controls
             playsInline
             preload="metadata"
-            poster="/images/running-man-method-teaser-poster.jpg"
+            poster="/images/running-man-method-teaser-poster.webp"
             aria-label="Ceech and Margarita demonstrating the Running Man with step-by-step captions"
           >
             <source src="/videos/running-man-method-teaser.mp4" type="video/mp4" />

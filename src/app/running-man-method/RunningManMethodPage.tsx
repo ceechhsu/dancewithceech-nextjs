@@ -219,7 +219,7 @@ export default function RunningManMethodPage() {
                 controls
                 playsInline
                 preload="metadata"
-                poster="/images/running-man-method-teaser-poster.jpg"
+                poster="/images/running-man-method-teaser-poster.webp"
                 aria-label="Ceech and Margarita demonstrating the Running Man with step-by-step captions"
               >
                 <source src="/videos/running-man-method-teaser.mp4" type="video/mp4" />
@@ -230,6 +230,9 @@ export default function RunningManMethodPage() {
               </p>
             </div>
             <p className="mt-7 max-w-2xl text-base leading-7 text-white/65 sm:text-lg">Ceech will guide you through simple, progressive drills and give you personalized feedback at key mastery checkpoints, so you know what to adjust and what to practice next.</p>
+            <div className="mt-7">
+              <PrimaryCta label="View Founding-Cohort Enrollment" />
+            </div>
             <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-3">
               {cohortFacts.map(({ icon: Icon, label, value }) => (
                 <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
@@ -239,16 +242,13 @@ export default function RunningManMethodPage() {
                 </div>
               ))}
             </div>
-            <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-              <PrimaryCta label="View Founding-Cohort Enrollment" />
-              <p className="text-sm leading-5 text-white/50">Enrollment closes September 17<br />or when all 12 seats are filled.</p>
-            </div>
+            <p className="mt-9 text-sm leading-5 text-white/50">Enrollment closes September 17<br />or when all 12 seats are filled.</p>
           </div>
           <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
             <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-[#2563EB]/30 via-transparent to-[#FDB515]/25 blur-xl" />
             <div className="relative overflow-hidden rounded-[2rem] border border-white/15 bg-[#111] shadow-2xl">
               <div className="relative aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5]">
-                <Image src="/images/ceech/running-man-method-class.jpg" alt="Ceech teaching adult dance students the Running Man in a group class" fill priority sizes="(min-width: 1024px) 42vw, 92vw" className="object-cover object-center" />
+                <Image src="/images/ceech/ceech-teaching-running-man-adult-class.webp" alt="Ceech teaching adult dance students the Running Man in a group class" title="Ceech teaching the Running Man in a group class" fill priority sizes="(min-width: 1024px) 42vw, 92vw" className="object-cover object-center" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/5 to-transparent" />
               </div>
               <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
@@ -372,7 +372,7 @@ export default function RunningManMethodPage() {
         <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
           <div className="relative mx-auto w-full max-w-md">
             <div className="absolute -inset-3 rounded-[2rem] bg-[#2563EB]/15 blur-2xl" />
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/15"><Image src="/images/ceech/portrait-smile-small.jpg" alt="Dance instructor Ceech Hsu smiling" fill sizes="(min-width: 1024px) 34vw, 86vw" className="object-cover" /></div>
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/15"><Image src="/images/ceech/ceech-smiling-portrait.jpg" alt="Dance instructor Ceech Hsu smiling" title="Dance instructor Ceech Hsu smiling" fill sizes="(min-width: 1024px) 34vw, 86vw" className="object-cover" /></div>
           </div>
           <div>
             <SectionHeading eyebrow="Meet your teacher" title="Learn From an Experienced Teacher—Not Just a Talented Dancer" align="left" />
@@ -383,6 +383,7 @@ export default function RunningManMethodPage() {
                 <li key={credential} className="flex gap-3 text-sm leading-6 text-white/70"><CheckCircle2 aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#FDB515]" /><span>{credential}</span></li>
               ))}
             </ul>
+            <p className="mt-5 text-sm leading-6 text-white/65">Ceech currently teaches hip-hop at Mission College, West Valley College, and Cabrillo College, and weight training at Gavilan College.</p>
             <p className="mt-7 border-l-2 border-[#2563EB] pl-5 leading-7 text-white/65">Ceech has also won Body Rock with DS Players, competed on <em>America’s Got Talent</em>, and received recognition for his contributions to the Bay Area hip-hop dance community.</p>
           </div>
         </div>

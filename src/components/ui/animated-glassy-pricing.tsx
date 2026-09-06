@@ -167,7 +167,7 @@ export const PricingCard = ({
         </div>
       )}
       <div className="mb-3">
-        <h2 className="text-[32px] font-extralight tracking-[-0.03em] text-white font-sans">{planName}</h2>
+        <h3 className="text-[32px] font-extralight tracking-[-0.03em] text-white font-sans">{planName}</h3>
         <p className="text-[14px] text-white/70 mt-1 font-sans">{description}</p>
       </div>
       <div className="my-6 flex items-baseline gap-2">

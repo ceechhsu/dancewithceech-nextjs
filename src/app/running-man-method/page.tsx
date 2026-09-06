@@ -66,21 +66,20 @@ const structuredData = {
 };
 
 export const metadata: Metadata = {
-  title: "The Running Man Method | Dance With Ceech",
-  description:
-    "A four-week online cohort for adult beginners. Learn the Running Man through progressive drills, personal feedback, and a live graduation challenge.",
+  title: "Learn the Running Man | 4-Week Online Cohort | Ceech",
+  description: "Join Ceech's four-week online beginner cohort to learn the Running Man through progressive drills, personal feedback, and live practice.",
   alternates: {
     canonical: "https://dancewithceech.com/running-man-method",
   },
   openGraph: {
-    title: "The Running Man Method | Dance With Ceech",
+    title: "Learn the Running Man | 4-Week Online Cohort | Ceech",
     description:
-      "Stop guessing whether you are practicing correctly. Build rhythm, coordination, and confidence in a four-week beginner cohort.",
+      "Join Ceech's four-week online beginner cohort to build Running Man rhythm, coordination, and confidence with personal feedback.",
     url: "https://dancewithceech.com/running-man-method",
     siteName: "Dance With Ceech",
     images: [
       {
-        url: "https://dancewithceech.com/images/ceech/running-man-method-class.jpg",
+        url: "https://dancewithceech.com/images/ceech/ceech-teaching-running-man-adult-class.webp",
         width: 1200,
         height: 800,
         alt: "Ceech teaching adult dance students",
@@ -90,10 +89,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Running Man Method | Dance With Ceech",
+    title: "Learn the Running Man | 4-Week Online Cohort | Ceech",
     description:
-      "A four-week online cohort that helps adult beginners learn the Running Man correctly and perform it with confidence.",
-    images: ["https://dancewithceech.com/images/ceech/running-man-method-class.jpg"],
+      "Learn the Running Man correctly in a four-week online beginner cohort with progressive drills and personal feedback from Ceech.",
+    images: ["https://dancewithceech.com/images/ceech/ceech-teaching-running-man-adult-class.webp"],
   },
 };
 

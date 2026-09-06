@@ -11,7 +11,7 @@ const TOTAL_FRAMES = 197;
 const PRELOAD_BEHIND = 2;
 const PRELOAD_AHEAD = 6;
 const FRAME_URL = (i: number) =>
-  `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/hero-frames/frame_${String(i).padStart(4, "0")}.jpg`;
+  `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_webp,q_auto/hero-frames/frame_${String(i).padStart(4, "0")}.jpg`;
 
 const PHASES: [number, number, string][] = [
   [0.0, 0.3, "You think you can't dance."],
@@ -247,6 +247,8 @@ export default function ScrollyHero() {
         <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", backgroundColor: "#0A0A0A" }}>
           <canvas
             ref={canvasRef}
+            role="img"
+            aria-label="Ceech demonstrating hip-hop dance movement in a scroll-controlled sequence"
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
           />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.65) 100%)" }} />
@@ -266,6 +268,9 @@ export default function ScrollyHero() {
                 </Tag>
               );
             })}
+            <p style={{ position: "absolute", bottom: "30%", left: "24px", right: "24px", zIndex: 1, maxWidth: "680px", margin: "0 auto", color: "rgba(249,249,249,0.78)", fontSize: "clamp(1rem, 2vw, 1.25rem)", lineHeight: 1.5, textShadow: "0 1px 10px rgba(0,0,0,0.9)" }}>
+              Hip-hop dance lessons in San Jose and online for adult beginners.
+            </p>
           </div>
 
           <div ref={ctaRef} style={{ position: "absolute", bottom: "10%", left: 0, right: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", opacity: 0 }}>
@@ -297,6 +302,9 @@ export default function ScrollyHero() {
           <div style={{ fontSize: "clamp(2.2rem, 9vw, 3.5rem)", fontWeight: 800, color: "#F9F9F9", letterSpacing: "-0.02em", lineHeight: 1.1, textShadow: "0 2px 20px rgba(0,0,0,0.6)", marginBottom: "2rem" }}>
             It&apos;s a skill —<br />not a gift.
           </div>
+          <p style={{ maxWidth: "320px", margin: "0 0 2rem", color: "rgba(249,249,249,0.82)", fontSize: "1rem", lineHeight: 1.5, textShadow: "0 1px 10px rgba(0,0,0,0.9)" }}>
+            Hip-hop dance lessons in San Jose and online for adult beginners.
+          </p>
           <div style={{ fontSize: "0.85rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#F9F9F9", marginBottom: "20px", textShadow: "0 1px 10px rgba(0,0,0,0.9)" }}>
             Rhythm First. Then Dance.
           </div>

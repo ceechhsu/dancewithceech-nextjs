@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
@@ -28,4 +29,13 @@ test("frame neighborhood stays inside the sequence at both edges", () => {
   assert.deepEqual(getFrameNeighborhood(0, 197, 2, 6), [0, 1, 2, 3, 4, 5, 6]);
   assert.deepEqual(getFrameNeighborhood(196, 197, 2, 6), [196, 195, 194]);
   assert.deepEqual(getFrameNeighborhood(0, 0, 2, 6), []);
+});
+
+test("scrolly hero requests compressed WebP frames from Cloudinary", async () => {
+  const source = await readFile(
+    new URL("../src/components/ScrollyHero.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(source, /image\/upload\/f_webp,q_auto\/hero-frames/);
 });
