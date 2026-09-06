@@ -1,23 +1,22 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Locking Fundamentals Volume 1 | Dance With Ceech",
-  description:
-    "This 30-day locking fundamentals training program is designed for beginners to get started with locking. Master The Lock, The Wrist Twirl, The Point, and The Five.",
+  title: "30-Day Locking Fundamentals for Beginners | Ceech",
+  description: "Learn locking from the ground up in a 30-day beginner program covering The Lock, Wrist Twirl, Point, and Five through progressive practice.",
   alternates: { canonical: "https://dancewithceech.com/locking-fundamentals-volume-1" },
   openGraph: {
-    title: "Locking Fundamentals Volume 1 | Dance With Ceech",
+    title: "30-Day Locking Fundamentals for Beginners | Ceech",
     description: "A 30-day beginner locking program covering The Lock, Wrist Twirl, Point, and Five through progressive practice.",
     url: "https://dancewithceech.com/locking-fundamentals-volume-1",
     siteName: "DanceWithCeech",
-    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Locking training with Ceech" }],
+    images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Locking training with Ceech" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Locking Fundamentals Volume 1 | Dance With Ceech",
+    title: "30-Day Locking Fundamentals for Beginners | Ceech",
     description: "A 30-day beginner locking program covering The Lock, Wrist Twirl, Point, and Five.",
-    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+    images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"],
   },
 };
 
@@ -100,7 +99,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
       videos: [{ id: "U_x-AxjcfNE", title: "The Lock", duration: "~21 min" }],
       notes: [
         "Video record yourself doing all of the drills from The Lock. Study yourself.",
-        "Members of the paid program, submit your video for evaluation and feedback.",
+        "Compare your recording with the demonstration and choose one thing to improve.",
       ],
     },
   },
@@ -183,7 +182,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
       videos: [{ id: "5zV4dygvPTU", title: "Wrist Twirl Part 2", duration: "~14 min" }],
       notes: [
         "Video record yourself doing all of the drills for Wrist Twirl 2. Study yourself.",
-        "Members of the paid program, submit your video for evaluation and feedback.",
+        "Compare your recording with the demonstration and choose one thing to improve.",
       ],
     },
   },
@@ -266,7 +265,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
       videos: [{ id: "MIbHRFWpYQ4", title: "The Point", duration: "~17 min" }],
       notes: [
         "Video record yourself doing all of the drills for The Point. Study yourself.",
-        "Members of the paid program, submit your video for evaluation and feedback.",
+        "Compare your recording with the demonstration and choose one thing to improve.",
       ],
     },
   },
@@ -349,7 +348,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
       videos: [{ id: "z3KxLk6UuJY", title: "The Five", duration: "~12 min" }],
       notes: [
         "Video record yourself doing all of the drills for The Point. Study yourself.",
-        "Members of the paid program, submit your video for evaluation and feedback.",
+        "Compare your recording with the demonstration and choose one thing to improve.",
       ],
     },
   },
@@ -375,7 +374,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
       ],
       notes: [
         "Video record yourself doing all of the drills for The Point. Study yourself.",
-        "Members of the paid program, submit your video for evaluation and feedback.",
+        "Compare your recording with the demonstration and choose one thing to improve.",
       ],
     },
   },
@@ -389,7 +388,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
       ],
       notes: [
         "Video record yourself doing all of the drills for The Point. Study yourself.",
-        "Members of the paid program, submit your video for evaluation and feedback.",
+        "Compare your recording with the demonstration and choose one thing to improve.",
       ],
     },
   },
@@ -408,8 +407,9 @@ function VideoCard({ video }: { video: VideoItem }) {
       <div className="relative flex-shrink-0 w-28 rounded overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={thumb}
-          alt={video.title}
+src={thumb}
+alt={video.title}
+title={video.title}
           width={112}
           height={63}
           className="w-full h-auto object-cover group-hover:opacity-80 transition-opacity"
@@ -498,7 +498,7 @@ export default function LockingFundamentalsPage() {
           <span className="text-[#2563EB]">Volume 1</span>
         </h1>
         <p className="text-lg text-[#F9F9F9]/70 max-w-xl mx-auto mb-4">
-          This 30-day locking fundamentals training program is designed for
+          This free, self-directed 30-day locking fundamentals training program is designed for
           beginners to get started with locking. You will focus on mastering:
         </p>
         <div className="flex flex-wrap justify-center gap-2 mb-8">

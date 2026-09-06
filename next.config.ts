@@ -94,6 +94,30 @@ const immutableCacheHeaders = [
   },
 ];
 
+const homepageCacheHeaders = [
+  {
+    key: "Cache-Control",
+    value: "public, s-maxage=86400, stale-while-revalidate=604800",
+  },
+];
+
+const RENAMED_IMAGE_REDIRECTS = [
+  ["/images/ceech/dsp-agt.jpg", "/images/ceech/dsplayers-performing-americas-got-talent.jpg"],
+  ["/images/ceech/mindtricks.jpg", "/images/ceech/mindtricks-dance-group-photo.jpg"],
+  ["/images/ceech/bodyrockwinner.jpg", "/images/ceech/dsplayers-2006-body-rock-winners.jpg"],
+  ["/images/ceech/thinking.jpg", "/images/ceech/ceech-thinking-dance-pose.jpg"],
+  ["/images/ceech/Teaching-Neck-1-sm.jpg", "/images/ceech/ceech-teaching-private-student-neck-control.jpg"],
+  ["/images/ceech/calistyles.jpg", "/images/ceech/calistyles-members-before-uc-santa-cruz-performance.jpg"],
+  ["/images/ceech/hat-off-pose.jpg", "/images/ceech/ceech-derby-dance-pose.jpg"],
+  ["/images/ceech/ceech-mirror.jpg", "/images/ceech/ceech-dance-pose-get-down-studio.jpg"],
+  ["/images/ceech/portrait-smile-small.jpg", "/images/ceech/ceech-smiling-portrait.jpg"],
+  ["/images/ceech/popping-arms.jpg", "/images/ceech/ceech-samy-popping-arm-drill.jpg"],
+  ["/images/ceech/teaching-knee-pop.jpg", "/images/ceech/ceech-samy-teaching-knee-pop.jpg"],
+  ["/images/ceech/running-man-method-class.jpg", "/images/ceech/ceech-teaching-running-man-adult-class.jpg"],
+  ["/images/ceech/group-class.jpg", "/images/ceech/ceech-teaching-adult-dance-class.jpg"],
+  ["/images/posts/1845-2.jpg", "/images/posts/steve-martin-dance-tutorial-cover.jpg"],
+].map(([source, destination]) => ({ source, destination, permanent: true }));
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   devIndicators: false,
@@ -108,6 +132,10 @@ const nextConfig: NextConfig = {
       {
         source: "/:path*",
         headers: securityHeaders,
+      },
+      {
+        source: "/",
+        headers: homepageCacheHeaders,
       },
       {
         source: "/beat-first/practice/:path*",
@@ -187,6 +215,7 @@ const nextConfig: NextConfig = {
         destination: r.destination,
         permanent: true,
       })),
+      ...RENAMED_IMAGE_REDIRECTS,
     ];
   },
 };

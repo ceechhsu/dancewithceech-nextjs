@@ -50,13 +50,6 @@ export default function LinksContent() {
       accent: "#2563EB",
     },
     {
-      label: "Join the Academy waitlist",
-      sublabel: "Founding-member pricing closes soon",
-      href: internal("/academy", "academy-waitlist"),
-      external: false,
-      campaign: "academy-waitlist",
-    },
-    {
       label: "Hip hop dance tutorials",
       sublabel: "88 free written breakdowns on the blog",
       href: internal("/blog", "blog"),
@@ -93,8 +86,9 @@ export default function LinksContent() {
     >
       <div className="w-full max-w-md flex flex-col items-center">
         <Image
-          src="/logo-mark.png"
-          alt="DanceWithCeech"
+  src="/logo-mark.png"
+  alt="DanceWithCeech"
+  title="DanceWithCeech logo"
           width={96}
           height={96}
           className="rounded-full mb-4"

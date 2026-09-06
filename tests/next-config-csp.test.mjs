@@ -17,3 +17,12 @@ test("keeps the local enrollment preview free of Next.js developer controls", as
 
   assert.match(config, /devIndicators:\s*false/);
 });
+
+test("allows the homepage HTML to be served from an edge cache", async () => {
+  const config = await readFile(configPath, "utf8");
+
+  assert.match(config, /const homepageCacheHeaders[\s\S]*?public, s-maxage=86400, stale-while-revalidate=604800/,
+    "the homepage should advertise a shared cache lifetime");
+  assert.match(config, /source:\s*"\/"[\s\S]*?headers: homepageCacheHeaders/,
+    "the homepage should use the shared cache headers");
+});

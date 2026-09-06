@@ -54,8 +54,9 @@ export default function HipHopMovesPage() {
               {post.hasImage && (
                 <div className="relative overflow-hidden" style={{ aspectRatio: "16/9" }}>
                   <Image
-                    src={`/images/posts/${post.slug}.jpg`}
-                    alt={post.title}
+            src={`/images/posts/${post.slug}.jpg`}
+            alt={post.title}
+            title={post.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
@@ -85,9 +86,9 @@ export default function HipHopMovesPage() {
       <section className="py-20 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
         <div className="max-w-5xl mx-auto text-center mb-12">
           <h2 className="text-2xl font-bold mb-3">Ready to go deeper?</h2>
-          <p style={{ color: "var(--muted)" }}>Three ways to keep moving — pick what fits where you are right now.</p>
+          <p style={{ color: "var(--muted)" }}>Two ways to keep learning. Choose rhythm practice or personal coaching.</p>
         </div>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="rounded-2xl p-8 flex flex-col gap-4" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
             <div className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--accent-primary)" }}>Free</div>
             <h3 className="text-lg font-bold">Train Your Rhythm</h3>
@@ -96,18 +97,10 @@ export default function HipHopMovesPage() {
               Play BeatFirst — Free
             </Link>
           </div>
-          <div className="rounded-2xl p-8 flex flex-col gap-4" style={{ backgroundColor: "var(--surface)", border: "1px solid #2563eb44" }}>
-            <div className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--accent-primary)" }}>Academy</div>
-            <h3 className="text-lg font-bold">Full Curriculum</h3>
-            <p className="text-sm flex-1" style={{ color: "var(--muted)" }}>A structured path from zero to freestyle. Video lessons, private community, and live sessions with Ceech.</p>
-            <Link href="/academy" className="inline-block text-center px-6 py-3 rounded-full font-semibold text-white hover:opacity-90 transition-opacity" style={{ backgroundColor: "var(--accent-primary)" }}>
-              Join the Academy
-            </Link>
-          </div>
           <div className="rounded-2xl p-8 flex flex-col gap-4" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
             <div className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FDB515" }}>Private Lessons</div>
             <h3 className="text-lg font-bold">1-on-1 with Ceech</h3>
-            <p className="text-sm flex-1" style={{ color: "var(--muted)" }}>Want faster results? Book a private lesson — in-person in San Jose or virtually via Zoom.</p>
+            <p className="text-sm flex-1" style={{ color: "var(--muted)" }}>Want faster results? Book a private lesson — in-person in San Jose or virtually via Google Meet.</p>
             <Link href="/private-lessons" className="inline-block text-center px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity" style={{ border: "1px solid #FDB515", color: "#FDB515" }}>
               Book a Lesson
             </Link>

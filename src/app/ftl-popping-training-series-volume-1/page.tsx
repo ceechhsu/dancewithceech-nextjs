@@ -10,14 +10,14 @@ export const metadata: Metadata = {
     description: "A 30-day beginner popping program with progressive drills and guided practice sessions.",
     url: "https://dancewithceech.com/ftl-popping-training-series-volume-1",
     siteName: "DanceWithCeech",
-    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Popping training with Ceech" }],
+    images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Popping training with Ceech" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "FTL Popping Training Series Volume 1 | Dance With Ceech",
     description: "A 30-day beginner popping program with progressive drills and guided practice sessions.",
-    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+    images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"],
   },
 };
 
@@ -100,7 +100,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
       videos: [{ id: "woY92TNFZSc", title: "Ep.1 FTL", duration: "~5 min" }],
       notes: [
         "Video record yourself doing Ep. 1 FTL. Study yourself.",
-        "Members of the paid program, submit your video for evaluation and feedback.",
+        "Compare your recording with the demonstration and choose one thing to improve.",
       ],
     },
   },
@@ -183,7 +183,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
       videos: [{ id: "bhcDgwGLQHA", title: "Ep.2 FTL", duration: "~9 min" }],
       notes: [
         "Video record yourself doing Ep. 2 FTL. Study yourself.",
-        "Members of the paid program, submit your video for evaluation and feedback.",
+        "Compare your recording with the demonstration and choose one thing to improve.",
       ],
     },
   },
@@ -266,7 +266,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
       videos: [{ id: "wbefRONiS8c", title: "Ep.3 FTL", duration: "~7 min" }],
       notes: [
         "Video record yourself doing Ep. 3 FTL. Study yourself.",
-        "Members of the paid program, submit your video for evaluation and feedback.",
+        "Compare your recording with the demonstration and choose one thing to improve.",
       ],
     },
   },
@@ -349,7 +349,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
       videos: [{ id: "MOGEJQT2O4Y", title: "Ep.4 FTL", duration: "~7 min" }],
       notes: [
         "Video record yourself doing Ep. 4 FTL. Study yourself.",
-        "Members of the paid program, submit your video for evaluation and feedback.",
+        "Compare your recording with the demonstration and choose one thing to improve.",
       ],
     },
   },
@@ -374,7 +374,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
         { id: "bhcDgwGLQHA", title: "Ep.2 FTL", duration: "~9 min" },
       ],
       notes: [
-        "Review Episode 1 & 2 of FTL. Paid members resubmit for feedback and evaluation.",
+        "Review Episode 1 & 2 of FTL. Record another attempt and compare your progress.",
       ],
     },
   },
@@ -387,7 +387,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
         { id: "MOGEJQT2O4Y", title: "Ep.4 FTL", duration: "~7 min" },
       ],
       notes: [
-        "Members of the paid program, submit your video for evaluation and feedback.",
+        "Compare your recording with the demonstration and choose one thing to improve.",
       ],
     },
   },
@@ -396,7 +396,7 @@ const schedule: { day: number; entry: DayEntry }[] = [
 const faqs = [
   {
     q: "How do I know if I'm doing it correctly?",
-    a: "Serious learners can use the paid program for professional feedback from Ceech.",
+    a: "For individual feedback, book private coaching separately on the private-lessons page. This free program does not include personal video review.",
   },
   {
     q: "How many videos am I supposed to do each day?",
@@ -437,8 +437,9 @@ function VideoCard({ video }: { video: VideoItem }) {
       <div className="relative flex-shrink-0 w-28 rounded overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={thumb}
-          alt={video.title}
+src={thumb}
+alt={video.title}
+title={video.title}
           width={112}
           height={63}
           className="w-full h-auto object-cover group-hover:opacity-80 transition-opacity"
@@ -527,7 +528,7 @@ export default function FTLPoppingPage() {
           <span className="text-[#2563EB]">Volume 1</span>
         </h1>
         <p className="text-lg text-[#F9F9F9]/70 max-w-xl mx-auto mb-8">
-          This 30-day popping training program is designed for beginners to get
+          This free, self-directed 30-day popping training program is designed for beginners to get
           started with popping. Follow the daily schedule and commit to the
           process.
         </p>
