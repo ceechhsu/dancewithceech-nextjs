@@ -1,77 +1,222 @@
 ---
-title: "Walk It Out Dance: Step-by-Step Tutorial (Atlanta, 2006)"
-seoTitle: "Walk It Out Dance: Atlanta Step-by-Step Tutorial"
+title: "Walk It Out Dance: How to Do It Step by Step"
+seoTitle: "Walk It Out Dance Tutorial: Step-by-Step Footwork"
 slug: "hip-hop-dance-move-walk-it-out"
-date: "2024-06-18 12:55:31"
+date: "2024-06-18T12:55:31-07:00"
+updated: "2026-09-06T14:01:31-07:00"
 category: "hip-hop-dance-moves"
-description: "Walk It Out dance tutorial — the crossing-step Atlanta hip hop move Unk turned into a 2006 hit. 7 simple steps with smooth footwork, arm swings, and groove."
+description: "Learn the Walk It Out dance with accurate pivot footwork, four-count and eight-step timing, beginner corrections, safety tips, and its Atlanta history."
+imageAlt: "Buddha Stretch demonstrating the Walk It Out dance"
+video:
+  name: "Hip Hop Dance Move - Walk It Out"
+  playerTitle: "Walk It Out dance demonstration by Buddha Stretch"
+  description: "Hip-hop pioneer Buddha Stretch explains and demonstrates the Walk It Out dance, including its Dirty South roots and pivoting footwork."
+  thumbnailUrl: "https://i.ytimg.com/vi/OtI4W6YcLbc/maxresdefault.jpg"
+  uploadDate: "2024-05-11"
+  duration: "PT33S"
+  embedUrl: "https://www.youtube.com/embed/OtI4W6YcLbc"
 ---
-## Introduction
+## TL;DR
 
-The "Walk It Out" is a smooth and groovy hip hop dance move that has become an iconic part of the genre's culture. This move involves a series of intricate footwork patterns and body movements that create a mesmerizing visual effect. It's a versatile move that can be incorporated into various dance routines, from freestyle cyphers to choreographed performances. The "Walk It Out" is a testament to the creativity and style that defines hip hop dance.[](https://www.frague.at/hip-hop-move-list/)
+- The Walk It Out dance is built on alternating steps and side-to-side pivots, not a crossing-step pattern.
+- Keep both knees bent, stay low, and pivot on the balls of both feet while the heels remain lifted.
+- Practice four steps per bar on **1, 2, 3, 4**. You can also dance faster with eight steps on **1 and 2 and 3 and 4 and**.
+- Learn the feet and weight transfer first. Add Twist-style arm movements after the lower-body pattern feels steady.
+- If balance is difficult, hold a stable chair or wall. Stop if you feel pain or discomfort.
 
-## Video Demonstration
+The Walk It Out dance is a Dirty South hip-hop move built around rhythm, bent knees, and alternating pivots. When your right foot steps, both feet turn right. When your left foot steps, both feet turn left. Your heels stay off the floor so the feet can rotate on the balls of the feet.
 
-[Watch: Tutorial](https://youtu.be/OtI4W6YcLbc)
+That is different from the crossing-step description that sometimes appears online. In the version taught here, you stay low and pivot from side to side while stepping right, left, right, left.
 
-## Dance History of The Walk It Out
+In the demonstration below, hip-hop pioneer [Buddha Stretch](https://steinhardt.nyu.edu/people/buddha-stretch) of Elite Force explains and performs the movement. I trained directly with Buddha Stretch, and I use the same foundation-first approach here: feet and rhythm first, arms later.
 
-The origins of the "Walk It Out" dance move can be traced back to the early 2000s, when it gained popularity in the underground hip hop dance scene. While the exact creator of the move is unknown, it is believed to have emerged from the vibrant street dance culture of cities like Los Angeles and Atlanta. The move was further popularized by the 2006 hit song "Walk It Out" by rapper Unk, which featured the dance in its music video and live performances.
+[Watch the demonstration](https://www.youtube.com/watch?v=OtI4W6YcLbc)
 
-## Step By Step Instruction
+## What is the Walk It Out dance?
 
-1. Start with your feet shoulder-width apart and your knees slightly bent.
+The Walk It Out dance is a hip-hop step in which you alternate your feet while pivoting both feet toward the side of each step.
 
-2. Step your right foot forward, shifting your weight onto it.
+The movement stays grounded. Your knees remain bent, your body sits low, and the balls of your feet act as the pivot points. The heels turn from side to side without settling heavily onto the floor.
 
-3. Bring your left foot towards your right, crossing it behind your right leg.
+A [dance analysis](https://dukespace.lib.duke.edu/server/api/core/bitstreams/edb59989-4991-428d-826f-3203c4a3f747/content) from Duke University also describes Walk It Out through bent knees, the balls of the feet, and arm movements that dancers can personalize. Those details match the mechanics you can see in Buddha Stretch's demonstration.
 
-4. Step your right foot forward again, repeating the crossing motion with your left foot.
+## Where did the Walk It Out dance come from?
 
-5. Continue this pattern, alternating the crossing of your feet and creating a smooth, gliding motion.
+The Walk It Out dance came from the Dirty South and became closely associated with Atlanta's dance and rap culture in 2006.
 
-6. Incorporate arm movements by swinging your arms in opposition to your leg movements, adding style and flair.
+At the beginning of his tutorial, Buddha Stretch calls it one of the newest dances from the Dirty South. He does not claim that he created it. He is giving credit to the region while demonstrating the move.
 
-7. Vary the speed and intensity of your steps to create different rhythmic patterns.
+Atlanta rapper DJ Unk helped carry the dance to a national audience through his song “Walk It Out.” The song's [release listing](https://music.apple.com/us/album/walk-it-out-ep/186076440) on Apple Music dates the EP to September 5, 2006. An [Atlanta history](https://www.npr.org/2025/01/29/g-s1-45266/dj-unk-walk-it-out-big-oomp-legacy) from NPR reports that Big Oomp released the song in 2006 and that it was inspired by the popular Poole Palace dance.
 
-## Tips For Learning The Walk It Out
+That wording matters. The available evidence connects the song to the Poole Palace dance, but it does not establish one verified creator of the Walk It Out movement. It is more accurate to credit the Atlanta and Dirty South dance community than to assign the dance to one person without documentation.
 
-- Start slow and focus on the footwork pattern before adding arm movements.
+The same Duke University analysis identifies DJ Unk as an Atlanta-based artist and notes that groups of dancers perform the move in the music video. This supports the connection between the song and the dance without claiming that DJ Unk created the movement.
 
-- Practice in front of a mirror to ensure proper form and alignment.
+## Watch Buddha Stretch demonstrate the Walk It Out
 
-- Listen to the music and feel the rhythm to help you synchronize your movements.
+Buddha Stretch starts by stepping to his right and then alternates right, left, right, left. Watch his feet before watching his arms.
 
-- Experiment with different arm variations and body isolations to add your personal style.
+Notice three details:
 
-- Stay relaxed and let the movement flow naturally.
+1. His knees stay bent.
+2. His heels remain lifted as both feet pivot.
+3. His arms counterbalance the direction of his lower body.
 
-## Conclusion
+You may start with the left foot instead. If you want to follow the demonstration exactly, begin with the right.
 
-The "Walk It Out" is a dynamic and expressive hip hop dance move that showcases the creativity and rhythm of the genre. Whether you're a seasoned dancer or a beginner, mastering this move will add a smooth and groovy element to your repertoire. With practice and dedication, you can make the "Walk It Out" your own and impress on the dance floor.
+## Can complete beginners learn the Walk It Out?
 
-## Frequently Asked Questions
+Complete beginners can learn the basic Walk It Out pattern by separating the movement into rhythm, balance, pivots, and arms.
 
-### What is the Walk It Out dance?
-The Walk It Out is a smooth hip hop dance move built around a crossing-step footwork pattern: one foot steps forward while the other crosses behind, creating a gliding sideways travel. It became widely popular after Atlanta rapper Unk released his 2006 hit "Walk It Out," which put the move on national TV and in clubs across the country.
+Do not try to learn every detail at once. First practice alternating right and left while keeping your knees bent. Then add the pivot. Once the footwork stays on beat, add the arms.
 
-### What does "Walk It Out" mean in hip hop?
-"Walk It Out" in the Atlanta hip hop context refers both to the specific dance move (the crossing-step travel) and to a broader attitude — carrying yourself with confidence and style. When Unk's song says "walk it out," it's a call to perform the dance and show off your groove on the floor.
+If balance is the first problem, hold a stable chair or place one hand against a wall. Use the support to practice lifting one foot without leaning your whole body from side to side.
 
-### Who created the Walk It Out dance?
-The exact creator is unknown — the move emerged from Atlanta's street dance scene in the early 2000s and was performed in clubs before it was recorded. Unk's 2006 single "Walk It Out" is what made it mainstream, but the dance itself predated the song.
+## How should you practice before adding the arms?
 
-### How long does it take to learn the Walk It Out?
-Most beginners can pick up the basic crossing-step pattern in 20–30 minutes. The real challenge is making it look smooth — the crossing should feel like one continuous glide, not two separate steps. Expect a few hours of practice to get the flow right.
+Practice the feet with the rhythm before adding the arms. The lower body creates the Walk It Out pattern, while the arms add balance and personal style.
 
-### What's the most common mistake with the Walk It Out?
-Stepping too heavy. The Walk It Out is supposed to look effortless, like you're skating — most beginners stomp the crossing step instead of letting it slide lightly behind. Stay on the balls of your feet, keep the weight soft, and let the cross feel like a smooth transfer.
+With any dance move, the rhythm matters. A dancer can remember the correct order and still look off if the steps do not match the music. Start with four clear steps per bar and alternate right, left, right, left.
 
-## More Hip Hop Dance Moves
+If you have trouble identifying or maintaining the beat, use the free [rhythm trainer](https://dancewithceech.com/beat-first) before combining the timing with footwork. BeatFirst shows whether each tap was early, late, on time, or missed. It isolates timing, but it does not replace practice with the actual Walk It Out movement.
 
-If you liked Walk It Out, these moves share the same smooth crossing footwork and gliding forward momentum:
+## How do you do the Walk It Out dance?
 
-- [How to Do the Heel Toe Hip Hop Dance Move](/blog/heel-toe) — the Heel Toe uses the same ball-and-heel pivot mechanics that make Walk It Out's crossing steps feel smooth, and both moves create a sliding illusion from precise foot placement.
-- [Mastering the ATL Stomp: Atlanta's Iconic Hip-Hop Dance Move](/blog/mastering-the-atl-stomp-rhythm-of-the-south) — Walk It Out was popularized out of Atlanta, and the ATL Stomp comes from the same Southern street culture — both moves have been featured in the same era of Southern hip-hop music videos.
-- [5 Easy Steps to Learn The Bankhead Bounce](/blog/bankhead-bounce) — the Bankhead Bounce also emerged from Atlanta's hip-hop scene and pairs naturally with Walk It Out as part of the same Southern party dance vocabulary.
-- [How to Do the Pepperseed Hip Hop Dance Move](/blog/hip-hop-dance-move-pepperseed) — the Pepperseed's smooth toe-heel rhythm and relaxed groove complement Walk It Out's crossing footwork, and both are frequently seen in the same freestyle and club settings.
+To do the Walk It Out dance, keep your knees bent and alternate right and left steps while pivoting both feet toward the stepping side.
+
+### 1. Bend your knees and stay low
+
+Begin with your feet at a comfortable distance apart. Bend both knees and sit your weight down between your legs.
+
+Do not begin with straight legs and then bounce down only when you step. Keep the bent-knee position throughout the pattern.
+
+### 2. Lift your heels
+
+Place the pressure toward the balls of your feet and allow both heels to lift slightly.
+
+The balls of the feet are your pivot points. If the heels press firmly into the floor, the feet cannot rotate freely.
+
+### 3. Step with your right foot and pivot right
+
+Lift the right foot and step down. As the right foot lands, pivot both feet so the toes point toward your right.
+
+Because you are pivoting on the balls of your feet, the heels swivel toward your left as the toes turn right. Think about where your feet point, not what the movement looks like to someone facing you.
+
+### 4. Step with your left foot and pivot left
+
+Lift the left foot and step down. Pivot both feet so the toes point toward your left.
+
+The heels now swivel toward your right. The left step and left pivot happen as one connected action.
+
+### 5. Continue right, left, right, left
+
+Repeat the alternating pattern. Every time one foot steps down, both feet point in that direction.
+
+The pattern is:
+
+**Right and point right. Left and point left.**
+
+The [Heel Toe](https://dancewithceech.com/blog/heel-toe) uses related pivot control and can help you understand how the feet rotate without planting the whole foot heavily.
+
+### 6. Keep your weight centered overall
+
+Try to keep your center between your legs instead of throwing your upper body over every step.
+
+You still need a brief weight transfer. To lift the left foot, enough weight must move onto the right foot. To lift the right foot, enough weight must move onto the left foot. It works like walking: the body stays generally centered, but the supporting leg temporarily carries the weight.
+
+### 7. Add Twist-style arms
+
+After the legs feel reliable, let the arms move as if you were doing The Twist. The arms counterbalance the direction of the hips and feet.
+
+This is the starting idea, not a fixed arm routine. Buddha Stretch also crosses an arm across his body and changes the level by moving the arms upward, downward, or out to the side. Once the foundation works, use those directions to create your own variations.
+
+## How do you count the Walk It Out with music?
+
+You can perform the Walk It Out with four steps per bar or eight steps per bar, depending on the speed and musical choice.
+
+A bar of 4/4 music contains four main beats. Berklee's [rhythm explanation](https://college.berklee.edu/bt/224/lesson.html) also explains that the same bar contains eight eighth notes when each beat is divided into two.
+
+### Four steps per bar
+
+Start with this version:
+
+1. **Right**
+2. **Left**
+3. **Right**
+4. **Left**
+
+You take one step on each main beat.
+
+### Eight steps per bar
+
+For the faster version, divide every beat in half:
+
+**1 and 2 and 3 and 4 and**
+
+Take one alternating step on every number and every “and.” In this counting system, the numbers mark the main beats and each “and” marks the halfway point between them.
+
+The “ands” are not four additional main beats. They are the halfway points between beats 1, 2, 3, and 4.
+
+## What is the most important cue for the Walk It Out?
+
+Assuming you are following the rhythm, the most important physical cue is: **keep your knees bent and stay low.**
+
+The most common mistake I see beginners make is standing straight up. When the knees straighten, the movement loses its grounded look and the feet often become heavier against the floor.
+
+Do not bend and straighten on every step. Choose a comfortable low position and maintain it while the feet pivot underneath you.
+
+## Common Walk It Out corrections
+
+| What you notice | Likely issue | What to correct |
+|---|---|---|
+| The movement looks like crossing steps | You are using the wrong footwork pattern | Alternate right and left while both feet pivot toward each step |
+| Your feet feel stuck | Your heels or entire soles are planted | Shift pressure toward the balls of the feet and let the heels lift |
+| You rise taller with every step | Your knees are straightening | Maintain one comfortable bent-knee level |
+| You fall toward each stepping foot | Your upper body is shifting too far | Keep your center generally between your legs |
+| You cannot lift the next foot | Your weight is still on it | Transfer enough weight to the supporting foot first |
+| Your feet are correct but the move looks off | Your steps are not matching the beat | Return to four steps on 1, 2, 3, 4 |
+| The arms make you lose the footwork | You added styling too early | Remove the arms and rebuild the lower-body pattern |
+| The pivot strains your knees | The shoes or floor may be resisting rotation | Stop, check the surface, and reduce the speed and range |
+
+## Walk It Out practice drills
+
+Use this progression instead of trying to copy the complete demonstration immediately:
+
+1. Hold a stable chair or wall and practice lifting right, then left.
+2. Keep both knees bent and pivot the feet right, then left.
+3. Combine each step with its matching pivot.
+4. Practice four steps per bar on 1, 2, 3, 4.
+5. Remove the hand support when you can remain balanced.
+6. Add simple Twist-style arms.
+7. Try eight steps per bar only when the four-step timing is reliable.
+8. Add your own arm directions last.
+
+Short, focused repetitions are more useful than repeating the full move while the same mistake continues.
+
+## Shoes, floors, and pivot control
+
+Wear shoes that allow the balls of your feet to turn without sticking. Shoes with heavy traction can make the pivot harder because the sole grips while your body tries to rotate.
+
+Older sneakers with smoother soles often work well, as long as the shoes are still secure and not damaged. Avoid sandals, loose shoes, or any footwear that may slide off.
+
+At home, socks on a clean hardwood or linoleum floor can make the pivot easier. Socks can also increase the chance of slipping, so clear the practice area, move with control, and hold a stable chair or wall if needed. Do not practice on stairs, rugs that move, or near furniture with sharp edges.
+
+## When should you stop practicing?
+
+Stop practicing if you feel pain or discomfort. Do not force the pivot through the knees, ankles, or feet.
+
+The American Academy of Orthopaedic Surgeons advises that exercise should not hurt and recommends contacting a doctor or physical therapist when something feels wrong in its [exercise guidance](https://orthoinfo.aaos.org/globalassets/pdfs/foot-and-ankle-conditioning-program---2025.pdf). If you have an injury, medical condition, disability, or physical limitation, consult an appropriate healthcare professional before attempting the movement.
+
+## What should you practice next?
+
+Build your Walk It Out in this order:
+
+1. Find and maintain the beat.
+2. Stay low with both knees bent.
+3. Alternate right and left steps.
+4. Pivot both feet toward each step.
+5. Keep your center controlled while transferring enough weight to lift each foot.
+6. Add simple arms.
+7. Add faster subdivisions and personal variations last.
+
+For another rhythm-based hip-hop foundation, practice the [Running Man](https://dancewithceech.com/blog/hip-hop-dance-move-running-man). If you need help identifying whether rhythm, balance, weight transfer, or coordination is stopping the movement, [private dance lessons](https://dancewithceech.com/private-lessons) provide individualized corrections and custom drills.

@@ -93,7 +93,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     ...(post.updated ? { dateModified: post.updated } : {}),
     mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
     author: { "@type": "Person", name: "Ceech", url: "https://dancewithceech.com/about" },
-    publisher: { "@type": "Organization", name: "DanceWithCeech", url: "https://dancewithceech.com" },
+    publisher: { "@type": "Organization", name: "Dance With Ceech", url: "https://dancewithceech.com" },
   };
 
   const videoSchema = post.video ? {
