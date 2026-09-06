@@ -1,14 +1,7 @@
-'use client';
-
-import { getYearsTeaching, getStudentCount } from '@/lib/stats';
-
 export default function StatsBar() {
-  const years = getYearsTeaching();
-  const students = getStudentCount();
-
   const stats = [
-    { stat: `${years}+`,                         label: 'Years Teaching' },
-    { stat: `${students.toLocaleString()}+`,      label: 'Students Trained' },
+    { stat: "1998",                         label: 'Teaching Since' },
+    { stat: "6,000+",      label: 'Students Taught (Estimated)' },
     { stat: '8+',                                 label: 'Colleges Taught At' },
     { stat: '5',                                  label: 'Dance Styles' },
   ];

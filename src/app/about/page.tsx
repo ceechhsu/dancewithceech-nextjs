@@ -1,24 +1,25 @@
 import Link from "next/link";
 import Image from "next/image";
+import { aboutProfileSchema } from "@/lib/private-lesson-details";
 import Nav from "@/components/Nav";
 
 export const metadata = {
-  title: "About Ceech — DanceWithCeech",
+  title: "About Ceech | Hip-Hop Dance Instructor | DanceWithCeech",
   description: "Meet Ceech, a UC Berkeley engineer turned hip-hop dance educator with 25+ years of experience teaching adults through clear, progressive training.",
   alternates: { canonical: "https://dancewithceech.com/about" },
   openGraph: {
-    title: "About Ceech — DanceWithCeech",
+    title: "About Ceech | Hip-Hop Dance Instructor | DanceWithCeech",
     description: "Meet Ceech, a UC Berkeley engineer turned hip-hop dance educator with 25+ years of teaching experience.",
     url: "https://dancewithceech.com/about",
-    siteName: "DanceWithCeech",
-    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Ceech teaching hip-hop dance" }],
+    siteName: "Dance With Ceech",
+    images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Ceech teaching hip-hop dance" }],
     type: "profile",
   },
   twitter: {
     card: "summary_large_image",
-    title: "About Ceech — DanceWithCeech",
+    title: "About Ceech | Hip-Hop Dance Instructor | DanceWithCeech",
     description: "Meet Ceech, a UC Berkeley engineer turned hip-hop dance educator with 25+ years of teaching experience.",
-    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+    images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"],
   },
 };
 
@@ -26,6 +27,7 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
 
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutProfileSchema).replace(/</g, "\\u003c") }} />
       <Nav />
 
       {/* HERO */}
@@ -37,14 +39,15 @@ export default function AboutPage() {
           From Engineer to Educator.
         </h1>
         <p className="text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: "var(--muted)" }}>
-          A UC Berkeley electrical engineer who discovered hip-hop dance — and spent the next 25+ years proving that anyone with the right system can learn to move.
+          Meet Ceech, a hip-hop dance instructor based in San Jose, teaching adults throughout the Bay Area and online. A UC Berkeley engineer turned educator, he has helped students learn through clear, practical instruction since 1998.
         </p>
 
         {/* Professional photo */}
         <div className="mt-12 flex justify-center">
           <Image
-            src="/images/ceech/portrait-smile-small.jpg"
+            src="/images/ceech/ceech-smiling-portrait.jpg"
             alt="Ceech — DanceWithCeech"
+            title="Ceech — DanceWithCeech"
             width={400}
             height={500}
             className="rounded-2xl object-cover"
@@ -82,8 +85,9 @@ export default function AboutPage() {
         {/* Dance photo */}
         <div className="mb-16 flex justify-center">
           <Image
-            src="/images/ceech/hat-off-pose.jpg"
+            src="/images/ceech/ceech-derby-dance-pose.jpg"
             alt="Ceech dancing"
+            title="Ceech dancing in a derby"
             width={500}
             height={600}
             className="rounded-2xl object-cover"
@@ -102,8 +106,9 @@ export default function AboutPage() {
             <div>
               <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>CaliStyles — Featured at UC Santa Cruz</div>
               <Image
-                src="/images/ceech/calistyles.jpg"
+                src="/images/ceech/calistyles-members-before-uc-santa-cruz-performance.jpg"
                 alt="CaliStyles at UC Santa Cruz"
+                title="CaliStyles members before a UC Santa Cruz performance"
                 width={600}
                 height={400}
                 className="rounded-xl object-cover w-full"
@@ -132,8 +137,9 @@ export default function AboutPage() {
           <div className="my-8">
             <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>Mindtricks — Many original Jabbawockeez founders pictured</div>
             <Image
-              src="/images/ceech/mindtricks.jpg"
+              src="/images/ceech/mindtricks-dance-group-photo.jpg"
               alt="Mindtricks crew — original Jabbawockeez founders"
+              title="Mindtricks crew with original Jabbawockeez founders"
               width={700}
               height={450}
               className="rounded-xl object-cover w-full"
@@ -149,8 +155,9 @@ export default function AboutPage() {
             <div>
               <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>DS Players — Body Rock 2007 Champions</div>
               <Image
-                src="/images/ceech/bodyrockwinner.jpg"
+                src="/images/ceech/dsplayers-2006-body-rock-winners.jpg"
                 alt="DS Players winning Body Rock 2007"
+                title="DS Players winning Body Rock 2007"
                 width={600}
                 height={400}
                 className="rounded-xl object-cover w-full"
@@ -169,6 +176,7 @@ export default function AboutPage() {
                 <img
                   src="https://img.youtube.com/vi/xjQF9YUDuDY/hqdefault.jpg"
                   alt="DS Players Body Rock 2007"
+                  title="DS Players Body Rock 2007 performance"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.3)' }}>
@@ -185,8 +193,9 @@ export default function AboutPage() {
           </p>
           <div className="mb-8 flex justify-center">
             <Image
-              src="/images/ceech/dsp-agt.jpg"
+              src="/images/ceech/dsplayers-performing-americas-got-talent.jpg"
               alt="DS Players on America's Got Talent 2010"
+              title="DS Players performing on America's Got Talent in 2010"
               width={700}
               height={450}
               className="rounded-2xl object-cover"
@@ -196,9 +205,15 @@ export default function AboutPage() {
         </div>
 
         <div className="mb-16">
-          <h2 className="text-2xl font-bold mb-4" style={{ color: "var(--accent-primary)" }}>25+ Years of Teaching</h2>
+          <h2 className="text-2xl font-bold mb-4" style={{ color: "var(--accent-primary)" }}>Teaching Since 1998</h2>
           <p className="text-lg leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
-            I have been teaching hip-hop dance at Bay Area community colleges since 2002. What started as one class became a career spanning eight institutions, thousands of students, and every level of experience — from complete beginners to competitive dancers.
+            I started teaching dance in 1998 at fitness clubs and dance studios, then began teaching at Mission College in 2002. Since then, I have taught thousands of students, from complete beginners to competitive dancers.
+          </p>
+          <p className="text-lg leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
+            I earned my Master of Arts in Kinesiology from Fresno Pacific University in 2016. Combined with my engineering background, it informs how I break movement into clear, practical steps.
+          </p>
+          <p className="text-lg leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
+            I currently teach hip-hop dance at Mission College, West Valley College, and Cabrillo College, and weight training at Gavilan College. I taught hip-hop at Gavilan from 2018 to 2020.
           </p>
           <div className="grid grid-cols-2 gap-3 mb-6">
             {['Mission College', 'West Valley College', 'Cabrillo College', 'Gavilan College'].map(school => (
@@ -213,9 +228,12 @@ export default function AboutPage() {
         </div>
 
         <div className="mb-16">
+          <p className="text-lg leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
+            Want to work together in person? Explore my <Link href="/private-lessons/san-jose" className="underline underline-offset-4" style={{ color: "var(--accent-primary)" }}>private hip-hop dance lessons in San Jose</Link> for studio details, pricing, and a free phone consultation.
+          </p>
           <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--accent-primary)" }}>My Teaching Philosophy</h2>
           <p className="text-lg leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
-            Dance teachers often say it&apos;s hard to teach analytical, left-brained people how to dance. I disagree — and I&apos;ve spent 25 years proving it.
+            Dance teachers often say it&apos;s hard to teach analytical, left-brained people how to dance. I disagree. I have been helping analytical learners understand dance since 1998.
           </p>
           <p className="text-lg leading-relaxed mb-8" style={{ color: "var(--muted)" }}>
             My background in engineering isn&apos;t separate from my teaching — it&apos;s the core of it. I break movement down into logical, repeatable steps. I explain the mechanics behind every groove. I give students a system, not just inspiration.
@@ -233,8 +251,9 @@ export default function AboutPage() {
 
           <div className="mt-12 flex justify-center">
             <Image
-              src="/images/ceech/thinking.jpg"
+              src="/images/ceech/ceech-thinking-dance-pose.jpg"
               alt="Ceech — teaching philosophy"
+              title="Ceech explaining his dance teaching philosophy"
               width={500}
               height={600}
               className="rounded-2xl object-cover"
@@ -249,7 +268,7 @@ export default function AboutPage() {
       <section className="py-16 px-6" style={{ backgroundColor: "var(--surface)", borderTop: "1px solid #1f1f1f", borderBottom: "1px solid #1f1f1f" }}>
         <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
-            { stat: "25+", label: "Years Teaching" },
+            { stat: "1998", label: "Teaching Since" },
             { stat: "8+", label: "Colleges Taught At" },
             { stat: "5", label: "Dance Styles" },
             { stat: "1999", label: "Trained by Electric Boogaloos" },
@@ -292,7 +311,6 @@ export default function AboutPage() {
               <div className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--muted)" }}>Learn</div>
               <div className="flex flex-col gap-2 text-sm" style={{ color: "var(--muted)" }}>
                 <Link href="/beat-first" className="hover:text-white transition-colors">BeatFirst</Link>
-                <Link href="/academy" className="hover:text-white transition-colors">Academy</Link>
                 <Link href="/private-lessons" className="hover:text-white transition-colors">Private Lessons</Link>
               </div>
             </div>

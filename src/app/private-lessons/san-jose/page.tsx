@@ -1,117 +1,36 @@
+import { LessonFaqs } from "@/components/PrivateLessonDetails";
+import { buildLessonSchema, sanJoseFaqs } from "@/lib/private-lesson-details";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import { formatReviewProof, getReviewSummary } from "@/lib/reviews";
 
 export const metadata = {
-  title: "Hip Hop Dance Lessons in San Jose — Private 1-on-1 with Ceech",
-  description: "Private hip-hop dance lessons in San Jose with Ceech at Get Down Dance Studios. Beginner-friendly training, personal feedback, and a free consultation.",
+  title: "Hip-Hop Dance Lessons in San Jose | DanceWithCeech",
+  description: "Book private hip-hop dance lessons in San Jose with Ceech at Get Down Dance Studios. Beginner-friendly coaching, personal feedback, and a free consultation.",
   alternates: { canonical: "https://dancewithceech.com/private-lessons/san-jose" },
   openGraph: {
-    title: "Hip Hop Dance Lessons in San Jose — Private 1-on-1 with Ceech",
-    description: "Private hip-hop dance lessons in San Jose, CA — taught by Ceech at Get Down Dance Studios. Free 15-min consultation.",
+    title: "Hip-Hop Dance Lessons in San Jose | DanceWithCeech",
+    description: "Private hip-hop dance lessons in San Jose, CA — taught by Ceech at Get Down Dance Studios. Free 30-minute phone consultation.",
     url: "https://dancewithceech.com/private-lessons/san-jose",
-    siteName: "DanceWithCeech",
-    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Private dance lessons in San Jose with Ceech" }],
+    siteName: "Dance With Ceech",
+    images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Private dance lessons in San Jose with Ceech" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hip Hop Dance Lessons in San Jose — Private 1-on-1 with Ceech",
-    description: "Private hip-hop dance lessons in San Jose, CA — taught by Ceech at Get Down Dance Studios. Free 15-min consultation.",
-    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+    title: "Hip-Hop Dance Lessons in San Jose | DanceWithCeech",
+    description: "Private hip-hop dance lessons in San Jose, CA — taught by Ceech at Get Down Dance Studios. Free 30-minute phone consultation.",
+    images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"],
   },
 };
 
-const danceSchoolSchema = {
-  "@context": "https://schema.org",
-  "@type": "DanceSchool",
-  "@id": "https://dancewithceech.com/#organization",
-  "name": "DanceWithCeech — San Jose Private Lessons",
-  "url": "https://dancewithceech.com/private-lessons/san-jose",
-  "telephone": "+14086573771",
-  "email": "dancewithceech@gmail.com",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "196 Jackson St",
-    "addressLocality": "San Jose",
-    "addressRegion": "CA",
-    "postalCode": "95112",
-    "addressCountry": "US"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 37.3488633,
-    "longitude": -121.8944247
-  },
-  "areaServed": [
-    { "@type": "City", "name": "San Jose" },
-    { "@type": "City", "name": "Sunnyvale" },
-    { "@type": "City", "name": "Santa Clara" },
-    { "@type": "City", "name": "Cupertino" },
-    { "@type": "City", "name": "Mountain View" }
-  ],
-  "priceRange": "$80–$250 per session",
-  "description": "Private hip-hop, locking, popping, breaking, and house dance lessons in San Jose, CA — taught by Ceech, a 25-year instructor with Electric Boogaloos lineage.",
-  "sameAs": [
-    "https://www.instagram.com/dancewithceech",
-    "https://www.tiktok.com/@dancewithceech",
-    "https://www.youtube.com/@dancewithceech",
-    "https://www.facebook.com/dancewithceech"
-  ]
-};
+export default async function SanJosePrivateLessonsPage() {
+  const reviewSummary = await getReviewSummary();
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Where in San Jose do you teach private dance lessons?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "I teach private lessons at Get Down Dance Studios, 196 Jackson St, San Jose, CA 95112 — in the heart of Japantown, a few minutes from downtown San Jose. Free street parking is usually easy to find."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Do you teach dance styles besides hip-hop in San Jose?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes — I teach hip-hop, locking, popping, breaking, house dance, salsa, and bachata. The foundation I trained under is the funk styles (locking, popping, boogaloo) from Pop'in Pete and Skeeter Rabbit of the Electric Boogaloos."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How much do private hip-hop dance lessons cost in San Jose?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "In-person lessons at Get Down Dance Studios in San Jose: Single 60-min session $250, 5-Pack $1,150 ($230/session), 10-Pack $2,100 ($210/session — our most popular option). A free 15-min consultation is always the first step."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Do you offer lessons for absolute beginners in San Jose?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes — about half my students are absolute beginners. I've taught at 4 Bay Area community colleges for 25+ years and specialize in adults who think they 'can't dance.' The first free consultation maps out a plan for exactly where you are."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do I book a private dance lesson in San Jose?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Text me directly at (408) 657-3771 or book a free 15-minute consultation online. After the consultation, we schedule your first lesson or demo at Get Down Dance Studios."
-      }
-    }
-  ]
-};
-
-export default function SanJosePrivateLessonsPage() {
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(danceSchoolSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildLessonSchema("/private-lessons/san-jose", "San Jose private dance lessons", sanJoseFaqs, false)).replace(/</g, "\\u003c") }} />
 
       <Nav />
 
@@ -125,7 +44,7 @@ export default function SanJosePrivateLessonsPage() {
             Private Hip-Hop Dance Lessons in San Jose
           </h1>
           <p className="text-lg leading-relaxed mb-8" style={{ color: "var(--muted)" }}>
-            1-on-1 private dance lessons in San Jose, taught by Ceech — a UC Berkeley engineer turned 25-year dance instructor with direct Electric Boogaloos lineage. Hip-hop, locking, popping, breaking, and house dance. In-person at <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}>Get Down Dance Studios</a> in Japantown.
+            1-on-1 private dance lessons in San Jose, taught by Ceech — a UC Berkeley engineer who has taught dance since 1998 with direct Electric Boogaloos lineage. Hip-hop, locking, popping, breaking, and house dance. In-person at <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}>Get Down Dance Studios</a> in Japantown.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a
@@ -133,7 +52,7 @@ export default function SanJosePrivateLessonsPage() {
               className="px-8 py-4 rounded-full text-white font-semibold text-center transition-opacity hover:opacity-90"
               style={{ backgroundColor: "var(--accent-primary)" }}
             >
-              Book a Free Consultation
+              Book a Free 30-Minute Phone Consultation
             </a>
             <a
               href="sms:4086573771"
@@ -158,7 +77,7 @@ export default function SanJosePrivateLessonsPage() {
               My funk styles lineage traces directly to the Electric Boogaloos (Pop&apos;in Pete, Skeeter Rabbit) — the crew that invented popping. That means when you learn popping, waving, or boogaloo from me, you&apos;re learning the real thing, not a watered-down studio version.
             </p>
             <p>
-              Lessons happen at <strong style={{ color: "var(--foreground)" }}>Get Down Dance Studios at 196 Jackson St</strong> in Japantown — a professional studio with sprung floors, mirrors, and sound, a few minutes from downtown San Jose. Free street parking is usually easy to find.
+              Lessons happen at <strong style={{ color: "var(--foreground)" }}>Get Down Dance Studios at 196 Jackson St</strong> in Japantown, a professional studio with sprung floors, mirrors, and sound, a few minutes from downtown San Jose. Paid street parking only. Check posted signs for fees and time limits, and allow time to park.
             </p>
           </div>
         </div>
@@ -169,7 +88,7 @@ export default function SanJosePrivateLessonsPage() {
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-balance">Trusted by San Jose dancers</h2>
           <p className="text-lg leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
-            30 five-star reviews on Yelp. 56 five-star reviews on Google. All earned, all from real students.
+            {formatReviewProof(reviewSummary)}
           </p>
           <div className="flex flex-wrap gap-3 text-sm">
             <a
@@ -199,7 +118,7 @@ export default function SanJosePrivateLessonsPage() {
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold mb-4 text-balance">Pricing</h2>
           <p className="text-lg leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
-            In-person 60-min lessons at Get Down Dance Studios, San Jose:
+            In-person 60-min lessons at Get Down Dance Studios, San Jose. Studio fee included:
           </p>
           <ul className="space-y-3 text-lg" style={{ color: "var(--muted)" }}>
             <li><strong style={{ color: "var(--foreground)" }}>10-Pack:</strong> $2,100 ($210/session — save $400) <em className="text-sm">Most popular</em></li>
@@ -207,18 +126,19 @@ export default function SanJosePrivateLessonsPage() {
             <li><strong style={{ color: "var(--foreground)" }}>Single Session:</strong> $250</li>
           </ul>
           <p className="mt-6" style={{ color: "var(--muted)" }}>
-            See all options including virtual lessons and video evaluations on the{" "}
-            <Link href="/private-lessons" className="hover:text-white transition-colors" style={{ color: "var(--accent-primary)" }}>
-              main private lessons page
+            <Link href="/private-lessons#video-eval" aria-label="Free video evaluation for prospective virtual students" className="hover:text-white transition-colors" style={{ color: "var(--accent-primary)" }}>
+              Free video evaluation for prospective virtual students
             </Link>.
           </p>
         </div>
       </section>
 
+      <LessonFaqs faqs={sanJoseFaqs} />
+
       {/* BOOKING */}
       <section id="booking" className="py-24 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4 text-balance">Book your free 15-min consultation</h2>
+          <h2 className="text-3xl font-bold mb-4 text-balance">Book your free 30-minute phone consultation</h2>
           <p className="mb-3" style={{ color: "var(--muted)" }}>
             We&apos;ll go over your goals, experience level, and schedule your first lesson in San Jose.
           </p>
@@ -236,7 +156,7 @@ export default function SanJosePrivateLessonsPage() {
             width="100%"
             className="h-[700px]"
             style={{ border: 0 }}
-            title="Book a private dance lesson in San Jose with Ceech"
+            title="Free 30-minute phone consultation with Ceech in San Jose"
           />
         </div>
       </section>

@@ -3,7 +3,6 @@
 import { GlassyPricingSection } from "@/components/ui/animated-glassy-pricing";
 
 const scrollToBooking = () => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' });
-const scrollToVideoEval = () => document.getElementById('video-eval')?.scrollIntoView({ behavior: 'smooth' });
 
 const ghostButtonStyle = {
   background: "none",
@@ -31,7 +30,7 @@ export default function PrivateLessonsPricing() {
           </div>
           <GlassyPricingSection
             title="In-Person Lessons"
-            subtitle="At Get Down Dance Studios, San Jose, CA. 60-minute sessions."
+            subtitle="At Get Down Dance Studios, San Jose, CA. 60-minute sessions. Studio fee included."
             plans={[
               {
                 planName: "10 Pack",
@@ -39,7 +38,7 @@ export default function PrivateLessonsPricing() {
                 price: "$2,100",
                 priceSuffix: "/ 10 sessions",
                 features: ["$210/session — save $400", "60 min each", "Get Down Dance Studios", "Any style or level"],
-                buttonText: "Book a Consultation",
+                buttonText: "Book a Free 30-Minute Phone Consultation",
                 isPopular: true,
                 buttonVariant: "primary",
                 onButtonClick: scrollToBooking,
@@ -50,7 +49,7 @@ export default function PrivateLessonsPricing() {
                 price: "$1,150",
                 priceSuffix: "/ 5 sessions",
                 features: ["$230/session — save $100", "60 min each", "Get Down Dance Studios", "Any style or level"],
-                buttonText: "Book a Consultation",
+                buttonText: "Book a Free 30-Minute Phone Consultation",
                 buttonVariant: "secondary",
                 onButtonClick: scrollToBooking,
               },
@@ -60,23 +59,21 @@ export default function PrivateLessonsPricing() {
                 price: "$250",
                 priceSuffix: "/ session",
                 features: ["60 minutes", "Get Down Dance Studios", "Any style or level"],
-                buttonText: "Book a Consultation",
+                buttonText: "Book a Free 30-Minute Phone Consultation",
                 buttonVariant: "secondary",
                 onButtonClick: scrollToBooking,
               },
             ]}
             footer={
               <div>
+                <p className="mb-5 text-sm text-white/60">Packages are valid for one year from your first lesson. Your practice recording is included; music editing, travel, and extra participants are quoted separately.</p>
                 <button
                   onClick={scrollToBooking}
                   className="font-semibold hover:text-white focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:rounded-xl"
                   style={ghostButtonStyle}
                 >
-                  Start with a free 15-min demo — book a quick consultation first →
+                  Start with a free 30-minute phone consultation to discuss your goals and choose the right lesson option →
                 </button>
-                <p className="text-xs mt-3 text-center" style={{ color: "rgba(255,255,255,0.3)" }}>
-                  ★ Students who book a package immediately after the demo receive a special rate. Ask Ceech directly.
-                </p>
               </div>
             }
           />
@@ -88,38 +85,48 @@ export default function PrivateLessonsPricing() {
         <div className="max-w-5xl mx-auto">
           <GlassyPricingSection
             title="Virtual Lessons"
-            subtitle="Via Zoom or Google Meet — same precision, same feedback, from anywhere."
+            subtitle="One complete cycle includes one video submission, private recorded feedback within three business days, and one 30-minute Live Coaching Session on Google Meet. All options are one-time purchases with no automatic renewal."
             plans={[
               {
-                planName: "Monthly Pack",
-                description: "4 sessions per month. Best value.",
-                price: "$280",
-                priceSuffix: "/ month",
-                features: ["4 × 30-min sessions", "$70/session — save $40", "Zoom or Google Meet", "Any style or level"],
-                buttonText: "Book a Consultation",
-                isPopular: true,
+                planName: "10-Cycle Pack",
+                description: "The best per-cycle value.",
+                price: "$500",
+                priceSuffix: "/ 10 cycles",
+                features: ["10 complete coaching cycles", "$50/cycle, save $300", "Use within 6 months of purchase", "Any style or level"],
+                buttonText: "Book a Free 30-Minute Phone Consultation",
                 buttonVariant: "primary",
                 onButtonClick: scrollToBooking,
               },
               {
-                planName: "Single Session",
-                description: "Try it out at your own pace.",
+                planName: "5-Cycle Pack",
+                description: "A balanced plan for steady progress.",
+                price: "$300",
+                priceSuffix: "/ 5 cycles",
+                features: ["5 complete coaching cycles", "$60/cycle, save $100", "Use within 3 months of purchase", "Any style or level"],
+                buttonText: "Book a Free 30-Minute Phone Consultation",
+                buttonVariant: "secondary",
+                onButtonClick: scrollToBooking,
+              },
+              {
+                planName: "Single Cycle",
+                description: "The lowest-commitment starting point.",
                 price: "$80",
-                priceSuffix: "/ 30 min",
-                features: ["Zoom or Google Meet", "Any style or level", "Real-time corrections"],
-                buttonText: "Book a Consultation",
+                priceSuffix: "/ cycle",
+                features: ["1 complete coaching cycle", "Private recorded feedback", "30-minute Google Meet", "Any style or level"],
+                buttonText: "Book a Free 30-Minute Phone Consultation",
                 buttonVariant: "secondary",
                 onButtonClick: scrollToBooking,
               },
             ]}
             footer={
-              <button
-                onClick={scrollToVideoEval}
+              <a
+                href="/private-lessons#video-eval"
+                aria-label="Free video evaluation for prospective virtual students"
                 className="font-semibold hover:text-white focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:rounded-xl"
-                style={ghostButtonStyle}
+                style={{ ...ghostButtonStyle, display: "block", textAlign: "center" }}
               >
-                Not sure where to start? Get a free video eval — Ceech reviews your movement personally →
-              </button>
+                Free video evaluation for prospective virtual students — Ceech reviews your movement personally →
+              </a>
             }
           />
         </div>

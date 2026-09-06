@@ -147,8 +147,9 @@ export default function AcademyWaitlist() {
           </div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Image
-              src="/images/ceech/group-class.jpg"
+              src="/images/ceech/ceech-teaching-adult-dance-class.webp"
               alt="Ceech teaching a group dance class"
+              title="Ceech teaching a group dance class"
               width={480}
               height={400}
               style={{ borderRadius: '16px', objectFit: 'cover', width: '100%', maxHeight: '420px' }}

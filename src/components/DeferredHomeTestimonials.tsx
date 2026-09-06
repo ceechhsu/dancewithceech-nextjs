@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
+import type { ReviewSummary } from '@/lib/reviews';
 
 const TestimonialsMarquee = dynamic(() => import('@/components/TestimonialsMarquee'), {
   ssr: false,
@@ -14,7 +15,7 @@ const CircularGallery = dynamic(
 
 type TestimonialVideo = { videoId: string };
 
-export default function DeferredHomeTestimonials({ items }: { items: TestimonialVideo[] }) {
+export default function DeferredHomeTestimonials({ items, summary }: { items: TestimonialVideo[]; summary: ReviewSummary }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState(false);
 
@@ -45,7 +46,7 @@ export default function DeferredHomeTestimonials({ items }: { items: Testimonial
     <div ref={containerRef}>
       {isReady ? (
         <>
-          <TestimonialsMarquee />
+          <TestimonialsMarquee summary={summary} />
           <section className="py-24 overflow-x-hidden" style={{ backgroundColor: 'var(--surface)' }}>
             <div className="px-6 text-center mb-12">
               <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: 'var(--accent-primary)' }}>

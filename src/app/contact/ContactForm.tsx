@@ -15,16 +15,20 @@ export default function ContactForm() {
     const subject = (form.elements.namedItem("subject") as HTMLSelectElement).value;
     const message = (form.elements.namedItem("message") as HTMLTextAreaElement).value;
 
-    const res = await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, subject, message }),
-    });
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, subject, message }),
+      });
 
-    if (res.ok) {
-      setStatus("success");
-      form.reset();
-    } else {
+      if (res.ok) {
+        setStatus("success");
+        form.reset();
+      } else {
+        setStatus("error");
+      }
+    } catch {
       setStatus("error");
     }
   }
@@ -68,7 +72,6 @@ export default function ContactForm() {
         >
           <option value="General question">General question</option>
           <option value="Private lessons">Private lessons</option>
-          <option value="Online academy">Online academy</option>
           <option value="Community college classes">Community college classes</option>
           <option value="Something else">Something else</option>
         </select>
@@ -91,7 +94,7 @@ export default function ContactForm() {
         <p className="text-sm text-green-400">Message sent! I&apos;ll get back to you soon.</p>
       )}
       {status === "error" && (
-        <p className="text-sm text-red-400">Something went wrong. Please try again or email me directly.</p>
+        <p role="alert" className="text-sm text-red-400">Something went wrong. Please try again or email me directly.</p>
       )}
 
       <button

@@ -5,7 +5,6 @@ const BASE_URL = 'https://dancewithceech.com'
 
 const STATIC_ROUTE_LAST_MODIFIED: Record<string, string> = {
   '/': '2026-08-24',
-  '/academy': '2026-05-11',
   '/running-man-method': '2026-08-22',
   '/beat-first': '2026-08-24',
   '/private-lessons': '2026-08-24',
@@ -39,7 +38,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticRoutes: MetadataRoute.Sitemap = [
     route('/', 'weekly', 1),
-    route('/academy', 'monthly', 0.9),
     route('/running-man-method', 'weekly', 0.9),
     route('/beat-first', 'monthly', 0.9),
     route('/private-lessons', 'monthly', 0.9),

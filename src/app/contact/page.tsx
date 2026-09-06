@@ -1,54 +1,29 @@
+import { businessSchema } from "@/lib/private-lesson-details";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import ContactForm from "./ContactForm";
 
 export const metadata = {
-  title: "Contact — DanceWithCeech",
+  title: "Contact Ceech | San Jose Dance Lessons | DanceWithCeech",
   description: "Contact Ceech about private hip-hop lessons, online dance training, or classes at Get Down Dance Studios in San Jose, California.",
   alternates: { canonical: "https://dancewithceech.com/contact" },
   openGraph: {
-    title: "Contact Ceech — DanceWithCeech",
+    title: "Contact Ceech | San Jose Dance Lessons | DanceWithCeech",
     description: "Contact Ceech about private hip-hop lessons, online dance training, or San Jose classes.",
     url: "https://dancewithceech.com/contact",
-    siteName: "DanceWithCeech",
-    images: [{ url: "https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg", width: 1200, height: 630, alt: "Ceech teaching hip-hop dance" }],
+    siteName: "Dance With Ceech",
+    images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Ceech teaching hip-hop dance" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Contact Ceech — DanceWithCeech",
+    title: "Contact Ceech | San Jose Dance Lessons | DanceWithCeech",
     description: "Contact Ceech about private hip-hop lessons, online dance training, or San Jose classes.",
-    images: ["https://dancewithceech.com/images/ceech/Teaching-Neck-1-sm.jpg"],
+    images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"],
   },
 };
 
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "DanceSchool",
-  "@id": "https://dancewithceech.com/#organization",
-  "name": "DanceWithCeech",
-  "url": "https://dancewithceech.com",
-  "telephone": "+14086573771",
-  "email": "dancewithceech@gmail.com",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "196 Jackson St",
-    "addressLocality": "San Jose",
-    "addressRegion": "CA",
-    "postalCode": "95112",
-    "addressCountry": "US"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 37.3488633,
-    "longitude": -121.8944247
-  },
-  "sameAs": [
-    "https://maps.app.goo.gl/UwJFWssFCYNC5Zyc7"
-  ],
-  "description": "Hip-hop dance classes for adults in San Jose, CA. Learn locking, popping, breaking, and house dance with instructor Ceech.",
-  "priceRange": "$$"
-};
+const schema = businessSchema;
 
 export default function ContactPage() {
   return (
@@ -105,6 +80,12 @@ export default function ContactPage() {
                 196 Jackson St<br />
                 San Jose, CA 95112
               </p>
+              <p className="mb-3 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
+                By appointment only, normally Saturdays between 9 a.m. and 5 p.m. Pacific Time. Other times may be available by special request.
+              </p>
+              <p className="mb-3 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
+                Paid street parking only. Check posted signs for fees and time limits, and allow time to park.
+              </p>
               <a
                 href="https://maps.app.goo.gl/UwJFWssFCYNC5Zyc7"
                 target="_blank"
@@ -143,6 +124,23 @@ export default function ContactPage() {
           {/* CONTACT FORM */}
           <ContactForm />
 
+        </div>
+      </section>
+
+      <section id="community-college-classes" className="py-16 px-6 scroll-mt-24" style={{ borderTop: "1px solid #1f1f1f" }}>
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-5">Community college dance classes</h2>
+          <p className="leading-relaxed mb-6 max-w-3xl" style={{ color: "var(--muted)" }}>
+            Ceech teaches hip-hop dance at Mission College, West Valley College, and Cabrillo College. These are college courses, separate from private lessons at the San Jose studio.
+          </p>
+          <ul className="grid sm:grid-cols-3 gap-4 mb-6">
+            {["Mission College", "West Valley College", "Cabrillo College"].map((college) => (
+              <li key={college} className="rounded-xl p-5 font-semibold" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>{college}</li>
+            ))}
+          </ul>
+          <p className="leading-relaxed max-w-3xl" style={{ color: "var(--muted)" }}>
+            Register directly through the college, not through this contact form. Check your college&apos;s current class schedule for Ceech&apos;s hip-hop course and enrollment instructions. Schedules and fees vary by college and semester.
+          </p>
         </div>
       </section>
 

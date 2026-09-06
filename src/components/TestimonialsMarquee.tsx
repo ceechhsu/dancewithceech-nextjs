@@ -3,6 +3,7 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Marquee } from '@/components/ui/3d-testimonials';
+import type { ReviewSummary } from '@/lib/reviews';
 
 const reviews = [
   {
@@ -93,7 +94,7 @@ const half = Math.ceil(reviews.length / 2);
 const col1 = reviews.slice(0, half);
 const col2 = reviews.slice(half);
 
-export default function TestimonialsMarquee() {
+export default function TestimonialsMarquee({ summary }: { summary: ReviewSummary }) {
   return (
     <section className="py-24 px-6" style={{ backgroundColor: "var(--background)", borderTop: "1px solid #1f1f1f" }}>
       <div className="max-w-5xl mx-auto">
@@ -110,7 +111,7 @@ export default function TestimonialsMarquee() {
               className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-white"
               style={{ color: "var(--muted)" }}
             >
-              <span className="text-yellow-400">★</span> 5.0 Google · 56 reviews →
+              <span className="text-yellow-400">★</span> {summary.google.rating.toFixed(1)} Google · {summary.google.reviewCount} reviews →
             </a>
             <a
               href="https://www.yelp.com/biz/dance-with-ceech-san-jose-3"
@@ -119,7 +120,7 @@ export default function TestimonialsMarquee() {
               className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-white"
               style={{ color: "var(--muted)" }}
             >
-              <span className="text-yellow-400">★</span> 5.0 Yelp · 30 reviews →
+              <span className="text-yellow-400">★</span> {summary.yelp.rating.toFixed(1)} Yelp · {summary.yelp.reviewCount} reviews →
             </a>
           </div>
         </div>
