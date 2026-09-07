@@ -285,7 +285,6 @@ export function getNearestBeat(currentTime, beats) {
 export function getContactBeatTimingRows({
   contacts,
   beats,
-  fps,
   perfectFrameThreshold = 1,
   slightFrameThreshold = 3,
 }) {
@@ -1098,30 +1097,6 @@ function buildGridBeat({
     detection_offset_seconds: rawBeat
       ? roundTime(rawBeat.timestamp_seconds - timestamp)
       : null,
-    label_frames: Array.from({ length: 5 }, (_, offset) => frame + offset)
-      .filter((labelFrame) => labelFrame >= 0 && labelFrame < frameCount),
-  };
-}
-
-function finalizeGridBeat({
-  item,
-  index,
-  fps,
-  videoStartOffset,
-  frameCount,
-}) {
-  const timestamp = roundTime(item.timestamp_seconds);
-  const frame = clampFrame(getNearestFrame(timestamp, fps, videoStartOffset), frameCount);
-
-  return {
-    number: index + 1,
-    timestamp_seconds: timestamp,
-    nearest_frame: frame,
-    strength: item.source === "detected" ? roundTime(item.strength ?? 0) : 0,
-    source: item.source,
-    raw_beat_number: item.raw_beat_number ?? null,
-    detected_timestamp_seconds: item.detected_timestamp_seconds ?? null,
-    detection_offset_seconds: item.detection_offset_seconds ?? null,
     label_frames: Array.from({ length: 5 }, (_, offset) => frame + offset)
       .filter((labelFrame) => labelFrame >= 0 && labelFrame < frameCount),
   };

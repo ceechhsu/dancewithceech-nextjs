@@ -11,7 +11,6 @@ const bayArea = read("src/app/private-lessons/bay-area/page.tsx");
 const pricing = read("src/components/PrivateLessonsPricing.tsx");
 const videoEval = read("src/components/VideoEvalForm.tsx");
 const consultationSources = { main, sanJose, bayArea, pricing };
-const allPublicSource = [main, sanJose, bayArea, pricing, videoEval].join("\n");
 const virtualOfferSource = [main, bayArea, pricing].join("\n");
 const virtualPricing = pricing.slice(pricing.indexOf("{/* Virtual */}"));
 

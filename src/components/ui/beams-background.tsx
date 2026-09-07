@@ -23,6 +23,8 @@ interface Beam {
   pulseSpeed: number;
 }
 
+const OPACITY_MAP = { subtle: 0.7, medium: 0.85, strong: 1 } as const;
+
 function createBeam(width: number, height: number): Beam {
   const angle = -35 + Math.random() * 10;
   return {
@@ -48,8 +50,6 @@ export function BeamsBackground({
   const beamsRef = useRef<Beam[]>([]);
   const animationFrameRef = useRef<number>(0);
   const MINIMUM_BEAMS = 20;
-
-  const opacityMap = { subtle: 0.7, medium: 0.85, strong: 1 };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -95,7 +95,7 @@ export function BeamsBackground({
       ctx.rotate((beam.angle * Math.PI) / 180);
 
       const pulsingOpacity =
-        beam.opacity * (0.8 + Math.sin(beam.pulse) * 0.2) * opacityMap[intensity];
+        beam.opacity * (0.8 + Math.sin(beam.pulse) * 0.2) * OPACITY_MAP[intensity];
 
       const gradient = ctx.createLinearGradient(0, 0, 0, beam.length);
       gradient.addColorStop(0, `hsla(${beam.hue}, 85%, 65%, 0)`);

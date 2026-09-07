@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { CATEGORY_LABELS, CATEGORY_PATHS, getAllPosts, getFeaturedTutorialsByCategory } from "@/lib/posts";
@@ -130,10 +131,13 @@ export default function BlogPage() {
             >
               {post.hasImage && (
                 <div className="overflow-hidden" style={{ aspectRatio: "16/9" }}>
-                  <img
-            src={`/images/posts/${post.slug}.jpg`}
-            alt={post.title}
-            title={post.title}
+                  <Image
+                    src={`/images/posts/${post.slug}.jpg`}
+                    alt={post.title}
+                    title={post.title}
+                    width={800}
+                    height={450}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>

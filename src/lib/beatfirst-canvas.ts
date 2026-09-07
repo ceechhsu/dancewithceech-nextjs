@@ -1,6 +1,6 @@
 import React from 'react'
 import { type Beat } from '@/lib/beats'
-import { type TapResult, CANVAS_W, STEPS_PER_BAR, WAVEFORM_CAPTURE_MS } from '@/lib/beatfirst-constants'
+import { type TapResult, STEPS_PER_BAR, WAVEFORM_CAPTURE_MS } from '@/lib/beatfirst-constants'
 
 export const ratingColor = (r: TapResult['rating']) =>
   ({ perfect: '#22c55e', good: '#86efac', ok: '#FDB515', miss: '#ef4444' })[r]

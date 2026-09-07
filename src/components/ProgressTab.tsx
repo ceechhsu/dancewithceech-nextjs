@@ -129,7 +129,7 @@ function ScoreGraph({ sessions }: { sessions: Session[] }) {
       ctx.fillText(label, x, H - PAD.bottom + 14)
       ctx.fillText(`#${i + 1}`, x, H - PAD.bottom + 24)
     }
-  }, [sessions])
+  }, [sessions, PAD.bottom, PAD.left, PAD.right, PAD.top])
 
   return <canvas ref={canvasRef} width={W} height={H} style={{ display: 'block', maxWidth: '100%' }} />
 }

@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 interface Testimonial {
   quote: string;
@@ -167,10 +168,13 @@ export const CircularTestimonials = ({
                   className="w-full h-full border-0"
                 />
               ) : (
-                <img
+                <Image
                   src={`https://img.youtube.com/vi/${t.videoId}/hqdefault.jpg`}
                   alt={t.name}
                   title={`${t.name} testimonial`}
+                  fill
+                  sizes="100vw"
+                  unoptimized
                   className="w-full h-full object-cover"
                 />
               )}

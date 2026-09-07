@@ -173,7 +173,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
 
   // Audio
   const {
-    kickRef, snareRef, hihatRef, clapRef, clapFilterRef,
+    kickRef, snareRef, hihatRef, clapRef,
     bassRef, analyserRef, bassAnalyserRef, initAudio,
   } = useBeatFirstAudio()
 
@@ -575,7 +575,6 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
     ctx.lineWidth = 2
     ctx.setLineDash([])
     ctx.beginPath(); ctx.moveTo(playheadX, 0); ctx.lineTo(playheadX, H); ctx.stroke()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, selectedBeat])
 
   // ── Start game ────────────────────────────────────────────────────────────

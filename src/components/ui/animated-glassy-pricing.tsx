@@ -125,7 +125,7 @@ const ShaderCanvas = () => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [backgroundColor]);
 
   // absolute (not fixed) so it stays within the pricing section container
   return <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full block z-0" />;

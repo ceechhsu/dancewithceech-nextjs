@@ -10,7 +10,6 @@ import {
   buildRecordingMediaStream,
   buildRecordingTimeline,
   buildSavedTakeFilename,
-  buildSerializableAudioSettings,
   buildSubmissionMetadata,
   buildSubmissionRejectionCopy,
   evaluatePreRecordingReadiness,
@@ -64,9 +63,6 @@ let audioContext = null;
 let challengeAudioBuffer = null;
 let recordingAudioDestination = null;
 let microphoneAudioSource = null;
-let selectedCameraLabel = "";
-let selectedFacingMode = "";
-let selectedMicAudioSettings = {};
 let selectedCameraSettings = {};
 let readinessCuePeak = null;
 let readinessState = evaluatePreRecordingReadiness();
@@ -646,10 +642,6 @@ async function openCamera() {
   await applyMinimumCameraZoom(videoTrack);
   const settings = videoTrack?.getSettings?.() || {};
   selectedCameraSettings = settings;
-  const audioTrack = mediaStream.getAudioTracks()[0];
-  selectedMicAudioSettings = buildSerializableAudioSettings(audioTrack?.getSettings?.() || {});
-  selectedFacingMode = settings.facingMode || "";
-  selectedCameraLabel = videoTrack?.label || "";
   syncRecordStageAspectWhenReady(cameraPreview, settings);
   refreshPreRecordingReadiness({ updateStatus: false });
   setMode("preview");
