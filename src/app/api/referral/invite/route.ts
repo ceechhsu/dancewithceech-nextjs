@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     to: referredEmail,
     subject: `${referrerEmail} invited you to try BeatFirst`,
     html: `
-      <p>Hey! Your friend <strong>${referrerEmail}</strong> wants you to try <strong>BeatFirst</strong> — a rhythm trainer for dancers.</p>
+      <p>Hey! Your friend <strong>${referrerEmail}</strong> wants you to try <strong>BeatFirst</strong>, a rhythm trainer for dancers.</p>
       <p>Sign up and complete a beat to unlock a bonus beat pattern for them.</p>
       <p><a href="${inviteUrl}" style="background:#2563EB;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;">Accept Invite &amp; Play</a></p>
       <p style="color:#888;font-size:12px;">dancewithceech.com</p>

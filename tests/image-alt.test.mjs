@@ -14,10 +14,10 @@ test("blog image templates provide meaningful alt text", () => {
     "article images should use the specific frontmatter description with the title as a fallback");
 });
 
-test("canvas hero imagery exposes an accessible image equivalent", () => {
+test("video hero exposes a poster and accessible section label", () => {
   const source = fs.readFileSync(path.join(siteRoot, "src/components/ScrollyHero.tsx"), "utf8");
-  assert.match(source, /<canvas[\s\S]{0,500}role="img"[\s\S]{0,500}aria-label="[^"]+"/, 
-    "the canvas hero should expose an accessible label for its visual content");
+  assert.match(source, /<video[\s\S]{0,500}poster="\/hero-mobile-poster\.jpg"/);
+  assert.match(source, /<section[^>]+aria-label="Dance With Ceech introduction"/);
 });
 
 test("homepage images provide meaningful title attributes for SEOwallet", () => {
@@ -29,7 +29,6 @@ test("homepage images provide meaningful title attributes for SEOwallet", () => 
   assert.match(homepage, /mindtricks-dance-group-photo\.jpg[\s\S]{0,180}title="Mindtricks dance group with future Jabbawockeez founders"/);
   assert.match(homepage, /dsplayers-2006-body-rock-winners\.jpg[\s\S]{0,180}title="DS Players Body Rock dance competition winners"/);
 
-  assert.match(homepage, /title=\{`\$\{name\} dance style`\}/);
 });
 
 test("meaningful site images provide title attributes for SEOwallet", () => {
@@ -95,7 +94,7 @@ test("identified site images use descriptive filenames", () => {
     assert.ok(fs.existsSync(path.join(imageDirectory, filename)), `${filename} should exist`);
   }
 
-  assert.ok(fs.existsSync(path.join(siteRoot, "public/images/posts/steve-martin-dance-tutorial-cover.jpg")), "Steve Martin cover should exist");
+  assert.ok(fs.existsSync(path.join(siteRoot, "public/images/posts/steve-martin-dance.jpg")), "Steve Martin cover should exist");
 });
 
 test("renamed image URLs have permanent redirects", () => {
@@ -114,7 +113,7 @@ test("renamed image URLs have permanent redirects", () => {
     "/images/ceech/teaching-knee-pop.jpg": "/images/ceech/ceech-samy-teaching-knee-pop.jpg",
     "/images/ceech/running-man-method-class.jpg": "/images/ceech/ceech-teaching-running-man-adult-class.jpg",
     "/images/ceech/group-class.jpg": "/images/ceech/ceech-teaching-adult-dance-class.jpg",
-    "/images/posts/1845-2.jpg": "/images/posts/steve-martin-dance-tutorial-cover.jpg",
+    "/images/posts/1845-2.jpg": "/images/posts/steve-martin-dance.jpg",
   };
 
   for (const [from, to] of Object.entries(redirects)) {

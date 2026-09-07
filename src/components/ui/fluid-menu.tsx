@@ -84,7 +84,7 @@ export function MenuContainer({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative w-[64px]" data-expanded={isExpanded}>
       <div className="relative">
-        {/* First item — hamburger toggle, always visible */}
+        {/* First item: hamburger toggle, always visible */}
         <div
           className="relative w-16 h-16 cursor-pointer rounded-full group will-change-transform z-50"
           onClick={() => setIsExpanded(!isExpanded)}

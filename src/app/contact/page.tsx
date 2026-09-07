@@ -42,7 +42,7 @@ export default function ContactPage() {
         </div>
         <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Ceech</h1>
         <p className="text-lg max-w-xl mx-auto" style={{ color: "var(--muted)" }}>
-          Questions about classes, private lessons, or just want to say hello — reach out anytime.
+          Questions about classes, private lessons, or just want to say hello? Reach out anytime.
         </p>
       </section>
 

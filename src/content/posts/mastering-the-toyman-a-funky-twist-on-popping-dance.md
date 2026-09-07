@@ -46,25 +46,25 @@ Toyman is a captivating and unique move within the funk style dance repertoire. 
 ## Frequently Asked Questions
 
 ### What is the Toyman dance?
-Toyman is a funk-style popping move that creates the illusion of a wind-up toy coming to life — sharp, jerky, mechanical movements punctuated by sudden stops. The dancer tenses their muscles into rigid angles, moves arms and legs in short jerks, and commits to a playful toy-like character. It's a performance-driven move that relies on imagination and body control.
+Toyman is a funk-style popping move that creates the illusion of a wind-up toy coming to life , sharp, jerky, mechanical movements punctuated by sudden stops. The dancer tenses their muscles into rigid angles, moves arms and legs in short jerks, and commits to a playful toy-like character. It's a performance-driven move that relies on imagination and body control.
 
 ### Who created the Toyman move?
-Toyman is closely associated with the Electric Boogaloos — the pioneering funk-style crew from Fresno, California. Founding members Pop'in Pete and Skeeter Rabbit helped popularize and demonstrate the Toyman style during the 1970s and 1980s. The exact originator isn't definitively credited, but it emerged from the same Electric Boogaloos-era creativity that produced many iconic popping characters.
+Toyman is closely associated with the Electric Boogaloos , the pioneering funk-style crew from Fresno, California. Founding members Pop'in Pete and Skeeter Rabbit helped popularize and demonstrate the Toyman style during the 1970s and 1980s. The exact originator isn't definitively credited, but it emerged from the same Electric Boogaloos-era creativity that produced many iconic popping characters.
 
 ### Is Toyman the same as popping?
-No — Toyman is a CHARACTER move built ON TOP of popping. Popping is the underlying technique (sharp muscle contractions); Toyman is a theme that uses popping to simulate a wind-up toy. You need solid popping fundamentals before Toyman will look convincing — every jerky motion in Toyman is a controlled pop in disguise.
+No , Toyman is a CHARACTER move built ON TOP of popping. Popping is the underlying technique (sharp muscle contractions); Toyman is a theme that uses popping to simulate a wind-up toy. You need solid popping fundamentals before Toyman will look convincing , every jerky motion in Toyman is a controlled pop in disguise.
 
 ### How long does it take to learn Toyman?
-Popping prerequisites take 1-3 months to build. Once you have clean pops, the Toyman character takes 2-4 weeks to develop — the challenge isn't the physical motion, it's committing to the toy-like attitude and finding the mechanical rhythm. Performers with theatrical backgrounds often pick it up faster than dancers who focus on technique only.
+Popping prerequisites take 1-3 months to build. Once you have clean pops, the Toyman character takes 2-4 weeks to develop , the challenge isn't the physical motion, it's committing to the toy-like attitude and finding the mechanical rhythm. Performers with theatrical backgrounds often pick it up faster than dancers who focus on technique only.
 
 ### What's the most common Toyman mistake?
-Not committing to the character. Toyman is THEATRICAL — it only works when you fully embody the wind-up toy concept with angular posture, wide eyes, and rigid movement. Dancers who half-commit produce something that looks like popping without purpose. Go fully into the character or don't do it.
+Not committing to the character. Toyman is THEATRICAL , it only works when you fully embody the wind-up toy concept with angular posture, wide eyes, and rigid movement. Dancers who half-commit produce something that looks like popping without purpose. Go fully into the character or don't do it.
 
 ## More Funk Style Dance Moves
 
 If you liked the Toyman, these moves share the same mechanical character concept and rely on sharp stops, starts, and body isolation to sell an illusion:
 
-- [Mastering the Scarecrow: A Funky Popping Dance Move](/blog/mastering-the-scarecrow-a-funky-popping-dance-move) — The Scarecrow is Toyman's old-school Electric Boogaloos sibling — both were demonstrated by the same dancers, both simulate an inanimate object animated by invisible forces, and they share identical isolation techniques.
-- [Mastering the Puppet: A Funky Dance Move That Pulls Your Strings](/blog/mastering-the-puppet-a-funky-dance-move-that-pulls-your-strings) — The Puppet expands the Toyman concept into a full marionette character with theatrical flair — if you like committing to a mechanical persona, the Puppet is the natural progression.
-- [Mastering Popping: The Fundamental Move of Funk Style Dancing](/blog/mastering-popping-the-fundamental-move-of-funk-style-dancing) — The tips for learning Toyman explicitly state that popping fundamentals come first — every jerky wind-up motion in Toyman is a pop in disguise, so your pop strength directly determines how convincing Toyman looks.
-- [Mastering the Art of Ticking: A Funk Style Dance Move That Will Make You Pop](/blog/mastering-the-art-of-ticking-a-funk-style-dance-move-that-will-make-you-pop) — Ticking and Toyman use the same small, sharp, rhythmic snaps — ticking drills the precision in clock-like increments, which transfers directly to the controlled arm jerks that define the Toyman move.
+- [Mastering the Scarecrow: A Funky Popping Dance Move](/blog/mastering-the-scarecrow-a-funky-popping-dance-move) , The Scarecrow is Toyman's old-school Electric Boogaloos sibling , both were demonstrated by the same dancers, both simulate an inanimate object animated by invisible forces, and they share identical isolation techniques.
+- [Mastering the Puppet: A Funky Dance Move That Pulls Your Strings](/blog/mastering-the-puppet-a-funky-dance-move-that-pulls-your-strings) , The Puppet expands the Toyman concept into a full marionette character with theatrical flair , if you like committing to a mechanical persona, the Puppet is the natural progression.
+- [Mastering Popping: The Fundamental Move of Funk Style Dancing](/blog/mastering-popping-the-fundamental-move-of-funk-style-dancing) , The tips for learning Toyman explicitly state that popping fundamentals come first , every jerky wind-up motion in Toyman is a pop in disguise, so your pop strength directly determines how convincing Toyman looks.
+- [Mastering the Art of Ticking: A Funk Style Dance Move That Will Make You Pop](/blog/mastering-the-art-of-ticking-a-funk-style-dance-move-that-will-make-you-pop) , Ticking and Toyman use the same small, sharp, rhythmic snaps , ticking drills the precision in clock-like increments, which transfers directly to the controlled arm jerks that define the Toyman move.

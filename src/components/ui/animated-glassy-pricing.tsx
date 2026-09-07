@@ -20,7 +20,7 @@ const ShaderCanvas = () => {
   const glProgramRef = useRef<WebGLProgram | null>(null);
   const glBgColorLocationRef = useRef<WebGLUniformLocation | null>(null);
   const glRef = useRef<WebGLRenderingContext | null>(null);
-  // Dark mode only site — always use dark background
+  // Dark mode only site, always use dark background
   const [backgroundColor] = useState([0, 0, 0]);
 
   useEffect(() => {

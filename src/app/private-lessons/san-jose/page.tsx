@@ -11,7 +11,7 @@ export const metadata = {
   alternates: { canonical: "https://dancewithceech.com/private-lessons/san-jose" },
   openGraph: {
     title: "Hip-Hop Dance Lessons in San Jose | DanceWithCeech",
-    description: "Private hip-hop dance lessons in San Jose, CA — taught by Ceech at Get Down Dance Studios. Free 30-minute phone consultation.",
+    description: "Private hip-hop dance lessons in San Jose, CA, taught by Ceech at Get Down Dance Studios. Free 30-minute phone consultation.",
     url: "https://dancewithceech.com/private-lessons/san-jose",
     siteName: "Dance With Ceech",
     images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Private dance lessons in San Jose with Ceech" }],
@@ -20,7 +20,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Hip-Hop Dance Lessons in San Jose | DanceWithCeech",
-    description: "Private hip-hop dance lessons in San Jose, CA — taught by Ceech at Get Down Dance Studios. Free 30-minute phone consultation.",
+    description: "Private hip-hop dance lessons in San Jose, CA, taught by Ceech at Get Down Dance Studios. Free 30-minute phone consultation.",
     images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"],
   },
 };
@@ -44,7 +44,7 @@ export default async function SanJosePrivateLessonsPage() {
             Private Hip-Hop Dance Lessons in San Jose
           </h1>
           <p className="text-lg leading-relaxed mb-8" style={{ color: "var(--muted)" }}>
-            1-on-1 private dance lessons in San Jose, taught by Ceech — a UC Berkeley engineer who has taught dance since 1998 with direct Electric Boogaloos lineage. Hip-hop, locking, popping, breaking, and house dance. In-person at <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}>Get Down Dance Studios</a> in Japantown.
+            1-on-1 private dance lessons for adults 18 and older in San Jose, taught by Ceech. He has a degree in Electrical Engineering and Computer Science from UC Berkeley and has taught dance since 1998, with direct training in Electric Boogaloos movement. Hip-hop, locking, popping, breaking, and house dance are available in person at <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}>Get Down Dance Studios</a> in Japantown.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a
@@ -71,10 +71,10 @@ export default async function SanJosePrivateLessonsPage() {
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-balance">Why train with Ceech in San Jose</h2>
           <div className="space-y-5 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
             <p>
-              San Jose has a surprisingly deep dance scene for a tech-heavy city, but finding an instructor who actually teaches the <em>foundation</em> — not just copy-the-choreography — is rare. I&apos;ve held college faculty positions at Mission College, West Valley College, Gavilan College, and Cabrillo College. I&apos;ve also guest taught at Stanford, UC Berkeley, UC Santa Cruz, Santa Clara University, De Anza College, San Jose City College, and Ohlone College. My teaching approach comes from engineering: diagnose the movement problem, apply the right technique, and build up systematically.
+              San Jose has a deep dance scene, and private lessons can give adult students focused time on foundations rather than a full choreography sequence. I&apos;ve held college faculty positions at Mission College, West Valley College, Gavilan College, and Cabrillo College. I&apos;ve also guest taught at Stanford, UC Berkeley, UC Santa Cruz, Santa Clara University, De Anza College, San Jose City College, and Ohlone College. My teaching approach draws on engineering: identify the movement problem, apply a specific correction, and build up systematically.
             </p>
             <p>
-              My funk styles lineage traces directly to the Electric Boogaloos (Pop&apos;in Pete, Skeeter Rabbit) — the crew that invented popping. That means when you learn popping, waving, or boogaloo from me, you&apos;re learning the real thing, not a watered-down studio version.
+              My funk styles training includes direct study with Electric Boogaloos members Pop&apos;in Pete and Skeeter Rabbit. That background informs lessons in popping, waving, and Boogaloo alongside the fundamentals of each movement.
             </p>
             <p>
               Lessons happen at <strong style={{ color: "var(--foreground)" }}>Get Down Dance Studios at 196 Jackson St</strong> in Japantown, a professional studio with sprung floors, mirrors, and sound, a few minutes from downtown San Jose. Paid street parking only. Check posted signs for fees and time limits, and allow time to park.
@@ -121,7 +121,7 @@ export default async function SanJosePrivateLessonsPage() {
             In-person 60-min lessons at Get Down Dance Studios, San Jose. Studio fee included:
           </p>
           <ul className="space-y-3 text-lg" style={{ color: "var(--muted)" }}>
-            <li><strong style={{ color: "var(--foreground)" }}>10-Pack:</strong> $2,100 ($210/session — save $400) <em className="text-sm">Most popular</em></li>
+            <li><strong style={{ color: "var(--foreground)" }}>10-Pack:</strong> $2,100 ($210/session, save $400) <em className="text-sm">Most popular</em></li>
             <li><strong style={{ color: "var(--foreground)" }}>5-Pack:</strong> $1,150 ($230/session)</li>
             <li><strong style={{ color: "var(--foreground)" }}>Single Session:</strong> $250</li>
           </ul>

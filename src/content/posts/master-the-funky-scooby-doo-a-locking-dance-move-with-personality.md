@@ -4,7 +4,7 @@ seoTitle: "Scooby Doo Dance: Jimmy Scoo B Doo Locking Move"
 slug: "master-the-funky-scooby-doo-a-locking-dance-move-with-personality"
 date: "2024-06-20 17:20:29"
 category: "locking-dance-moves"
-description: "Scooby Doo dance tutorial — the funky locking move created by Jimmy 'Scoo B Doo' Foster in the 1970s. Step-by-step with kicks, arm swings, and personality tips."
+description: "Scooby Doo dance tutorial , the funky locking move created by Jimmy 'Scoo B Doo' Foster in the 1970s. Step-by-step with kicks, arm swings, and personality tips."
 ---
 ## Introduction
 
@@ -41,7 +41,7 @@ The Scooby Doo is a dynamic and entertaining locking move that showcases the fun
 ## Frequently Asked Questions
 
 ### What is the Scooby Doo dance?
-The Scooby Doo is a signature locking dance move built on a squat-dip-kick-step-stomp sequence with exaggerated arm positions. Created by Jimmy "Scoo B Doo" Foster — a legendary locker from the 1970s — it's named after the cartoon character, reflecting its playful, funky, and comedic character. It's a staple of the locking dance vocabulary.
+The Scooby Doo is a signature locking dance move built on a squat-dip-kick-step-stomp sequence with exaggerated arm positions. Created by Jimmy "Scoo B Doo" Foster , a legendary locker from the 1970s , it's named after the cartoon character, reflecting its playful, funky, and comedic character. It's a staple of the locking dance vocabulary.
 
 ### Who created the Scooby Doo locking move?
 Jimmy "Scoo B Doo" Foster, a pioneer of locking dance from the 1970s Los Angeles scene, created the move. Foster was one of the era's most innovative lockers and the Scooby Doo became his signature step. He named it after the Scooby-Doo cartoon because the move's exaggerated, goofy physicality matched the character's comedic energy.
@@ -50,16 +50,16 @@ Jimmy "Scoo B Doo" Foster, a pioneer of locking dance from the 1970s Los Angeles
 It's moderate difficulty. The individual actions (squat, kick, step, stomp) are simple, but coordinating them WITH the specific arm positions and maintaining the exaggerated locking attitude takes practice. Most beginners can perform the sequence in 30 minutes; making it look funky and characterful takes 1-2 weeks.
 
 ### How long does it take to learn the Scooby Doo?
-The basic step takes 20-30 minutes. Layering in the muscle-man arm start, the arm swap on the kick, and the attitude takes another 60-90 minutes. Integrating it into a longer locking sequence — transitioning in and out smoothly — takes a couple of practice sessions once the standalone move is solid.
+The basic step takes 20-30 minutes. Layering in the muscle-man arm start, the arm swap on the kick, and the attitude takes another 60-90 minutes. Integrating it into a longer locking sequence , transitioning in and out smoothly , takes a couple of practice sessions once the standalone move is solid.
 
 ### What's the most common Scooby Doo mistake?
-Doing it too small. The Scooby Doo is a CHARACTER move — it's meant to be big, funny, and slightly cartoonish. Beginners who perform it tightly and politely lose the move's whole identity. Exaggerate the squat, commit to the kick, sell the arm positions. If it doesn't feel slightly silly, you're not doing enough.
+Doing it too small. The Scooby Doo is a CHARACTER move , it's meant to be big, funny, and slightly cartoonish. Beginners who perform it tightly and politely lose the move's whole identity. Exaggerate the squat, commit to the kick, sell the arm positions. If it doesn't feel slightly silly, you're not doing enough.
 
 ## More Locking Dance Moves
 
 If you liked the Scooby Doo, these moves share the same traveling footwork and full-body coordination:
 
-- [Master the Skeeter Rabbit: A Locking Dance Move Masterclass](/blog/master-the-funky-skeeter-rabbit-a-locking-dance-move-masterclass) — Like the Scooby Doo, the Skeeter Rabbit is a traveling footwork pattern built on alternating kicks and forward momentum, both created by members of the same 1970s locking scene.
-- [Mastering the Leo Walk: An Iconic Locking Dance Move](/blog/unleash-your-funk-mastering-the-iconic-leo-walk) — Another locomotor locking move that pairs hip pushes with kicks as you travel across the floor, making it a natural companion to the Scooby Doo's forward-stepping rhythm.
-- [Mastering the Pimp Walk: An Iconic Locking Dance Move](/blog/unleash-your-swagger-mastering-the-iconic-pimp-walk-in-locking) — Both the Scooby Doo and the Pimp Walk are character-driven traveling moves where attitude and exaggerated body language are just as important as the footwork.
-- [Mastering the Iconic Lock: The Foundation of Locking Dance](/blog/mastering-the-iconic-lock-the-foundation-of-locking-dance) — The Scooby Doo's arm positions hit freeze shapes mid-motion, so drilling the foundational Lock gives you the body control to land those pauses cleanly.
+- [Master the Skeeter Rabbit: A Locking Dance Move Masterclass](/blog/master-the-funky-skeeter-rabbit-a-locking-dance-move-masterclass) , Like the Scooby Doo, the Skeeter Rabbit is a traveling footwork pattern built on alternating kicks and forward momentum, both created by members of the same 1970s locking scene.
+- [Mastering the Leo Walk: An Iconic Locking Dance Move](/blog/unleash-your-funk-mastering-the-iconic-leo-walk) , Another locomotor locking move that pairs hip pushes with kicks as you travel across the floor, making it a natural companion to the Scooby Doo's forward-stepping rhythm.
+- [Mastering the Pimp Walk: An Iconic Locking Dance Move](/blog/unleash-your-swagger-mastering-the-iconic-pimp-walk-in-locking) , Both the Scooby Doo and the Pimp Walk are character-driven traveling moves where attitude and exaggerated body language are just as important as the footwork.
+- [Mastering the Iconic Lock: The Foundation of Locking Dance](/blog/mastering-the-iconic-lock-the-foundation-of-locking-dance) , The Scooby Doo's arm positions hit freeze shapes mid-motion, so drilling the foundational Lock gives you the body control to land those pauses cleanly.

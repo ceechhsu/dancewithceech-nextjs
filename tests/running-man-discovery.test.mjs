@@ -15,7 +15,7 @@ test("homepage promotes the live Running Man founding cohort", async () => {
   ]);
 
   assert.match(source, /RunningManCampaignBanner/);
-  assert.match(banner, /September 24–October 22, 2026/);
+  assert.match(banner, /September 24 to October 22, 2026/);
   assert.match(banner, /four-week live cohort/i);
   assert.match(banner, /Limited to 12 students/i);
   assert.match(banner, /\/running-man-method#enroll/);

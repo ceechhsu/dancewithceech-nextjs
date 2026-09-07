@@ -30,7 +30,7 @@ import TrackedRunningManVideo from "@/components/running-man/TrackedRunningManVi
 const enrollmentHref = "#enroll";
 
 const cohortFacts = [
-  { icon: CalendarDays, label: "Four-week cohort", value: "September 24–October 22, 2026" },
+  { icon: CalendarDays, label: "Four-week cohort", value: "September 24 to October 22, 2026" },
   { icon: Clock3, label: "Weekly live sessions", value: "Thursdays at 8:00 p.m. Pacific" },
   { icon: UsersRound, label: "Small-group support", value: "Adults 18+ · Only 12 seats" },
 ];
@@ -39,7 +39,7 @@ const learningPath = [
   {
     number: "01",
     title: "Learn One Skill at a Time",
-    copy: "Follow short, progressive drills that break the Running Man into manageable skills—including rhythm, balance, coordination, and movement.",
+    copy: "Follow short, progressive drills that break the Running Man into manageable skills, including rhythm, balance, coordination, and movement.",
   },
   {
     number: "02",
@@ -59,7 +59,7 @@ const learningPath = [
   {
     number: "05",
     title: "Complete the Graduation Challenge",
-    copy: "Perform the Running Man continuously and on beat for at least 30 seconds—live in front of Ceech and your fellow students.",
+    copy: "Perform the Running Man continuously and on beat for at least 30 seconds live in front of Ceech and your fellow students.",
   },
 ];
 
@@ -82,7 +82,7 @@ const inclusions = [
   {
     icon: UserRoundCheck,
     title: "Personalized Feedback From Ceech",
-    copy: "Learn what you are doing well, what needs adjustment, and what to practice next—with opportunities to revise and resubmit.",
+    copy: "Learn what you are doing well, what needs adjustment, and what to practice next, with opportunities to revise and resubmit.",
   },
   {
     icon: Video,
@@ -97,7 +97,7 @@ const inclusions = [
   {
     icon: GraduationCap,
     title: "Live Graduation Challenge",
-    copy: "Complete a single-take, 30-second Running Man performance—continuously and on beat—in front of Ceech and your cohort.",
+    copy: "Complete a single-take, 30-second Running Man performance continuously and on beat in front of Ceech and your cohort.",
   },
   {
     icon: InfinityIcon,
@@ -123,7 +123,7 @@ const faqItems = [
   },
   {
     question: "Are there any physical requirements?",
-    answer: "You should be able to safely perform a light hop on the balls of your feet without pain or instability. If an injury, medical condition, or physical limitation could make the movement unsafe, consult a qualified healthcare professional before enrolling. If you simply feel uncoordinated, that is okay—the drills are designed to train coordination progressively.",
+    answer: "You should be able to safely perform a light hop on the balls of your feet without pain or instability. If an injury, medical condition, or physical limitation could make the movement unsafe, consult a qualified healthcare professional before enrolling. If you simply feel uncoordinated, that is okay. The drills are designed to train coordination progressively.",
   },
   {
     question: "Do I need special shoes or flooring?",
@@ -131,7 +131,7 @@ const faqItems = [
   },
   {
     question: "How much time must I practice each day?",
-    answer: "There is no arbitrary daily-minute requirement. Practice each short drill until you believe you can demonstrate it correctly. Progress is based on mastery—not minutes watched.",
+    answer: "There is no arbitrary daily-minute requirement. Practice each short drill until you believe you can demonstrate it correctly. Progress is based on mastery, not minutes watched.",
   },
   {
     question: "How does personalized feedback work?",
@@ -210,7 +210,7 @@ export default function RunningManMethodPage() {
               <span className="rounded-full border border-[#FDB515]/30 bg-[#FDB515]/10 px-3 py-1.5 text-[#FDB515]">Founding Cohort</span>
               <span className="text-white/45">The Dance With Ceech System</span>
             </div>
-            <h1 className="font-display text-5xl font-extrabold uppercase leading-[0.94] tracking-[-0.025em] text-white sm:text-6xl lg:text-7xl">Learn the Running Man—and Finally Feel Ready to Join the Dance Floor</h1>
+            <h1 className="font-display text-5xl font-extrabold uppercase leading-[0.94] tracking-[-0.025em] text-white sm:text-6xl lg:text-7xl">Learn the Running Man and Feel Ready to Join the Dance Floor</h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-white/70 sm:text-xl">A four-week online cohort for complete and frustrated adult beginners who are tired of copying choreography and guessing whether they are practicing correctly.</p>
             <div className="mt-7 max-w-2xl overflow-hidden rounded-3xl border border-white/15 bg-black shadow-2xl">
               <TrackedRunningManVideo
@@ -226,7 +226,7 @@ export default function RunningManMethodPage() {
                 Your browser does not support video playback.
               </TrackedRunningManVideo>
               <p className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-white/70 sm:text-base">
-                <strong className="text-white">What is the Running Man?</strong>{" "}The iconic hip-hop move that creates the illusion of running in place—a recognizable, versatile step you can use with many different songs.
+                <strong className="text-white">What is the Running Man?</strong>{" "}The iconic hip-hop move that creates the illusion of running in place. It is a recognizable, versatile step you can use with many different songs.
               </p>
             </div>
             <p className="mt-7 max-w-2xl text-base leading-7 text-white/65 sm:text-lg">Ceech will guide you through simple, progressive drills and give you personalized feedback at key mastery checkpoints, so you know what to adjust and what to practice next.</p>
@@ -269,10 +269,10 @@ export default function RunningManMethodPage() {
         <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <SectionHeading eyebrow="The real problem" title="You Don’t Need More Choreography. You Need One Move You Can Trust." align="left" />
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-7 sm:p-10">
-            <p className="text-xl leading-8 text-white/80">You want to join the dance floor—but you do not know what to do once you get there.</p>
+            <p className="text-xl leading-8 text-white/80">You want to join the dance floor, but you do not know what to do once you get there.</p>
             <blockquote className="my-7 border-l-2 border-[#FDB515] pl-5 font-display text-3xl font-bold uppercase leading-tight text-white">“Am I doing it correctly? Will I look awkward? What if everyone sees that I don’t know how to dance?”</blockquote>
             <p className="leading-7 text-white/60">So you stay near the wall, wait for someone else to go first, or rely on a little “liquid courage” before you feel comfortable enough to try.</p>
-            <p className="mt-5 leading-7 text-white/75">That does not mean you are incapable of dancing. It means you have not been given a clear foundation—or the feedback needed to know that you are practicing correctly.</p>
+            <p className="mt-5 leading-7 text-white/75">That does not mean you are incapable of dancing. It means you have not been given a clear foundation or the feedback needed to know that you are practicing correctly.</p>
           </div>
         </div>
       </section>
@@ -284,7 +284,7 @@ export default function RunningManMethodPage() {
             <article className="rounded-3xl border border-[#2563EB]/25 bg-[#2563EB]/8 p-7 sm:p-9">
               <Music2 aria-hidden="true" className="h-9 w-9 text-[#2563EB]" />
               <h3 className="mt-6 font-display text-3xl font-bold uppercase text-white">Rhythm Before Repetition</h3>
-              <p className="mt-4 leading-7 text-white/60">You can memorize every step and still feel awkward if you do not understand how the movement connects to the beat. The Running Man Method trains the rhythm—not only the foot pattern.</p>
+              <p className="mt-4 leading-7 text-white/60">You can memorize every step and still feel awkward if you do not understand how the movement connects to the beat. The Running Man Method trains the rhythm, not only the foot pattern.</p>
             </article>
             <article className="rounded-3xl border border-[#FDB515]/25 bg-[#FDB515]/8 p-7 sm:p-9">
               <Award aria-hidden="true" className="h-9 w-9 text-[#FDB515]" />
@@ -322,7 +322,7 @@ export default function RunningManMethodPage() {
             <article className="rounded-3xl border border-[#2563EB]/30 bg-[#2563EB]/8 p-7 sm:p-9">
               <h3 className="font-display text-3xl font-bold uppercase text-white">This program is for you if:</h3>
               <ul className="mt-7 space-y-4">
-                {["You are a complete beginner and do not know what to do on the dance floor.", "You have tried classes or tutorials but still feel unsure.", "Choreography classes move too quickly to build a foundation.", "You want to understand rhythm—not merely imitate steps.", "You want personalized feedback and are willing to make corrections.", "You can follow a basic beat but struggle to coordinate the movement.", "You want to become more comfortable dancing in front of others."].map((item) => (
+                {["You are a complete beginner and do not know what to do on the dance floor.", "You have tried classes or tutorials but still feel unsure.", "Choreography classes move too quickly to build a foundation.", "You want to understand rhythm, not merely imitate steps.", "You want personalized feedback and are willing to make corrections.", "You can follow a basic beat but struggle to coordinate the movement.", "You want to become more comfortable dancing in front of others."].map((item) => (
                   <li key={item} className="flex gap-3 text-sm leading-6 text-white/75"><Check aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#2563EB]" /><span>{item}</span></li>
                 ))}
               </ul>
@@ -375,11 +375,11 @@ export default function RunningManMethodPage() {
             <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/15"><Image src="/images/ceech/ceech-smiling-portrait.jpg" alt="Dance instructor Ceech Hsu smiling" title="Dance instructor Ceech Hsu smiling" fill sizes="(min-width: 1024px) 34vw, 86vw" className="object-cover" /></div>
           </div>
           <div>
-            <SectionHeading eyebrow="Meet your teacher" title="Learn From an Experienced Teacher—Not Just a Talented Dancer" align="left" />
+            <SectionHeading eyebrow="Meet your teacher" title="Learn From an Experienced Teacher, Not Just a Talented Dancer" align="left" />
             <p className="mt-6 text-lg leading-8 text-white/65">A talented dancer can show you what the Running Man looks like. An experienced teacher can identify why your movement is not working and explain how to correct it.</p>
-            <p className="mt-5 text-lg leading-8 text-white/65">For more than 25 years, Ceech has helped over 6,000 students understand rhythm, develop coordination, and learn dance through manageable progressions.</p>
+            <p className="mt-5 text-lg leading-8 text-white/65">For more than 25 years, Ceech estimates he has taught more than 6,000 students through manageable progressions in rhythm, coordination, and dance.</p>
             <ul className="mt-7 grid gap-3 sm:grid-cols-2">
-              {["More than 25 years teaching", "More than 6,000 students taught", "MA in Kinesiology", "Professor at four Bay Area colleges", "Guest instructor at Stanford, UC Berkeley, UC Santa Cruz, and more", "Co-founder of Get Down Dance Studios", "Creator of a Running Man course for Udemy", "Choreographed and taught members of the Jabbawockeez"].map((credential) => (
+              {["More than 25 years teaching", "6,000+ students taught (estimated)", "MA in Kinesiology", "Professor at four Bay Area colleges", "Guest instructor at Stanford, UC Berkeley, UC Santa Cruz, and more", "Co-founder of Get Down Dance Studios", "Creator of a Running Man course for Udemy", "Mindtricks choreographer and director; several crew members later founded the Jabbawockeez"].map((credential) => (
                 <li key={credential} className="flex gap-3 text-sm leading-6 text-white/70"><CheckCircle2 aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#FDB515]" /><span>{credential}</span></li>
               ))}
             </ul>
@@ -413,7 +413,7 @@ export default function RunningManMethodPage() {
       <section id="enrollment-confirmation" className="scroll-mt-24 px-5 py-20 sm:px-8 lg:py-28">
         <div className="mx-auto max-w-5xl overflow-hidden rounded-[2rem] border border-[#2563EB]/35 bg-gradient-to-br from-[#102250] via-[#0D1425] to-[#15120A] p-7 sm:p-12 lg:p-16">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#FDB515]">Your next dance-floor chapter</p>
-          <h2 className="mt-4 max-w-4xl font-display text-5xl font-extrabold uppercase leading-[0.95] tracking-tight text-white sm:text-6xl">Graduate on October 22—Then Take Your Running Man to Halloween</h2>
+          <h2 className="mt-4 max-w-4xl font-display text-5xl font-extrabold uppercase leading-[0.95] tracking-tight text-white sm:text-6xl">Graduate on October 22, Then Take Your Running Man to Halloween</h2>
           <p className="mt-7 max-w-3xl text-lg leading-8 text-white/70">You do not need dozens of dance moves. You need one move that you understand, have practiced correctly, and can trust yourself to perform.</p>
           <div className="mt-10 grid gap-4 md:grid-cols-2">
             {["I understand this is active training that requires practice and video submissions.", "I understand the gradual video-sharing progression and private Mastery Checkpoints.", "I plan to attend the Thursday sessions and live Graduation Challenge.", "I am at least 18 and can practice safely or have appropriate medical clearance.", "I have reviewed the full-refund-through-Day-5 policy."].map((item) => (
@@ -428,7 +428,7 @@ export default function RunningManMethodPage() {
             </div>
           </div>
           <div className="mt-10 flex flex-col gap-5 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
-            <div><p className="font-display text-2xl font-bold uppercase text-white">Continue Your Dance Journey</p><p className="mt-2 max-w-2xl text-sm leading-6 text-white/55">Students who graduate receive 20% off their next eligible Dance With Ceech Method, such as the Roger Rabbit Method.</p></div>
+            <div><p className="font-display text-2xl font-bold uppercase text-white">Keep practicing</p><p className="mt-2 max-w-2xl text-sm leading-6 text-white/55">When the cohort ends, you can continue practicing with the free tutorials or explore private lessons for individualized feedback.</p></div>
             <RefreshCw aria-hidden="true" className="h-9 w-9 shrink-0 text-[#2563EB]" />
           </div>
         </div>

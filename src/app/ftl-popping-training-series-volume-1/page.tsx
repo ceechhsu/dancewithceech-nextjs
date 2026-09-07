@@ -400,19 +400,19 @@ const faqs = [
   },
   {
     q: "How many videos am I supposed to do each day?",
-    a: "Do ALL the videos listed for that day. More repetitions is always better.",
+    a: "Complete the videos listed for that day, then repeat a drill only as long as you can keep your movements controlled and pain-free.",
   },
   {
     q: "Must I follow them in a particular order?",
-    a: "The order is recommended, but you can break up the videos throughout the day. Finishing in one session strengthens muscle memory the most.",
+    a: "The order is recommended, but you can break up the videos throughout the day. Choose a practice rhythm you can repeat consistently.",
   },
   {
     q: "Is it possible to over train?",
-    a: "Be careful with the leg pop — avoid hyperextending your knees. Otherwise, it's very difficult to over-train with popping.",
+    a: "Be careful with the leg pop and avoid hyperextending your knees. Stop if you feel pain, and adjust the drill or take a rest day when needed.",
   },
   {
     q: "It's too hard! Any tips?",
-    a: "Go at your own pace. Keep track of your progress. Building skills takes time — stay consistent.",
+    a: "Go at your own pace and keep track of your practice. Building skills takes time, so return to the schedule when you are ready.",
   },
   {
     q: "Can I take more rest days or change the schedule?",
@@ -529,8 +529,7 @@ export default function FTLPoppingPage() {
         </h1>
         <p className="text-lg text-[#F9F9F9]/70 max-w-xl mx-auto mb-8">
           This free, self-directed 30-day popping training program is designed for beginners to get
-          started with popping. Follow the daily schedule and commit to the
-          process.
+          started with popping. Use the daily schedule to organize your practice.
         </p>
         <a
           href="http://youtube.com/nustudios"

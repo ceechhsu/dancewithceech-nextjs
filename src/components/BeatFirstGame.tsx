@@ -786,9 +786,9 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
           </p>
           <div className="flex flex-col gap-2">
             {[
-              'Tap along to real beats — no instruments needed',
-              'Track your accuracy and watch your timing improve',
-              'Build the foundation every dance style runs on',
+              'Tap along to real beats. No instruments needed.',
+              'Track your timing beat by beat',
+              'Practice timing before adding dance steps',
             ].map((point) => (
               <div key={point} className="flex items-start gap-3 text-sm" style={{ color: 'var(--muted)' }}>
                 <span style={{ color: 'var(--accent-primary)', marginTop: 2 }}>→</span>
@@ -947,7 +947,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
         {phase === 'ready' && (
           <div className="flex flex-col items-center gap-4">
             <p className="text-sm self-start" style={{ color: 'var(--muted)' }}>
-              Bar 1 will cue you in — scoring starts on bar 2
+              Bar 1 will cue you in. Scoring starts on bar 2.
             </p>
             <div className="w-full rounded-lg overflow-hidden" style={{ border: '1px solid #222' }}>
               <canvas
@@ -1086,15 +1086,15 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
             {showMasteryBanner && (
               <div className="mb-6 p-4 rounded-xl text-center" style={{ backgroundColor: '#0f2a0f', border: '1px solid #22c55e' }}>
                 <div className="text-3xl mb-1">★</div>
-                <p className="font-bold text-lg mb-1" style={{ color: '#22c55e' }}>Beat Mastered!</p>
-                <p className="text-sm" style={{ color: 'var(--muted)' }}>3 rounds at 90%+ — you&apos;ve locked in {selectedBeat.name}</p>
+                <p className="font-bold text-lg mb-1" style={{ color: '#22c55e' }}>Pattern checkpoint reached</p>
+                <p className="text-sm" style={{ color: 'var(--muted)' }}>You recorded 3 rounds at 90%+ for {selectedBeat.name}.</p>
               </div>
             )}
 
             {showSignIn && (
               <div className="mb-6 p-4 rounded-xl text-center" style={{ backgroundColor: '#111', border: '1px solid #2563EB' }}>
                 <p className="font-semibold mb-1">To save your score & unlock tutorials</p>
-                <p className="text-sm mb-3" style={{ color: 'var(--muted)' }}>Sign in with Google — it&apos;s free</p>
+                <p className="text-sm mb-3" style={{ color: 'var(--muted)' }}>Sign in with Google. It&apos;s free.</p>
                 <button
                   onClick={() => signIn('google')}
                   className="px-6 py-2 rounded-full font-medium text-white transition-opacity hover:opacity-90"
@@ -1169,7 +1169,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
                   </div>
                 </div>
                 <p className="text-xs mt-3" style={{ color: 'var(--muted)' }}>
-                  Tight clusters beat random scatter — even slightly behind the beat is good, as long as you&apos;re consistent. That&apos;s what rhythm is.
+                  Tight clusters beat random scatter. Even slightly behind the beat is useful information when you&apos;re tracking consistency.
                 </p>
               </div>
             )}
@@ -1273,7 +1273,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
                           setInviteError(data.error ?? 'Something went wrong')
                         }
                       } catch {
-                        setInviteError('Network error — please try again')
+                        setInviteError('Network error. Please try again.')
                       } finally {
                         setInviteLoading(false)
                       }

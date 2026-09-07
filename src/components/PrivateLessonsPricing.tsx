@@ -20,7 +20,7 @@ const ghostButtonStyle = {
 export default function PrivateLessonsPricing() {
   return (
     <>
-      {/* In-Person — shown first (premium anchor) */}
+      {/* In-person lessons are shown first. */}
       <section className="py-24 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-8">
@@ -34,10 +34,10 @@ export default function PrivateLessonsPricing() {
             plans={[
               {
                 planName: "10 Pack",
-                description: "Commit to real progress.",
+                description: "Practice regularly with a 10-session package.",
                 price: "$2,100",
                 priceSuffix: "/ 10 sessions",
-                features: ["$210/session — save $400", "60 min each", "Get Down Dance Studios", "Any style or level"],
+                features: ["$210/session, save $400", "60 min each", "Get Down Dance Studios", "Any style or level"],
                 buttonText: "Book a Free 30-Minute Phone Consultation",
                 isPopular: true,
                 buttonVariant: "primary",
@@ -48,7 +48,7 @@ export default function PrivateLessonsPricing() {
                 description: "Build momentum over time.",
                 price: "$1,150",
                 priceSuffix: "/ 5 sessions",
-                features: ["$230/session — save $100", "60 min each", "Get Down Dance Studios", "Any style or level"],
+                features: ["$230/session, save $100", "60 min each", "Get Down Dance Studios", "Any style or level"],
                 buttonText: "Book a Free 30-Minute Phone Consultation",
                 buttonVariant: "secondary",
                 onButtonClick: scrollToBooking,
@@ -125,7 +125,7 @@ export default function PrivateLessonsPricing() {
                 className="font-semibold hover:text-white focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:rounded-xl"
                 style={{ ...ghostButtonStyle, display: "block", textAlign: "center" }}
               >
-                Free video evaluation for prospective virtual students — Ceech reviews your movement personally →
+                Free video evaluation for prospective virtual students. Ceech reviews your movement personally →
               </a>
             }
           />

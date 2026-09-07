@@ -4,7 +4,7 @@ seoTitle: "Monastery Dance: How to Do the St. Louis Move"
 slug: "hip-hop-dance-move-monastery"
 date: "2024-06-11 11:51:05"
 category: "hip-hop-dance-moves"
-description: "Monastery dance tutorial — the St. Louis hip hop move built on a toe-heel weight shift that creates a bouncing illusion. 5 steps plus rhythm and style tips."
+description: "Monastery dance tutorial, the St. Louis hip hop move built on a toe-heel weight shift that creates a bouncing illusion. 5 steps plus rhythm and style tips."
 ---
 ## Introduction
 
@@ -49,25 +49,25 @@ The Monastery is an iconic and visually captivating hip hop dance move that show
 ## Frequently Asked Questions
 
 ### What is the Monastery dance?
-The Monastery is a hip hop dance move built on a rapid toe-heel weight shift — lifting the heels while keeping the toes planted, then reversing the motion — which creates a subtle bouncing illusion. Complemented by arm and head movements, it's used across popping, locking, and freestyle hip hop, particularly in battle and cypher settings.
+The Monastery is a hip hop dance move built on a rapid toe-heel weight shift, lifting the heels while keeping the toes planted, then reversing the motion, which creates a subtle bouncing illusion. Complemented by arm and head movements, it's used across popping, locking, and freestyle hip hop, particularly in battle and cypher settings.
 
 ### Where did the Monastery dance come from?
 The Monastery emerged from the St. Louis, Missouri hip hop scene in the early 2000s. It quickly spread to other regions through battles, cyphers, and music videos, becoming a staple move in the broader hip hop footwork vocabulary. It shares technical DNA with LA's Pepperseed and house dance's heel-toe family.
 
 ### Is the Monastery the same as the Pepperseed?
-They're close cousins. Both use the toe-heel weight-shift mechanic to create a bouncing illusion. The Monastery is the St. Louis version with a specific rhythm and arm vocabulary; the Pepperseed is the LA version. Most dancers who know one can quickly learn the other — the core footwork action is identical.
+They're close cousins. Both use the toe-heel weight-shift mechanic to create a bouncing illusion. The Monastery is the St. Louis version with a specific rhythm and arm vocabulary; the Pepperseed is the LA version. Most dancers who know one can quickly learn the other, the core footwork action is identical.
 
 ### How long does it take to learn the Monastery?
 The basic toe-heel motion takes 10-15 minutes to pick up physically. Getting the SMOOTH weight transfer that makes it look like bouncing (rather than hopping) takes 30-60 minutes. Layering in arm pushes and the loose head bobs that give the Monastery its signature groove is another 1-2 practice sessions.
 
 ### What's the most common Monastery mistake?
-Bouncing too high. The Monastery illusion works when the heels barely leave the floor — you should feel the weight transfer more than see vertical movement. Beginners who lift the heels too high break the illusion and turn it into a hop. Keep it low, controlled, and quick.
+Bouncing too high. The Monastery illusion works when the heels barely leave the floor, you should feel the weight transfer more than see vertical movement. Beginners who lift the heels too high break the illusion and turn it into a hop. Keep it low, controlled, and quick.
 
 ## More Hip Hop Dance Moves
 
 If you liked the Monastery, these moves share the same toe-heel bounce illusion and rhythmic footwork-based groove:
 
-- [How to Do the Pepperseed Hip Hop Dance Move](/blog/hip-hop-dance-move-pepperseed) — the Pepperseed uses an identical toe-heel shifting mechanic as the Monastery, originating from LA while the Monastery comes from St. Louis — both are in the same technical family.
-- [House Dance | Loose Leg](/blog/house-dance-loose-leg) — the Loose Leg is the house dance root of this heel-toe bounce family and helps build the smooth, controlled weight transfer that makes the Monastery look effortless.
-- [How to Do the Heel Toe Hip Hop Dance Move](/blog/heel-toe) — the Heel Toe applies the same heel-and-toe pivot mechanics but creates a rocking side-to-side motion rather than a vertical bounce, making both moves great for cross-training footwork control.
-- [How to Do the Party Machine Hip Hop Dance Move](/blog/hip-hop-dance-move-party-machine) — the Party Machine's kick-and-hop alternation pairs well with the Monastery in battle and cypher settings, as both moves are footwork-centric and work at similar tempos.
+- [How to Do the Pepperseed Hip Hop Dance Move](/blog/hip-hop-dance-move-pepperseed), the Pepperseed uses an identical toe-heel shifting mechanic as the Monastery, originating from LA while the Monastery comes from St. Louis, both are in the same technical family.
+- [House Dance | Loose Leg](/blog/house-dance-loose-leg), the Loose Leg is the house dance root of this heel-toe bounce family and helps build the smooth, controlled weight transfer that makes the Monastery look effortless.
+- [How to Do the Heel Toe Hip Hop Dance Move](/blog/heel-toe), the Heel Toe applies the same heel-and-toe pivot mechanics but creates a rocking side-to-side motion rather than a vertical bounce, making both moves great for cross-training footwork control.
+- [How to Do the Party Machine Hip Hop Dance Move](/blog/hip-hop-dance-move-party-machine), the Party Machine's kick-and-hop alternation pairs well with the Monastery in battle and cypher settings, as both moves are footwork-centric and work at similar tempos.

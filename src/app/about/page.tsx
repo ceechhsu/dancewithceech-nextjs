@@ -46,8 +46,8 @@ export default function AboutPage() {
         <div className="mt-12 flex justify-center">
           <Image
             src="/images/ceech/ceech-smiling-portrait.jpg"
-            alt="Ceech — DanceWithCeech"
-            title="Ceech — DanceWithCeech"
+            alt="Ceech, Dance With Ceech"
+            title="Ceech, Dance With Ceech"
             width={400}
             height={500}
             className="rounded-2xl object-cover"
@@ -62,23 +62,23 @@ export default function AboutPage() {
         <div className="mb-16">
           <h2 className="text-2xl font-bold mb-4" style={{ color: "var(--accent-primary)" }}>The Unlikely Beginning</h2>
           <p className="text-lg leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
-            I wasn&apos;t supposed to be a dancer. I was an Electrical Engineering and Computer Science student at UC Berkeley — analytical, logical, and athletic. Then I tore my ACL.
+            I wasn&apos;t supposed to be a dancer. I was an Electrical Engineering and Computer Science student at UC Berkeley: analytical, logical, and athletic. Then I tore my ACL.
           </p>
           <p className="text-lg leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
             Sidelined from snowboarding that winter, I flew back to Taiwan to visit family. A friend introduced me to three guys who had become household names there: the LA Boys. Originally from Los Angeles, they had won major dance competitions in Taiwan and headlined their own shows. I sat down with the oldest brother, Jeff, and heard how they got their start.
           </p>
           <p className="text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-            That conversation changed everything. As an Asian American, I had spent years feeling the pull toward a &quot;safe&quot; path — doctor, engineer, something respectable. Watching these guys own a stage cracked something open: logic and creativity weren&apos;t opposites. I could have both.
+            That conversation changed everything. As an Asian American, I had spent years feeling the pull toward a &quot;safe&quot; path: doctor, engineer, something respectable. Watching these guys own a stage cracked something open: logic and creativity weren&apos;t opposites. I could have both.
           </p>
         </div>
 
         <div className="mb-16">
-          <h2 className="text-2xl font-bold mb-4" style={{ color: "var(--accent-primary)" }}>Learning From the Best</h2>
+          <h2 className="text-2xl font-bold mb-4" style={{ color: "var(--accent-primary)" }}>Learning from mentors</h2>
           <p className="text-lg leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
-            My first real instructor was Gary Kendell — one of the most gifted dancers I have ever seen. From the moment I watched him move, I knew I needed to learn from him. Gary was already being hired by major artists to choreograph and perform — including what we now call K-pop artists, before that term even existed. He became my big brother in dance.
+            My first real instructor was Gary Kendell, a dancer whose teaching shaped my approach. From the moment I watched him move, I knew I needed to learn from him. Gary was already being hired by major artists to choreograph and perform, including artists from Korea before the term K-pop was widely used. He became my big brother in dance.
           </p>
           <p className="text-lg leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
-            In 1999, I connected with Pop&apos;in Pete and Skeeter Rabbit of the legendary Electric Boogaloos — the originators of popping and Electric Boogaloo style. They took me in not just as a student, but like a little brother. I learned not only technique, but the history, culture, and spirit behind the movement.
+            In 1999, I connected with Pop&apos;in Pete and Skeeter Rabbit of the Electric Boogaloos, the originators of popping and Electric Boogaloo style. They took me in not just as a student, but like a little brother. I learned not only technique, but the history, culture, and spirit behind the movement.
           </p>
         </div>
 
@@ -98,13 +98,13 @@ export default function AboutPage() {
         <div className="mb-16">
           <h2 className="text-2xl font-bold mb-4" style={{ color: "var(--accent-primary)" }}>Competing at the Highest Level</h2>
           <p className="text-lg leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
-            In the early 2000s, I formed CaliStyles — a crew built around Electric Boogaloo-style movement that competed and performed across the Bay Area, including as featured guests at UC Santa Cruz.
+            In the early 2000s, I formed CaliStyles, a crew built around Electric Boogaloo-style movement that competed and performed across the Bay Area, including as featured guests at UC Santa Cruz.
           </p>
 
           {/* CaliStyles photos */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>CaliStyles — Featured at UC Santa Cruz</div>
+              <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>CaliStyles, featured at UC Santa Cruz</div>
               <Image
                 src="/images/ceech/calistyles-members-before-uc-santa-cruz-performance.jpg"
                 alt="CaliStyles at UC Santa Cruz"
@@ -116,7 +116,7 @@ export default function AboutPage() {
               />
             </div>
             <div>
-              <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>CaliStyles — Cane Routine</div>
+              <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>CaliStyles, cane routine</div>
               <div style={{ position: 'relative', height: '220px', borderRadius: '12px', overflow: 'hidden' }}>
                 <iframe
                   src="https://www.youtube.com/embed/5gZQwf0VGRY"
@@ -130,15 +130,15 @@ export default function AboutPage() {
           </div>
 
           <p className="text-lg leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
-            I was also a senior member and choreographer of Mindtricks — a Bay Area crew that became one of the most respected in the region. Several founding members of Mindtricks went on to form Jabbawockeez, who won MTV&apos;s America&apos;s Best Dance Crew and today headline their own show at MGM Grand in Las Vegas. One of my CaliStyles crew members, Bionic, went on to become a principal dancer in Michael Jackson ONE, the Cirque du Soleil production in Las Vegas.
+            I was also a senior member and choreographer of Mindtricks, a Bay Area crew. Several founding members of Mindtricks went on to form Jabbawockeez, who won MTV&apos;s America&apos;s Best Dance Crew and later headlined a show at MGM Grand in Las Vegas. One of my CaliStyles crew members, Bionic, went on to become a principal dancer in Michael Jackson ONE, the Cirque du Soleil production in Las Vegas.
           </p>
 
           {/* Mindtricks photo */}
           <div className="my-8">
-            <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>Mindtricks — Many original Jabbawockeez founders pictured</div>
+            <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>Mindtricks, with original Jabbawockeez founders</div>
             <Image
               src="/images/ceech/mindtricks-dance-group-photo.jpg"
-              alt="Mindtricks crew — original Jabbawockeez founders"
+              alt="Mindtricks crew with original Jabbawockeez founders"
               title="Mindtricks crew with original Jabbawockeez founders"
               width={700}
               height={450}
@@ -147,13 +147,13 @@ export default function AboutPage() {
           </div>
 
           <p className="text-lg leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
-            Later, I formed DS Players. In 2007, we entered Body Rock — one of the most prestigious international hip-hop dance competitions in the country, drawing over 15 crews from across the US and abroad. We took 1st place.
+            Later, I formed DS Players. In 2007, we entered Body Rock, an international hip-hop dance competition that drew crews from across the US and abroad. We took 1st place.
           </p>
 
           {/* Body Rock winner photo + video */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>DS Players — Body Rock 2007 Champions</div>
+              <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>DS Players, Body Rock 2007 winners</div>
               <Image
                 src="/images/ceech/dsplayers-2006-body-rock-winners.jpg"
                 alt="DS Players winning Body Rock 2007"
@@ -165,7 +165,7 @@ export default function AboutPage() {
               />
             </div>
             <div>
-              <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>DS Players — Body Rock 2007 Performance</div>
+              <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>DS Players, Body Rock 2007 performance</div>
               <a
                 href="https://www.youtube.com/watch?v=xjQF9YUDuDY"
                 target="_blank"
@@ -213,7 +213,7 @@ export default function AboutPage() {
             I earned my Master of Arts in Kinesiology from Fresno Pacific University in 2016. Combined with my engineering background, it informs how I break movement into clear, practical steps.
           </p>
           <p className="text-lg leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
-            I currently teach hip-hop dance at Mission College, West Valley College, and Cabrillo College, and weight training at Gavilan College. I taught hip-hop at Gavilan from 2018 to 2020.
+            My college teaching has included hip-hop dance at Mission College, West Valley College, and Cabrillo College, plus weight training at Gavilan College. I taught hip-hop at Gavilan from 2018 to 2020.
           </p>
           <div className="grid grid-cols-2 gap-3 mb-6">
             {['Mission College', 'West Valley College', 'Cabrillo College', 'Gavilan College'].map(school => (
@@ -223,7 +223,7 @@ export default function AboutPage() {
             ))}
           </div>
           <p className="text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-            Beyond academia, I&apos;ve taught at corporate campuses including <strong style={{ color: 'var(--foreground)' }}>Google</strong> and <strong style={{ color: 'var(--foreground)' }}>LinkedIn</strong>, fitness chains including 24 Hour Fitness, and multiple dance studios throughout the Bay Area. I am co-founder of <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}><strong style={{ color: 'var(--foreground)' }}>Get Down Dance Studios</strong></a> in San Jose, California. Growing up in the dance community, I learned early how to make every dollar stretch — that mindset led me to build <a href="https://krazy.deals" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}><strong style={{ color: 'var(--foreground)' }}>Krazy.Deals</strong></a>, where I share the best promo codes and deals I find. <Link href="/blog/how-krazy-deals-started" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}>Here&apos;s how it started.</Link>
+            Beyond academia, I&apos;ve taught at corporate campuses including <strong style={{ color: 'var(--foreground)' }}>Google</strong>, fitness chains including 24 Hour Fitness, and multiple dance studios throughout the Bay Area. I am co-founder of <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}><strong style={{ color: 'var(--foreground)' }}>Get Down Dance Studios</strong></a> in San Jose, California. Growing up in the dance community, I learned early how to make every dollar stretch. That mindset led me to build <a href="https://krazy.deals" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}><strong style={{ color: 'var(--foreground)' }}>Krazy.Deals</strong></a>, where I share the best promo codes and deals I find. <Link href="/blog/how-krazy-deals-started" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}>Here&apos;s how it started.</Link>
           </p>
         </div>
 
@@ -236,7 +236,7 @@ export default function AboutPage() {
             Dance teachers often say it&apos;s hard to teach analytical, left-brained people how to dance. I disagree. I have been helping analytical learners understand dance since 1998.
           </p>
           <p className="text-lg leading-relaxed mb-8" style={{ color: "var(--muted)" }}>
-            My background in engineering isn&apos;t separate from my teaching — it&apos;s the core of it. I break movement down into logical, repeatable steps. I explain the mechanics behind every groove. I give students a system, not just inspiration.
+            My background in engineering isn&apos;t separate from my teaching. It&apos;s the core of it. I break movement down into logical, repeatable steps. I explain the mechanics behind every groove. I give students a system, not just inspiration.
           </p>
           {/* Pull quote */}
           <blockquote style={{
@@ -245,14 +245,14 @@ export default function AboutPage() {
             margin: '0',
           }}>
             <p className="text-2xl font-bold leading-snug" style={{ color: 'var(--foreground)' }}>
-              &ldquo;Dance is not a gift. It is a skill. And every skill can be taught — if you have the right method.&rdquo;
+              &ldquo;Dance is not a gift. It is a skill. Skills can be taught when the method is clear and the student practices.&rdquo;
             </p>
           </blockquote>
 
           <div className="mt-12 flex justify-center">
             <Image
               src="/images/ceech/ceech-thinking-dance-pose.jpg"
-              alt="Ceech — teaching philosophy"
+              alt="Ceech, teaching philosophy"
               title="Ceech explaining his dance teaching philosophy"
               width={500}
               height={600}
@@ -285,11 +285,11 @@ export default function AboutPage() {
       <section className="py-24 px-6 text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to start?</h2>
         <p className="text-lg mb-10 max-w-xl mx-auto" style={{ color: "var(--muted)" }}>
-          Begin with BeatFirst — the free rhythm trainer. No dance experience required. No judgment.
+          Begin with BeatFirst, the free rhythm trainer. No dance experience required. No judgment.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/beat-first" className="px-8 py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: "var(--accent-primary)" }}>
-            Play BeatFirst — Free
+            Play BeatFirst Free
           </Link>
           <Link href="/private-lessons" className="px-8 py-4 rounded-full font-semibold transition-colors hover:text-white" style={{ border: "1px solid #333", color: "var(--muted)" }}>
             Book a Private Lesson

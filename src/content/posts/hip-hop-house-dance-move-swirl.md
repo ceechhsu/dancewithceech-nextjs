@@ -51,7 +51,7 @@ The Swirl is a captivating and dynamic house dance move that showcases the creat
 
 If you liked the Swirl, these moves share the same pivot-and-turn or continuous rotational footwork:
 
-- [How to Learn the Crossroads House Dance Move](/blog/crossroads) — Crossroads uses the same pivot-on-the-ball-of-your-foot mechanics as the Swirl, so both moves strengthen the same ankle control and weight-transfer skill.
-- [How to Do the Tip Tap Toe House Dance Move](/blog/hip-hop-house-dance-move-tip-tap-toe) — both are intricate footwork patterns rooted in the Chicago/NY club scene that demand precision and rhythmic control rather than large traveling steps.
-- [House Dance | The Setup Move Explained](/blog/house-setup) — because the Swirl is a continuous motion, learning the Setup will help you enter and exit the Swirl cleanly within a longer combination.
-- [How to Do the Crosswalk House Dance Move](/blog/house-crosswalk) — the Crosswalk also involves alternating steps with directional changes, giving you a complementary way to travel the floor after a Swirl sequence.
+- [How to Learn the Crossroads House Dance Move](/blog/crossroads), Crossroads uses the same pivot-on-the-ball-of-your-foot mechanics as the Swirl, so both moves strengthen the same ankle control and weight-transfer skill.
+- [How to Do the Tip Tap Toe House Dance Move](/blog/hip-hop-house-dance-move-tip-tap-toe), both are intricate footwork patterns rooted in the Chicago/NY club scene that demand precision and rhythmic control rather than large traveling steps.
+- [House Dance | The Setup Move Explained](/blog/house-setup), because the Swirl is a continuous motion, learning the Setup will help you enter and exit the Swirl cleanly within a longer combination.
+- [How to Do the Crosswalk House Dance Move](/blog/house-crosswalk), the Crosswalk also involves alternating steps with directional changes, giving you a complementary way to travel the floor after a Swirl sequence.

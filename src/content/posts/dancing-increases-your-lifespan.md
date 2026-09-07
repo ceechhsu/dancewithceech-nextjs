@@ -3,7 +3,7 @@ title: "Dancing Increases Your Lifespan"
 slug: "dancing-increases-your-lifespan"
 date: "2022-08-23 20:46:40"
 category: "general"
-description: "Learn how dancing may support brain health, social connection, and healthy aging—and why dancers can live longer, happier lives."
+description: "Learn how dancing may support brain health, social connection, and healthy aging, and why dancers can live longer, happier lives."
 ---
 I have always thought dancers looked younger than their actual age.  Maybe it's because they live an active lifestyle. I think there is something special about dancers in general.  Could it be because the music? Could it be because the feeling that it brings to the dancers while they are dancing?
 
@@ -25,7 +25,7 @@ There are so many benefits to dancing. Yet the one thing that holds most of us b
 
 ## Read Next
 
-- [Groove to Wellness: Mental Benefits of Dance in the Bay Area](/blog/groove-to-wellness-unlocking-the-mental-benefits-of-dance-in-the-bay-area-2024) — the companion piece: where this article covers longevity, that one goes deep on stress relief, brain chemistry, and neurological benefits
-- [Dance Is Hard — Here's Why You Should Keep Going](/blog/reality-hits-you-in-the-face) — knowing the benefits is one thing; staying in it long enough to get them is another
-- [How to Do the Running Man Hip Hop Dance Move](/blog/hip-hop-dance-move-running-man) — if you want to start moving, this is one of the most beginner-friendly hip-hop moves to learn first
-- [6 Simple Steps To Learn The Happy Feet](/blog/happy-feet) — low barrier, high fun — exactly the kind of move that keeps people dancing for decades
+- [Groove to Wellness: Mental Benefits of Dance in the Bay Area](/blog/groove-to-wellness-unlocking-the-mental-benefits-of-dance-in-the-bay-area-2024), the companion piece: where this article covers longevity, that one goes deep on stress relief, brain chemistry, and neurological benefits
+- [Dance Is Hard, Here's Why You Should Keep Going](/blog/reality-hits-you-in-the-face), knowing the benefits is one thing; staying in it long enough to get them is another
+- [How to Do the Running Man Hip Hop Dance Move](/blog/hip-hop-dance-move-running-man), if you want to start moving, this is one of the most beginner-friendly hip-hop moves to learn first
+- [6 Simple Steps To Learn The Happy Feet](/blog/happy-feet), low barrier, high fun, exactly the kind of move that keeps people dancing for decades

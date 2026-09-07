@@ -10,7 +10,7 @@ type Props = {
 export default function RunningManTeaser({
   eyebrow = "See the move",
   title = "This is the Running Man",
-  copy = "In the four-week program, Ceech teaches the rhythm, balance, and coordination behind this move—with personal feedback so you can dance it with confidence.",
+  copy = "In the four-week program, Ceech teaches the rhythm, balance, and coordination behind this move, with personal feedback and practice between sessions.",
 }: Props) {
   return (
     <section aria-labelledby="running-man-teaser-heading" className="border-y border-white/10 bg-[#0D0D0D] px-5 py-16 sm:px-8 lg:py-20">

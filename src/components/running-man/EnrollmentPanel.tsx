@@ -24,7 +24,7 @@ const ANALYTICS_TIER = {
 function tierNote(tier: EnrollmentTier, state: EnrollmentState | null): string {
   if (!state) return "Availability is being confirmed.";
   if (tier.status === "active") return "Current enrollment price";
-  if (tier.status === "complete") return "Sold out — this price is no longer available.";
+  if (tier.status === "complete") return "Sold out: this price is no longer available.";
   if (tier.status === "held") return "This price tier is temporarily held by another checkout.";
   if (tier.status === "under_review") return "Availability is under review.";
   if (tier.status === "unavailable") return "Currently unavailable.";
@@ -105,7 +105,7 @@ export default function EnrollmentPanel() {
   const total = enrollmentPrice !== null ? enrollmentPrice + (selectedCoaching ? 100 : 0) : null;
   const canCheckout = Boolean(state?.canStartCheckout && acknowledged && !isSubmitting);
   const showWaitlist = state?.enrollmentStatus === "sold_out";
-  const checkoutLabel = selectedCoaching && total !== null ? `Claim your seat — $${total}` : state?.currentCta.label ?? "Checking availability…";
+  const checkoutLabel = selectedCoaching && total !== null ? `Claim your seat: $${total}` : state?.currentCta.label ?? "Checking availability...";
 
   async function beginCheckout() {
     if (!state || !canCheckout) return;
@@ -238,7 +238,7 @@ export default function EnrollmentPanel() {
               {tierSoldOut ? <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-3xl"><Image alt="SOLD OUT" src="/running-man/sold-out-stamp-option-2.png" width={2067} height={761} className="absolute left-1/2 top-16 h-auto w-[105%] -translate-x-1/2 -rotate-[12deg] object-contain opacity-80 brightness-75 contrast-125" /></div> : null}
               {index === 1 ? <span className="absolute -top-3 left-7 z-20 rounded-full bg-[#FDB515] px-3 py-1 text-xs font-extrabold uppercase tracking-[0.12em] text-black">Best founding price</span> : null}
               <div className="relative z-10">
-                <p className={`mt-2 text-xs font-bold uppercase tracking-[0.18em] ${tierLabelColor}`}>{copy.label} — ${copy.price}</p>
+                <p className={`mt-2 text-xs font-bold uppercase tracking-[0.18em] ${tierLabelColor}`}>{copy.label}: ${copy.price}</p>
                 <p className={`mt-5 font-display text-6xl font-extrabold ${tierPriceColor}`}>${copy.price}</p>
                 <p className="mt-3 min-h-12 text-sm leading-6 text-white/65">{copy.saving}</p>
                 {availabilityCopy ? <p className={`mt-5 font-display text-xl font-bold ${active ? "text-[#FDB515]" : "text-white/80"}`}>{availabilityCopy}</p> : null}
@@ -256,8 +256,8 @@ export default function EnrollmentPanel() {
           <Sparkles aria-hidden="true" className={`mt-1 h-6 w-6 shrink-0 ${coachingSoldOut ? "text-white/40" : "text-[#60A5FA]"}`} />
           <div>
             <p className={`text-xs font-bold uppercase tracking-[0.18em] ${coachingSoldOut ? "text-white/45" : "text-[#60A5FA]"}`}>{coachingSoldOut ? "Private coaching availability" : "Limited to three students"}</p>
-            <h3 className="mt-3 font-display text-3xl font-bold uppercase text-white">{coachingSoldOut ? "Private Coaching — Sold Out" : "Add Private Coaching for $100"}</h3>
-            <p className="mt-3 text-sm leading-6 text-white/70">Two 20-minute private check-ins with Ceech—one in Week 1 and one in Week 3—focused on your specific challenges.</p>
+            <h3 className="mt-3 font-display text-3xl font-bold uppercase text-white">{coachingSoldOut ? "Private Coaching: Sold Out" : "Add Private Coaching for $100"}</h3>
+            <p className="mt-3 text-sm leading-6 text-white/70">Two 20-minute private check-ins with Ceech, one in Week 1 and one in Week 3, focused on your specific challenges.</p>
           </div>
         </div>
         <label aria-disabled={!coachingAvailable} className={`relative z-20 mt-7 flex cursor-pointer gap-4 rounded-2xl border p-5 transition ${coachingAvailable ? "border-[#60A5FA]/45 bg-[#2563EB]/10 hover:bg-[#2563EB]/15" : "cursor-not-allowed border-white/10 bg-black/20"}`}>
@@ -342,7 +342,7 @@ export default function EnrollmentPanel() {
       </div>
 
       {notice ? <div role="status" aria-live="polite" className="mt-5 flex gap-3 rounded-2xl border border-[#FDB515]/35 bg-[#15120A] p-5 text-sm leading-6 text-white/85"><CircleAlert aria-hidden="true" className="h-5 w-5 shrink-0 text-[#FDB515]" />{notice}</div> : null}
-      <p className="mt-7 rounded-2xl border border-white/10 bg-white/[0.025] p-6 text-center text-sm leading-6 text-white/65">Enrollment closes September 17, 2026, at 11:59 p.m. Pacific Time—or immediately when all 12 seats are filled. The cohort requires at least eight students. If Ceech cancels or postpones it, you may choose a full refund or transfer after the next cohort dates are confirmed.</p>
+      <p className="mt-7 rounded-2xl border border-white/10 bg-white/[0.025] p-6 text-center text-sm leading-6 text-white/65">Enrollment closes September 17, 2026, at 11:59 p.m. Pacific Time, or immediately when all 12 seats are filled. The cohort requires at least eight students. If Ceech cancels or postpones it, you may choose a full refund or transfer after the next cohort dates are confirmed.</p>
     </div>
   );
 }

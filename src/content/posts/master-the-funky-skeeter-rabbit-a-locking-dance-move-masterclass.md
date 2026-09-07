@@ -47,7 +47,7 @@ The Skeeter Rabbit is a true testament to the creativity and innovation of the l
 The Skeeter Rabbit is a signature locking dance move built on a kick-step-kick-hop footwork pattern combined with alternating "running motion" arm swings. It's a traveling move that crosses the floor while showcasing syncopated rhythm and the locking style's characteristic groove. Created in the early 1970s, it remains a cornerstone of locking vocabulary.
 
 ### Who created the Skeeter Rabbit move?
-The Skeeter Rabbit was created by James "Skeeter Rabbit" Higgins, one of the original members of The Lockers — the legendary locking crew founded in Los Angeles in the early 1970s. Higgins earned the nickname "Skeeter Rabbit" for his lightning-fast execution of the move, and the move was named after him. He's one of locking's founding pioneers.
+The Skeeter Rabbit was created by James "Skeeter Rabbit" Higgins, one of the original members of The Lockers , the legendary locking crew founded in Los Angeles in the early 1970s. Higgins earned the nickname "Skeeter Rabbit" for his lightning-fast execution of the move, and the move was named after him. He's one of locking's founding pioneers.
 
 ### Who are The Lockers dance crew?
 The Lockers are the legendary locking dance crew founded in Los Angeles in the early 1970s by Don "Campbellock" Campbell. Members included Fred Berry (Rerun from "What's Happening!!"), Toni Basil, Adolfo "Shabba-Doo" Quiñones, James "Skeeter Rabbit" Higgins, and others. The crew codified locking dance vocabulary and popularized it through TV appearances on Soul Train and other shows.
@@ -56,13 +56,13 @@ The Lockers are the legendary locking dance crew founded in Los Angeles in the e
 Most beginners can learn the basic kick-step-kick-hop pattern in 20-30 minutes. Adding the "running motion" arm swings in proper sync with the leg action takes another 30-60 minutes. Building it up to a traveling flow across the floor at musical speed takes 1-2 weeks of daily practice.
 
 ### What's the most common Skeeter Rabbit mistake?
-Rushing the arm swings. The Skeeter Rabbit's signature look comes from the EXAGGERATED, running-motion arm swing that alternates with each kick — if the arms are small or out of sync, the move loses its locking character. Commit to big, confident arm swings that mirror your leg alternation exactly.
+Rushing the arm swings. The Skeeter Rabbit's signature look comes from the EXAGGERATED, running-motion arm swing that alternates with each kick , if the arms are small or out of sync, the move loses its locking character. Commit to big, confident arm swings that mirror your leg alternation exactly.
 
 ## More Locking Dance Moves
 
 If you liked the Skeeter Rabbit, these moves share the same footwork-driven, traveling character:
 
-- [Master the Scooby Doo: A Locking Dance Move with Personality](/blog/master-the-funky-scooby-doo-a-locking-dance-move-with-personality) — Created by the same 1970s locking generation, the Scooby Doo shares the Skeeter Rabbit's forward-traveling kick pattern and requires the same alternating arm-leg coordination.
-- [Mastering the Leo Walk: An Iconic Locking Dance Move](/blog/unleash-your-funk-mastering-the-iconic-leo-walk) — The Leo Walk is another footwork-centered locking move that uses knee lifts and hip pushes to travel across the floor, building on the same lower-body rhythmic awareness the Skeeter Rabbit develops.
-- [Mastering the Pacing Move in Locking Dance](/blog/unlock-the-rhythm-mastering-the-pacing-move-in-locking-dance) — Pacing teaches you how to swing your arms in rhythm with your steps, directly reinforcing the arm-running motion that drives the Skeeter Rabbit.
-- [Mastering the Sneak: A Classic Locking Move](/blog/mastering-the-sneak-a-classic-locking-move) — Both the Skeeter Rabbit and the Sneak require smooth weight shifts and sliding footwork, making them complementary techniques for building clean footwork control.
+- [Master the Scooby Doo: A Locking Dance Move with Personality](/blog/master-the-funky-scooby-doo-a-locking-dance-move-with-personality) , Created by the same 1970s locking generation, the Scooby Doo shares the Skeeter Rabbit's forward-traveling kick pattern and requires the same alternating arm-leg coordination.
+- [Mastering the Leo Walk: An Iconic Locking Dance Move](/blog/unleash-your-funk-mastering-the-iconic-leo-walk) , The Leo Walk is another footwork-centered locking move that uses knee lifts and hip pushes to travel across the floor, building on the same lower-body rhythmic awareness the Skeeter Rabbit develops.
+- [Mastering the Pacing Move in Locking Dance](/blog/unlock-the-rhythm-mastering-the-pacing-move-in-locking-dance) , Pacing teaches you how to swing your arms in rhythm with your steps, directly reinforcing the arm-running motion that drives the Skeeter Rabbit.
+- [Mastering the Sneak: A Classic Locking Move](/blog/mastering-the-sneak-a-classic-locking-move) , Both the Skeeter Rabbit and the Sneak require smooth weight shifts and sliding footwork, making them complementary techniques for building clean footwork control.

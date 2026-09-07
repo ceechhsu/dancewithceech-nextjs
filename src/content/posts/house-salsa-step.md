@@ -45,13 +45,13 @@ The Salsa Step finds its origins in the cross-pollination of Latin dance and the
 
 ## Conclusion
 
-The Hip Hop House Salsa Step is more than just a move—it's a celebration of cultural unity and the joy of dance. By blending the spirited steps of Latin Salsa with the innovative essence of Hip Hop House, dancers can experience an exhilarating fusion that challenges and delights. The Salsa Step keeps feet tapping, hips swaying, and the dance floor alive with the spirit of diversity and connection.
+The Hip Hop House Salsa Step is more than just a move, it's a celebration of cultural unity and the joy of dance. By blending the spirited steps of Latin Salsa with the innovative essence of Hip Hop House, dancers can experience an exhilarating fusion that challenges and delights. The Salsa Step keeps feet tapping, hips swaying, and the dance floor alive with the spirit of diversity and connection.
 
 ## More Hip Hop Dance Moves
 
 If you liked the Salsa Step, these moves share the same step-tap rhythm, forward-back axis, or Latin-influenced hip movement:
 
-- [How to Do the Tip Tap Toe House Dance Move](/blog/hip-hop-house-dance-move-tip-tap-toe) — both moves are built on deliberate taps with no weight transfer on the tap foot, so the light-touch footwork mechanic is identical and they pair naturally in a combo.
-- [House Dance | Roger Rabbit](/blog/house-roger-rabbit) — the Roger Rabbit works the same front-back floor axis as the Salsa Step but with a hop-and-drag quality, giving you two contrasting textures along the same spatial line.
-- [How to Do the Jack In The Box House Dance Move](/blog/house-dance-jack-in-the-box) — the Jack In The Box develops the in-place rhythmic bounce and hip movement that underpins the Salsa Step's groove, making it a strong foundational companion.
-- [House Dance | Sidewalk](/blog/house-sidewalk) — once you can hold the Salsa Step's front-back rhythm, the Sidewalk teaches you to apply a similar step-and-tap pattern along a lateral axis, expanding your spatial vocabulary.
+- [How to Do the Tip Tap Toe House Dance Move](/blog/hip-hop-house-dance-move-tip-tap-toe), both moves are built on deliberate taps with no weight transfer on the tap foot, so the light-touch footwork mechanic is identical and they pair naturally in a combo.
+- [House Dance | Roger Rabbit](/blog/house-roger-rabbit), the Roger Rabbit works the same front-back floor axis as the Salsa Step but with a hop-and-drag quality, giving you two contrasting textures along the same spatial line.
+- [How to Do the Jack In The Box House Dance Move](/blog/house-dance-jack-in-the-box), the Jack In The Box develops the in-place rhythmic bounce and hip movement that underpins the Salsa Step's groove, making it a strong foundational companion.
+- [House Dance | Sidewalk](/blog/house-sidewalk), once you can hold the Salsa Step's front-back rhythm, the Sidewalk teaches you to apply a similar step-and-tap pattern along a lateral axis, expanding your spatial vocabulary.

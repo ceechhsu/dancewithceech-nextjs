@@ -4,7 +4,7 @@ seoTitle: "How to Do the Real 80s Harlem Shake"
 slug: "harlem-shake"
 date: "2024-05-13 21:02:53"
 category: "hip-hop-dance-moves"
-description: "Learn the real 1980s Harlem Shake—not the 2013 meme—with a step-by-step tutorial for the shoulder shimmy, torso shake, and authentic style."
+description: "Learn the real 1980s Harlem Shake, not the 2013 meme, with a step-by-step tutorial for the shoulder shimmy, torso shake, and authentic style."
 ---
 ## The Harlem Shake and Its Enduring Hip Hop Legacy
 
@@ -40,7 +40,7 @@ The dance became mainstream when it appeared in music videos and was performed b
 
 - Focus on isolating the shoulders and gradually allow the movement to flow through your arms.
 
-- Don't overthink the movements—the Harlem Shake thrives on being unstudied and genuine.
+- Don't overthink the movements, the Harlem Shake thrives on being unstudied and genuine.
 
 - Incorporate your unique style into the shake, making the move your own.
 
@@ -53,7 +53,7 @@ The Harlem Shake stands as a potent symbol of Hip Hop's enduring ability to brin
 ## Frequently Asked Questions
 
 ### What is the Harlem Shake dance?
-The Harlem Shake is a 1980s hip-hop street dance that originated in Harlem, New York. It's built on loose shoulder shimmies, torso shakes, and free-flowing upper-body movement. It is NOT the same as the 2013 Harlem Shake internet meme — that viral video trend used Baauer's song but had no connection to the original dance.
+The Harlem Shake is a 1980s hip-hop street dance that originated in Harlem, New York. It's built on loose shoulder shimmies, torso shakes, and free-flowing upper-body movement. It is NOT the same as the 2013 Harlem Shake internet meme, that viral video trend used Baauer's song but had no connection to the original dance.
 
 ### Is the Harlem Shake the same as the 2013 meme?
 No. The 2013 meme (one dancer going wild while others stand still, then everyone joins in) used Baauer's 2012 song "Harlem Shake" but the choreography had no relation to the actual dance. The real Harlem Shake is a specific 1980s hip-hop street move from Harlem.
@@ -62,16 +62,16 @@ No. The 2013 meme (one dancer going wild while others stand still, then everyone
 The Harlem Shake was created in the early 1980s by a Harlem resident named Al B, who jokingly described it as an "alcoholic shake." Despite the name, the dance itself was inspired by an ancient Egyptian dance step called "the pharaoh."
 
 ### How long does it take to learn the Harlem Shake?
-Most beginners can pick up the basic shoulder shimmy and loose upper-body motion in 15–20 minutes of practice. The real challenge isn't the technique — it's loosening up enough to let the shake feel natural rather than forced.
+Most beginners can pick up the basic shoulder shimmy and loose upper-body motion in 15–20 minutes of practice. The real challenge isn't the technique, it's loosening up enough to let the shake feel natural rather than forced.
 
 ### What's the most common mistake when learning the Harlem Shake?
-Trying to shake everything at once. Start with just the shoulders — get the alternating shoulder shimmy solid first, then let it naturally flow down through your arms and into your torso. Adding the knees and hips comes last.
+Trying to shake everything at once. Start with just the shoulders, get the alternating shoulder shimmy solid first, then let it naturally flow down through your arms and into your torso. Adding the knees and hips comes last.
 
 ## More Hip Hop Dance Moves
 
 If you liked the Harlem Shake, these moves share the same loose-limbed, upper-body-led isolation style rooted in street culture:
 
-- [How to Do the Tone Wop Hip Hop Dance Move](/blog/hip-hop-dance-move-tone-wop) — the Tone Wop also comes from Harlem and uses the same weight-shifting bounce that underlies the Harlem Shake, making it a direct neighborhood counterpart.
-- [How to Do the Smurf Hip Hop Dance Move](/blog/hip-hop-dance-move-smurf) — the Smurf's bouncing and alternating arm swings share the Harlem Shake's emphasis on loose, rhythmic upper-body freedom over precise footwork.
-- [5 Easy Steps to Learn The Bankhead Bounce](/blog/bankhead-bounce) — the Bankhead Bounce is a Southern parallel to the Harlem Shake — both are city-named street moves defined by attitude and a relaxed, community groove rather than strict technique.
-- [How to Do the Prep Hip Hop Dance Move](/blog/hip-hop-dance-move-prep) — the Prep shares the Harlem Shake's emphasis on self-expression and personality, using exaggerated body actions to tell a story rather than relying on footwork complexity.
+- [How to Do the Tone Wop Hip Hop Dance Move](/blog/hip-hop-dance-move-tone-wop), the Tone Wop also comes from Harlem and uses the same weight-shifting bounce that underlies the Harlem Shake, making it a direct neighborhood counterpart.
+- [How to Do the Smurf Hip Hop Dance Move](/blog/hip-hop-dance-move-smurf), the Smurf's bouncing and alternating arm swings share the Harlem Shake's emphasis on loose, rhythmic upper-body freedom over precise footwork.
+- [5 Easy Steps to Learn The Bankhead Bounce](/blog/bankhead-bounce), the Bankhead Bounce is a Southern parallel to the Harlem Shake, both are city-named street moves defined by attitude and a relaxed, community groove rather than strict technique.
+- [How to Do the Prep Hip Hop Dance Move](/blog/hip-hop-dance-move-prep), the Prep shares the Harlem Shake's emphasis on self-expression and personality, using exaggerated body actions to tell a story rather than relying on footwork complexity.

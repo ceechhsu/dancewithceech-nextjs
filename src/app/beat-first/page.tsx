@@ -5,11 +5,11 @@ import { auth } from '@/auth'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 
 export const metadata = {
-  title: 'BeatFirst — Rhythm Trainer | DanceWithCeech',
+  title: 'BeatFirst: Rhythm Trainer | DanceWithCeech',
   description: 'Use BeatFirst, a free online rhythm trainer for dancers. Tap along to real drum beats, measure your timing, and build the rhythm foundation dance requires.',
   alternates: { canonical: 'https://dancewithceech.com/beat-first' },
   openGraph: {
-    title: 'BeatFirst — Rhythm Trainer | DanceWithCeech',
+    title: 'BeatFirst: Rhythm Trainer | DanceWithCeech',
     description: 'Use a free online rhythm trainer to measure your timing and build the rhythm foundation dance requires.',
     url: 'https://dancewithceech.com/beat-first',
     siteName: 'DanceWithCeech',
@@ -18,7 +18,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BeatFirst — Rhythm Trainer | DanceWithCeech',
+    title: 'BeatFirst: Rhythm Trainer | DanceWithCeech',
     description: 'Use a free online rhythm trainer to measure your timing and build the rhythm foundation dance requires.',
     images: ['https://dancewithceech.com/images/ceech/ceech-samy-teaching-knee-pop.jpg'],
   },
@@ -68,7 +68,7 @@ export default async function BeatFirstPage() {
             {[
               ['1. Listen', 'Hear the pulse in a real drum groove before you move.'],
               ['2. Tap', 'Tap along and let BeatFirst measure your timing.'],
-              ['3. Improve', 'Repeat the exercise and watch your rhythm score become more consistent.'],
+              ['3. Repeat', 'Run the exercise again and compare your timing from beat to beat.'],
             ].map(([title, copy]) => (
               <div key={title} className="rounded-2xl p-6" style={{ backgroundColor: 'var(--background)', border: '1px solid #1f1f1f' }}>
                 <h3 className="font-bold">{title}</h3>

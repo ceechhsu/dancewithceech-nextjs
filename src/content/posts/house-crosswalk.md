@@ -51,7 +51,7 @@ The Crosswalk is more than just a journey of the feet; it's a rich visual tapest
 
 If you liked the Crosswalk, these moves share the same traveling quality or cross-step footwork:
 
-- [How to Learn the Crossroads House Dance Move](/blog/crossroads) — Crossroads uses a very similar cross-step mechanics where one foot crosses in front of or behind the other, making the two moves essentially variations of the same family.
-- [House Dance | Sidewalk](/blog/house-sidewalk) — both are traveling moves that cover ground laterally; once you own the Crosswalk, the Sidewalk gives you a complementary way to glide the floor from side to side.
-- [House Dance | Skate](/blog/house-skate) — like the Crosswalk, the Skate is about moving fluidly through space with smooth, gliding footwork, and the two pair well when you want to chain traveling sequences.
-- [House Dance | Train](/blog/house-dance-move-train) — the Train is another floor-covering traveling move with a strong rhythmic side-to-side pulse, and it's a good foundational reference for understanding how house dance moves through space.
+- [How to Learn the Crossroads House Dance Move](/blog/crossroads), Crossroads uses a very similar cross-step mechanics where one foot crosses in front of or behind the other, making the two moves essentially variations of the same family.
+- [House Dance | Sidewalk](/blog/house-sidewalk), both are traveling moves that cover ground laterally; once you own the Crosswalk, the Sidewalk gives you a complementary way to glide the floor from side to side.
+- [House Dance | Skate](/blog/house-skate), like the Crosswalk, the Skate is about moving fluidly through space with smooth, gliding footwork, and the two pair well when you want to chain traveling sequences.
+- [House Dance | Train](/blog/house-dance-move-train), the Train is another floor-covering traveling move with a strong rhythmic side-to-side pulse, and it's a good foundational reference for understanding how house dance moves through space.

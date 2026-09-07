@@ -39,13 +39,13 @@ The Leo Walk was created by Leo Lundy, one of the original Lockers and a pioneer
 
 ## Conclusion
 
-The Leo Walk is a true embodiment of the Locking dance style, combining technical precision with raw funk and attitude. By mastering this foundational move, dancers can tap into the essence of Locking and unleash their creativity on the dance floor. Whether performed as a standalone step or integrated into intricate routines, the Leo Walk remains a timeless and iconic move that continues to inspire and captivate audiences worldwide.
+The Leo Walk combines technical precision with raw funk and attitude. By practicing this foundational move, dancers can study the essence of Locking and develop their own choices on the dance floor. Whether performed as a standalone step or integrated into intricate routines, the Leo Walk remains an iconic move from the style's history.
 
 ## More Locking Dance Moves
 
 If you liked the Leo Walk, these moves share the same traveling footwork with hip-driven rhythm:
 
-- [Master the Skeeter Rabbit: A Locking Dance Move Masterclass](/blog/master-the-funky-skeeter-rabbit-a-locking-dance-move-masterclass) — The Skeeter Rabbit is the Leo Walk's closest footwork cousin — both are traveling patterns from The Lockers era that pair rhythmic kicks with forward momentum.
-- [Master the Scooby Doo: A Locking Dance Move with Personality](/blog/master-the-funky-scooby-doo-a-locking-dance-move-with-personality) — Like the Leo Walk, the Scooby Doo is a traveling move with a strong character identity, requiring coordinated arm-and-leg alternation as you move across the floor.
-- [Mastering the Pimp Walk: An Iconic Locking Dance Move](/blog/unleash-your-swagger-mastering-the-iconic-pimp-walk-in-locking) — Both the Leo Walk and the Pimp Walk are locomotor locking moves where the quality of your hip and upper-body attitude defines the move — technically different, but they live in the same stylistic category.
-- [Mastering the Pacing Move in Locking Dance](/blog/unlock-the-rhythm-mastering-the-pacing-move-in-locking-dance) — Pacing gives you a rhythmic arm framework that sits naturally on top of the Leo Walk's footwork, letting you layer arm accents onto the walk without disrupting its groove.
+- [Master the Skeeter Rabbit: A Locking Dance Move Masterclass](/blog/master-the-funky-skeeter-rabbit-a-locking-dance-move-masterclass): The Skeeter Rabbit is the Leo Walk's closest footwork cousin. Both are traveling patterns from The Lockers era that pair rhythmic kicks with forward momentum.
+- [Master the Scooby Doo: A Locking Dance Move with Personality](/blog/master-the-funky-scooby-doo-a-locking-dance-move-with-personality): Like the Leo Walk, the Scooby Doo is a traveling move with a strong character identity, requiring coordinated arm-and-leg alternation as you move across the floor.
+- [Mastering the Pimp Walk: An Iconic Locking Dance Move](/blog/unleash-your-swagger-mastering-the-iconic-pimp-walk-in-locking): Both the Leo Walk and the Pimp Walk are locomotor locking moves where the quality of your hip and upper-body attitude defines the move. They are technically different, but they live in the same stylistic category.
+- [Mastering the Pacing Move in Locking Dance](/blog/unlock-the-rhythm-mastering-the-pacing-move-in-locking-dance): Pacing gives you a rhythmic arm framework that sits naturally on top of the Leo Walk's footwork, letting you layer arm accents onto the walk without disrupting its groove.

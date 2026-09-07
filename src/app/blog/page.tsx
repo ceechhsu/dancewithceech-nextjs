@@ -174,15 +174,15 @@ export default function BlogPage() {
           <div className="rounded-2xl p-8 flex flex-col gap-4" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
             <div className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--accent-primary)" }}>Free</div>
             <h3 className="text-lg font-bold">Train Your Rhythm</h3>
-            <p className="text-sm flex-1" style={{ color: "var(--muted)" }}>Every dance move starts with timing. BeatFirst builds that foundation — free, no sign-up required.</p>
+            <p className="text-sm flex-1" style={{ color: "var(--muted)" }}>Every dance move starts with timing. BeatFirst builds that foundation. It is free, with no sign-up required.</p>
             <Link href="/beat-first" className="inline-block text-center px-6 py-3 rounded-full font-semibold text-white hover:opacity-90 transition-opacity" style={{ backgroundColor: "var(--accent-primary)" }}>
-              Play BeatFirst — Free
+              Play BeatFirst Free
             </Link>
           </div>
           <div className="rounded-2xl p-8 flex flex-col gap-4" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
             <div className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FDB515" }}>Private Lessons</div>
             <h3 className="text-lg font-bold">1-on-1 with Ceech</h3>
-            <p className="text-sm flex-1" style={{ color: "var(--muted)" }}>Want faster results? Book a private lesson — in-person in San Jose or virtually via Google Meet.</p>
+            <p className="text-sm flex-1" style={{ color: "var(--muted)" }}>Want focused practice? Book a private lesson in San Jose or meet with Ceech virtually through Google Meet.</p>
             <Link href="/private-lessons" className="inline-block text-center px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity" style={{ border: "1px solid #FDB515", color: "#FDB515" }}>
               Book a Lesson
             </Link>

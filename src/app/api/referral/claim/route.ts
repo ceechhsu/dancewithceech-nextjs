@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ claimed: false, reason: 'own_code' })
   }
 
-  // Already claimed — idempotent, just return ok
+  // Already claimed: idempotent, just return ok
   if (referral.referred_user_email) {
     return NextResponse.json({ claimed: false, reason: 'already_claimed' })
   }

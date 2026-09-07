@@ -7,7 +7,7 @@ description: "Learn the house dance Roger Rabbit step-by-step. Master the hop-ba
 ---
 ## Exploring the House Dance Universe: Nailing the Unique Roger Rabbit Step
 
-Delve into the refined energy of House dance with the effervescent "Roger Rabbit" move, a dance step that brings its own cachet to the floor. Though it shares a name with the popular Hip Hop version, the House dance Roger Rabbit is a different beast—a unique flavor in the rich stew of dance moves that populate the genre. This variant marries the freestyle essence of House with a playful bounce, suggesting a conversation between the dancer and the rhythm that beckons them. Let's lace up and hop into the essence of this buoyant move.
+The House dance "Roger Rabbit" uses a hop-back bounce with a light glide. It shares a name with the Hip Hop version, but the timing and texture differ. Start with the weight shift, then let the bounce settle into the beat.
 
 ## Video Demonstration
 
@@ -53,7 +53,7 @@ The House dance variant of the Roger Rabbit offers a distinct bounce and a smoot
 
 If you liked the Roger Rabbit, these moves share the same backward momentum, playful bounce, or hop-and-drag footwork:
 
-- [How to Do the Jack In The Box House Dance Move](/blog/house-dance-jack-in-the-box) — both moves are defined by their bounce quality — the Jack In The Box develops the same heel-toe spring that gives the Roger Rabbit its hop, making it a useful warm-up for this move.
-- [House Dance | Skate](/blog/house-skate) — the Skate shares the Roger Rabbit's emphasis on a trailing foot that glides loosely behind the weight-bearing foot, so the drag mechanic carries over.
-- [House Dance | The Setup Move Explained](/blog/house-setup) — because the Roger Rabbit travels backward, using a Setup to enter and exit it cleanly within a routine is especially important.
-- [House Dance | Salsa Step](/blog/house-salsa-step) — the Salsa Step's forward-back rhythm is a mirror image of the Roger Rabbit's backward hop, making the two moves a natural front-to-back pair for working the same floor axis.
+- [How to Do the Jack In The Box House Dance Move](/blog/house-dance-jack-in-the-box), both moves are defined by their bounce quality, the Jack In The Box develops the same heel-toe spring that gives the Roger Rabbit its hop, making it a useful warm-up for this move.
+- [House Dance | Skate](/blog/house-skate), the Skate shares the Roger Rabbit's emphasis on a trailing foot that glides loosely behind the weight-bearing foot, so the drag mechanic carries over.
+- [House Dance | The Setup Move Explained](/blog/house-setup), because the Roger Rabbit travels backward, using a Setup to enter and exit it cleanly within a routine is especially important.
+- [House Dance | Salsa Step](/blog/house-salsa-step), the Salsa Step's forward-back rhythm is a mirror image of the Roger Rabbit's backward hop, making the two moves a natural front-to-back pair for working the same floor axis.

@@ -49,22 +49,22 @@ The windmill is a cornerstone move in breaking that showcases a dancer's strengt
 The Windmill (also called the continuous backspin) is an iconic b-boy power move where the dancer rolls their torso continuously in a circular motion on the floor while their legs twirl through the air in a V-shape. It's one of the most recognizable power moves in breaking and serves as the foundation for many advanced variations.
 
 ### Who created the Windmill breakdance move?
-The Windmill was accidentally created by Ken Swift of the Rock Steady Crew from the Bronx, New York. The move was born when Swift overshot a chair freeze and the momentum carried him into a continuous back spin. He drew additional inspiration from kung fu films — particularly Bruce Lee — which featured ground-based kicks that resembled the windmill's leg motion.
+The Windmill was accidentally created by Ken Swift of the Rock Steady Crew from the Bronx, New York. The move was born when Swift overshot a chair freeze and the momentum carried him into a continuous back spin. He drew additional inspiration from kung fu films , particularly Bruce Lee , which featured ground-based kicks that resembled the windmill's leg motion.
 
 ### How long does it take to learn a Windmill?
-Most dancers need 2-6 months of dedicated practice to perform a rough Windmill. A clean, sustained Windmill with good leg extension takes 6-12 months. Prerequisites like the backspin and turtle freeze should be solid first — jumping straight to the Windmill without those foundations dramatically slows progress and increases injury risk.
+Most dancers need 2-6 months of dedicated practice to perform a rough Windmill. A clean, sustained Windmill with good leg extension takes 6-12 months. Prerequisites like the backspin and turtle freeze should be solid first , jumping straight to the Windmill without those foundations dramatically slows progress and increases injury risk.
 
 ### Is the Windmill dangerous to learn?
 There's real risk if you skip the progressions. Landing hard on shoulders, neck, or lower back without proper technique can cause bruising or more serious injury. Learn the backspin and turtle freeze first, practice on padded surfaces, use a cypher mat or a thick rug, and consider wearing a beanie to protect your head. Ramp up slowly.
 
 ### What's the most common Windmill mistake?
-Not keeping the feet off the ground. The Windmill only LOOKS like a windmill when the legs stay fully elevated in the V-shape throughout the rotation. Beginners drag their feet on the floor, which both kills the visual and ruins the momentum. Kick harder from the hips and keep the feet UP — that single adjustment fixes half the problems beginners have.
+Not keeping the feet off the ground. The Windmill only LOOKS like a windmill when the legs stay fully elevated in the V-shape throughout the rotation. Beginners drag their feet on the floor, which both kills the visual and ruins the momentum. Kick harder from the hips and keep the feet UP , that single adjustment fixes half the problems beginners have.
 
 ## More Breaking Dance Moves
 
 If you liked the Windmill, these moves share the same continuous floor rotation mechanics or are the direct prerequisites the windmill is built on:
 
-- [Mastering the Backspin: A Fundamental Breaking Power Move](/blog/mastering-the-backspin-a-fundamental-breaking-power-move) — The backspin is the direct prerequisite to the windmill — Ken Swift discovered the windmill by overshooting a backspin, and the mechanics of spinning on your upper back are the same foundation both moves use.
-- [Mastering the Thomas Flare: A Powerful Breaking Move](/blog/mastering-the-thomas-flare-a-powerful-breaking-move) — The flare and windmill are the two most commonly combined power moves in breaking because both rely on continuous circular leg motion and are designed to transition into each other.
-- [Mastering the Swipe: A Fundamental Breaking Power Move](/blog/mastering-the-swipe-a-fundamental-breaking-power-move) — Swipes and windmills share the same rotational momentum and are frequently chained in sets, with the Swipe acting as a natural entry or transition between windmill repetitions.
-- [Mastering the Headspin: A Gravity-Defying Breaking Move](/blog/mastering-the-headspin-a-gravity-defying-breaking-move) — The headspin is the classic finish after a windmill run in competition, and building both moves in parallel gives you one of the most recognized power move combinations in breaking.
+- [Mastering the Backspin: A Fundamental Breaking Power Move](/blog/mastering-the-backspin-a-fundamental-breaking-power-move) , The backspin is the direct prerequisite to the windmill , Ken Swift discovered the windmill by overshooting a backspin, and the mechanics of spinning on your upper back are the same foundation both moves use.
+- [Mastering the Thomas Flare: A Powerful Breaking Move](/blog/mastering-the-thomas-flare-a-powerful-breaking-move) , The flare and windmill are the two most commonly combined power moves in breaking because both rely on continuous circular leg motion and are designed to transition into each other.
+- [Mastering the Swipe: A Fundamental Breaking Power Move](/blog/mastering-the-swipe-a-fundamental-breaking-power-move) , Swipes and windmills share the same rotational momentum and are frequently chained in sets, with the Swipe acting as a natural entry or transition between windmill repetitions.
+- [Mastering the Headspin: A Gravity-Defying Breaking Move](/blog/mastering-the-headspin-a-gravity-defying-breaking-move) , The headspin is the classic finish after a windmill run in competition, and building both moves in parallel gives you one of the most recognized power move combinations in breaking.

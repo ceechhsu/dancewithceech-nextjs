@@ -25,7 +25,7 @@ const barlowCondensed = Barlow_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: "DanceWithCeech — Rhythm First. Then Dance.",
+  title: "DanceWithCeech: Rhythm First. Then Dance.",
   description: "Learn hip-hop dance from home at your own pace. Start with BeatFirst, the free rhythm trainer built for analytical minds.",
 };
 

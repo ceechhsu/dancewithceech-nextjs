@@ -4,7 +4,7 @@ seoTitle: "Roger Rabbit Dance: How to Do the 80s Move"
 slug: "hip-hop-dance-move-roger-rabbit"
 date: "2024-06-18 09:09:48"
 category: "hip-hop-dance-moves"
-description: "Roger Rabbit dance tutorial — the late-80s hip hop move inspired by the cartoon. 6 simple steps with floppy arms, bouncy footwork, and playful expression."
+description: "Roger Rabbit dance tutorial, the late-80s hip hop move inspired by the cartoon. 6 simple steps with floppy arms, bouncy footwork, and playful expression."
 ---
 ## Introduction
 
@@ -60,16 +60,16 @@ The dance move is not performed in "Who Framed Roger Rabbit" (1988), but dancers
 The exact creator is unknown. The dance emerged organically in hip hop social dance circles in the late 1980s, directly inspired by the character animation in "Who Framed Roger Rabbit." It spread quickly through music videos, clubs, and TV shows throughout the late 80s and early 90s.
 
 ### How long does it take to learn the Roger Rabbit?
-Most beginners can get the basic bounce and arm-swing pattern in 10–15 minutes. The real challenge is letting the arms move loose and rag-doll style instead of stiff — that takes a few hours of practice to feel natural and effortless.
+Most beginners can get the basic bounce and arm-swing pattern in 10–15 minutes. The real challenge is letting the arms move loose and rag-doll style instead of stiff, that takes a few hours of practice to feel natural and effortless.
 
 ### What's the most common mistake with the Roger Rabbit?
-Holding tension in the shoulders and flapping the arms too fast. The Roger Rabbit works when your arms swing FREELY — relaxed, almost floppy, driven by the bounce of your knees rather than active arm muscles. Slow down, relax, and let gravity do most of the work.
+Holding tension in the shoulders and flapping the arms too fast. The Roger Rabbit works when your arms swing FREELY, relaxed, almost floppy, driven by the bounce of your knees rather than active arm muscles. Slow down, relax, and let gravity do most of the work.
 
 ## More Hip Hop Dance Moves
 
 If you liked the Roger Rabbit, these moves share the same cartoon-named, late-80s loose-limbed playfulness:
 
-- [How to Learn the Steve Martin Dance Move](/blog/steve-martin-dance) — the Steve Martin is the closest era match to the Roger Rabbit — both debuted in the late 80s, both are named after comedic figures, and both use an alternating kick-bounce structure with expressive arm motion.
-- [4 Key Tips to Mastering The Bart Simpson](/blog/bart-simpson) — the Bart Simpson is a direct sibling move to the Roger Rabbit: both are cartoon-named, both emerged from early-90s hip-hop culture, and both rely on exaggerated character performance over technical precision.
-- [How to Do the Smurf Hip Hop Dance Move](/blog/hip-hop-dance-move-smurf) — the Smurf rounds out the cartoon-named trio alongside the Roger Rabbit and Bart Simpson, using alternating bouncy arm swings with the same retro party-dance energy.
-- [How to Do the Prep Hip Hop Dance Move](/blog/hip-hop-dance-move-prep) — the Prep shares the Roger Rabbit's theatrical, character-driven approach — both moves prioritize performance and personality as much as rhythm.
+- [How to Learn the Steve Martin Dance Move](/blog/steve-martin-dance), the Steve Martin is the closest era match to the Roger Rabbit, both debuted in the late 80s, both are named after comedic figures, and both use an alternating kick-bounce structure with expressive arm motion.
+- [4 Key Tips to Mastering The Bart Simpson](/blog/bart-simpson), the Bart Simpson is a direct sibling move to the Roger Rabbit: both are cartoon-named, both emerged from early-90s hip-hop culture, and both rely on exaggerated character performance over technical precision.
+- [How to Do the Smurf Hip Hop Dance Move](/blog/hip-hop-dance-move-smurf), the Smurf rounds out the cartoon-named trio alongside the Roger Rabbit and Bart Simpson, using alternating bouncy arm swings with the same retro party-dance energy.
+- [How to Do the Prep Hip Hop Dance Move](/blog/hip-hop-dance-move-prep), the Prep shares the Roger Rabbit's theatrical, character-driven approach, both moves prioritize performance and personality as much as rhythm.

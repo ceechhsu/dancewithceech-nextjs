@@ -4,7 +4,7 @@ seoTitle: "Scribble Foot Dance: Hip-Hop House Tutorial"
 slug: "hip-hop-house-dance-move-scribble-foot"
 date: "2024-06-18 09:59:59"
 category: "hip-hop-dance-moves"
-description: "Scribble Foot dance tutorial — the intricate hip hop house footwork move where one foot 'scribbles' rapid patterns on the floor. 6 steps with precision tips."
+description: "Scribble Foot dance tutorial, the intricate hip hop house footwork move where one foot 'scribbles' rapid patterns on the floor. 6 steps with precision tips."
 ---
 ## Introduction
 
@@ -51,25 +51,25 @@ The Scribble Foot is a testament to the creativity and skill of hip hop dancers.
 ## Frequently Asked Questions
 
 ### What is the Scribble Foot dance?
-The Scribble Foot is a hip hop and house dance move where one foot rapidly "scribbles" intricate patterns on the floor — drawing small circles, zigzags, or figure-eights with the ball and heel of the foot — while the other foot supports. It's a footwork-focused move that emphasizes dexterity, musicality, and creative individual expression.
+The Scribble Foot is a hip hop and house dance move where one foot rapidly "scribbles" intricate patterns on the floor, drawing small circles, zigzags, or figure-eights with the ball and heel of the foot, while the other foot supports. It's a footwork-focused move that emphasizes dexterity, musicality, and creative individual expression.
 
 ### Where did the Scribble Foot come from?
-The Scribble Foot evolved from the early hip hop dance scene in 1970s New York City, where dancers experimenting with intricate footwork patterns developed many of the foundational floor-level moves. Its exact creator isn't documented — it emerged organically from the culture of street dance experimentation, and it has strong overlap with house dance's foot-precision vocabulary.
+The Scribble Foot evolved from the early hip hop dance scene in 1970s New York City, where dancers experimenting with intricate footwork patterns developed many of the foundational floor-level moves. Its exact creator isn't documented, it emerged organically from the culture of street dance experimentation, and it has strong overlap with house dance's foot-precision vocabulary.
 
 ### Is the Scribble Foot a house dance or hip hop move?
-Both. The Scribble Foot lives in the overlap between hip hop and house dance — both traditions claim it as part of their vocabulary. It shows up in hip hop freestyle (especially battle and cypher contexts) and in house dance routines. The rapid foot precision it develops is equally valuable in both styles.
+Both. The Scribble Foot lives in the overlap between hip hop and house dance, both traditions claim it as part of their vocabulary. It shows up in hip hop freestyle (especially battle and cypher contexts) and in house dance routines. The rapid foot precision it develops is equally valuable in both styles.
 
 ### How long does it take to learn the Scribble Foot?
-The basic concept takes 10-15 minutes to grasp, but developing the foot dexterity to move rapidly and precisely takes 2-4 weeks of daily practice. Building up to creative, varied patterns at music tempo takes a few months. The move rewards patience — clean precision at moderate speed beats messy patterns at fast speed every time.
+The basic concept takes 10-15 minutes to grasp, but developing the foot dexterity to move rapidly and precisely takes 2-4 weeks of daily practice. Building up to creative, varied patterns at music tempo takes a few months. The move rewards patience, clean precision at moderate speed beats messy patterns at fast speed every time.
 
 ### What's the most common Scribble Foot mistake?
-Using the whole leg instead of just the foot. The Scribble Foot should move from the ANKLE — your foot flicks, traces, and scribbles while your thigh and knee stay relatively still. Beginners use the whole leg, which turns small intricate patterns into big awkward sweeps. Isolate the motion to the foot and ankle.
+Using the whole leg instead of just the foot. The Scribble Foot should move from the ANKLE, your foot flicks, traces, and scribbles while your thigh and knee stay relatively still. Beginners use the whole leg, which turns small intricate patterns into big awkward sweeps. Isolate the motion to the foot and ankle.
 
 ## More Hip Hop Dance Moves
 
 If you liked the Scribble Foot, these moves share the same intricate footwork-first approach requiring precise control and individual expression:
 
-- [House Dance | Loose Leg](/blog/house-dance-loose-leg) — the Loose Leg is a foundational house dance move that builds the heel-toe awareness and foot sensitivity needed to execute the Scribble Foot's rapid, precise patterns cleanly.
-- [How to Do the Heel Toe Hip Hop Dance Move](/blog/heel-toe) — the Heel Toe develops the same ball-and-heel pivot dexterity as the Scribble Foot, and both share roots in the house dance tradition that crossed over into hip-hop street styles.
-- [5 Easy Steps to Master The Dolphin Dive](/blog/dolphin-dive) — the Dolphin Dive is another hip-hop house move that demands full-body control and creative expression, pairing well with the Scribble Foot in a house dance showcase.
-- [5 Easy Steps to Learn The Farmer Dance](/blog/farmer-dance) — the Farmer shares the Scribble Foot's hip-hop house lineage and lateral footwork energy, making both moves complementary in the same house dance vocabulary.
+- [House Dance | Loose Leg](/blog/house-dance-loose-leg), the Loose Leg is a foundational house dance move that builds the heel-toe awareness and foot sensitivity needed to execute the Scribble Foot's rapid, precise patterns cleanly.
+- [How to Do the Heel Toe Hip Hop Dance Move](/blog/heel-toe), the Heel Toe develops the same ball-and-heel pivot dexterity as the Scribble Foot, and both share roots in the house dance tradition that crossed over into hip-hop street styles.
+- [5 Easy Steps to Master The Dolphin Dive](/blog/dolphin-dive), the Dolphin Dive is another hip-hop house move that demands full-body control and creative expression, pairing well with the Scribble Foot in a house dance showcase.
+- [5 Easy Steps to Learn The Farmer Dance](/blog/farmer-dance), the Farmer shares the Scribble Foot's hip-hop house lineage and lateral footwork energy, making both moves complementary in the same house dance vocabulary.

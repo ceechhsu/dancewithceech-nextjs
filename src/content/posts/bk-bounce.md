@@ -23,7 +23,7 @@ Buddha Stretch is a prominent name in hip-hop dance, known for his work with art
 
 2. The Bounce: Start with a simple bounce motion, dipping your knees to the rhythm, getting comfortable with the beat.
 
-3. The Step: With each bounce, alternate stepping out to the side—first right, then left—with the corresponding hip tilting upwards slightly.
+3. The Step: With each bounce, alternate stepping out to the side, first right, then left, with the corresponding hip tilting upwards slightly.
 
 4. Arm Coordination: As you step out, let your opposite arm swing naturally. If you step out with your right foot, your left arm should swing out, and vice versa.
 
@@ -33,7 +33,7 @@ Here is a great tutorial by Versa-Style Dance Company on how to practice the [BK
 
 ## Tips For Learning The BK Bounce
 
-- Always start with the bounce—get comfortable with this foundational movement before stepping out.
+- Always start with the bounce, get comfortable with this foundational movement before stepping out.
 
 - As you get more comfortable, allow your body to loosen up and find the natural flow of the bounce and swing.
 
@@ -43,13 +43,13 @@ Here is a great tutorial by Versa-Style Dance Company on how to practice the [BK
 
 ## Conclusion
 
-The BK Bounce encapsulates the spirit of Brooklyn's hip-hop scene—a community that values the blend of finesse and energy. This dance move, with its simple bounce and step, allows for ample personal interpretation and style, making it accessible to all. As you practice, remember you are not just performing steps; you are embodying the essence of a culture that has had a resounding impact on the global dance community, all courtesy of Buddha Stretch's creative genius.
+The BK Bounce encapsulates the spirit of Brooklyn's hip-hop scene, a community that values the blend of finesse and energy. This dance move, with its simple bounce and step, allows for ample personal interpretation and style, making it accessible to all. As you practice, remember you are not just performing steps; you are embodying the essence of a culture that has had a resounding impact on the global dance community, all courtesy of Buddha Stretch's creative genius.
 
 ## More Hip Hop Dance Moves
 
 If you liked the BK Bounce, these moves share the same side-step bounce structure and rhythmic weight-shifting pattern:
 
-- [5 Easy Steps to Learn The Bankhead Bounce](/blog/bankhead-bounce) — the Bankhead Bounce is Atlanta's direct counterpart to Brooklyn's BK Bounce — both are city-named moves built on a relaxed knee dip and natural arm swing.
-- [Mastering the ATL Stomp: Atlanta's Iconic Hip-Hop Dance Move](/blog/mastering-the-atl-stomp-rhythm-of-the-south) — the ATL Stomp adds a percussive stomp to the same side-shifting bounce footwork the BK Bounce uses, making it an easy style progression.
-- [How to Do the Tone Wop Hip Hop Dance Move](/blog/hip-hop-dance-move-tone-wop) — the Tone Wop uses a similar alternating weight-transfer bounce that complements the BK Bounce's foundational step-out rhythm.
-- [6 Simple Steps To Learn The Happy Feet](/blog/happy-feet) — Happy Feet shares the BK Bounce's light, rhythmic hop-and-kick quality, making them a natural pair in a casual freestyle sequence.
+- [5 Easy Steps to Learn The Bankhead Bounce](/blog/bankhead-bounce), the Bankhead Bounce is Atlanta's direct counterpart to Brooklyn's BK Bounce, both are city-named moves built on a relaxed knee dip and natural arm swing.
+- [Mastering the ATL Stomp: Atlanta's Iconic Hip-Hop Dance Move](/blog/mastering-the-atl-stomp-rhythm-of-the-south), the ATL Stomp adds a percussive stomp to the same side-shifting bounce footwork the BK Bounce uses, making it an easy style progression.
+- [How to Do the Tone Wop Hip Hop Dance Move](/blog/hip-hop-dance-move-tone-wop), the Tone Wop uses a similar alternating weight-transfer bounce that complements the BK Bounce's foundational step-out rhythm.
+- [6 Simple Steps To Learn The Happy Feet](/blog/happy-feet), Happy Feet shares the BK Bounce's light, rhythmic hop-and-kick quality, making them a natural pair in a casual freestyle sequence.

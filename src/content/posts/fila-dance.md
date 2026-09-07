@@ -47,13 +47,13 @@ Though not attached to a single creator, the Fila move's evolution is a testamen
 
 ## Conclusion
 
-The Fila dance move, with its sleek footwork and expressive potential, stands as a vibrant symbol of Hip Hop's rich cultural tapestry. It embodies the essence of Hip Hop — creativity, style, and community. Whether on the dance floor or in the studio, mastering the Fila is about more than just learning a new move; it's an invitation to become part of the ongoing story of Hip Hop, a culture that celebrates the power of movement and the beauty of individual expression.
+The Fila dance move, with its sleek footwork and expressive potential, stands as a vibrant symbol of Hip Hop's rich cultural tapestry. It embodies the essence of Hip Hop, creativity, style, and community. Whether on the dance floor or in the studio, mastering the Fila is about more than just learning a new move; it's an invitation to become part of the ongoing story of Hip Hop, a culture that celebrates the power of movement and the beauty of individual expression.
 
 ## More Hip Hop Dance Moves
 
 If you liked the Fila, these moves share the same stomp-and-hop footwork pattern and quarter-turn rotation technique:
 
-- [Mastering the ATL Stomp: Atlanta's Iconic Hip-Hop Dance Move](/blog/mastering-the-atl-stomp-rhythm-of-the-south) — the ATL Stomp uses an almost identical stomp-hop-switch-turn sequence, making it the closest structural cousin to the Fila in terms of footwork mechanics.
-- [How to Do Stomping in Hip Hop Dance](/blog/hip-hop-dance-move-stomping) — stomping is the percussive core of the Fila's technique, so mastering the isolated stomp with proper force and rhythm directly improves the Fila's impact.
-- [How to Do the Party Machine Hip Hop Dance Move](/blog/hip-hop-dance-move-party-machine) — the Party Machine's kick-and-hop alternation shares the Fila's rhythm pattern and the same emphasis on smooth weight transfer between each step.
-- [6 Simple Steps To Learn The Happy Feet](/blog/happy-feet) — Happy Feet uses a similar quick hop-and-kick footwork loop that complements the Fila when chaining moves together in a freestyle.
+- [Mastering the ATL Stomp: Atlanta's Iconic Hip-Hop Dance Move](/blog/mastering-the-atl-stomp-rhythm-of-the-south), the ATL Stomp uses an almost identical stomp-hop-switch-turn sequence, making it the closest structural cousin to the Fila in terms of footwork mechanics.
+- [How to Do Stomping in Hip Hop Dance](/blog/hip-hop-dance-move-stomping), stomping is the percussive core of the Fila's technique, so mastering the isolated stomp with proper force and rhythm directly improves the Fila's impact.
+- [How to Do the Party Machine Hip Hop Dance Move](/blog/hip-hop-dance-move-party-machine), the Party Machine's kick-and-hop alternation shares the Fila's rhythm pattern and the same emphasis on smooth weight transfer between each step.
+- [6 Simple Steps To Learn The Happy Feet](/blog/happy-feet), Happy Feet uses a similar quick hop-and-kick footwork loop that complements the Fila when chaining moves together in a freestyle.

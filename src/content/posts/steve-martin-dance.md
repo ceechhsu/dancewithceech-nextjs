@@ -4,7 +4,7 @@ seoTitle: "Steve Martin Dance: 80s Hip-Hop Tutorial"
 slug: "steve-martin-dance"
 date: "2024-06-18 10:23:54"
 category: "hip-hop-dance-moves"
-description: "Steve Martin dance tutorial — the 80s hip hop move created by Stezo, featured in EPMD's \"You Gots to Chill\" (1988). 7 simple steps with footwork and arm timing."
+description: "Steve Martin dance tutorial: the 80s hip hop move created by Stezo, featured in EPMD's \"You Gots to Chill\" (1988). 7 simple steps with footwork and arm timing."
 ---
 ## Introduction
 
@@ -55,25 +55,25 @@ The Steve Martin dance move is a true classic in the world of hip-hop dance. Its
 ## Frequently Asked Questions
 
 ### What is the Steve Martin dance?
-The Steve Martin is a late-1980s hip hop dance move built on alternating side kicks with a bouncy knee bend and opposing arm swings. Created by rapper and dancer Stezo from Connecticut, it was named as a nod to the comedian Steve Martin's eccentric, high-energy performance style — not because Steve Martin himself invented it.
+The Steve Martin is a late-1980s hip hop dance move built on alternating side kicks with a bouncy knee bend and opposing arm swings. Created by rapper and dancer Stezo from Connecticut, it was named as a nod to the comedian Steve Martin's eccentric, high-energy performance style, not because Steve Martin himself invented it.
 
 ### Who created the Steve Martin dance?
 Stezo, a Connecticut-based rapper and dancer, created the Steve Martin dance in the late 1980s. He debuted the move in the music video for EPMD's "You Gots to Chill" (1988) and later recorded a song called "Steve Martin" on EPMD's album "Strictly Business," which cemented his legacy in hip hop dance history.
 
 ### Is the Steve Martin dance related to the comedian?
-Only by name. The comedian Steve Martin didn't create or perform the dance — Stezo named the move after him as a tribute to Martin's eccentric, physical comedy style. The dance itself is a hip hop footwork move that has no connection to Steve Martin's actual stand-up or film work.
+Only by name. The comedian Steve Martin didn't create or perform the dance. Stezo named the move after him as a tribute to Martin's eccentric, physical comedy style. The dance itself is a hip hop footwork move that has no connection to Steve Martin's actual stand-up or film work.
 
 ### How long does it take to learn the Steve Martin dance?
 Most beginners can pick up the basic alternating side-kick pattern in 15–20 minutes. Syncing the arm swings to the kicks takes another 30–45 minutes of practice. To make it look crisp and confident (instead of stiff) usually takes a few sessions.
 
 ### What's the most common mistake with the Steve Martin?
-Kicking too high. The Steve Martin isn't a karate kick — the leg should extend out naturally at knee-to-shin level, driven by the bounce in the supporting leg. Beginners who kick high lose the bounce rhythm and the move stops looking like hip hop.
+Kicking too high. The Steve Martin isn't a karate kick. The leg should extend out naturally at knee-to-shin level, driven by the bounce in the supporting leg. Beginners who kick high lose the bounce rhythm and the move stops looking like hip hop.
 
 ## More Hip Hop Dance Moves
 
 If you liked the Steve Martin, these moves share the same 80s late-night party energy and alternating footwork pattern:
 
-- [How to Do the Roger Rabbit Hip Hop Dance Move](/blog/hip-hop-dance-move-roger-rabbit) — another cartoon-inspired 80s move that uses a loose, bouncy stance and playful exaggerated arm swings similar to the Steve Martin's kick-and-swing rhythm.
-- [How to Do the Running Man Hip Hop Dance Move](/blog/hip-hop-dance-move-running-man) — a late-80s New Jersey staple that also alternates legs with pumping arms, making it a natural companion move from the same era.
-- [5 Easy Steps To Learn The Cabbage Patch Dance](/blog/cabbage-patch) — originated in the same 80s golden-age party scene and pairs well as a combo move since the arm circles contrast the Steve Martin's leg-dominant kicks.
-- [How to Do the Smurf Hip Hop Dance Move](/blog/hip-hop-dance-move-smurf) — another cartoon-named 80s/90s party move built on alternating arm swings with a consistent bounce, paralleling the Steve Martin's pop-culture humor and rhythm structure.
+- [How to Do the Roger Rabbit Hip Hop Dance Move](/blog/hip-hop-dance-move-roger-rabbit): another cartoon-inspired 80s move that uses a loose, bouncy stance and playful exaggerated arm swings similar to the Steve Martin's kick-and-swing rhythm.
+- [How to Do the Running Man Hip Hop Dance Move](/blog/hip-hop-dance-move-running-man): a late-80s New Jersey staple that also alternates legs with pumping arms, making it a natural companion move from the same era.
+- [5 Easy Steps To Learn The Cabbage Patch Dance](/blog/cabbage-patch): originated in the same 80s golden-age party scene and pairs well as a combo move since the arm circles contrast the Steve Martin's leg-dominant kicks.
+- [How to Do the Smurf Hip Hop Dance Move](/blog/hip-hop-dance-move-smurf): another cartoon-named 80s/90s party move built on alternating arm swings with a consistent bounce, paralleling the Steve Martin's pop-culture humor and rhythm structure.

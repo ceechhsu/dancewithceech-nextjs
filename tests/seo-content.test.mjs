@@ -10,11 +10,11 @@ const LOCAL_PAGES = [
   "src/app/private-lessons/bay-area/page.tsx",
 ];
 
-test("homepage hero progressively loads frames without the eager all-frame loop", async () => {
+test("homepage hero uses a lightweight video with reduced-motion support", async () => {
   const source = await read("src/components/ScrollyHero.tsx");
-  assert.doesNotMatch(source, /for \(let i = 1; i <= TOTAL_FRAMES; i\+\+\)/);
-  assert.match(source, /loadFrame\(0\)/);
-  assert.match(source, /requestIdleCallback|getInitialFrameIndices/);
+  assert.match(source, /<video/);
+  assert.match(source, /autoPlay=\{!reduceMotion\}/);
+  assert.match(source, /poster="\/hero-mobile-poster\.jpg"/);
 });
 
 test("approved homepage sections, hero copy, and CTAs remain present", async () => {
@@ -35,9 +35,9 @@ test("approved homepage sections, hero copy, and CTAs remain present", async () 
     assert.match(deferredTestimonials, new RegExp(component));
   }
   for (const copy of [
-    "You think you can't dance.",
-    "It's a skill — not a gift.",
-    "Let us prove it.",
+    "It&apos;s a skill.",
+    "Not a gift.",
+    "Rhythm First. Then Dance.",
     "Book a Private Lesson",
     "Meet Ceech",
   ]) {
@@ -94,7 +94,7 @@ test("college history distinguishes the four employers from guest teaching", asy
   assert.ok(about.includes("Teaching Since 1998"));
   assert.ok(about.includes("Mission College in 2002"));
   assert.ok(sanJose.includes("taught dance since 1998"));
-  assert.ok(bayArea.includes("teaching since 1998"));
+  assert.ok(bayArea.includes("taught dance since 1998"));
 });
 
 test("private lesson and Running Man pages have descriptive internal links", async () => {

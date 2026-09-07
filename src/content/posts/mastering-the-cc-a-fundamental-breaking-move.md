@@ -4,7 +4,7 @@ seoTitle: "CC Breaking Move: Kickout Footwork Tutorial"
 slug: "mastering-the-cc-a-fundamental-breaking-move"
 date: "2024-06-21 14:57:53"
 category: "breaking-dance-moves"
-description: "CC (Kickout) breakdance tutorial — the foundational b-boy downrock footwork move used to build fluid floor combinations. 10-step guide with timing and tips."
+description: "CC (Kickout) breakdance tutorial , the foundational b-boy downrock footwork move used to build fluid floor combinations. 10-step guide with timing and tips."
 ---
 ## Introduction
 
@@ -47,25 +47,25 @@ The CC is a fundamental move in breaking that demonstrates a dancer's control, f
 ## Frequently Asked Questions
 
 ### What is the CC in breaking?
-The CC (also called the Kickout) is a foundational breakdancing footwork move where the dancer alternates leg kicks while supporting their body on the opposite arm and leg in a low squat. It's a core downrock element — a floor-level move that connects other footwork patterns and creates rhythmic transitions in a breaking set.
+The CC (also called the Kickout) is a foundational breakdancing footwork move where the dancer alternates leg kicks while supporting their body on the opposite arm and leg in a low squat. It's a core downrock element , a floor-level move that connects other footwork patterns and creates rhythmic transitions in a breaking set.
 
 ### Is the CC the same as the Kickout?
-Yes — they're the same move. "CC" is the shortened name used in modern breaking culture; "Kickout" is the descriptive alternate name that refers to the kicking action. Both terms appear in tutorials and battle commentary.
+Yes , they're the same move. "CC" is the shortened name used in modern breaking culture; "Kickout" is the descriptive alternate name that refers to the kicking action. Both terms appear in tutorials and battle commentary.
 
 ### Where did the CC breaking move come from?
-The CC is one of the foundational footwork moves in breaking, which originated in the early 1970s among African American and Puerto Rican youth in the South Bronx, New York. The exact creator isn't documented — the move grew out of the collective evolution of breaking's downrock vocabulary during the genre's first decade.
+The CC is one of the foundational footwork moves in breaking, which originated in the early 1970s among African American and Puerto Rican youth in the South Bronx, New York. The exact creator isn't documented , the move grew out of the collective evolution of breaking's downrock vocabulary during the genre's first decade.
 
 ### How long does it take to learn the CC?
-Most beginners can execute a rough CC in 1-2 weeks of daily practice. Clean form (the snap on the kick, smooth weight transfers, proper balance) takes 4-6 weeks. The move rewards flexibility — if your hamstrings and hip flexors are tight, add stretching to your practice to accelerate progress.
+Most beginners can execute a rough CC in 1-2 weeks of daily practice. Clean form (the snap on the kick, smooth weight transfers, proper balance) takes 4-6 weeks. The move rewards flexibility , if your hamstrings and hip flexors are tight, add stretching to your practice to accelerate progress.
 
 ### What's the most common CC mistake?
-Collapsing the supporting arm. The CC demands that you hold the weight on one arm AND one leg while the other leg kicks — beginners tend to let the support arm buckle, which kills the kick's power. Drill the support position (one arm, one leg, balanced) BEFORE adding the kick. Strong support makes for a sharp kickout.
+Collapsing the supporting arm. The CC demands that you hold the weight on one arm AND one leg while the other leg kicks , beginners tend to let the support arm buckle, which kills the kick's power. Drill the support position (one arm, one leg, balanced) BEFORE adding the kick. Strong support makes for a sharp kickout.
 
 ## More Breaking Dance Moves
 
 If you liked the CC, these moves build on the same floor-level footwork mechanics and single-arm support position it uses:
 
-- [Mastering the 6 Step: The Foundation of Breakdancing Footwork](/blog/mastering-the-6-step-the-foundation-of-breakdancing-footwork) — The 6 Step is the foundational pattern that the CC slots into directly — both moves operate from the same low squat and use continuous leg alternation to maintain circular floor movement.
-- [Mastering the 3 Step: A Breaking Footwork Move for B-Boys & B-Girls](/blog/mastering-the-3-step-a-fundamental-breaking-move-for-aspiring-b-boys-and-b-girls-2) — The 3 Step is the other core floor pattern that pairs with the CC in standard downrock combinations, and both moves require the same hip-low, arms-down body position.
-- [Cutting in Breaking: How to Master This Essential Footwork Move](/blog/cutting-in-breaking-how-to-master-this-essential-footwork-move) — Cutting is a transitional move that links CC sequences to other footwork patterns, and the two are practiced together to build fluid floor combinations.
-- [Mastering the 4 Step: A Fundamental Breaking Move](/blog/mastering-the-4-step-a-fundamental-breaking-move) — The 4 Step shares the CC's reliance on weight distribution across one arm and two feet, and the two moves are often mixed to create variety in footwork sets.
+- [Mastering the 6 Step: The Foundation of Breakdancing Footwork](/blog/mastering-the-6-step-the-foundation-of-breakdancing-footwork) , The 6 Step is the foundational pattern that the CC slots into directly , both moves operate from the same low squat and use continuous leg alternation to maintain circular floor movement.
+- [Mastering the 3 Step: A Breaking Footwork Move for B-Boys & B-Girls](/blog/mastering-the-3-step-a-fundamental-breaking-move-for-aspiring-b-boys-and-b-girls-2) , The 3 Step is the other core floor pattern that pairs with the CC in standard downrock combinations, and both moves require the same hip-low, arms-down body position.
+- [Cutting in Breaking: How to Master This Essential Footwork Move](/blog/cutting-in-breaking-how-to-master-this-essential-footwork-move) , Cutting is a transitional move that links CC sequences to other footwork patterns, and the two are practiced together to build fluid floor combinations.
+- [Mastering the 4 Step: A Fundamental Breaking Move](/blog/mastering-the-4-step-a-fundamental-breaking-move) , The 4 Step shares the CC's reliance on weight distribution across one arm and two feet, and the two moves are often mixed to create variety in footwork sets.

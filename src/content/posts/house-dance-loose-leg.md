@@ -45,7 +45,7 @@ The Loose Leg is a quintessential house dance move that captures the rhythmic an
 
 If you liked the Loose Leg, these moves share the same heel-toe weight-shifting foundation rooted in house dance:
 
-- [How to Do the Monastery Hip Hop Dance Move](/blog/hip-hop-dance-move-monastery) — the Monastery applies the same toe-heel rocking mechanic as the Loose Leg but adds a downward arm push and head bob, making it the next natural progression from this foundational move.
-- [How to Do the Pepperseed Hip Hop Dance Move](/blog/hip-hop-dance-move-pepperseed) — the Pepperseed is the LA hip-hop dance descendant of the same heel-toe bounce family as the Loose Leg, extending the technique with shoulder and arm accents.
-- [How to Do the Heel Toe Hip Hop Dance Move](/blog/heel-toe) — the Heel Toe is a direct sibling of the Loose Leg: both come from the house dance tradition and use heel-and-toe pivots, but the Heel Toe applies them as a lateral rocking step rather than a vertical bounce.
-- [How to Do the Scribble Foot Dance Move](/blog/hip-hop-house-dance-move-scribble-foot) — the Scribble Foot is another house dance footwork move that benefits directly from the foot sensitivity and weight-transfer control built by mastering the Loose Leg first.
+- [How to Do the Monastery Hip Hop Dance Move](/blog/hip-hop-dance-move-monastery), the Monastery applies the same toe-heel rocking mechanic as the Loose Leg but adds a downward arm push and head bob, making it the next natural progression from this foundational move.
+- [How to Do the Pepperseed Hip Hop Dance Move](/blog/hip-hop-dance-move-pepperseed), the Pepperseed is the LA hip-hop dance descendant of the same heel-toe bounce family as the Loose Leg, extending the technique with shoulder and arm accents.
+- [How to Do the Heel Toe Hip Hop Dance Move](/blog/heel-toe), the Heel Toe is a direct sibling of the Loose Leg: both come from the house dance tradition and use heel-and-toe pivots, but the Heel Toe applies them as a lateral rocking step rather than a vertical bounce.
+- [How to Do the Scribble Foot Dance Move](/blog/hip-hop-house-dance-move-scribble-foot), the Scribble Foot is another house dance footwork move that benefits directly from the foot sensitivity and weight-transfer control built by mastering the Loose Leg first.

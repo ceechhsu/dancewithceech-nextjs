@@ -22,7 +22,7 @@ test("priority commercial pages use intent-aligned SEO metadata", () => {
     },
     "src/app/private-lessons/bay-area/page.tsx": {
       title: "Bay Area Hip-Hop Dance Lessons | DanceWithCeech",
-      description: "Find private hip-hop dance lessons for Bay Area adults—in person in San Jose or online. Train with Ceech through clear foundations and personal feedback.",
+      description: "Find private hip-hop dance lessons for Bay Area adults, in person in San Jose or online. Train with Ceech through clear foundations and personal feedback.",
     },
     "src/app/blog/page.tsx": {
       title: "Hip-Hop Dance Tutorials & Move Guides | DanceWithCeech",

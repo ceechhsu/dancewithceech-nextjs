@@ -25,7 +25,7 @@ This move can be seen in Michael Jackson's "[Remember The Time](https://youtu.be
 
 2. The Slide: Kick your right foot to the side slightly while sliding your left foot to meet it, then reverse the motion with the opposite feet.
 
-3. Arm Movement: As you kick out each foot, pump your arms back and forth in the opposite direction of your feet—a bit like a seesaw motion.
+3. Arm Movement: As you kick out each foot, pump your arms back and forth in the opposite direction of your feet, a bit like a seesaw motion.
 
 4. Adding the &#8220;Bart&#8221;: To give the move its distinctive character, add a bit of a bouncy swagger to your step, keeping the movements playful and energetic.
 
@@ -39,7 +39,7 @@ This move can be seen in Michael Jackson's "[Remember The Time](https://youtu.be
 
 - Dance to a range of hip-hop beats to get used to maintaining your rhythm across different tempos.
 
-- Don't be afraid to exaggerate the movements—after all, the dance is inspired by an animated character known for his larger-than-life personality.
+- Don't be afraid to exaggerate the movements, after all, the dance is inspired by an animated character known for his larger-than-life personality.
 
 ## Conclusion
 
@@ -49,7 +49,7 @@ Merging the zesty character of hip-hop with the lighthearted spirit of an animat
 
 If you liked the Bart Simpson, these moves share the same early-90s cartoon-inspired playfulness and lateral sliding footwork:
 
-- [How to Learn the Steve Martin Dance Move](/blog/steve-martin-dance) — also named after a pop-culture figure and built around a side kick-and-bounce pattern, the Steve Martin is from the same late-80s/early-90s novelty move era as the Bart Simpson.
-- [How to Do the Roger Rabbit Hip Hop Dance Move](/blog/hip-hop-dance-move-roger-rabbit) — the Roger Rabbit is the closest sibling to the Bart Simpson: both are cartoon-named 80s moves featuring floppy, exaggerated arm motions and a playful, loose-bodied stance.
-- [How to Do the Smurf Hip Hop Dance Move](/blog/hip-hop-dance-move-smurf) — yet another cartoon-named party move, the Smurf uses alternating circular arm swings that echo the Bart Simpson's seesaw arm pump rhythm.
-- [5 Easy Steps To Learn The Cabbage Patch Dance](/blog/cabbage-patch) — an 80s golden-age party move with circular arm swings and a hip sway, the Cabbage Patch is a natural combo partner when freestyling alongside the Bart Simpson.
+- [How to Learn the Steve Martin Dance Move](/blog/steve-martin-dance), also named after a pop-culture figure and built around a side kick-and-bounce pattern, the Steve Martin is from the same late-80s/early-90s novelty move era as the Bart Simpson.
+- [How to Do the Roger Rabbit Hip Hop Dance Move](/blog/hip-hop-dance-move-roger-rabbit), the Roger Rabbit is the closest sibling to the Bart Simpson: both are cartoon-named 80s moves featuring floppy, exaggerated arm motions and a playful, loose-bodied stance.
+- [How to Do the Smurf Hip Hop Dance Move](/blog/hip-hop-dance-move-smurf), yet another cartoon-named party move, the Smurf uses alternating circular arm swings that echo the Bart Simpson's seesaw arm pump rhythm.
+- [5 Easy Steps To Learn The Cabbage Patch Dance](/blog/cabbage-patch), an 80s golden-age party move with circular arm swings and a hip sway, the Cabbage Patch is a natural combo partner when freestyling alongside the Bart Simpson.

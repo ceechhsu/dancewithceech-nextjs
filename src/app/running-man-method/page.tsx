@@ -26,7 +26,7 @@ const structuredData = {
         "Running Man rhythm, balance, coordination, muscle memory, and performance confidence",
       hasCourseInstance: {
         "@type": "CourseInstance",
-        name: "Founding Cohort — Fall 2026",
+        name: "Founding Cohort, Fall 2026",
         courseMode: "Online",
         startDate: "2026-09-24",
         endDate: "2026-10-22",
@@ -41,7 +41,7 @@ const structuredData = {
     },
     {
       "@type": "Event",
-      name: "The Running Man Method — Live Graduation Challenge",
+      name: "The Running Man Method: Live Graduation Challenge",
       description:
         "Students perform the Running Man continuously and on beat for at least 30 seconds live in front of Ceech and their cohort.",
       startDate: "2026-10-22T20:00:00-07:00",
@@ -91,7 +91,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Learn the Running Man | 4-Week Online Cohort | Ceech",
     description:
-      "Learn the Running Man correctly in a four-week online beginner cohort with progressive drills and personal feedback from Ceech.",
+      "Learn the Running Man in a four-week online beginner cohort with progressive drills and personal feedback from Ceech.",
     images: ["https://dancewithceech.com/images/ceech/ceech-teaching-running-man-adult-class.webp"],
   },
 };

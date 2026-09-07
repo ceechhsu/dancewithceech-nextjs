@@ -499,7 +499,10 @@ export default function LockingFundamentalsPage() {
         </h1>
         <p className="text-lg text-[#F9F9F9]/70 max-w-xl mx-auto mb-4">
           This free, self-directed 30-day locking fundamentals training program is designed for
-          beginners to get started with locking. You will focus on mastering:
+          beginners to get started with locking. You will focus on practicing:
+        </p>
+        <p className="text-sm text-[#F9F9F9]/55 max-w-xl mx-auto mb-4">
+          This is a self-directed resource. It does not include personalized feedback or live coaching.
         </p>
         <div className="flex flex-wrap justify-center gap-2 mb-8">
           {["The Lock", "The Wrist Twirl", "The Point", "The Five"].map((move) => (

@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     from: "DanceWithCeech Contact Form <no-reply@dancewithceech.com>",
     to: "dancewithceech@gmail.com",
     replyTo: email,
-    subject: `[Contact] ${subject} — from ${name}`,
+    subject: `[Contact] ${subject}: from ${name}`,
     text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\n${message}`,
   });
 

@@ -197,7 +197,7 @@ function BeatRow({
   const firstScore = sessionCount > 0 ? sessions[0].score_pct : null
   const improvement = bestScore !== null && firstScore !== null ? bestScore - firstScore : null
 
-  let statusColor = '#6b7280'  // never played — gray
+  let statusColor = '#6b7280'  // never played, gray
   let statusLabel = 'Not started'
   if (mastered) {
     statusColor = '#22c55e'
@@ -234,12 +234,12 @@ function BeatRow({
 
         {/* Session count */}
         <div style={{ fontSize: 12, color: '#9ca3af', width: 60, textAlign: 'right' }}>
-          {sessionCount > 0 ? `${sessionCount} session${sessionCount !== 1 ? 's' : ''}` : '—'}
+          {sessionCount > 0 ? `${sessionCount} session${sessionCount !== 1 ? 's' : ''}` : 'N/A'}
         </div>
 
         {/* Best score */}
         <div style={{ fontSize: 12, color: '#9ca3af', width: 50, textAlign: 'right' }}>
-          {bestScore !== null ? `${bestScore}%` : '—'}
+          {bestScore !== null ? `${bestScore}%` : 'N/A'}
         </div>
 
         {/* Sparkline */}
@@ -262,7 +262,7 @@ function BeatRow({
               ['First Score', `${firstScore}%`],
               ['Best Score', `${bestScore}%`],
               ['Sessions', String(sessionCount)],
-              ['Improvement', improvement !== null ? `+${improvement}%` : '—'],
+              ['Improvement', improvement !== null ? `+${improvement}%` : 'N/A'],
               ['Mastery', '90% × 3 in a row'],
             ].map(([label, value]) => (
               <div key={label} style={{

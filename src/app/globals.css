@@ -4,16 +4,16 @@
 :root {
   --button-ripple-color: rgba(255, 255, 255, 0.3);
 
-  /* Brand: DanceWithCeech.com — dark mode only */
+  /* Brand: DanceWithCeech.com, dark mode only */
   --background: #0A0A0A;
   --surface: #111111;
   --foreground: #F9F9F9;
   --muted: #9CA3AF;
 
   /* Accent colors */
-  --accent-primary: #2563EB;   /* Electric blue — CTAs, links, highlights */
+  --accent-primary: #2563EB;   /* Electric blue, CTAs, links, highlights */
   --accent-primary-accessible: #60A5FA; /* Accessible blue for small text on dark surfaces */
-  --accent-secondary: #FDB515; /* Cal Gold — milestones, achievements, badges */
+  --accent-secondary: #FDB515; /* Cal Gold, milestones, achievements, badges */
   --accent-gold: #FDB515;      /* Alias for accent-secondary */
 }
 
@@ -70,7 +70,7 @@ textarea:-webkit-autofill {
   line-height: 1.9 !important;
 }
 
-/* H2 — major section headers */
+/* H2, major section headers */
 .prose h2 {
   font-family: var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif !important;
   font-size: 2rem !important;
@@ -85,7 +85,7 @@ textarea:-webkit-autofill {
   line-height: 1.2 !important;
 }
 
-/* H3 — subsection labels */
+/* H3, subsection labels */
 .prose h3 {
   font-family: var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif !important;
   font-size: 1.375rem !important;
@@ -98,7 +98,7 @@ textarea:-webkit-autofill {
   line-height: 1.25 !important;
 }
 
-/* H4 — inline labels */
+/* H4, inline labels */
 .prose h4 {
   font-family: var(--font-geist-sans), system-ui, sans-serif !important;
   font-size: 1rem !important;
@@ -137,7 +137,7 @@ textarea:-webkit-autofill {
   color: #9CA3AF !important;
 }
 
-/* ── Unordered lists — em dash in blue */
+/* Unordered lists with blue bullets */
 .prose ul {
   list-style: none !important;
   padding-left: 0 !important;
@@ -149,14 +149,14 @@ textarea:-webkit-autofill {
   margin-bottom: 0.65rem !important;
 }
 .prose ul > li::before {
-  content: "—" !important;
+  content: "•" !important;
   position: absolute !important;
   left: 0 !important;
   color: #2563EB !important;
   font-weight: 700 !important;
 }
 
-/* ── Ordered lists — numbered blue badge */
+/* Ordered lists with numbered blue badges */
 .prose ol {
   list-style: none !important;
   padding-left: 0 !important;
@@ -188,7 +188,7 @@ textarea:-webkit-autofill {
   font-family: var(--font-barlow-condensed), 'Arial Narrow', Arial, sans-serif !important;
 }
 
-/* ── Blockquote — gold accent */
+/* Blockquote, gold accent */
 .prose blockquote {
   border-left: 4px solid #FDB515 !important;
   padding: 1rem 1.5rem !important;

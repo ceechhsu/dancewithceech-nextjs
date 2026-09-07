@@ -4,11 +4,11 @@ seoTitle: "Stop N Go Dance: Scoo B Doo Locking Tutorial"
 slug: "master-the-funky-stop-n-go-a-locking-dance-move-that-oozes-swagger"
 date: "2024-06-20 15:45:52"
 category: "locking-dance-moves"
-description: "Stop N Go locking dance tutorial — the freeze-and-flow move created by Jimmy 'Scoo B Doo' Foster. 5 steps to master this signature locking contrast technique."
+description: "Stop N Go locking dance tutorial , the freeze-and-flow move created by Jimmy 'Scoo B Doo' Foster. 5 steps to master this signature locking contrast technique."
 ---
 ## Introduction
 
-The "Stop N' Go" is a quintessential locking dance move that epitomizes the funky and rhythmic nature of this style. Originating from the locking pioneer Scoo B Doo, this move involves freezing in place and then seamlessly transitioning back into motion, creating a mesmerizing contrast of stillness and fluidity. With its playful and expressive character, the "Stop N' Go" is a must-learn for anyone looking to add some serious swagger to their locking repertoire.
+The "Stop N' Go" is a classic locking dance move built on contrast. Originating from locking pioneer Scoo B Doo, it asks you to freeze in place, then transition smoothly back into motion. That contrast gives the move its playful character and makes it useful for adding personality to your locking.
 
 ## Video Demonstration
 
@@ -47,19 +47,19 @@ The Stop N Go is a locking dance move built on the contrast between sudden freez
 The Stop N Go was created by Jimmy "Scoo B Doo" Foster, an original member of The Lockers and a pioneering protégé of locking founder Don Campbell. Foster developed the move in the 1970s and it became one of the most widely used locking techniques because it captures the dance style's defining tension between motion and stillness.
 
 ### Is the Stop N Go the same as the Lock?
-Closely related. The Lock is the foundational freeze position that defines locking dance — a sudden pause after motion. The Stop N Go is a specific traveling move that USES the Lock (the freeze) as its defining beat. Every time you freeze during a Stop N Go, you're performing a Lock. The two moves train the same fundamental skill.
+Closely related. The Lock is the foundational freeze position that defines locking dance , a sudden pause after motion. The Stop N Go is a specific traveling move that USES the Lock (the freeze) as its defining beat. Every time you freeze during a Stop N Go, you're performing a Lock. The two moves train the same fundamental skill.
 
 ### How long does it take to learn the Stop N Go?
-Most beginners can perform the step-freeze-step pattern in 20-30 minutes. Getting the SHARPNESS right on the freeze — a truly locked, tension-filled pose rather than a soft pause — takes 1-2 weeks of focused practice. Matching the freezes to the music's accent beats is the next layer, another week or two.
+Most beginners can perform the step-freeze-step pattern in 20-30 minutes. Getting the SHARPNESS right on the freeze , a truly locked, tension-filled pose rather than a soft pause , takes 1-2 weeks of focused practice. Matching the freezes to the music's accent beats is the next layer, another week or two.
 
 ### What's the most common Stop N Go mistake?
-Soft freezes. The Stop N Go lives and dies on how sharp the freeze is — it should feel like every muscle locks simultaneously, not like a gradual deceleration. Beginners let the freeze fade instead of hitting it hard. Practice the freeze alone first (without the step) until it feels like hitting a wall, then add the stepping.
+Soft freezes. The Stop N Go lives and dies on how sharp the freeze is , it should feel like every muscle locks simultaneously, not like a gradual deceleration. Beginners let the freeze fade instead of hitting it hard. Practice the freeze alone first (without the step) until it feels like hitting a wall, then add the stepping.
 
 ## More Locking Dance Moves
 
 If you liked the Stop N Go, these moves share the same freeze-and-flow contrast at the core of locking:
 
-- [Mastering the Iconic Lock: The Foundation of Locking Dance](/blog/mastering-the-iconic-lock-the-foundation-of-locking-dance) — The Stop N Go is built on the same freeze-then-release mechanic that defines the Lock itself, so mastering the original Lock directly sharpens the stillness moments in your Stop N Go.
-- [Mastering the Sneak: A Classic Locking Move](/blog/mastering-the-sneak-a-classic-locking-move) — Both the Sneak and the Stop N Go are freeze-based moves that use a sharp hold to punctuate motion, and both were staples of early Don Campbell-era locking vocabulary.
-- [Mastering the Pacing Move in Locking Dance](/blog/unlock-the-rhythm-mastering-the-pacing-move-in-locking-dance) — Pacing builds the rhythmic arm extension that gives you something purposeful to do with your upper body during the "go" phase of the Stop N Go.
-- [Mastering the Volkswagen: A Funky Locking Move](/blog/mastering-the-volkswagen-a-funky-locking-move) — Like the Stop N Go, the Volkswagen relies on holding a precise shape at a defined beat before releasing, training the same sense of rhythmic pause and body control.
+- [Mastering the Iconic Lock: The Foundation of Locking Dance](/blog/mastering-the-iconic-lock-the-foundation-of-locking-dance) , The Stop N Go is built on the same freeze-then-release mechanic that defines the Lock itself, so mastering the original Lock directly sharpens the stillness moments in your Stop N Go.
+- [Mastering the Sneak: A Classic Locking Move](/blog/mastering-the-sneak-a-classic-locking-move) , Both the Sneak and the Stop N Go are freeze-based moves that use a sharp hold to punctuate motion, and both were staples of early Don Campbell-era locking vocabulary.
+- [Mastering the Pacing Move in Locking Dance](/blog/unlock-the-rhythm-mastering-the-pacing-move-in-locking-dance) , Pacing builds the rhythmic arm extension that gives you something purposeful to do with your upper body during the "go" phase of the Stop N Go.
+- [Mastering the Volkswagen: A Funky Locking Move](/blog/mastering-the-volkswagen-a-funky-locking-move) , Like the Stop N Go, the Volkswagen relies on holding a precise shape at a defined beat before releasing, training the same sense of rhythmic pause and body control.

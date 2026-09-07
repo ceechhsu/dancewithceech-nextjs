@@ -50,9 +50,9 @@ The freeze is more than just a static pose; it's a powerful tool in a breaker's 
 
 ## More Breaking Dance Moves
 
-If you liked the Freeze, these moves give you the dynamic content to punctuate — because a freeze only lands when you've got something to freeze out of:
+If you liked the Freeze, these moves give you the dynamic content to punctuate , because a freeze only lands when you've got something to freeze out of:
 
-- [Mastering the 6 Step: The Foundation of Breakdancing Footwork](/blog/mastering-the-6-step-the-foundation-of-breakdancing-footwork) — The 6 Step is the most common move to exit into a freeze, and learning to snap cleanly from footwork into a held position is one of the first skills taught together.
-- [Mastering the Backspin: A Fundamental Breaking Power Move](/blog/mastering-the-backspin-a-fundamental-breaking-power-move) — Power moves like the backspin are designed to build rotational momentum that is then released into a freeze — the two elements are structurally paired in breaking.
-- [Mastering the Windmill: The Iconic B-Boy Power Move](/blog/mastering-the-windmill-the-iconic-b-boy-power-move) — Ending a windmill combination with a freeze is a standard battle move, and developing both together sharpens your ability to control when and how you stop.
-- [Mastering the Headspin: A Gravity-Defying Breaking Move](/blog/mastering-the-headspin-a-gravity-defying-breaking-move) — Locking into a freeze after a headspin is an advanced but frequently used sequence, and both moves demand the same core stability and sense of body position under pressure.
+- [Mastering the 6 Step: The Foundation of Breakdancing Footwork](/blog/mastering-the-6-step-the-foundation-of-breakdancing-footwork) , The 6 Step is the most common move to exit into a freeze, and learning to snap cleanly from footwork into a held position is one of the first skills taught together.
+- [Mastering the Backspin: A Fundamental Breaking Power Move](/blog/mastering-the-backspin-a-fundamental-breaking-power-move) , Power moves like the backspin are designed to build rotational momentum that is then released into a freeze , the two elements are structurally paired in breaking.
+- [Mastering the Windmill: The Iconic B-Boy Power Move](/blog/mastering-the-windmill-the-iconic-b-boy-power-move) , Ending a windmill combination with a freeze is a standard battle move, and developing both together sharpens your ability to control when and how you stop.
+- [Mastering the Headspin: A Gravity-Defying Breaking Move](/blog/mastering-the-headspin-a-gravity-defying-breaking-move) , Locking into a freeze after a headspin is an advanced but frequently used sequence, and both moves demand the same core stability and sense of body position under pressure.

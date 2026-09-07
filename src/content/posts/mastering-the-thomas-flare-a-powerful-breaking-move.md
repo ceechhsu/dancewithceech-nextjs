@@ -49,22 +49,22 @@ The Thomas Flare is a cornerstone move in breaking that demands dedication and p
 The Thomas Flare (usually just called "flare" in breaking) is a power move where the dancer alternates balance between both arms while swinging their legs in continuous wide circles. It originated in gymnastics on the pommel horse and was adapted to breakdancing in the late 1970s, becoming one of breaking's most recognizable power moves.
 
 ### Who created the Thomas Flare?
-The Thomas Flare was created by American gymnast Kurt Thomas in the 1970s on the pommel horse. B-boys adapted the move to the dance floor by performing it without a pommel horse, balancing on their hands and the floor instead. In gymnastics it's technically the "Thomas flair" — the breaking spelling "flare" is the one that stuck in dance circles.
+The Thomas Flare was created by American gymnast Kurt Thomas in the 1970s on the pommel horse. B-boys adapted the move to the dance floor by performing it without a pommel horse, balancing on their hands and the floor instead. In gymnastics it's technically the "Thomas flair" , the breaking spelling "flare" is the one that stuck in dance circles.
 
 ### Is the Thomas Flare hard to learn?
-Very hard. The Thomas Flare is one of the most physically demanding moves in breaking — it requires significant shoulder and arm strength, hip flexibility, core control, and coordination. Most breakers need 6-12 months of dedicated training with solid prerequisites (swipes, push-ups, straddle flexibility) before they can execute a clean flare.
+Very hard. The Thomas Flare is one of the most physically demanding moves in breaking , it requires significant shoulder and arm strength, hip flexibility, core control, and coordination. Most breakers need 6-12 months of dedicated training with solid prerequisites (swipes, push-ups, straddle flexibility) before they can execute a clean flare.
 
 ### How long does it take to learn the Thomas Flare?
-Assuming you have the prerequisite strength and flexibility: 3-6 months of dedicated practice to get a rough flare, 6-12 months for a clean one, 1-2 years to combine flares into sequences smoothly. Without prerequisites (shoulder strength, straddle flexibility, core stability), expect significantly longer — start with conditioning first.
+Assuming you have the prerequisite strength and flexibility: 3-6 months of dedicated practice to get a rough flare, 6-12 months for a clean one, 1-2 years to combine flares into sequences smoothly. Without prerequisites (shoulder strength, straddle flexibility, core stability), expect significantly longer , start with conditioning first.
 
 ### What's the most common Thomas Flare mistake?
-Not keeping the arms fully extended. The flare requires locked-out, fully extended arms to transfer weight between them cleanly. Bent arms collapse, causing the hips to drop and the rotation to die. Drill planche-position arm strength BEFORE attempting full flares — push-ups with locked arms, L-sits, and straddle holds build the required structure.
+Not keeping the arms fully extended. The flare requires locked-out, fully extended arms to transfer weight between them cleanly. Bent arms collapse, causing the hips to drop and the rotation to die. Drill planche-position arm strength BEFORE attempting full flares , push-ups with locked arms, L-sits, and straddle holds build the required structure.
 
 ## More Breaking Dance Moves
 
 If you liked the Thomas Flare, these moves share the same requirement for extended arm strength, hip elevation, and continuous circular leg motion:
 
-- [Mastering the Swipe: A Fundamental Breaking Power Move](/blog/mastering-the-swipe-a-fundamental-breaking-power-move) — The Swipe develops the same hip-up, weight-on-extended-arms body position that the flare requires, and many b-boys use swipe training as direct conditioning for flares.
-- [Mastering the Windmill: The Iconic B-Boy Power Move](/blog/mastering-the-windmill-the-iconic-b-boy-power-move) — The windmill shares the flare's continuous circular leg motion, and both moves are paired in advanced power move combos because they demand the same leg power and body awareness.
-- [Mastering the 1990: A Classic Power Move in Breaking](/blog/mastering-the-1990-a-classic-power-move-in-breaking) — Like the flare, the 1990 has deep roots in gymnastics movement patterns and demands the same full arm extension and sustained inverted balance to execute cleanly.
-- [Mastering the Baby Swipe: A Fundamental Breaking Power Move](/blog/mastering-the-baby-swipe-a-fundamental-breaking-power-move) — The Baby Swipe is the most accessible way to start building the bridged body position and rotational habit the flare depends on, making it a common prerequisite drill.
+- [Mastering the Swipe: A Fundamental Breaking Power Move](/blog/mastering-the-swipe-a-fundamental-breaking-power-move) , The Swipe develops the same hip-up, weight-on-extended-arms body position that the flare requires, and many b-boys use swipe training as direct conditioning for flares.
+- [Mastering the Windmill: The Iconic B-Boy Power Move](/blog/mastering-the-windmill-the-iconic-b-boy-power-move) , The windmill shares the flare's continuous circular leg motion, and both moves are paired in advanced power move combos because they demand the same leg power and body awareness.
+- [Mastering the 1990: A Classic Power Move in Breaking](/blog/mastering-the-1990-a-classic-power-move-in-breaking) , Like the flare, the 1990 has deep roots in gymnastics movement patterns and demands the same full arm extension and sustained inverted balance to execute cleanly.
+- [Mastering the Baby Swipe: A Fundamental Breaking Power Move](/blog/mastering-the-baby-swipe-a-fundamental-breaking-power-move) , The Baby Swipe is the most accessible way to start building the bridged body position and rotational habit the flare depends on, making it a common prerequisite drill.

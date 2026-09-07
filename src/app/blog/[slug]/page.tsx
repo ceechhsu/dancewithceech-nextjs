@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const pageUrl = `https://dancewithceech.com/blog/${post.slug}`;
   const ogImage = `https://dancewithceech.com/images/posts/${post.slug}.jpg`;
   return {
-    title: post.seoTitle ?? `${post.title} — DanceWithCeech`,
+    title: post.seoTitle ?? `${post.title}: DanceWithCeech`,
     description,
     openGraph: {
       title: post.title,
@@ -183,7 +183,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           {post.title}
         </h1>
 
-        {/* Meta row — author, dates, and reading time */}
+        {/* Meta row: author, dates, and reading time */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm mb-10" style={{ color: "var(--muted)" }}>
           <Link href="/about" className="hover:text-white transition-colors">By Ceech</Link>
           <span>Published {displayDate(post.date)}</span>

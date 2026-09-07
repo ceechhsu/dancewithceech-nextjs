@@ -47,7 +47,7 @@ The Pepperseed is an iconic and visually captivating hip hop dance move that sho
 
 If you liked the Pepperseed, these moves share the same toe-heel bouncing illusion and shoulder-accented rhythm:
 
-- [How to Do the Monastery Hip Hop Dance Move](/blog/hip-hop-dance-move-monastery) — the Monastery is the St. Louis counterpart to LA's Pepperseed — both use the same toe-heel weight transfer with arm accents, making them nearly identical in mechanics with different regional origins.
-- [House Dance | Loose Leg](/blog/house-dance-loose-leg) — the Loose Leg is the foundational house dance ancestor of the Pepperseed's bouncing heel-toe technique and helps build the smooth, controlled weight transfer required.
-- [How to Do the Heel Toe Hip Hop Dance Move](/blog/heel-toe) — the Heel Toe applies the same heel-and-toe mechanics as the Pepperseed but shifts them into a lateral rocking pivot, making the two moves great partners for building overall foot control.
-- [How to Do the Walk It Out Hip Hop Dance Move](/blog/hip-hop-dance-move-walk-it-out) — Walk It Out's crossing footwork and smooth weight transitions pair naturally with the Pepperseed's ground-level bouncing style in a connected freestyle sequence.
+- [How to Do the Monastery Hip Hop Dance Move](/blog/hip-hop-dance-move-monastery), the Monastery is the St. Louis counterpart to LA's Pepperseed, both use the same toe-heel weight transfer with arm accents, making them nearly identical in mechanics with different regional origins.
+- [House Dance | Loose Leg](/blog/house-dance-loose-leg), the Loose Leg is the foundational house dance ancestor of the Pepperseed's bouncing heel-toe technique and helps build the smooth, controlled weight transfer required.
+- [How to Do the Heel Toe Hip Hop Dance Move](/blog/heel-toe), the Heel Toe applies the same heel-and-toe mechanics as the Pepperseed but shifts them into a lateral rocking pivot, making the two moves great partners for building overall foot control.
+- [How to Do the Walk It Out Hip Hop Dance Move](/blog/hip-hop-dance-move-walk-it-out), Walk It Out's crossing footwork and smooth weight transitions pair naturally with the Pepperseed's ground-level bouncing style in a connected freestyle sequence.

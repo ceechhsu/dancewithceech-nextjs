@@ -7,7 +7,7 @@ description: "Learn the Heel Toe hip hop dance move step by step. Master this sm
 ---
 ## Master the Heel Toe Dance Move with Hip Hop Flair
 
-Infuse your Hip Hop routine with the slick and intricate "Heel Toe" dance move, a step that cleverly plays with balance and shifts in weight to create an eye-catching illusion. Integral to the street dance scene, the Heel Toe is equal parts precision and style, offering dancers a way to add complexity to their footwork while keeping to the beat. Perfecting the Heel Toe can be a game-changer for any dancer looking to enhance their repertoire with smooth transitions and engaging patterns.
+The "Heel Toe" plays with balance and weight shifts to create an eye-catching illusion. It adds detail to your footwork while keeping you on beat. Practice the heel and toe changes slowly before adding transitions.
 
 ## Video Demonstration
 
@@ -56,7 +56,7 @@ The Heel Toe isn't simply a dance step; it's a testament to the balance, rhythm,
 
 If you liked the Heel Toe, these moves share the same weight-shifting mechanics between heel and toe that create a smooth sliding illusion:
 
-- [House Dance | Loose Leg](/blog/house-dance-loose-leg) — the Loose Leg is essentially the foundational house dance version of the same heel-toe rocking motion, originating from the same Chicago/NY underground scene that influenced the Heel Toe's crossover.
-- [How to Do the Monastery Hip Hop Dance Move](/blog/hip-hop-dance-move-monastery) — the Monastery uses the exact same toe-to-heel weight transfer as the Heel Toe, just applied with a bouncing illusion rather than a rocking pivot.
-- [How to Do the Pepperseed Hip Hop Dance Move](/blog/hip-hop-dance-move-pepperseed) — the Pepperseed operates on the identical toe-heel shifting mechanic as the Heel Toe, and learning both sharpens the muscle memory for all moves in this family.
-- [How to Do the Walk It Out Hip Hop Dance Move](/blog/hip-hop-dance-move-walk-it-out) — Walk It Out relies on smooth crossing footwork and weight transitions, making it a natural style companion for dancers who enjoy the Heel Toe's ground-level precision.
+- [House Dance | Loose Leg](/blog/house-dance-loose-leg), the Loose Leg is essentially the foundational house dance version of the same heel-toe rocking motion, originating from the same Chicago/NY underground scene that influenced the Heel Toe's crossover.
+- [How to Do the Monastery Hip Hop Dance Move](/blog/hip-hop-dance-move-monastery), the Monastery uses the exact same toe-to-heel weight transfer as the Heel Toe, just applied with a bouncing illusion rather than a rocking pivot.
+- [How to Do the Pepperseed Hip Hop Dance Move](/blog/hip-hop-dance-move-pepperseed), the Pepperseed operates on the identical toe-heel shifting mechanic as the Heel Toe, and learning both sharpens the muscle memory for all moves in this family.
+- [How to Do the Walk It Out Hip Hop Dance Move](/blog/hip-hop-dance-move-walk-it-out), Walk It Out relies on smooth crossing footwork and weight transitions, making it a natural style companion for dancers who enjoy the Heel Toe's ground-level precision.

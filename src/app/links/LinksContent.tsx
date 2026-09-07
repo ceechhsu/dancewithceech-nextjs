@@ -43,7 +43,7 @@ export default function LinksContent() {
     },
     {
       label: "Book a free consultation",
-      sublabel: "Private lessons — San Jose or online",
+      sublabel: "Private lessons: San Jose or online",
       href: internal("/private-lessons", "private-lessons"),
       external: false,
       campaign: "private-lessons",
@@ -65,7 +65,7 @@ export default function LinksContent() {
     },
     {
       label: "Text Ceech",
-      sublabel: "Fastest way to reach me — (408) 657-3771",
+      sublabel: "Fastest way to reach me: (408) 657-3771",
       href: "sms:4086573771",
       external: true,
       campaign: "sms",

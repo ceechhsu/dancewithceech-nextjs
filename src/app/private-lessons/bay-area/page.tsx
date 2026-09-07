@@ -7,7 +7,7 @@ import { formatReviewProof, getReviewSummary } from "@/lib/reviews";
 
 export const metadata = {
   title: "Bay Area Hip-Hop Dance Lessons | DanceWithCeech",
-  description: "Find private hip-hop dance lessons for Bay Area adults—in person in San Jose or online. Train with Ceech through clear foundations and personal feedback.",
+  description: "Find private hip-hop dance lessons for Bay Area adults, in person in San Jose or online. Train with Ceech through clear foundations and personal feedback.",
   alternates: { canonical: "https://dancewithceech.com/private-lessons/bay-area" },
   openGraph: {
     title: "Bay Area Hip-Hop Dance Lessons | DanceWithCeech",
@@ -44,7 +44,7 @@ export default async function BayAreaPrivateLessonsPage() {
             Private Hip-Hop Dance Lessons for the Bay Area
           </h1>
           <p className="text-lg leading-relaxed mb-8" style={{ color: "var(--muted)" }}>
-            1-on-1 private dance lessons serving the entire Bay Area, in person at Get Down Dance Studios in San Jose or virtually through Google Meet from anywhere. Taught by Ceech, a Bay Area dance instructor teaching since 1998 with direct Electric Boogaloos lineage. Hip-hop, locking, popping, breaking, and house.
+            1-on-1 private dance lessons for adults 18 and older across the Bay Area, in person at Get Down Dance Studios in San Jose or virtually through Google Meet from anywhere. Ceech has taught dance since 1998 and has direct training in Electric Boogaloos movement. Hip-hop, locking, popping, breaking, and house dance are available.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a
@@ -71,10 +71,10 @@ export default async function BayAreaPrivateLessonsPage() {
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-balance">Teaching in the Bay Area since 1998</h2>
           <div className="space-y-5 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
             <p>
-              The Bay Area has a vibrant but fragmented dance scene — studios in San Francisco focus on contemporary and jazz; South Bay options skew toward ballroom and K-pop. If you&apos;re looking for <em>actual street dance</em> — hip-hop, locking, popping, breaking, house — with an instructor who trained under the people who created the styles, the options narrow fast.
+              The Bay Area has many dance communities and training options. If you&apos;re looking for hip-hop, locking, popping, breaking, or house dance, private lessons can give you focused time on foundations, rhythm, balance, and coordination.
             </p>
             <p>
-              I&apos;ve held college faculty positions at Mission College, West Valley College, Gavilan College, and Cabrillo College, and I&apos;ve guest taught at Stanford, UC Berkeley, UC Santa Cruz, Santa Clara University, De Anza College, San Jose City College, and Ohlone College. My funk styles lineage traces directly to Pop&apos;in Pete and Skeeter Rabbit of the Electric Boogaloos — the crew that invented popping. When you learn from me, you&apos;re learning the real thing from someone a handshake away from the original sources.
+              I&apos;ve held college faculty positions at Mission College, West Valley College, Gavilan College, and Cabrillo College, and I&apos;ve guest taught at Stanford, UC Berkeley, UC Santa Cruz, Santa Clara University, De Anza College, San Jose City College, and Ohlone College. My funk styles training includes direct study with Pop&apos;in Pete and Skeeter Rabbit of the Electric Boogaloos. That background informs the way I teach popping, waving, and Boogaloo.
             </p>
             <p>
               In-person lessons are at <strong style={{ color: "var(--foreground)" }}>Get Down Dance Studios in San Jose Japantown</strong>, central enough for students from Sunnyvale, Cupertino, Palo Alto, Santa Clara, Mountain View, Fremont, and Milpitas. For students farther out, <strong style={{ color: "var(--foreground)" }}>virtual coaching through Google Meet</strong> provides personalized video feedback and live instruction.
@@ -88,15 +88,15 @@ export default async function BayAreaPrivateLessonsPage() {
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-balance">Students come from across the Bay</h2>
           <p className="text-lg leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
-            Typical drive times to Get Down Dance Studios, San Jose (Japantown):
+            Approximate drive times to Get Down Dance Studios in San Jose Japantown can vary with traffic:
           </p>
           <ul className="space-y-2 text-base" style={{ color: "var(--muted)" }}>
-            <li><strong style={{ color: "var(--foreground)" }}>San Jose</strong> — 0-15 min</li>
-            <li><strong style={{ color: "var(--foreground)" }}>Santa Clara / Sunnyvale</strong> — 15-25 min</li>
-            <li><strong style={{ color: "var(--foreground)" }}>Cupertino / Mountain View</strong> — 20-30 min</li>
-            <li><strong style={{ color: "var(--foreground)" }}>Milpitas / Fremont</strong> — 15-25 min</li>
-            <li><strong style={{ color: "var(--foreground)" }}>Palo Alto / Los Altos</strong> — 25-35 min</li>
-            <li><strong style={{ color: "var(--foreground)" }}>Oakland / San Francisco</strong> — 50-60 min (virtual recommended)</li>
+            <li><strong style={{ color: "var(--foreground)" }}>San Jose</strong>: 0 to 15 min</li>
+            <li><strong style={{ color: "var(--foreground)" }}>Santa Clara / Sunnyvale</strong>: 15 to 25 min</li>
+            <li><strong style={{ color: "var(--foreground)" }}>Cupertino / Mountain View</strong>: 20 to 30 min</li>
+            <li><strong style={{ color: "var(--foreground)" }}>Milpitas / Fremont</strong>: 15 to 25 min</li>
+            <li><strong style={{ color: "var(--foreground)" }}>Palo Alto / Los Altos</strong>: 25 to 35 min</li>
+            <li><strong style={{ color: "var(--foreground)" }}>Oakland / San Francisco</strong>: 50 to 60 min (virtual recommended)</li>
           </ul>
           <p className="mt-6 text-base" style={{ color: "var(--muted)" }}>
             For students in San Francisco, Oakland, Marin, or the East Bay, I strongly recommend starting with virtual coaching through Google Meet. You receive personalized video feedback and live instruction without spending hours driving to San Jose.

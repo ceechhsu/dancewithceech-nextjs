@@ -40,9 +40,9 @@ test("the Running Man Method route presents the approved founding-cohort hero", 
 
   assert.match(
     source,
-    /Learn the Running Man—and Finally Feel Ready to Join the Dance Floor/,
+    /Learn the Running Man and Feel Ready to Join the Dance Floor/,
   );
-  assert.match(source, /September 24–October 22, 2026/);
+  assert.match(source, /September 24 to October 22, 2026/);
   assert.match(source, /Enrollment closes September 17/);
   assert.match(source, /Adults 18\+/);
   assert.match(source, /Limited to 12 students/);
@@ -73,7 +73,6 @@ test("the page carries the complete approved offer from problem through enrollme
     /Private Coaching for \$100/,
     /Frequently Asked Questions/,
     /Graduate on October 22/,
-    /20% off their next eligible Dance With Ceech Method/,
   ];
 
   for (const pattern of requiredCopy) {
@@ -194,7 +193,7 @@ test("sold-out offers are visibly stamped and remain non-interactive", async () 
   const enrollmentPanel = await readFile(enrollmentPanelPath, "utf8");
 
   assert.match(enrollmentPanel, /SOLD OUT/);
-  assert.match(enrollmentPanel, /Private Coaching — Sold Out/);
+  assert.match(enrollmentPanel, /Private Coaching: Sold Out/);
   assert.match(enrollmentPanel, /tier\.status === "complete"/);
   assert.match(enrollmentPanel, /coachingStatus === "sold_out"/);
   assert.match(enrollmentPanel, /\/running-man\/sold-out-stamp-option-2\.png/);

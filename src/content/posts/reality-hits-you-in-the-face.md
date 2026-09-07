@@ -1,5 +1,5 @@
 ---
-title: "Dance Is Hard — Here's Why You Should Keep Going"
+title: "Dance Is Hard , Here's Why You Should Keep Going"
 seoTitle: "Dance Is Hard: How to Keep Going"
 slug: "reality-hits-you-in-the-face"
 date: "2022-09-08 12:49:01"
@@ -16,7 +16,7 @@ I want to state for the record that I believe that anyone can learn to dance.  
 
 ## Read Next
 
-- [Why Hip Hop Dance Is Hard (And How to Push Through)](/blog/i-almost-quit-dancing) — the companion piece: where this article gives the mindset, that one gives the real story of what 8 months of not quitting actually looked like
-- [3 Reasons Why Private Dance Lessons Work](/blog/3-reasons-why-private-lessons-works) — if you're going to push through, having a coach removes the wasted repetitions and bad habits that slow solo learners down
-- [Work with Ceech — Private Lessons](/private-lessons) — for students who choose option 3 (practice more), this is the most direct path to results
-- [6 Simple Steps to Learn The Harlem Shake](/blog/harlem-shake) — pick a move and start: beginner-friendly, quick win, and exactly the kind of early momentum that keeps people going
+- [Why Hip Hop Dance Is Hard (And How to Push Through)](/blog/i-almost-quit-dancing) , the companion piece: where this article gives the mindset, that one gives the real story of what 8 months of not quitting actually looked like
+- [3 Reasons Why Private Dance Lessons Work](/blog/3-reasons-why-private-lessons-works) , if you're going to push through, having a coach removes the wasted repetitions and bad habits that slow solo learners down
+- [Work with Ceech , Private Lessons](/private-lessons) , for students who choose option 3 (practice more), this is the most direct path to results
+- [6 Simple Steps to Learn The Harlem Shake](/blog/harlem-shake) , pick a move and start: beginner-friendly, quick win, and exactly the kind of early momentum that keeps people going

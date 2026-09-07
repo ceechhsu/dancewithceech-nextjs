@@ -53,7 +53,7 @@ export default async function PrivateLessonsPage() {
               Private Hip-Hop Dance Lessons in San Jose and Online
             </h1>
             <p className="text-lg leading-relaxed mb-8" style={{ color: "var(--muted)" }}>
-              Real-time feedback. Personalized to exactly where you are. Available in-person at <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}>Get Down Dance Studios</a> in San Jose, or virtually through Google Meet from anywhere in the world.
+              Real-time feedback, personalized to your current ability and goals. Private lessons are designed for adults 18 and older and are available in person at <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}>Get Down Dance Studios</a> in San Jose, or virtually through Google Meet from anywhere in the world.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
@@ -108,11 +108,11 @@ title="Ceech teaching a private lesson"
               },
               {
                 title: "Real-Time Corrections",
-                description: "Ceech watches you move and gives immediate feedback — the kind you can't get from a YouTube video.",
+                description: "Ceech watches you move and gives immediate feedback, with corrections you can't get from a prerecorded video.",
               },
               {
                 title: "Any Style, Any Level",
-                description: "Hip-hop, locking, popping, breaking, house dance. Complete beginner or seasoned dancer — all welcome.",
+                description: "Hip-hop, locking, popping, breaking, and house dance for adults 18 and older, from complete beginners to experienced dancers.",
               },
             ].map(({ title, description }) => (
               <div key={title} className="rounded-2xl p-6" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
@@ -135,7 +135,7 @@ title="Ceech teaching a private lesson"
               The Method in Action
             </div>
             <h2 className="text-3xl font-bold mb-3 text-balance">Watch Ceech teach</h2>
-            <p style={{ color: "var(--muted)" }}>Not just performing — actually teaching. This is what your lesson looks like.</p>
+            <p style={{ color: "var(--muted)" }}>These videos show Ceech teaching, not just performing. This is what your lesson looks like.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
@@ -208,9 +208,9 @@ title="Ceech teaching knee pop footwork"
             {[
               "You want to learn faster than a group class allows",
               "You're too self-conscious to dance in front of others yet",
-              "You have a specific move or style you want to master",
+              "You have a specific move or style you want to learn",
               "You've been dancing for years but hit a plateau",
-              "You want direct, honest feedback — not just encouragement",
+              "You want direct, honest feedback, not just encouragement",
             ].map((item) => (
               <div key={item} className="flex items-start gap-3">
                 <span style={{ color: "var(--accent-primary)" }}>→</span>

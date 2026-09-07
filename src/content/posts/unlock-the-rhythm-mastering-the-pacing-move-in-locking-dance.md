@@ -7,7 +7,7 @@ description: "Learn the Pacing locking move with rhythmic arm extensions that dr
 ---
 ## Introduction
 
-In the dynamic world of Locking, a funk-inspired dance style that emerged from the streets of Los Angeles, the Pacing move stands as a fundamental technique that drives the rhythm and timing of a routine. This essential move serves as the backbone, providing a steady beat and allowing dancers to seamlessly transition between other locking moves. Pacing is not just a step; it's a rhythmic expression that embodies the essence of Locking, combining precise arm movements with a groovy swagger.
+In Locking, the Pacing move helps drive a routine's rhythm and timing. It provides a steady beat and lets you transition smoothly between other locking moves. Combine precise arm paths with a relaxed groove.
 
 ## Video Demonstration
 
@@ -38,13 +38,13 @@ The origins of Pacing can be traced back to the pioneers of Locking, a group kno
 
 ## Conclusion
 
-Pacing is a fundamental move in the Locking dance style, serving as the backbone that drives the rhythm and timing of a routine. By mastering this essential technique, dancers can tap into the funk-inspired essence of Locking, creating a mesmerizing visual representation of the music's beat. Whether performed as a standalone move or integrated into intricate combinations, Pacing remains a timeless and essential part of the Locking repertoire.
+Pacing is a fundamental move in the Locking dance style that develops rhythm and timing within a routine. By practicing the technique, dancers can work with the funk-inspired qualities of Locking and make the beat visible through coordinated arm and body movement. Whether performed as a standalone move or integrated into combinations, Pacing remains an important part of the Locking repertoire.
 
 ## More Locking Dance Moves
 
 If you liked the Pacing Move, these moves share the same arm-extension rhythm and use Pacing as their natural connecting tissue:
 
-- [Mastering the Locking Point: A Funky and Animated Move](/blog/mastering-the-locking-point-a-funky-and-animated-move) — The Locking Point and Pacing both involve sharp outward arm extensions, making them natural partners — Pacing keeps you in the groove while the Point punctuates it with a directional gesture.
-- [Master the Wrist Twirl: An Essential Locking Dance Move](/blog/master-the-funky-wrist-twirl-a-locking-dance-move-essential) — Pacing's wrist flick at the peak of each arm extension draws directly from Wrist Twirl technique — the two moves reinforce each other when practiced together.
-- [Mastering the Iconic Lock: The Foundation of Locking Dance](/blog/mastering-the-iconic-lock-the-foundation-of-locking-dance) — Pacing is the rhythmic glue that connects individual Locks into a cohesive routine — learning to transition from Pacing into a Lock and back out is foundational to building a real locking set.
-- [Master the Skeeter Rabbit: A Locking Dance Move Masterclass](/blog/master-the-funky-skeeter-rabbit-a-locking-dance-move-masterclass) — The Skeeter Rabbit uses a running arm swing that mirrors Pacing's alternating arm pattern — dancers who understand Pacing's rhythmic arm logic pick up the Skeeter Rabbit's arm timing much faster.
+- [Mastering the Locking Point: A Funky and Animated Move](/blog/mastering-the-locking-point-a-funky-and-animated-move): The Locking Point and Pacing both involve sharp outward arm extensions, making them natural partners. Pacing keeps you in the groove while the Point punctuates it with a directional gesture.
+- [Master the Wrist Twirl: An Essential Locking Dance Move](/blog/master-the-funky-wrist-twirl-a-locking-dance-move-essential): Pacing's wrist flick at the peak of each arm extension draws directly from Wrist Twirl technique. The two moves reinforce each other when practiced together.
+- [Mastering the Iconic Lock: The Foundation of Locking Dance](/blog/mastering-the-iconic-lock-the-foundation-of-locking-dance): Pacing is the rhythmic glue that connects individual Locks into a cohesive routine. Learning to transition from Pacing into a Lock and back out is foundational to building a real locking set.
+- [Master the Skeeter Rabbit: A Locking Dance Move Masterclass](/blog/master-the-funky-skeeter-rabbit-a-locking-dance-move-masterclass): The Skeeter Rabbit uses a running arm swing that mirrors Pacing's alternating arm pattern. Dancers who understand Pacing's rhythmic arm logic can study the Skeeter Rabbit's arm timing more clearly.

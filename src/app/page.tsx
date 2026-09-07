@@ -90,7 +90,7 @@ export default async function Home() {
               />
               <div className="px-4 py-3" style={{ backgroundColor: "var(--surface)" }}>
                 <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--accent-gold)" }}>Crew with Future Jabbawockeez Members</div>
-                <div className="text-sm font-semibold">Mindtricks: Bay Area&apos;s most respected crew</div>
+                <div className="text-sm font-semibold">Mindtricks: Bay Area dance crew</div>
               </div>
             </div>
             <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
@@ -113,8 +113,7 @@ export default async function Home() {
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm" style={{ color: "var(--muted)" }}>
             <span>Also taught at</span>
             <strong style={{ color: "var(--foreground)" }}>Google</strong>
-            <strong style={{ color: "var(--foreground)" }}>LinkedIn</strong>
-            <span>College faculty at Mission, West Valley, Gavilan &amp; Cabrillo</span>
+            <span>College teaching at Mission, West Valley, Gavilan, and Cabrillo</span>
             <span>Guest taught at Stanford, UC Berkeley &amp; more</span>
           </div>
         </div>
@@ -147,7 +146,7 @@ export default async function Home() {
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Start with these dance tutorials</h2>
             <p className="max-w-2xl mx-auto" style={{ color: "var(--muted)" }}>
-              Core tutorials from each style, linked directly from the homepage so students and search engines can reach them faster.
+              Core tutorials from each style, collected here so you can start with the fundamentals.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
