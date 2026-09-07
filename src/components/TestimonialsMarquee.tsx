@@ -22,13 +22,13 @@ const reviews = [
     name: 'Hoaxin L.',
     initials: 'HL',
     source: 'Yelp',
-    body: "The best dance class I'd repeat! Ceech knows how to connect students as a group. Last month I was on a TV show and used what I learned — it rocked!",
+    body: "The best dance class I'd repeat! Ceech knows how to connect students as a group. Last month I was on a TV show and used what I learned, and it rocked!",
   },
   {
     name: 'Nicole R.',
     initials: 'NR',
     source: 'Yelp',
-    body: "Ceech taught me how to dance. Now I am a dance teacher — tells you a lot about my teacher! He'll instill a strong, everlasting dance foundation in your bones.",
+    body: "Ceech taught me how to dance. Now I am a dance teacher, which tells you a lot about my teacher! He'll instill a strong, everlasting dance foundation in your bones.",
   },
   {
     name: 'Debbie C.',
@@ -58,13 +58,13 @@ const reviews = [
     name: 'Jadyn R.',
     initials: 'JR',
     source: 'Google',
-    body: "Best dance instructor I've had — and I've taken classes with dozens of teachers. He explains moves in great detail. I leave his classes feeling more confident in both dancing and life.",
+    body: "Best dance instructor I've had, and I've taken classes with dozens of teachers. He explains moves in great detail. I leave his classes feeling more confident in both dancing and life.",
   },
   {
     name: 'Dan W.',
     initials: 'DW',
     source: 'Google',
-    body: "Ceech shows the dance as it will look when learned, then breaks it down into simple parts. He's so positive and encouraging — never criticizing, just showing you the correct way.",
+    body: "Ceech shows the dance as it will look when learned, then breaks it down into simple parts. He's so positive and encouraging, never criticizing, just showing you the correct way.",
   },
 ];
 
@@ -125,7 +125,7 @@ export default function TestimonialsMarquee({ summary }: { summary: ReviewSummar
           </div>
         </div>
 
-        {/* 3D marquee — desktop */}
+        {/* 3D marquee, desktop */}
         <div className="hidden md:flex relative h-96 w-full flex-row items-center justify-center overflow-hidden gap-1.5 [perspective:300px] rounded-2xl">
           <div
             className="flex flex-row items-center gap-4"
@@ -152,7 +152,7 @@ export default function TestimonialsMarquee({ summary }: { summary: ReviewSummar
           </div>
         </div>
 
-        {/* 2-column marquee — mobile */}
+        {/* 2-column marquee, mobile */}
         <div className="flex md:hidden relative h-96 w-full flex-row items-center justify-center overflow-hidden gap-1.5 rounded-2xl">
           <div className="flex flex-row items-center gap-4">
             <Marquee vertical pauseOnHover repeat={3} className="[--duration:35s]">

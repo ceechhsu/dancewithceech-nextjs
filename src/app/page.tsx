@@ -12,12 +12,12 @@ import { getReviewSummary } from "@/lib/reviews";
 const organizationSchema = businessSchema;
 
 export const metadata = {
-  title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
-  description: "Learn hip-hop, locking, popping, breaking, and house dance with Ceech through beginner-friendly online training and private lessons in San Jose.",
+  title: "DanceWithCeech: Hip-Hop Dance Lessons with Ceech",
+  description: "Learn hip-hop, locking, popping, and house dance with Ceech through beginner-friendly online training and private lessons in San Jose.",
   alternates: { canonical: "https://dancewithceech.com" },
   openGraph: {
-    title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
-    description: "Learn hip-hop, locking, popping, breaking, and house dance from Ceech — America's Got Talent performer, Body Rock champion, and Bay Area dance instructor.",
+    title: "DanceWithCeech: Hip-Hop Dance Lessons with Ceech",
+    description: "Learn hip-hop, locking, popping, and house dance from Ceech. America's Got Talent performer, Body Rock champion, and Bay Area dance instructor.",
     url: "https://dancewithceech.com",
     siteName: "Dance With Ceech",
     images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Ceech teaching hip-hop dance" }],
@@ -25,8 +25,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "DanceWithCeech — Hip-Hop Dance Lessons with Ceech",
-    description: "Learn hip-hop, locking, popping, breaking, and house dance from Ceech — America's Got Talent performer, Body Rock champion, and Bay Area dance instructor.",
+    title: "DanceWithCeech: Hip-Hop Dance Lessons with Ceech",
+    description: "Learn hip-hop, locking, popping, and house dance from Ceech. America's Got Talent performer, Body Rock champion, and Bay Area dance instructor.",
     images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"],
   },
 };
@@ -74,23 +74,23 @@ export default async function Home() {
               />
               <div className="px-4 py-3" style={{ backgroundColor: "var(--surface)" }}>
                 <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--accent-gold)" }}>America&apos;s Got Talent</div>
-                <div className="text-sm font-semibold">DS Players — Season 5 (2010)</div>
+                <div className="text-sm font-semibold">DS Players: Season 5 (2010)</div>
               </div>
             </div>
             <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
               <Image
                 src="/images/ceech/mindtricks-dance-group-photo.jpg"
-                alt="Mindtricks — original Jabbawockeez founders"
+                alt="Mindtricks: original Jabbawockeez founders"
                 title="Mindtricks dance group with future Jabbawockeez founders"
                 width={600}
                 height={380}
                 sizes="(min-width: 640px) 33vw, 100vw"
                 className="w-full object-cover"
-                style={{ height: "200px" }}
+                style={{ height: "200px", objectPosition: "center 20%" }}
               />
               <div className="px-4 py-3" style={{ backgroundColor: "var(--surface)" }}>
                 <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--accent-gold)" }}>Crew with Future Jabbawockeez Members</div>
-                <div className="text-sm font-semibold">Mindtricks — Bay Area&apos;s most respected crew</div>
+                <div className="text-sm font-semibold">Mindtricks: Bay Area&apos;s most respected crew</div>
               </div>
             </div>
             <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
@@ -105,7 +105,7 @@ export default async function Home() {
                 style={{ height: "200px" }}
               />
               <div className="px-4 py-3" style={{ backgroundColor: "var(--surface)" }}>
-                <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--accent-gold)" }}>Body Rock 2007 — 1st Place</div>
+                <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--accent-gold)" }}>Body Rock 2007: 1st Place</div>
                 <div className="text-sm font-semibold">International Hip-Hop Dance Championship</div>
               </div>
             </div>
@@ -127,50 +127,14 @@ export default async function Home() {
             BeatFirst Rhythm Trainer
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-6">
-            The first skill every dancer<br />needs — and most skip.
+            The first skill every dancer<br />needs, and most skip.
           </h2>
           <p className="text-lg mb-10 max-w-xl mx-auto leading-relaxed" style={{ color: "var(--muted)" }}>
-            Tap to the beat, earn your rhythm score, and unlock real dance move tutorials. Free. No account needed.
+            Tap to the beat, earn your rhythm score, and access real dance move tutorials. Free. No account needed.
           </p>
           <Link href="/beat-first" className="inline-block px-8 py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: "var(--accent-primary)" }}>
-            Play BeatFirst — Free
+            Play BeatFirst Free
           </Link>
-        </div>
-      </section>
-
-      {/* DANCE STYLES */}
-      <section className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Pick Your Style</h2>
-            <p style={{ color: "var(--muted)" }}>Five hip-hop dance styles. All teachable. All learnable.</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              { name: "Hip-Hop", slug: "/hip-hop-dance-moves", image: "/images/styles/hip-hop.jpg", description: "The foundation. Groove, bounce, and flow." },
-              { name: "Locking", slug: "/locking-dance-moves", image: "/images/styles/locking.jpg", description: "Funky freezes and sharp punctuations." },
-              { name: "Breaking", slug: "/breaking-dance-moves", image: "/images/styles/breaking.jpg", description: "Footwork, power moves, and style." },
-              { name: "Funk & Popping", slug: "/funk-style-dance-moves", image: "/images/styles/funk.jpg", description: "Isolations, waves, and electric hits." },
-              { name: "House Dance", slug: "/house-dance", image: "/images/styles/house.jpg", description: "Fast footwork rooted in the underground." },
-            ].map(({ name, slug, image, description }) => (
-              <Link key={name} href={slug} className="group rounded-2xl overflow-hidden transition-colors hover:border-blue-600" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={image}
-                    alt={name}
-                    title={`${name} dance style`}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="font-bold text-lg mb-1 group-hover:text-blue-400 transition-colors">{name}</h3>
-                  <p className="text-sm" style={{ color: "var(--muted)" }}>{description}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -268,7 +232,6 @@ export default async function Home() {
               <div className="flex flex-col gap-2 text-sm" style={{ color: "var(--muted)" }}>
                 <Link href="/hip-hop-dance-moves" prefetch={false} className="hover:text-white transition-colors">Hip-Hop</Link>
                 <Link href="/locking-dance-moves" prefetch={false} className="hover:text-white transition-colors">Locking</Link>
-                <Link href="/breaking-dance-moves" prefetch={false} className="hover:text-white transition-colors">Breaking</Link>
                 <Link href="/funk-style-dance-moves" prefetch={false} className="hover:text-white transition-colors">Funk & Popping</Link>
               </div>
             </div>
