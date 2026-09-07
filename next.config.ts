@@ -115,7 +115,7 @@ const RENAMED_IMAGE_REDIRECTS = [
   ["/images/ceech/teaching-knee-pop.jpg", "/images/ceech/ceech-samy-teaching-knee-pop.jpg"],
   ["/images/ceech/running-man-method-class.jpg", "/images/ceech/ceech-teaching-running-man-adult-class.jpg"],
   ["/images/ceech/group-class.jpg", "/images/ceech/ceech-teaching-adult-dance-class.jpg"],
-  ["/images/posts/1845-2.jpg", "/images/posts/steve-martin-dance-tutorial-cover.jpg"],
+  ["/images/posts/1845-2.jpg", "/images/posts/steve-martin-dance.jpg"],
 ].map(([source, destination]) => ({ source, destination, permanent: true }));
 
 const nextConfig: NextConfig = {
