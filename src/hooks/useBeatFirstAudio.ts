@@ -14,8 +14,16 @@ export function useBeatFirstAudio() {
   const bassAnalyserRef = useRef<Tone.Analyser | null>(null)
 
   const initAudio = useCallback(async () => {
+    const rawContext = Tone.getContext().rawContext
+    const resumePromise = rawContext.state === 'suspended' ? rawContext.resume() : Promise.resolve()
     await Tone.start()
+    await resumePromise
+    await Tone.getContext().resume()
+    Tone.getDestination().mute = false
+    if (kickRef.current) return
+
     analyserRef.current = new Tone.Analyser('waveform', 512)
+    analyserRef.current.toDestination()
 
     kickRef.current = new Tone.MembraneSynth({
       pitchDecay: 0.05, octaves: 6,
@@ -43,7 +51,7 @@ export function useBeatFirstAudio() {
     clapRef.current = new Tone.NoiseSynth({
       noise: { type: 'white' },
       envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.02 },
-    })
+    }).toDestination()
     clapRef.current.connect(clapFilterRef.current)
     clapRef.current.volume.value = 6
 
@@ -70,6 +78,14 @@ export function useBeatFirstAudio() {
       bassRef.current?.dispose()
       analyserRef.current?.dispose()
       bassAnalyserRef.current?.dispose()
+      kickRef.current = null
+      snareRef.current = null
+      hihatRef.current = null
+      clapRef.current = null
+      clapFilterRef.current = null
+      bassRef.current = null
+      analyserRef.current = null
+      bassAnalyserRef.current = null
     }
   }, [])
 

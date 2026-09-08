@@ -184,6 +184,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
   const idealTimesRef  = useRef<number[]>([])
   const isPlayingRef   = useRef(false)
   const isPreviewRef   = useRef(false)
+  const beatLoopRef    = useRef<number | null>(null)
 
   // Waveform capture
   const waveformEnvelopeRef  = useRef<number[]>([])
@@ -423,6 +424,10 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
   // ── Listen to beat pattern ────────────────────────────────────────────────
 
   const listenBeat = useCallback(async () => {
+    if (beatLoopRef.current !== null) {
+      window.clearInterval(beatLoopRef.current)
+      beatLoopRef.current = null
+    }
     Tone.getTransport().stop()
     Tone.getTransport().cancel()
     cancelAnimationFrame(animFrameRef.current)
@@ -434,6 +439,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
     isPreviewRef.current = true
 
     const beat = selectedBeat
+    const stepMs = (60000 / beat.bpm) / 4
     setIsListening(true)
 
     setTimeout(() => {
@@ -444,9 +450,11 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
       Tone.getTransport().position = 0
 
       let step = 0
+      const previewTotalSteps = beat.bars * STEPS_PER_BAR
       let capturedWaveform = waveformEnvelopeRef.current.length > 0
 
-      Tone.getTransport().scheduleRepeat((time) => {
+      const intervalId = window.setInterval(() => {
+        const time = Tone.now()
         const s = step % STEPS_PER_BAR
         if (beat.kick[s])  kickRef.current?.triggerAttackRelease('C1', '8n', time)
         if (beat.snare[s]) snareRef.current?.triggerAttackRelease('8n', time)
@@ -475,7 +483,16 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
         }
 
         step++
-      }, '16n')
+        if (step >= previewTotalSteps) {
+          window.clearInterval(intervalId)
+          beatLoopRef.current = null
+          Tone.getTransport().stop()
+          Tone.getTransport().cancel()
+          isPreviewRef.current = false
+          cancelAnimationFrame(animFrameRef.current)
+        }
+      }, stepMs)
+      beatLoopRef.current = intervalId
 
       Tone.getTransport().start()
       animFrameRef.current = requestAnimationFrame(drawTimeline)
@@ -486,6 +503,10 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
   // ── Cancel preview ────────────────────────────────────────────────────────
 
   const cancelPreview = useCallback(() => {
+    if (beatLoopRef.current !== null) {
+      window.clearInterval(beatLoopRef.current)
+      beatLoopRef.current = null
+    }
     Tone.getTransport().stop()
     Tone.getTransport().cancel()
     cancelAnimationFrame(animFrameRef.current)
@@ -499,6 +520,10 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
   // ── Commit ready ──────────────────────────────────────────────────────────
 
   const commitReady = useCallback(() => {
+    if (beatLoopRef.current !== null) {
+      window.clearInterval(beatLoopRef.current)
+      beatLoopRef.current = null
+    }
     Tone.getTransport().stop()
     Tone.getTransport().cancel()
     cancelAnimationFrame(animFrameRef.current)
@@ -580,6 +605,10 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
   // ── Start game ────────────────────────────────────────────────────────────
 
   const startGame = useCallback(async () => {
+    if (beatLoopRef.current !== null) {
+      window.clearInterval(beatLoopRef.current)
+      beatLoopRef.current = null
+    }
     await initAudio()
     const beat = selectedBeat
     const stepMs = (60000 / beat.bpm) / 4
@@ -600,7 +629,9 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
     Tone.getTransport().bpm.value = beat.bpm
     Tone.getTransport().cancel()
     Tone.getTransport().position = 0
-    startTimeRef.current = performance.now()
+    // The direct timer emits its first beat one step after the loop starts.
+    // Align scoring with that first audible beat, not the button click.
+    startTimeRef.current = performance.now() + stepMs
 
     setTimeout(() => setCountdown('2'),   4 * stepMs)
     setTimeout(() => setCountdown('1'),   8 * stepMs)
@@ -618,7 +649,8 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
 
     let step = 0
     let capturedWaveform = waveformEnvelopeRef.current.length > 0
-    Tone.getTransport().scheduleRepeat((time) => {
+    const intervalId = window.setInterval(() => {
+      const time = Tone.now()
       const s = step % STEPS_PER_BAR
       if (beat.kick[s])  kickRef.current?.triggerAttackRelease('C1', '8n', time)
       if (beat.snare[s]) snareRef.current?.triggerAttackRelease('8n', time)
@@ -648,13 +680,15 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
 
       step++
       if (step >= totalSteps) {
+        window.clearInterval(intervalId)
+        beatLoopRef.current = null
         Tone.getTransport().stop()
         Tone.getTransport().cancel()
         isPlayingRef.current = false
         cancelAnimationFrame(animFrameRef.current)
         setTimeout(() => endGame(ideals, beat), 400)
       }
-    }, '16n')
+    }, stepMs)
 
     Tone.getTransport().start()
     animFrameRef.current = requestAnimationFrame(drawTimeline)
@@ -686,6 +720,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
     return () => {
       cancelAnimationFrame(animFrameRef.current)
       if (waveformCaptureRef.current) clearInterval(waveformCaptureRef.current)
+      if (beatLoopRef.current !== null) window.clearInterval(beatLoopRef.current)
       Tone.getTransport().stop()
       Tone.getTransport().cancel()
     }
@@ -778,7 +813,7 @@ export default function BeatFirstGame({ user, unlockedCount = 0 }: Props) {
               letterSpacing: '0.02em',
             }}
           >
-            Rhythm Isn&apos;t Born.<br />It&apos;s Trained.
+            Train Your Rhythm<br />Before You Dance
           </h1>
           <p className="text-lg mb-6 max-w-lg" style={{ color: 'var(--muted)' }}>
             Most people can&apos;t dance because nobody taught them rhythm. BeatFirst does.

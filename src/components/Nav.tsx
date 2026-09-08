@@ -32,7 +32,7 @@ export default function Nav({ user }: Props = {}) {
       </Link>
       {/* Desktop nav links */}
       <div className="hidden md:flex items-center gap-6 text-sm" style={{ color: "var(--muted)" }}>
-        <Link href="/beat-first" prefetch={false} className="hover:text-white transition-colors">BeatFirst</Link>
+        <Link href="/beat-first" prefetch={false} className="hover:text-white transition-colors">Beat First</Link>
         <Link href="/blog" prefetch={false} className="hover:text-white transition-colors">Blog</Link>
         <CampaignNavLink />
         <Link href="/private-lessons" prefetch={false} className="hover:text-white transition-colors">Private Lessons</Link>
@@ -42,9 +42,6 @@ export default function Nav({ user }: Props = {}) {
         ) : (
           <SignInButton />
         )}
-        <Link href="/beat-first" prefetch={false} className="px-4 py-2 rounded-full text-white text-sm font-medium transition-colors hover:opacity-90" style={{ backgroundColor: "var(--accent-primary)" }}>
-          Play Free
-        </Link>
       </div>
       {/* Mobile: fluid hamburger menu */}
       <MobileMenu />

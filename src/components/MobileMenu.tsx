@@ -6,7 +6,7 @@ import { Menu, X } from "lucide-react"
 import CampaignNavLink from "@/components/CampaignNavLink"
 
 const links = [
-  { label: "BeatFirst", href: "/beat-first" },
+  { label: "Beat First", href: "/beat-first" },
   { label: "Blog", href: "/blog" },
   { label: "Running Man", href: "/running-man-method" },
   { label: "Private Lessons", href: "/private-lessons" },
