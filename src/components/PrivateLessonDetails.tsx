@@ -44,7 +44,7 @@ export function LessonProcess() {
         <h2 className="text-3xl font-bold mb-8 text-center">How your lessons work</h2>
         <div className="grid md:grid-cols-2 gap-6">
           {processes.map(({ title, steps }) => (
-            <div key={title} className="rounded-2xl p-6 md:p-8" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
+            <div key={title} id={title === "Virtual coaching" ? "virtual-coaching" : undefined} className="scroll-mt-24 rounded-2xl p-6 md:p-8" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
               <h3 className="text-xl font-bold mb-6">{title}</h3>
               <ol className="space-y-6 list-decimal pl-5 marker:text-blue-400">
                 {steps.map(([heading, detail]) => (

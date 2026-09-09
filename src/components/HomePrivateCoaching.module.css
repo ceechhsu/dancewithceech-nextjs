@@ -1,0 +1,144 @@
+.section {
+  padding: 80px 24px 40px;
+  background: var(--surface);
+  border-bottom: 1px solid #252525;
+  scroll-margin-top: 76px;
+}
+
+.layout {
+  max-width: 1152px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas: "intro intro" "online inperson" "details details" "footer footer";
+  column-gap: 32px;
+}
+
+.intro { grid-area: intro; text-align: center; margin-bottom: 36px; }
+.eyebrow {
+  color: var(--accent-primary-accessible);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.heading {
+  font-size: clamp(36px, 3.5vw, 50px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+.heading span { color: var(--accent-primary-accessible); }
+.availability {
+  margin-top: 18px;
+  color: var(--foreground);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.description {
+  margin: 14px auto 0;
+  color: #bcc1c9;
+  font-size: 17px;
+  line-height: 1.75;
+  max-width: 680px;
+}
+.online { grid-area: online; min-width: 0; }
+.inPerson { grid-area: inperson; min-width: 0; }
+.formatHeading { margin-bottom: 16px; }
+.formatHeading h3 { font-size: 23px; font-weight: 600; margin-bottom: 3px; }
+.online .formatHeading h3 { color: var(--accent-primary-accessible); }
+.formatHeading span { color: var(--muted); font-size: 13px; }
+.formatDescription { color: #bcc1c9; font-size: 15px; line-height: 1.7; margin: 16px 0 8px; }
+.onlineVisual { aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; background: #191919; }
+.onlineVisualImage { width: 100%; height: 100%; object-fit: cover; display: block; }
+.imageFrame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #202020;
+  aspect-ratio: 16 / 9;
+}
+.imageFrame::after {
+  content: "";
+  position: absolute;
+  inset: 35% 0 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, .85));
+  pointer-events: none;
+}
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 49% center;
+}
+.imageNote { position: absolute; bottom: 24px; left: 24px; z-index: 1; }
+.imageNote span {
+  display: block;
+  color: var(--accent-gold);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.imageNote p { font-size: 28px; line-height: 1.15; font-weight: 600; letter-spacing: -.02em; }
+.caption { color: var(--muted); font-size: 12px; margin-top: 12px; line-height: 1.5; }
+.details { grid-area: details; text-align: center; margin-top: 28px; }
+.actions { display: flex; align-items: center; justify-content: center; }
+.primaryCta {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 28px;
+  border-radius: 999px;
+  background: var(--accent-primary);
+  color: #fff;
+  font-weight: 600;
+  transition: background-color .2s;
+}
+.primaryCta:hover { background: #1d4ed8; }
+.secondaryCta { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 20px; border: 1px solid #505050; border-radius: 999px; font-size: 14px; font-weight: 500; }
+.secondaryCta:hover { color: var(--accent-primary-accessible); }
+.section a:focus-visible { outline: 2px solid var(--accent-primary-accessible); outline-offset: 5px; }
+.callNote { color: var(--muted); font-size: 12px; line-height: 1.7; margin-top: 15px; }
+.footer {
+  grid-area: footer;
+  display: flex;
+  justify-content: center;
+  gap: 16px 24px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #2b2b2b;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+.footer span { padding: 0 6px; }
+
+@media (max-width: 767px) {
+  .section { padding-top: 48px; }
+  .layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "intro" "online" "inperson" "details" "footer"; max-width: 640px; }
+  .intro { text-align: left; }
+  .inPerson { margin-top: 32px; }
+  .heading { font-size: clamp(36px, 6vw, 48px); }
+  .imageNote { left: 24px; bottom: 24px; }
+  .imageNote p { font-size: 28px; }
+  .details { margin-top: 28px; }
+  .footer { margin-top: 28px; gap: 10px; }
+}
+
+@media (max-width: 479px) {
+  .section { padding: 40px 24px 28px; }
+  .description { font-size: 16px; }
+  .imageNote { left: 18px; bottom: 18px; }
+  .imageNote p { font-size: 22px; }
+  .imageNote span { font-size: 10px; margin-bottom: 6px; }
+  .actions { flex-direction: column; align-items: stretch; gap: 4px; }
+  .secondaryCta { justify-content: center; }
+  .callNote { text-align: center; margin-top: 8px; }
+}

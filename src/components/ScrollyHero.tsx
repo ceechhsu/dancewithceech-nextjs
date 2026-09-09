@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 const CTA_BUTTONS = (
-  <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
-    <Link href="/private-lessons" style={{ padding: "16px 32px", minHeight: "44px", borderRadius: "9999px", backgroundColor: "#2563EB", color: "#fff", fontWeight: 600, fontSize: "1.05rem", textDecoration: "none" }}>
-      Book a Private Lesson
+  <div className="hero-cta-buttons" style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
+    <Link href="/private-lessons#booking" className="hero-primary-cta" style={{ padding: "16px 32px", minHeight: "44px", borderRadius: "9999px", backgroundColor: "#2563EB", color: "#fff", fontWeight: 600, fontSize: "1.05rem", textDecoration: "none" }}>
+            Book a Free Call
     </Link>
-    <Link href="/about" style={{ padding: "16px 32px", minHeight: "44px", borderRadius: "9999px", border: "1px solid rgba(255,255,255,0.25)", color: "#F9F9F9", fontWeight: 600, fontSize: "1.05rem", textDecoration: "none" }}>
-      Meet Ceech
+    <Link href="/about" className="hero-secondary-cta" style={{ padding: "16px 32px", minHeight: "44px", borderRadius: "9999px", border: "1px solid rgba(255,255,255,0.25)", color: "#F9F9F9", fontWeight: 600, fontSize: "1.05rem", textDecoration: "none" }}>
+            Meet Ceech
     </Link>
   </div>
 );

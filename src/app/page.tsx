@@ -5,8 +5,9 @@ import ScrollyHero from "@/components/ScrollyHero";
 import StatsBar from "@/components/StatsBar";
 import DeferredHomeTestimonials from "@/components/DeferredHomeTestimonials";
 import RunningManCampaignBanner from "@/components/RunningManCampaignBanner";
+import HomePrivateCoaching from "@/components/HomePrivateCoaching";
 import { businessSchema } from "@/lib/private-lesson-details";
-import { CATEGORY_LABELS, CATEGORY_PATHS, getFeaturedTutorialsByCategory } from "@/lib/posts";
+import HomeTutorials from "@/components/HomeTutorials";
 import { getReviewSummary } from "@/lib/reviews";
 
 const organizationSchema = businessSchema;
@@ -32,9 +33,6 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const featuredTutorialGroups = Object.entries(getFeaturedTutorialsByCategory()).filter(
-    ([, posts]) => posts.length > 0
-  );
   const reviewSummary = await getReviewSummary();
 
   return (
@@ -51,8 +49,8 @@ export default async function Home() {
       {/* SOCIAL PROOF BAR */}
       <StatsBar />
 
-      {/* TEMPORARY FOUNDING-COHORT CAMPAIGN */}
-      <RunningManCampaignBanner />
+      {/* PRIVATE COACHING */}
+      <HomePrivateCoaching />
 
       {/* CREDIBILITY */}
       <section className="py-16 px-6">
@@ -120,64 +118,39 @@ export default async function Home() {
       </section>
 
       {/* BEATFIRST TEASER */}
-      <section className="py-24 px-6" style={{ backgroundColor: "var(--surface)" }}>
-        <div className="max-w-4xl mx-auto text-center">
+      <section id="rhythm-trainer" className="py-24 px-6 scroll-mt-20" style={{ backgroundColor: "var(--surface)" }}>
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+          <div>
           <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary-accessible)" }}>
             BeatFirst Rhythm Trainer
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-6">
-            The first skill every dancer<br />needs, and most skip.
+            Build your rhythm. One beat at a time.
           </h2>
           <p className="text-lg mb-10 max-w-xl mx-auto leading-relaxed" style={{ color: "var(--muted)" }}>
-            Tap to the beat, earn your rhythm score, and access real dance move tutorials. Free. No account needed.
+            Practice between lessons. Tap along to real beats and see whether you’re early, late, or right on time.
           </p>
           <Link href="/beat-first" className="inline-block px-8 py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: "var(--accent-primary)" }}>
             Play BeatFirst Free
           </Link>
+          </div>
+          <figure className="min-w-0">
+            <Image
+              src="/images/beatfirst-results.jpg"
+              alt="Ceech’s BeatFirst results: 100%, 32 of 32 beats hit, a beat-by-beat timeline, average timing of minus 3 milliseconds, and consistency of plus or minus 50 milliseconds."
+              width={714}
+              height={1239}
+              sizes="(min-width: 768px) 540px, calc(100vw - 48px)"
+              className="w-full aspect-[714/650] object-cover object-[center_83%] rounded-2xl border border-white/10"
+            />
+            <figcaption className="text-xs mt-3 text-center" style={{ color: "var(--muted)" }}>
+              Ceech’s practice round. See your timing, beat by beat.
+            </figcaption>
+          </figure>
         </div>
       </section>
 
-      {/* FEATURED TUTORIAL LINKS */}
-      <section className="py-20 px-6" style={{ backgroundColor: "var(--surface)", borderTop: "1px solid #1f1f1f" }}>
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary-accessible)" }}>
-              Start Learning
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Start with these dance tutorials</h2>
-            <p className="max-w-2xl mx-auto" style={{ color: "var(--muted)" }}>
-              Core tutorials from each style, collected here so you can start with the fundamentals.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {featuredTutorialGroups.map(([category, posts]) => (
-              <div key={category} className="rounded-2xl p-5" style={{ backgroundColor: "var(--background)", border: "1px solid #1f1f1f" }}>
-                <Link
-                  href={CATEGORY_PATHS[category] ?? "/blog"}
-                  prefetch={false}
-                  className="block text-sm font-bold uppercase tracking-widest mb-4 hover:text-blue-400 transition-colors"
-                  style={{ color: "var(--accent-primary-accessible)" }}
-                >
-                  {CATEGORY_LABELS[category] ?? category}
-                </Link>
-                <div className="flex flex-col gap-3">
-                  {posts.map((post) => (
-                    <Link
-                      key={post.slug}
-                      href={`/blog/${post.slug}`}
-                      prefetch={false}
-                      className="text-sm leading-snug hover:text-white transition-colors"
-                      style={{ color: "var(--muted)" }}
-                    >
-                      {post.title}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HomeTutorials />
 
       <DeferredHomeTestimonials
         summary={reviewSummary}
@@ -192,6 +165,9 @@ export default async function Home() {
         ]}
       />
 
+      {/* TEMPORARY FOUNDING-COHORT CAMPAIGN */}
+      <RunningManCampaignBanner />
+
       {/* PRIVATE LESSONS CTA */}
       <section className="py-24 px-6" style={{ backgroundColor: "var(--surface)" }}>
         <div className="max-w-3xl mx-auto text-center">
@@ -201,8 +177,8 @@ export default async function Home() {
           <p className="text-lg mb-10 leading-relaxed" style={{ color: "var(--muted)" }}>
             Private 1-on-1 Google Meet lessons. Real-time corrections. Personalized to exactly where you are.
           </p>
-          <Link href="/private-lessons" className="inline-block px-8 py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: "var(--accent-primary)" }}>
-            Book a Private Lesson
+          <Link href="/private-lessons#booking" className="inline-block px-8 py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: "var(--accent-primary)" }}>
+              Book a Free Call
           </Link>
         </div>
       </section>

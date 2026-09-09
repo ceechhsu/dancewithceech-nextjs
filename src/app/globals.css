@@ -266,6 +266,10 @@ textarea:-webkit-autofill {
 }
 
 @media (max-width: 640px) {
+  .hero-cta-buttons { width: 100%; max-width: 360px; flex-direction: column !important; gap: 10px !important; }
+  .hero-cta-buttons a { width: 100%; box-sizing: border-box; text-align: center; }
+  .hero-cta-buttons .hero-secondary-cta { padding: 10px 16px !important; border-color: transparent !important; background: transparent !important; color: rgba(249,249,249,.78) !important; font-size: .95rem !important; }
+
   .prose table,
   .prose tbody,
   .prose tr,

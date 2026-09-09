@@ -18,7 +18,7 @@ export default function RunningManCampaignBanner() {
             The Running Man Method
           </h2>
           <p className="mt-5 max-w-xl text-lg leading-8 text-white/75">
-            A four-week live cohort for complete beginners who want one move they can trust on the dance floor.
+            A live coaching series for complete beginners who want one move they can trust on the dance floor.
           </p>
           <p className="mt-4 max-w-xl text-sm leading-6 text-white/60">
             September 24 to October 22, 2026 · Thursdays at 8 p.m. Pacific · Limited to 12 students
