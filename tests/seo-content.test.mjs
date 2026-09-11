@@ -13,7 +13,8 @@ const LOCAL_PAGES = [
 test("homepage hero uses a lightweight video with reduced-motion support", async () => {
   const source = await read("src/components/ScrollyHero.tsx");
   assert.match(source, /<video/);
-  assert.match(source, /autoPlay=\{!reduceMotion\}/);
+  assert.match(source, /prefers-reduced-motion/);
+  assert.match(source, /video\.pause\(\)/);
   assert.match(source, /poster="\/hero-mobile-poster\.jpg"/);
 });
 
@@ -31,14 +32,14 @@ test("approved homepage sections, hero copy, and CTAs remain present", async () 
   ]) {
     assert.match(home, new RegExp(component));
   }
-  for (const component of ["TestimonialsMarquee", "CircularGallery"]) {
+  for (const component of ["TestimonialsMarquee", "ManualVideoTestimonials"]) {
     assert.match(deferredTestimonials, new RegExp(component));
   }
   for (const copy of [
     "It&apos;s a skill.",
     "Not a gift.",
     "Rhythm First. Then Dance.",
-    "Book a Private Lesson",
+    "Book a Free Call",
     "Meet Ceech",
   ]) {
     assert.ok(hero.includes(copy), `missing approved hero copy: ${copy}`);

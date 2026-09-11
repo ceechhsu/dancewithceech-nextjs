@@ -4,7 +4,8 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { CATEGORY_LABELS, CATEGORY_PATHS, getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/posts";
+import { getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/posts";
+import { blogHref, getBlogStyleLabel, getBlogTopic, TOPICS } from "@/lib/blog-library";
 import { addResponsiveTableLabels } from "@/lib/markdown";
 
 export async function generateStaticParams() {
@@ -79,7 +80,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const ogImage = `https://dancewithceech.com/images/posts/${post.slug}.jpg`;
   const description = post.description ?? `Learn the ${post.title} dance move with step-by-step instruction from Ceech.`;
   const relatedPosts = getRelatedPosts(post);
-  const categoryPath = CATEGORY_PATHS[post.category] ?? "/blog";
+  const blogTopic = getBlogTopic(post);
+  const styleLabel = blogTopic === "learn" ? getBlogStyleLabel(post) : null;
+  const categoryLabel = styleLabel ?? TOPICS[blogTopic];
+  const parentLabel = TOPICS[blogTopic];
+  const categoryPath = blogHref({ topic: blogTopic });
+  const collectionPath = styleLabel ? blogHref({ topic: blogTopic, style: post.category }) : categoryPath;
   const categoryUrl = `https://dancewithceech.com${categoryPath}`;
 
   const articleSchema = {
@@ -112,8 +118,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Blog", item: "https://dancewithceech.com/blog" },
-      { "@type": "ListItem", position: 2, name: CATEGORY_LABELS[post.category] ?? post.category, item: categoryUrl },
-      { "@type": "ListItem", position: 3, name: post.title, item: pageUrl },
+      { "@type": "ListItem", position: 2, name: parentLabel, item: categoryUrl },
+      ...(styleLabel ? [{ "@type": "ListItem", position: 3, name: styleLabel, item: `https://dancewithceech.com${collectionPath}` }] : []),
+      { "@type": "ListItem", position: styleLabel ? 4 : 3, name: post.title, item: pageUrl },
     ],
   };
 
@@ -151,12 +158,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <article className="pt-36 pb-24 px-6 max-w-2xl mx-auto">
 
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-xs mb-10 uppercase tracking-widest" style={{ color: "var(--muted)" }}>
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-xs mb-10 uppercase tracking-widest" style={{ color: "var(--muted)" }}>
           <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
           <span style={{ color: "#333" }}>/</span>
-          <Link href={categoryPath} className="hover:text-white transition-colors">
-            {CATEGORY_LABELS[post.category] ?? post.category}
-          </Link>
+          <Link href={categoryPath} className="hover:text-white transition-colors">{parentLabel}</Link>
+          {styleLabel && <><span style={{ color: "#333" }}>/</span><Link href={`${collectionPath}#articles`} className="hover:text-white transition-colors">{styleLabel}</Link></>}
         </nav>
 
         {/* Category pill */}
@@ -165,7 +171,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             className="text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"
             style={{ backgroundColor: "rgba(37,99,235,0.15)", color: "var(--accent-primary)", border: "1px solid rgba(37,99,235,0.3)" }}
           >
-            {CATEGORY_LABELS[post.category] ?? post.category}
+            {categoryLabel}
           </span>
         </div>
 
@@ -217,11 +223,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                   Keep Learning
                 </div>
                 <h2 className="text-xl font-bold">
-                  More {CATEGORY_LABELS[post.category] ?? "dance"} tutorials
+                  More {categoryLabel} articles
                 </h2>
               </div>
               <Link
-                href={categoryPath}
+                href={collectionPath}
                 className="text-sm font-semibold hover:text-white transition-colors"
                 style={{ color: "var(--muted)" }}
               >

@@ -30,3 +30,31 @@ P3 follow-up: the browser’s red “1 Issue” pill is an annotation/review ove
 ## Final result
 
 passed
+
+## Blog editorial update — September 10, 2026
+
+Option 2 implemented at `/blog`. Visual inspection at 1328px desktop and 390px mobile; 320px width also checked without horizontal overflow. Reference hierarchy retained: centered heading, topic pills, search, large lead with two supporting cards, compact discovery row. Real article images and descriptions intentionally replace concept imagery. Mobile stacks the editorial sections and wraps topic controls into two columns.
+
+Verified: wellbeing filter (2 articles), House filter, Running Man search, empty search recovery, pagination (88 articles, page 2 shows 13–24). Five automated filtering/date/query tests pass; scoped lint and TypeScript checks pass. Canonical and social metadata retained. Existing article routes unchanged.
+
+Desktop evidence: `docs/reviews/2026-09-10-blog-editorial/desktop.png`.
+
+Result: passed for local preview review. Not deployed; production build was not rerun for this update.
+
+## Category consistency follow-up — September 10, 2026
+
+The article detail page now uses the same three-topic classifier as `/blog`. Verified representative detail pages: the college showcase is **Stories & Community**, the mental-benefits article is **Dance & Wellbeing**, and Running Man is **Learn to Dance**. Breadcrumbs, category pills, related-article headings, and category links all follow the shared topic. All 88 published articles classify to one of the three topics.
+
+Result: passed for local preview review.
+
+## Final blog review — September 10, 2026
+
+Reviewed desktop and mobile layout, filter/search/pagination state, representative article navigation, image alt text, form labeling, focus treatment, and hover feedback. No horizontal overflow or browser errors observed in the preview. Seven focused blog-library tests, TypeScript, and scoped lint pass.
+
+Result: passed for local preview review.
+
+## Five-style learning taxonomy follow-up — September 10, 2026
+
+Learning articles now show their child style prominently while retaining “Learn to Dance” as the parent section. The five available style filters are Hip-Hop, Locking, Breaking, Popping & Funk, and House. Detail-page breadcrumbs and pills use the same child style, and link directly back to that filtered collection. Three broad learning-advice articles remain intentionally marked as cross-style learning advice rather than being assigned an arbitrary style.
+
+Result: passed for local preview review.

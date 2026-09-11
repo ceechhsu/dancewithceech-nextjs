@@ -16,7 +16,7 @@ test("homepage promotes the live Running Man founding cohort", async () => {
 
   assert.match(source, /RunningManCampaignBanner/);
   assert.match(banner, /September 24 to October 22, 2026/);
-  assert.match(banner, /four-week live cohort/i);
+  assert.match(banner, /A live coaching series/i);
   assert.match(banner, /Limited to 12 students/i);
   assert.match(banner, /\/running-man-method#enroll/);
 });
@@ -49,11 +49,11 @@ test("temporary Running Man campaign link appears in desktop and mobile navigati
   assert.match(mobileMenu, /href: "\/running-man-method"/);
 });
 
-test("Running Man navigation uses the approved launch treatment", async () => {
+test("Running Man navigation uses an understated treatment", async () => {
   const source = await readFile(campaignNavLinkPath, "utf8");
 
   assert.match(source, /href="\/running-man-method"/);
-  assert.match(source, /rounded-full/);
-  assert.match(source, />\s*NEW\s*</);
+  assert.match(source, /text-zinc-400/);
+  assert.doesNotMatch(source, />\s*NEW\s*</);
   assert.doesNotMatch(source, /navVariant/);
 });

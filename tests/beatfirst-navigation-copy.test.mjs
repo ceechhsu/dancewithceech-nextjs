@@ -5,12 +5,15 @@ import test from 'node:test';
 
 const root = path.resolve(import.meta.dirname, '..');
 
-test('Beat First navigation uses the readable two-word label without a duplicate free CTA', () => {
+test('BeatFirst Rhythm Trainer appears under Learn Free without a duplicate free CTA', () => {
   const nav = fs.readFileSync(path.join(root, 'src/components/Nav.tsx'), 'utf8');
   const mobile = fs.readFileSync(path.join(root, 'src/components/MobileMenu.tsx'), 'utf8');
-  assert.match(nav, />Beat First<\/Link>/);
+  const learning = fs.readFileSync(path.join(root, 'src/components/LearnFreeMenu.tsx'), 'utf8');
+  assert.match(nav, /<LearnFreeMenu \/>/);
+  assert.match(learning, /Learn Free/);
+  assert.match(learning, /label: "BeatFirst Rhythm Trainer", href: "\/beat-first"/);
   assert.doesNotMatch(nav, />\s*Play Free\s*<\/Link>/);
-  assert.match(mobile, /label: "Beat First"/);
+  assert.match(mobile, /freeLinks\.map/);
 });
 
 test('Beat First hero states the training purpose directly', () => {

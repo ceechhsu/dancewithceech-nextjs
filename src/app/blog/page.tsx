@@ -1,201 +1,29 @@
-import Link from "next/link";
-import Image from "next/image";
-import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
-import { CATEGORY_LABELS, CATEGORY_PATHS, getAllPosts, getFeaturedTutorialsByCategory } from "@/lib/posts";
+import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
+import BlogLibrary from '@/components/BlogLibrary';
+import { getAllPosts } from '@/lib/posts';
+import { readBlogQuery } from '@/lib/blog-library';
 
 export const metadata = {
-  title: "Hip-Hop Dance Tutorials & Move Guides | DanceWithCeech",
-  description: "Learn hip-hop, locking, popping, breaking, and house dance with step-by-step tutorials, move breakdowns, and practice tips from Ceech.",
-  alternates: { canonical: "https://dancewithceech.com/blog" },
+  title: 'Dance Tutorials, Wellbeing & Stories | DanceWithCeech Blog',
+  description: 'Explore dance tutorials, practice tips, wellbeing, and stories from the dance community with Ceech.',
+  alternates: { canonical: 'https://dancewithceech.com/blog' },
   openGraph: {
-    title: "Hip-Hop Dance Tutorials & Move Guides | DanceWithCeech",
-    description: "Learn hip-hop, locking, popping, breaking, and house dance with step-by-step tutorials, move breakdowns, and practice tips from Ceech.",
-    url: "https://dancewithceech.com/blog",
-    siteName: "DanceWithCeech",
-    images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Ceech teaching hip-hop dance" }],
-    type: "website",
+    title: 'The Dance With Ceech Blog',
+    description: 'Learn new moves. Feel better. Connect through dance.',
+    url: 'https://dancewithceech.com/blog', siteName: 'DanceWithCeech', type: 'website',
+    images: [{ url: 'https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg', width: 1200, height: 630, alt: 'Ceech teaching hip-hop dance' }],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Hip-Hop Dance Tutorials & Move Guides | DanceWithCeech",
-    description: "Learn hip-hop, locking, popping, breaking, and house dance with step-by-step tutorials, move breakdowns, and practice tips from Ceech.",
-    images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"],
+    card: 'summary_large_image', title: 'The Dance With Ceech Blog',
+    description: 'Learn new moves. Feel better. Connect through dance.',
+    images: ['https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg'],
   },
 };
 
-const CATEGORIES = [
-  "all",
-  "hip-hop-dance-moves",
-  "locking-dance-moves",
-  "breaking-dance-moves",
-  "funk-style-dance-moves",
-  "house-dance",
-];
-
-export default function BlogPage() {
-  const activeCategory = "all";
-  const allPosts = getAllPosts();
-  const posts = allPosts;
-  const featuredTutorialGroups = Object.entries(getFeaturedTutorialsByCategory()).filter(
-    ([, featuredPosts]) => featuredPosts.length > 0
-  );
-
-  return (
-    <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
-
-      <Nav />
-
-      {/* HEADER */}
-      <section className="pt-40 pb-12 px-6 text-center">
-        <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
-          The Blog
-        </div>
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Dance Move Library</h1>
-        <p className="text-lg max-w-xl mx-auto" style={{ color: "var(--muted)" }}>
-          Breakdowns, tutorials, and tips across every hip-hop dance style.
-        </p>
-      </section>
-
-      {/* CATEGORY FILTER */}
-      <section className="px-6 pb-12">
-        <div className="max-w-5xl mx-auto flex flex-wrap gap-2 justify-center">
-          {CATEGORIES.map((cat) => (
-            <Link
-              key={cat}
-              href={cat === "all" ? "/blog" : CATEGORY_PATHS[cat]}
-              className="px-4 py-2 rounded-full text-sm font-medium transition-colors"
-              style={{
-                backgroundColor: activeCategory === cat ? "var(--accent-primary)" : "var(--surface)",
-                color: activeCategory === cat ? "#fff" : "var(--muted)",
-                border: "1px solid #1f1f1f",
-              }}
-            >
-              {cat === "all" ? "All" : CATEGORY_LABELS[cat] ?? cat}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* FEATURED TUTORIALS */}
-      <section className="px-6 pb-16">
-        <div className="max-w-5xl mx-auto rounded-2xl p-6 md:p-8" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
-            <div>
-              <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--accent-primary)" }}>
-                Featured Tutorials
-              </div>
-              <h2 className="text-2xl font-bold">Core dance move guides by style</h2>
-            </div>
-            <p className="text-sm max-w-md" style={{ color: "var(--muted)" }}>
-              These are the main tutorial paths students usually need first.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
-            {featuredTutorialGroups.map(([category, featuredPosts]) => (
-              <div key={category}>
-                <Link
-                  href={CATEGORY_PATHS[category] ?? "/blog"}
-                  className="block text-xs font-bold uppercase tracking-widest mb-3 hover:text-blue-400 transition-colors"
-                  style={{ color: "var(--accent-primary)" }}
-                >
-                  {CATEGORY_LABELS[category] ?? category}
-                </Link>
-                <div className="flex flex-col gap-2">
-                  {featuredPosts.map((post) => (
-                    <Link
-                      key={post.slug}
-                      href={`/blog/${post.slug}`}
-                      className="text-sm leading-snug hover:text-white transition-colors"
-                      style={{ color: "var(--muted)" }}
-                    >
-                      {post.title}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* POSTS GRID */}
-      <section className="px-6 pb-24">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <Link
-              key={post.slug}
-              href={`/blog/${post.slug}`}
-              className="group rounded-2xl overflow-hidden flex flex-col transition-colors hover:border-blue-600"
-              style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}
-            >
-              {post.hasImage && (
-                <div className="overflow-hidden" style={{ aspectRatio: "16/9" }}>
-                  <Image
-                    src={`/images/posts/${post.slug}.jpg`}
-                    alt={post.title}
-                    title={post.title}
-                    width={800}
-                    height={450}
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-              )}
-              <div className="p-6 flex flex-col gap-3 flex-1">
-                <div className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--accent-primary)" }}>
-                  {CATEGORY_LABELS[post.category] ?? post.category}
-                </div>
-                <h2 className="font-bold text-lg leading-snug group-hover:text-blue-400 transition-colors">
-                  {post.title}
-                </h2>
-                <div className="text-xs mt-auto" style={{ color: "var(--muted)" }}>
-                  {new Date(post.date).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {posts.length === 0 && (
-          <div className="text-center py-24" style={{ color: "var(--muted)" }}>
-            No posts in this category yet.
-          </div>
-        )}
-      </section>
-
-      {/* 2-PATH CTA */}
-      <section className="py-20 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
-        <div className="max-w-5xl mx-auto text-center mb-12">
-          <h2 className="text-2xl font-bold mb-3">Ready to go deeper?</h2>
-          <p style={{ color: "var(--muted)" }}>Two ways to keep learning. Choose rhythm practice or personal coaching.</p>
-        </div>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="rounded-2xl p-8 flex flex-col gap-4" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
-            <div className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--accent-primary)" }}>Free</div>
-            <h3 className="text-lg font-bold">Train Your Rhythm</h3>
-            <p className="text-sm flex-1" style={{ color: "var(--muted)" }}>Every dance move starts with timing. BeatFirst builds that foundation. It is free, with no sign-up required.</p>
-            <Link href="/beat-first" className="inline-block text-center px-6 py-3 rounded-full font-semibold text-white hover:opacity-90 transition-opacity" style={{ backgroundColor: "var(--accent-primary)" }}>
-              Play BeatFirst Free
-            </Link>
-          </div>
-          <div className="rounded-2xl p-8 flex flex-col gap-4" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
-            <div className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FDB515" }}>Private Lessons</div>
-            <h3 className="text-lg font-bold">1-on-1 with Ceech</h3>
-            <p className="text-sm flex-1" style={{ color: "var(--muted)" }}>Want focused practice? Book a private lesson in San Jose or meet with Ceech virtually through Google Meet.</p>
-            <Link href="/private-lessons" className="inline-block text-center px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity" style={{ border: "1px solid #FDB515", color: "#FDB515" }}>
-              Book a Lesson
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-
-    </main>
-  );
+export default async function BlogPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const params = await searchParams;
+  const query = readBlogQuery(params);
+  const overview = !params.view && !query.q && query.topic === 'all' && query.page === 1;
+  return <><Nav /><main><BlogLibrary posts={getAllPosts()} query={query} overview={overview} /></main><Footer /></>;
 }

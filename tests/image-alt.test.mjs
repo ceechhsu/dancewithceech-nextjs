@@ -6,10 +6,10 @@ import path from "node:path";
 const siteRoot = path.resolve(import.meta.dirname, "..");
 
 test("blog image templates provide meaningful alt text", () => {
-  const listing = fs.readFileSync(path.join(siteRoot, "src/app/blog/page.tsx"), "utf8");
+  const listing = fs.readFileSync(path.join(siteRoot, "src/components/BlogLibrary.tsx"), "utf8");
   const article = fs.readFileSync(path.join(siteRoot, "src/app/blog/[slug]/page.tsx"), "utf8");
 
-  assert.match(listing, /src=\{`\/images\/posts\/\$\{post\.slug\}\.jpg`\}[\s\S]{0,120}alt=\{post\.title\}/);
+  assert.match(listing, /alt=\{post\.imageAlt \?\? blogTitle\(post\)\}/);
   assert.match(article, /src=\{`\/images\/posts\/\$\{post\.slug\}\.jpg`\}[\s\S]{0,120}alt=\{post\.imageAlt \?\? post\.title\}/,
     "article images should use the specific frontmatter description with the title as a fallback");
 });
@@ -34,7 +34,7 @@ test("homepage images provide meaningful title attributes for SEOwallet", () => 
 test("meaningful site images provide title attributes for SEOwallet", () => {
   const files = [
     "src/app/about/page.tsx",
-    "src/app/blog/page.tsx",
+    "src/components/BlogLibrary.tsx",
     "src/app/blog/[slug]/page.tsx",
     "src/app/breaking-dance-moves/page.tsx",
     "src/app/ftl-popping-training-series-volume-1/page.tsx",

@@ -18,8 +18,9 @@ test("homepage copy contains no em dash punctuation", () => {
   assert.doesNotMatch(copy, /—/);
 });
 
-test("BeatFirst copy uses plain language for tutorial access", () => {
+test("BeatFirst copy describes the rhythm trainer and free action plainly", () => {
   const source = fs.readFileSync(path.join(siteRoot, "src/app/page.tsx"), "utf8");
   assert.doesNotMatch(source, /unlock real dance move tutorials/);
-  assert.match(source, /access real dance move tutorials/);
+  assert.match(source, /Build your rhythm\. One beat at a time\./);
+  assert.match(source, /Play BeatFirst Free/);
 });
