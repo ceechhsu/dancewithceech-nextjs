@@ -37,7 +37,7 @@ export default function HomePrivateCoaching() {
           <p className={styles.formatDescription}>
             Get recorded feedback on your dance video, then work through corrections together in a 30-minute Google Meet.
           </p>
-          <Link href="/private-lessons#virtual-coaching" className={styles.secondaryCta} aria-label="Learn more about online 1-on-1 coaching">Learn More</Link>
+          <Link href="/private-lessons#virtual-coaching" className={styles.secondaryCta}>Explore Online Coaching</Link>
         </article>
 
         <article className={styles.inPerson} aria-labelledby="in-person-coaching-title">
@@ -65,7 +65,7 @@ export default function HomePrivateCoaching() {
           <p className={styles.formatDescription}>
             Work with me at Get Down Dance Studios. A 60-minute private lesson built around your goals, with specific corrections and drills to take home.
           </p>
-          <Link href="/private-lessons/san-jose" className={styles.secondaryCta} aria-label="Learn more about in-person lessons in San Jose">Learn More</Link>
+          <Link href="/private-lessons/san-jose" className={styles.secondaryCta}>Explore San Jose Lessons</Link>
         </article>
 
         <div className={styles.details}>

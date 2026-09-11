@@ -222,7 +222,7 @@ export default function RunningManMethodPage() {
                 poster="/images/running-man-method-teaser-poster.webp"
                 aria-label="Ceech and Margarita demonstrating the Running Man with step-by-step captions"
               >
-                <source src="/videos/running-man-method-teaser.mp4" type="video/mp4" />
+                <source src="/videos/edit/running-man-method-teaser-web.mp4" type="video/mp4" />
                 Your browser does not support video playback.
               </TrackedRunningManVideo>
               <p className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-white/70 sm:text-base">

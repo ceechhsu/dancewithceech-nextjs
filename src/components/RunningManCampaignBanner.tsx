@@ -39,6 +39,7 @@ export default function RunningManCampaignBanner() {
 
         <div className="overflow-hidden rounded-3xl border border-white/15 bg-black shadow-2xl">
           <TrackedRunningManVideo
+            loadOnPlay
             placement="homepage_campaign_banner"
             className="block aspect-video w-full"
             controls
@@ -47,7 +48,7 @@ export default function RunningManCampaignBanner() {
             poster="/images/running-man-method-teaser-poster.webp"
             aria-label="Ceech and Margarita demonstrating the Running Man with step-by-step captions"
           >
-            <source src="/videos/running-man-method-teaser.mp4" type="video/mp4" />
+            <source src="/videos/edit/running-man-method-teaser-web.mp4" type="video/mp4" />
             Your browser does not support video playback.
           </TrackedRunningManVideo>
         </div>
