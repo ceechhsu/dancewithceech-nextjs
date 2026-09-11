@@ -33,7 +33,7 @@ test("frame neighborhood stays inside the sequence at both edges", () => {
 
 test("homepage hero uses a video and poster instead of the retired frame sequence", async () => {
   const source = await readFile(
-    new URL("../src/components/ScrollyHero.tsx", import.meta.url),
+    new URL("../src/components/VideoHero.tsx", import.meta.url),
     "utf8",
   );
 

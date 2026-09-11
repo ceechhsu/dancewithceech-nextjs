@@ -6,7 +6,7 @@ import path from "node:path";
 const siteRoot = path.resolve(import.meta.dirname, "..");
 const homepageCopyFiles = [
   "src/app/page.tsx",
-  "src/components/ScrollyHero.tsx",
+  "src/components/VideoHero.tsx",
   "src/components/TestimonialsMarquee.tsx",
   "src/components/TestimonialsCarousel.tsx",
 ];

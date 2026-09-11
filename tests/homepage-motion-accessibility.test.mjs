@@ -5,7 +5,7 @@ import { readFileSync, existsSync } from 'node:fs';
 const read = (name) => readFileSync(new URL(`../src/components/${name}`, import.meta.url), 'utf8');
 
 test('hero exposes a persistent control wired to real media playback', () => {
-  const source = read('ScrollyHero.tsx');
+  const source = read('VideoHero.tsx');
   assert.ok(source.includes('Pause animation'), 'missing visible pause control');
   assert.ok(source.includes('Resume animation'), 'missing resume state');
   assert.match(source, /\.pause\(\)/);

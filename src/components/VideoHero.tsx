@@ -89,7 +89,7 @@ function HeroContent() {
   );
 }
 
-export default function ScrollyHero() {
+export default function VideoHero() {
   return (
     <section aria-label="Dance With Ceech introduction" style={{ height: "100vh", minHeight: "600px", position: "relative", overflow: "hidden", backgroundColor: "#0A0A0A" }}>
       <HeroVideo />
