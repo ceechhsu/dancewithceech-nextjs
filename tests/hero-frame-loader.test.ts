@@ -31,11 +31,13 @@ test("frame neighborhood stays inside the sequence at both edges", () => {
   assert.deepEqual(getFrameNeighborhood(0, 0, 2, 6), []);
 });
 
-test("scrolly hero requests compressed WebP frames from Cloudinary", async () => {
+test("homepage hero uses a video and poster instead of the retired frame sequence", async () => {
   const source = await readFile(
     new URL("../src/components/ScrollyHero.tsx", import.meta.url),
     "utf8",
   );
 
-  assert.match(source, /image\/upload\/f_webp,q_auto\/hero-frames/);
+  assert.match(source, /src="\/hero-mobile\.mp4"/);
+  assert.match(source, /poster="\/hero-mobile-poster\.jpg"/);
+  assert.doesNotMatch(source, /hero-frames/);
 });

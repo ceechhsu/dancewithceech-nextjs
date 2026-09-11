@@ -15,7 +15,6 @@ test("homepage hero uses the existing video with an accessible poster fallback",
 });
 
 test("homepage hero keeps its primary conversion links", () => {
-  assert.match(heroSource, /href="\/private-lessons"/);
+  assert.match(heroSource, /href="\/private-lessons#booking"/);
   assert.match(heroSource, /href="\/about"/);
 });
-

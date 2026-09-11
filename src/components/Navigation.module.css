@@ -1,0 +1,6 @@
+.navigation a, .navigation button { min-height: 44px; }
+.navigation a { display: inline-flex; align-items: center; }
+.navigation button { min-width: 44px; }
+.navigation a:focus-visible, .navigation button:focus-visible { outline: 2px solid #93c5fd; outline-offset: 3px; border-radius: 4px; }
+.booking { background: #2563eb; color: white; border-radius: 8px; padding: 0.65rem 1rem; font-weight: 600; justify-content: center; }
+.booking:hover { background: #1d4ed8; }

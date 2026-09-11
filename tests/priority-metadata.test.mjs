@@ -25,8 +25,8 @@ test("priority commercial pages use intent-aligned SEO metadata", () => {
       description: "Find private hip-hop dance lessons for Bay Area adults, in person in San Jose or online. Train with Ceech through clear foundations and personal feedback.",
     },
     "src/app/blog/page.tsx": {
-      title: "Hip-Hop Dance Tutorials & Move Guides | DanceWithCeech",
-      description: "Learn hip-hop, locking, popping, breaking, and house dance with step-by-step tutorials, move breakdowns, and practice tips from Ceech.",
+      title: "Dance Tutorials, Wellbeing & Stories | DanceWithCeech Blog",
+      description: "Explore dance tutorials, practice tips, wellbeing, and stories from the dance community with Ceech.",
     },
     "src/app/about/page.tsx": {
       title: "About Ceech | Hip-Hop Dance Instructor | DanceWithCeech",

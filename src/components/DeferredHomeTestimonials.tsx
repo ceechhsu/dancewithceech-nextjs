@@ -8,8 +8,8 @@ const TestimonialsMarquee = dynamic(() => import('@/components/TestimonialsMarqu
   ssr: false,
 });
 
-const CircularGallery = dynamic(
-  () => import('@/components/ui/circular-gallery').then((module) => module.CircularGallery),
+const ManualVideoTestimonials = dynamic(
+  () => import('@/components/ManualVideoTestimonials'),
   { ssr: false },
 );
 
@@ -49,15 +49,13 @@ export default function DeferredHomeTestimonials({ items, summary }: { items: Te
           <TestimonialsMarquee summary={summary} />
           <section className="py-24 overflow-x-hidden" style={{ backgroundColor: 'var(--surface)' }}>
             <div className="px-6 text-center mb-12">
-              <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: 'var(--accent-primary)' }}>
+              <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: 'var(--accent-primary-accessible)' }}>
                 Student Results
               </div>
               <h2 className="text-3xl md:text-4xl font-bold">What Students Say on Video</h2>
-              <p className="mt-3 text-sm" style={{ color: 'var(--muted)' }}>Hover to pause · Click any card to watch</p>
+              <p className="mt-3 text-sm" style={{ color: 'var(--muted)' }}>Choose a student story, then press play. Watch at your own pace.</p>
             </div>
-            <div style={{ height: '480px' }}>
-              <CircularGallery items={items} />
-            </div>
+            <ManualVideoTestimonials items={items} />
           </section>
         </>
       ) : (

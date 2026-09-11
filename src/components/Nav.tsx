@@ -4,6 +4,8 @@ import MobileMenu from "@/components/MobileMenu";
 import UserMenu from "@/components/UserMenu";
 import SignInButton from "@/components/SignInButton";
 import CampaignNavLink from "@/components/CampaignNavLink";
+import LearnFreeMenu from "@/components/LearnFreeMenu";
+import styles from "./Navigation.module.css";
 
 type NavUser = {
   name?: string | null;
@@ -17,7 +19,7 @@ type Props = {
 
 export default function Nav({ user }: Props = {}) {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4" style={{ backgroundColor: "var(--background)", borderBottom: "1px solid #1f1f1f" }}>
+    <nav aria-label="Main navigation" className={`${styles.navigation} fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 py-3 sm:px-6`} style={{ backgroundColor: "var(--background)", borderBottom: "1px solid #1f1f1f" }}>
       <Link href="/" prefetch={false} className="flex items-center gap-2" style={{ textDecoration: "none" }}>
         <Image
           src="/logo-mark.png"
@@ -31,20 +33,22 @@ export default function Nav({ user }: Props = {}) {
         </span>
       </Link>
       {/* Desktop nav links */}
-      <div className="hidden md:flex items-center gap-6 text-sm" style={{ color: "var(--muted)" }}>
-        <Link href="/beat-first" prefetch={false} className="hover:text-white transition-colors">Beat First</Link>
-        <Link href="/blog" prefetch={false} className="hover:text-white transition-colors">Blog</Link>
-        <CampaignNavLink />
+      <div className="hidden xl:flex items-center gap-5 text-sm whitespace-nowrap" style={{ color: "var(--muted)" }}>
         <Link href="/private-lessons" prefetch={false} className="hover:text-white transition-colors">Private Lessons</Link>
-        <Link href="/contact" prefetch={false} className="hover:text-white transition-colors">Contact</Link>
+        <LearnFreeMenu />
+        <CampaignNavLink />
+        <Link href="/about" prefetch={false} className="hover:text-white transition-colors">About Ceech</Link>
+        <Link href="/private-lessons#booking" prefetch={false} className={styles.booking}>Book a Free Call</Link>
+        <div className="text-xs">
         {user ? (
           <UserMenu name={user.name} email={user.email} image={user.image} />
         ) : (
           <SignInButton />
         )}
+        </div>
       </div>
       {/* Mobile: fluid hamburger menu */}
-      <MobileMenu />
+      <MobileMenu user={user} />
     </nav>
   );
 }
