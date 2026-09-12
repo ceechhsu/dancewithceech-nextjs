@@ -176,7 +176,7 @@ export default async function Home() {
             </details>
           ))}
           <p className="mt-6 text-sm" style={{ color: "var(--muted)" }}>
-            For pricing, scheduling, and lesson policies, see the <Link href="/private-lessons#faq" className="underline underline-offset-4" style={{ color: "var(--accent-primary)" }}>private lesson FAQs</Link>.
+            For pricing, scheduling, and lesson policies, see the <Link href="/private-lessons#faq" className="underline underline-offset-4" style={{ color: "var(--accent-primary-accessible)" }}>private lesson FAQs</Link>.
           </p>
         </div>
       </section>

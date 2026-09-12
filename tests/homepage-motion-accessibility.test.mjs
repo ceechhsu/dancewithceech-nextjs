@@ -53,3 +53,9 @@ test('private lesson text links use accessible blue', () => {
   assert.match(source, /var\(--accent-primary-accessible\)/);
   assert.doesNotMatch(source, /color: ['"]var\(--accent-primary\)['"]/);
 });
+
+test('homepage FAQ link uses accessible blue for small text', () => {
+  const source = readFileSync(new URL('../src/app/page.tsx', import.meta.url), 'utf8');
+  assert.match(source, /private lesson FAQs/);
+  assert.match(source, /style=\{\{ color: "var\(--accent-primary-accessible\)" \}\}>private lesson FAQs<\/Link>/);
+});
