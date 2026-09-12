@@ -7,7 +7,9 @@ const siteRoot = path.resolve(import.meta.dirname, "..");
 const heroSource = fs.readFileSync(path.join(siteRoot, "src/components/VideoHero.tsx"), "utf8");
 
 test("homepage hero uses the existing video with an accessible poster fallback", () => {
-  assert.match(heroSource, /src="\/hero-mobile\.mp4"/);
+  assert.match(heroSource, /video\.src = "\/hero-mobile\.mp4"/);
+  assert.doesNotMatch(heroSource, /<video\b[^>]*\bsrc=/);
+  assert.match(heroSource, /preload="none"/);
   assert.match(heroSource, /poster="[^"]+"/);
   assert.match(heroSource, /muted/);
   assert.match(heroSource, /playsInline/);
