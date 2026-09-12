@@ -18,18 +18,29 @@ function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const userPaused = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasPlayed, setHasPlayed] = useState(false);
 
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const desktop = window.matchMedia("(min-width: 768px) and (pointer: fine)");
     const updatePlayback = () => {
       const video = videoRef.current;
       if (!video) return;
-      if (preference.matches || userPaused.current) video.pause();
-      else void video.play().catch(() => { /* The resume button remains available if autoplay is blocked. */ });
+      if (preference.matches || !desktop.matches || userPaused.current) video.pause();
+      else {
+        // Keep the source out of the initial HTML so mobile never downloads
+        // background video until the visitor explicitly chooses to play it.
+        if (!video.getAttribute("src")) video.src = "/hero-mobile.mp4";
+        void video.play().catch(() => { /* The play button remains available if autoplay is blocked. */ });
+      }
     };
     updatePlayback();
     preference.addEventListener("change", updatePlayback);
-    return () => preference.removeEventListener("change", updatePlayback);
+    desktop.addEventListener("change", updatePlayback);
+    return () => {
+      preference.removeEventListener("change", updatePlayback);
+      desktop.removeEventListener("change", updatePlayback);
+    };
   }, []);
 
   function togglePlayback() {
@@ -37,6 +48,7 @@ function HeroVideo() {
     if (!video) return;
     if (video.paused) {
       userPaused.current = false;
+      if (!video.getAttribute("src")) video.src = "/hero-mobile.mp4";
       void video.play().catch(() => { /* Leave the control in its paused state. */ });
     } else {
       userPaused.current = true;
@@ -49,14 +61,13 @@ function HeroVideo() {
     <video
       id="hero-background-video"
       ref={videoRef}
-      src="/hero-mobile.mp4"
       loop
       muted
       playsInline
-      preload="metadata"
+      preload="none"
       poster="/hero-mobile-poster.jpg"
       aria-hidden="true"
-      onPlay={() => setIsPlaying(true)}
+      onPlay={() => { setIsPlaying(true); setHasPlayed(true); }}
       onPause={() => setIsPlaying(false)}
       style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
     />
@@ -66,7 +77,7 @@ function HeroVideo() {
       aria-controls="hero-background-video"
       className="absolute bottom-6 right-6 z-10 min-h-11 rounded-full border border-white/40 bg-black/80 px-4 py-2 text-sm text-white hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-300"
     >
-      {isPlaying ? "Pause animation" : "Resume animation"}
+      {isPlaying ? "Pause animation" : hasPlayed ? "Resume animation" : "Play animation"}
     </button>
     </>
   );

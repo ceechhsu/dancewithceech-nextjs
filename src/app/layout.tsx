@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
 });
 
 const barlowCondensed = Barlow_Condensed({
@@ -22,6 +23,7 @@ const barlowCondensed = Barlow_Condensed({
   subsets: ["latin"],
   weight: ["600", "700", "800"],
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
