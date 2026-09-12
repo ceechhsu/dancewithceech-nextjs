@@ -1,16 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import Nav from "@/components/Nav";
-import ScrollyHero from "@/components/ScrollyHero";
+import VideoHero from "@/components/VideoHero";
 import StatsBar from "@/components/StatsBar";
 import DeferredHomeTestimonials from "@/components/DeferredHomeTestimonials";
 import RunningManCampaignBanner from "@/components/RunningManCampaignBanner";
 import HomePrivateCoaching from "@/components/HomePrivateCoaching";
-import { businessSchema } from "@/lib/private-lesson-details";
+import { homepageFaqs, homepageSchema } from "@/lib/homepage-details";
 import HomeTutorials from "@/components/HomeTutorials";
 import { getReviewSummary } from "@/lib/reviews";
-
-const organizationSchema = businessSchema;
 
 export const metadata = {
   title: "DanceWithCeech: Hip-Hop Dance Lessons with Ceech",
@@ -39,12 +37,12 @@ export default async function Home() {
     <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageSchema).replace(/</g, "\\u003c") }}
       />
 
       <Nav />
 
-      <ScrollyHero />
+      <VideoHero />
 
       {/* SOCIAL PROOF BAR */}
       <StatsBar />
@@ -167,6 +165,21 @@ export default async function Home() {
 
       {/* TEMPORARY FOUNDING-COHORT CAMPAIGN */}
       <RunningManCampaignBanner />
+
+      <section id="faq" aria-labelledby="homepage-faq-heading" className="py-16 px-6 scroll-mt-24" style={{ borderTop: "1px solid #1f1f1f" }}>
+        <div className="max-w-3xl mx-auto">
+          <h2 id="homepage-faq-heading" className="text-3xl font-bold mb-6">Getting started with Dance With Ceech</h2>
+          {homepageFaqs.map(({ question, answer }) => (
+            <details key={question} className="py-5 border-b border-white/10">
+              <summary className="font-semibold cursor-pointer focus-visible:outline-2 focus-visible:outline-blue-400 rounded">{question}</summary>
+              <p className="mt-3 leading-relaxed" style={{ color: "var(--muted)" }}>{answer}</p>
+            </details>
+          ))}
+          <p className="mt-6 text-sm" style={{ color: "var(--muted)" }}>
+            For pricing, scheduling, and lesson policies, see the <Link href="/private-lessons#faq" className="underline underline-offset-4" style={{ color: "var(--accent-primary)" }}>private lesson FAQs</Link>.
+          </p>
+        </div>
+      </section>
 
       {/* PRIVATE LESSONS CTA */}
       <section className="py-24 px-6" style={{ backgroundColor: "var(--surface)" }}>

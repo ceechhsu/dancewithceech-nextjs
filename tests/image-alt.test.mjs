@@ -15,7 +15,7 @@ test("blog image templates provide meaningful alt text", () => {
 });
 
 test("video hero exposes a poster and accessible section label", () => {
-  const source = fs.readFileSync(path.join(siteRoot, "src/components/ScrollyHero.tsx"), "utf8");
+  const source = fs.readFileSync(path.join(siteRoot, "src/components/VideoHero.tsx"), "utf8");
   assert.match(source, /<video[\s\S]{0,500}poster="\/hero-mobile-poster\.jpg"/);
   assert.match(source, /<section[^>]+aria-label="Dance With Ceech introduction"/);
 });

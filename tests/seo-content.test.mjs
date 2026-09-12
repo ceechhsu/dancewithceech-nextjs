@@ -11,7 +11,7 @@ const LOCAL_PAGES = [
 ];
 
 test("homepage hero uses a lightweight video with reduced-motion support", async () => {
-  const source = await read("src/components/ScrollyHero.tsx");
+  const source = await read("src/components/VideoHero.tsx");
   assert.match(source, /<video/);
   assert.match(source, /prefers-reduced-motion/);
   assert.match(source, /video\.pause\(\)/);
@@ -21,11 +21,11 @@ test("homepage hero uses a lightweight video with reduced-motion support", async
 test("approved homepage sections, hero copy, and CTAs remain present", async () => {
   const [home, hero, deferredTestimonials] = await Promise.all([
     read("src/app/page.tsx"),
-    read("src/components/ScrollyHero.tsx"),
+    read("src/components/VideoHero.tsx"),
     read("src/components/DeferredHomeTestimonials.tsx"),
   ]);
   for (const component of [
-    "ScrollyHero",
+    "VideoHero",
     "StatsBar",
     "RunningManCampaignBanner",
     "DeferredHomeTestimonials",
@@ -50,7 +50,7 @@ test("local-business pages use the verified coordinates and stable entity identi
   const shared = await read("src/lib/private-lesson-details.ts");
   const sources = await Promise.all(LOCAL_PAGES.map(async path => {
     const source = await read(path);
-    assert.match(source, /businessSchema|buildLessonSchema/);
+    assert.match(source, /businessSchema|buildLessonSchema|homepageSchema/);
     return source + shared;
   }));
   for (const source of sources) {
@@ -61,7 +61,9 @@ test("local-business pages use the verified coordinates and stable entity identi
     assert.ok(source.includes('https://dancewithceech.com/#organization'));
   }
   const home = await read("src/app/page.tsx");
-  assert.match(home, /businessSchema/);
+  assert.match(home, /homepageSchema/);
+  const homepageDetails = await read("src/lib/homepage-details.ts");
+  assert.match(homepageDetails, /businessSchema/);
   assert.ok(shared.includes('https://dancewithceech.com/#organization'));
 });
 
@@ -173,5 +175,5 @@ test("Running Man campaign enrollment references remain intact", async () => {
   ]);
   assert.match(banner, /enrollment-state|RunningManTeaser|running-man-method/);
   assert.match(panel, /currentPrice|coaching|checkout/i);
-  assert.match(teaser, /running-man-method-teaser\.mp4/);
+  assert.match(teaser, /running-man-method-teaser-web\.mp4/);
 });

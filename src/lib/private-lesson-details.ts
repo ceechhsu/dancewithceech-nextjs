@@ -10,6 +10,8 @@ export const businessSchema = {
   telephone: "+14086573771",
   email: "dancewithceech@gmail.com",
   logo: "https://dancewithceech.com/logo-mark.png",
+  image: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg",
+  priceRange: "$80 per virtual coaching cycle; $250 per in-person lesson",
   address: {
     "@type": "PostalAddress",
     streetAddress: "196 Jackson St",
