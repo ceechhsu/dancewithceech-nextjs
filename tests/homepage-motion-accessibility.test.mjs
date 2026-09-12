@@ -47,3 +47,9 @@ test('small review labels use the existing accessible text blue', () => {
     assert.doesNotMatch(source, /color: ['"]var\(--accent-primary\)['"]/);
   }
 });
+
+test('private lesson text links use accessible blue', () => {
+  const source = readFileSync(new URL('../src/components/PrivateLessonDetails.tsx', import.meta.url), 'utf8');
+  assert.match(source, /var\(--accent-primary-accessible\)/);
+  assert.doesNotMatch(source, /color: ['"]var\(--accent-primary\)['"]/);
+});

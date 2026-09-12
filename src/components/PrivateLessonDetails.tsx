@@ -12,7 +12,7 @@ export function LessonIntroduction() {
         <p className="leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
           His approach is specific: identify the rhythm, balance, or coordination problem, then give you a drill you can practice. One step before the next.
         </p>
-        <Link href="/about" className="underline underline-offset-4" style={{ color: "var(--accent-primary)" }}>Read Ceech&apos;s story</Link>
+        <Link href="/about" className="underline underline-offset-4" style={{ color: "var(--accent-primary-accessible)" }}>Read Ceech&apos;s story</Link>
       </div>
     </section>
   );
@@ -76,7 +76,7 @@ export function CelebrationLessons() {
         <p className="text-sm leading-relaxed mb-5" style={{ color: "var(--muted)" }}>
           Standard in-person rates apply to couples. Larger groups cost more based on participant count. Music editing, travel, and extra rehearsals are quoted separately.
         </p>
-        <a href="#booking" className="underline underline-offset-4" style={{ color: "var(--accent-primary)" }}>Discuss your dance in a free phone consultation</a>
+        <a href="#booking" className="underline underline-offset-4" style={{ color: "var(--accent-primary-accessible)" }}>Discuss your dance in a free phone consultation</a>
       </div>
     </section>
   );
@@ -105,7 +105,7 @@ export function SpecializedLessons() {
             </p>
           </div>
         </div>
-        <a href="#booking" className="underline underline-offset-4" style={{ color: "var(--accent-primary)" }}>Talk through your goals in a free 30-minute phone consultation</a>
+        <a href="#booking" className="underline underline-offset-4" style={{ color: "var(--accent-primary-accessible)" }}>Talk through your goals in a free 30-minute phone consultation</a>
       </div>
     </section>
   );
@@ -134,7 +134,7 @@ export function LessonLocation() {
         <h2 className="text-2xl font-bold mb-4">Find Dance With Ceech in Japantown</h2>
         <p className="leading-relaxed mb-4" style={{ color: "var(--muted)" }}>In-person lessons take place at Get Down Dance Studios.<br />196 Jackson St, San Jose, CA 95112<br />By appointment only, normally Saturdays between 9 a.m. and 5 p.m. Pacific Time. Other times may be available by special request.</p>
         <p className="leading-relaxed mb-4" style={{ color: "var(--muted)" }}>Paid street parking only. Check posted signs for fees and time limits, and allow time to park.</p>
-        <a href="https://maps.app.goo.gl/UwJFWssFCYNC5Zyc7" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4" style={{ color: "var(--accent-primary)" }}>View location and directions on Google Maps</a>
+        <a href="https://maps.app.goo.gl/UwJFWssFCYNC5Zyc7" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4" style={{ color: "var(--accent-primary-accessible)" }}>View location and directions on Google Maps</a>
       </div>
     </section>
   );
