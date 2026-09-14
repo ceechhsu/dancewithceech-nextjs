@@ -1,0 +1,10 @@
+export type AttendanceStatus = 'present' | 'absent'
+export interface AttendanceClass { id: string; instructor_email: string; name: string; college: string; location_label: string; term: string; year: number; start_date: string; end_date: string; timezone: string; days: number[]; start_time: string; end_time: string; archived: boolean; schedule_revision?: number }
+export interface Enrollment { id: string; class_id: string; name: string; first_name?: string | null; last_name?: string | null; photo_url?: string | null; college_id: string | null; email: string | null; effective_from: string; effective_to: string | null }
+export interface AttendanceMeeting { id: string; class_id: string; instructor_email: string; meeting_date: string; status: 'open' | 'closed' | 'cancelled'; opened_at: string; expires_at: string; extended: boolean; closed_at: string | null }
+export interface RosterSnapshot { meeting_id: string; enrollment_id: string; name: string; college_id: string | null; email: string | null }
+export interface AttendanceRecord { meeting_id: string; enrollment_id: string; status: AttendanceStatus; source: 'check_in' | 'manual' | 'finalized'; revision: number; updated_at: string; checked_in_at?: string | null }
+export interface AttendanceCorrection { id: string; meeting_id: string; enrollment_id: string; old_status: AttendanceStatus | null; new_status: AttendanceStatus; actor_email: string; note: string; operation_id: string; created_at: string }
+export interface AttendanceLocation { latitude: number; longitude: number; accuracy: number; timestamp: number }
+export interface CorrectionOperation { operationId: string; meetingId: string; enrollmentId: string; status: AttendanceStatus; expectedRevision: number; note?: string; recordedAt?: string }
+export interface MeetingResponse { meeting: AttendanceMeeting | null; records: AttendanceRecord[]; roster: RosterSnapshot[]; corrections: AttendanceCorrection[]; failures?: {id:string;actor_email:string;reason:string;created_at:string}[] }

@@ -1,0 +1,66 @@
+.calendar {
+  --attendance-surface: #151719;
+  --attendance-line: #383e46;
+  --attendance-ink: #f5f5f5;
+  --attendance-muted: #b8bec8;
+  --present-fill: #16392d;
+  --present-ink: #c5f7dc;
+  --absent-fill: #492634;
+  --absent-ink: #ffd9e7;
+  margin: 24px 0;
+  padding: 24px;
+  background: var(--attendance-surface);
+  border: 1px solid var(--attendance-line);
+  border-radius: 18px;
+}
+.monthBar {display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:12px;margin-bottom:24px;text-align:center}
+.monthBar h2 {font-size:22px;font-weight:650;letter-spacing:-.02em}
+.monthBar button {display:flex;align-items:center;justify-content:center;height:44px;border:1px solid #69717d;border-radius:8px;background:#24282f;color:#f5f5f5;cursor:pointer}
+.monthBar button:disabled {opacity:.4;cursor:not-allowed}
+.weekdays,.monthGrid {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.weekdays {font-size:12px;color:var(--attendance-muted);text-align:center;margin-bottom:8px}
+.day {min-width:0;min-height:80px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;padding:10px;border:1px solid #41464e;border-radius:8px;cursor:pointer;font-variant-numeric:tabular-nums}
+.dateNumber {font-size:18px;font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:2px;width:100%}
+.dayText {font-size:11px;line-height:1.2}
+.present {background:var(--present-fill,#16392d);color:var(--present-ink,#c5f7dc);border-color:#5da787}
+.absent {background:var(--absent-fill,#492634);color:var(--absent-ink,#ffd9e7);border-color:#cf899f}
+.upcoming {background:#151d29;color:#c7dfff;border-color:#93c5fd}
+.none,.holiday,.cancelled {background:#24272c;color:#c1c6ce;border-color:#454b54}
+.pending,.mixed {background:#292d36;color:#e1e5ed;border-color:#8b95a6}
+.day:hover,.day.selected {outline:2px solid #f5f5f5;outline-offset:1px}
+.toggle {display:inline-flex;gap:4px;padding:4px;border:1px solid #4c535e;border-radius:12px}
+.toggle button {min-height:44px;padding:8px 16px;border-radius:8px;background:transparent;color:#b8bec8;cursor:pointer}
+.toggle button[aria-pressed=true] {background:#253e62;color:#e3efff}
+.legend {display:flex;flex-wrap:wrap;gap:12px 16px;margin-top:20px;color:#c1c6ce;font-size:12px}
+.legend span {display:flex;align-items:center;gap:6px}
+.legend i {display:inline-block;width:12px;height:12px;border:1px solid;border-radius:3px}
+.summary {display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid var(--attendance-line);padding-top:24px;margin-top:24px;text-align:center}
+.summary strong {display:block;font-size:30px;font-weight:650;font-variant-numeric:tabular-nums;line-height:1.2}
+.summary span {display:block;margin-top:6px;font-size:13px;color:var(--attendance-muted)}
+.footnote {font-size:12px;color:var(--attendance-muted);margin:20px 0 0;text-align:center}
+.entries {list-style:none;margin:0;padding:0}
+.entries li+li {border-top:1px solid #383e46}
+.entries button {display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:72px;text-align:left;padding:16px 0;color:#f5f5f5;cursor:pointer}
+.entries button:hover {background:#20252c}
+.badge {display:inline-block;border:1px solid;border-radius:8px;padding:4px 10px;font-size:13px;white-space:nowrap}
+.listTime {display:block;font-size:13px;font-weight:400;color:#b8bec8;margin-top:4px}
+.detail {scroll-margin:16px}
+.detail p {margin-bottom:12px}
+.sessionDetail+.sessionDetail {border-top:1px solid #383e46;margin-top:20px;padding-top:20px}
+.request {margin-top:16px}
+.request h3 {font-size:18px;font-weight:600;margin-bottom:8px}
+.requestHistory {padding:12px 0;border-bottom:1px solid #383e46;margin-bottom:16px;font-size:14px;overflow-wrap:anywhere}
+.requestHistory strong {color:#c7dfff}
+.request textarea:focus-visible {outline:3px solid #fcd34d;outline-offset:3px}
+@media(max-width:600px){
+ .calendar {padding:16px 12px}
+ .monthBar {margin-bottom:16px}
+ .monthBar h2 {font-size:20px}
+ .monthGrid,.weekdays {gap:4px}
+ .day {padding:6px 3px;min-height:64px;align-items:center;gap:8px}
+ .dateNumber {font-size:15px;justify-content:center}
+ .dateNumber svg {width:10px}
+ .dayText {font-size:10px}
+ .summary strong {font-size:26px}
+ .entries button {align-items:flex-start;flex-wrap:wrap}
+}
