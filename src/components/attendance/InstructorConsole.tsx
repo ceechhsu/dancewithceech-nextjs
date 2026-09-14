@@ -249,7 +249,7 @@ export default function InstructorConsole({ owner }: { owner: string }) {
           </>
         )}
       </section>
-      {selected && <ClassRosterSummary key={classId} classId={classId} className={selected.name} revision={data} />}
+      {selected && <ClassRosterSummary key={classId} classId={classId} className={selected.name} revision={data} onRosterChanged={() => { void load() }} />}
       {selected && <ScheduleManager key={`schedule-${classId}`} classId={classId} onChanged={updated=>{setClasses(current=>current.map(item=>item.id===updated.id?updated:item));void load();}} />}
       {selected && <CorrectionRequests key={`requests-${classId}`} classId={classId} onChanged={()=>{void load();}} />}
       {data && meeting && (

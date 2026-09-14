@@ -142,6 +142,12 @@
   justify-content: space-between;
   flex-wrap: wrap;
 }
+.addStudent { margin: 12px 0 20px; }
+.addStudentForm { border-top: 1px solid #383838; margin-top: 20px; padding-top: 20px; display: grid; gap: 16px; }
+.addStudentForm h3 { font-size: 18px; font-weight: 650; }
+.addStudentForm .field { margin-bottom: 0; }
+.addStudentForm .button { white-space: normal; overflow-wrap: anywhere; }
+.addStudent .button:hover:not(:disabled) { filter: brightness(1.12); }
 .button {
   display: inline-flex;
   align-items: center;

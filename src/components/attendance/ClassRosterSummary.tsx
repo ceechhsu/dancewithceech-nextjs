@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react'
 import { attendanceApi, errorMessage } from '@/lib/attendance/client'
 import s from './Attendance.module.css'
 import StudentAvatar from './StudentAvatar'
+import AddStudent from './AddStudent'
 type Summary = { classId: string; students: { id: string; name: string; first_name: string | null; last_name: string | null; photo_url: string | null; email: string | null; present: number; absent: number }[] }
-export default function ClassRosterSummary({ classId, className, revision }: { classId: string; className: string; revision: unknown }) {
+export default function ClassRosterSummary({ classId, className, revision, onRosterChanged }: { classId: string; className: string; revision: unknown; onRosterChanged?: () => void }) {
   const [data, setData] = useState<Summary | null>(null)
   const [error, setError] = useState('')
   const [retry, setRetry] = useState(0)
@@ -28,9 +29,9 @@ export default function ClassRosterSummary({ classId, className, revision }: { c
     return () => { cancelled = true; clearInterval(timer); window.removeEventListener('focus', refresh); document.removeEventListener('visibilitychange', refresh) }
   }, [classId, revision, retry])
   return <section className={s.card} aria-label="Class roster and attendance totals">
-    <h2>{className} · Roster</h2>
+    <AddStudent key={classId} classId={classId} className={className} onAdded={() => { setRetry(v => v+1); onRosterChanged?.() }} />
     <p className={s.muted}>Semester totals · completed classes only. Open and cancelled sessions do not count.</p>
-    {error ? <><p role="alert">{error}</p><button className={s.button} onClick={() => setRetry(v => v+1)}>Retry roster</button></> : !data ? <p role="status">Loading roster…</p> : !data.students.length ? <p>No active students yet. Add students in Manage classes.</p> :
+    {error ? <><p role="alert">{error}</p><button className={s.button} onClick={() => setRetry(v => v+1)}>Retry roster</button></> : !data ? <p role="status">Loading roster…</p> : !data.students.length ? <p>No active students yet. Use Add student above to start your roster.</p> :
       <><p className={s.rosterSwipe}>Swipe or scroll sideways to see all columns →</p>
       <div className={s.rosterScroll} tabIndex={0} role="region" aria-label={`${className} roster, scroll horizontally`}>
       <table className={s.rosterDetails}>

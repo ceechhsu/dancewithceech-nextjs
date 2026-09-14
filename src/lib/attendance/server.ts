@@ -8,8 +8,8 @@ import { syncRosterProfile } from './profile-sync'
 
 export function attendanceDb() {
   if (process.env.ATTENDANCE_ENABLED !== 'true') throw new AttendanceError('Attendance is not available yet.', 503)
-  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const url = process.env.ATTENDANCE_SUPABASE_URL || process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.ATTENDANCE_SUPABASE_URL ? process.env.ATTENDANCE_SUPABASE_SERVICE_ROLE_KEY : process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!url || !key) throw new AttendanceError('Attendance is not configured yet.', 503)
   return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } })
 }
@@ -42,7 +42,11 @@ export async function attendanceRequest(request: Request, resource: string) {
       try { await syncRosterProfile(db, actor.profile) }
       catch { throw new AttendanceError('Your profile could not be refreshed. Please try checking in again.', 503) }
     }
-    const { data, error } = await db.rpc('attendance_api', { p_actor: actor.email, p_sub: actor.sub, p_instructor: actor.instructor, p_resource: resource, p_action: action, p_body: body })
+    const addingStudent = resource === 'enrollments' && action === 'add'
+    if (addingStudent && !actor.instructor) throw new AttendanceError('Instructor access required.', 403)
+    const { data, error } = addingStudent
+      ? await db.rpc('attendance_add_student', { p_actor: actor.email, p_sub: actor.sub, p_instructor: actor.instructor, p_class_id: body.classId, p_email: body.email, p_first: body.first_name || '', p_last: body.last_name || '' })
+      : await db.rpc('attendance_api', { p_actor: actor.email, p_sub: actor.sub, p_instructor: actor.instructor, p_resource: resource, p_action: action, p_body: body })
     if (error) {
       console.error('Attendance database request failed', error.code)
       throw new AttendanceError(error.code === 'P0001' ? error.message : 'Attendance could not be saved. Please try again.', error.code === 'P0001' ? 400 : 503)

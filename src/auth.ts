@@ -35,8 +35,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ profile }) {
       const fields = rosterGoogleProfile(profile)
       if (!fields || process.env.ATTENDANCE_ENABLED !== 'true') return
-      const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
-      const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+      const url = process.env.ATTENDANCE_SUPABASE_URL || process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+      const key = process.env.ATTENDANCE_SUPABASE_URL ? process.env.ATTENDANCE_SUPABASE_SERVICE_ROLE_KEY : process.env.SUPABASE_SERVICE_ROLE_KEY
       if (!url || !key) return
       try {
         const { createClient } = await import('@supabase/supabase-js')
