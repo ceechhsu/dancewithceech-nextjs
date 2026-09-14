@@ -11,7 +11,7 @@ type Props = {
   image?: string | null
 }
 
-export default function UserMenu({ name, image }: Props) {
+export default function UserMenu({ name, email, image }: Props) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -95,7 +95,7 @@ export default function UserMenu({ name, image }: Props) {
             My Progress
           </Link>
           <button
-            onClick={() => { setOpen(false); signOut() }}
+            onClick={async () => { try { if(email && typeof indexedDB !== 'undefined') { const {clearOfflineData}=await import('@/lib/attendance/offline'); await clearOfflineData(email.trim().toLowerCase()) } setOpen(false); await signOut() } catch(error) { alert(error instanceof Error?error.message:'Please sync attendance before signing out.') } }}
             style={{
               display: 'block',
               width: '100%',

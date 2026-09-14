@@ -37,7 +37,11 @@ test("homepage hero uses a video and poster instead of the retired frame sequenc
     "utf8",
   );
 
-  assert.match(source, /src="\/hero-mobile\.mp4"/);
+  const videoTag=source.match(/<video\b[\s\S]*?\/>/)?.[0];
+  assert.ok(videoTag, 'Hero renders a video element');
+  assert.doesNotMatch(videoTag, /\bsrc\s*=/, 'Video must not download from initial mobile HTML');
+  assert.match(videoTag, /preload="none"/);
+  assert.match(source, /video\.src = "\/hero-mobile\.mp4"/);
   assert.match(source, /poster="\/hero-mobile-poster\.jpg"/);
   assert.doesNotMatch(source, /hero-frames/);
 });

@@ -13,9 +13,9 @@ const links = [
   { label: "Running Man", href: "/running-man-method" },
   { label: "About Ceech", href: "/about" },
 ];
-type Props = { user?: { name?: string | null; email?: string | null; image?: string | null } | null };
+type Props = { user?: { name?: string | null; email?: string | null; image?: string | null } | null; showAttendance?: boolean; alwaysVisible?: boolean };
 
-export default function MobileMenu({ user }: Props) {
+export default function MobileMenu({ user, showAttendance = false, alwaysVisible = false }: Props) {
   const [requestedOpen, setOpen] = useState(false);
   const pathname = usePathname();
   const [openedPath, setOpenedPath] = useState(pathname);
@@ -32,10 +32,10 @@ export default function MobileMenu({ user }: Props) {
 
   useEffect(() => {
     if (!open) return;
-    const nav = root.current?.closest("nav");
+    const nav = root.current?.closest("nav, header");
     const measure = () => {
       if (nav) setTop(nav.getBoundingClientRect().bottom);
-      if (window.matchMedia("(min-width: 1280px)").matches) setOpen(false);
+      if (!alwaysVisible && window.matchMedia("(min-width: 1280px)").matches) setOpen(false);
     };
     measure();
     const observer = new ResizeObserver(measure);
@@ -66,9 +66,9 @@ export default function MobileMenu({ user }: Props) {
       document.removeEventListener("pointerdown", dismiss);
       document.removeEventListener("keydown", keyboard);
     };
-  }, [open]);
+  }, [open, alwaysVisible]);
 
-  return <div ref={root} className="xl:hidden">
+  return <div ref={root} className={alwaysVisible ? undefined : "xl:hidden"}>
     <button ref={trigger} type="button" aria-label={open ? "Close menu" : "Open menu"}
       aria-expanded={open} aria-controls="mobile-navigation"
       onClick={() => { setOpenedPath(pathname); setOpen(!open); }}
@@ -76,11 +76,14 @@ export default function MobileMenu({ user }: Props) {
       {open ? <X size={24} /> : <Menu size={24} />}
     </button>
     {open && <div ref={panel} id="mobile-navigation"
-      className="fixed inset-x-0 bottom-0 z-40 flex flex-col gap-1 overflow-y-auto bg-zinc-950 px-6 py-5 text-sm text-zinc-300"
+      className={`${styles.navigation} fixed inset-x-0 bottom-0 z-40 flex flex-col gap-1 overflow-y-auto bg-zinc-950 px-6 py-5 text-sm text-zinc-300`}
       style={{ top }} onClick={(event) => {
         if ((event.target as HTMLElement).closest("a")) { setOpen(false); trigger.current?.focus(); }
       }}>
       <Link href="/private-lessons#booking" prefetch={false} className={`${styles.booking} mb-3 shrink-0`}>Book a Free Call</Link>
+      {user && !showAttendance && <a href="/dashboard" className="flex min-h-12 shrink-0 items-center font-semibold text-blue-300">My Classes</a>}
+      {/* Fresh document applies attendance permissions and unloads marketing scripts. */}
+      {showAttendance && <a href="/attendance/instructor" className="flex min-h-11 shrink-0 items-center font-semibold text-blue-300">Attendance</a>}
       <Link href="/private-lessons" prefetch={false}>Private Lessons</Link>
       <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Learn Free</p>
       {freeLinks.map(({ label, href }) => <Link key={href} href={href} prefetch={false} className="shrink-0 pl-3">{label}</Link>)}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import {isPrivateAttendancePath} from '@/lib/attendance/privacy';
 
 import { initializeGoogleAnalytics } from '@/lib/analytics/client';
 
@@ -20,6 +21,7 @@ type Fbq = ((...args: unknown[]) => void) & {
 };
 
 function loadAnalytics() {
+  if (isPrivateAttendancePath(window.location.pathname)) return;
   initializeGoogleAnalytics();
 
   const win = window as AnalyticsWindow;
@@ -52,6 +54,7 @@ function loadAnalytics() {
 
 export default function DeferredAnalytics() {
   useEffect(() => {
+    if (isPrivateAttendancePath(window.location.pathname)) return;
     let scheduled = false;
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
 

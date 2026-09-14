@@ -123,7 +123,7 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   images: {
     remotePatterns: [
-      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+      { protocol: 'https', hostname: '**.googleusercontent.com' },
       { protocol: 'https', hostname: 'i.ytimg.com' },
     ],
   },
@@ -137,6 +137,12 @@ const nextConfig: NextConfig = {
         source: "/",
         headers: homepageCacheHeaders,
       },
+      ...["/attendance/:path*", "/dashboard"].map(source => ({source, headers: [
+        {key:"Permissions-Policy",value:"camera=(), microphone=(), geolocation=(self), browsing-topics=()"},
+        {key:"Referrer-Policy",value:"no-referrer"},
+        {key:"Cache-Control",value:"private, no-store"},
+        {key:"Content-Security-Policy",value:`default-src 'self'; script-src 'self' 'unsafe-inline'${process.env.NODE_ENV==='development'?" 'unsafe-eval'":''}; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'`},
+      ]})),
       {
         source: "/beat-first/practice/:path*",
         headers: [
