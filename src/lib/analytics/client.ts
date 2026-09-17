@@ -55,8 +55,10 @@ export function initializeGoogleAnalytics() {
   const win = window as AnalyticsWindow;
   if (!win.gtag) {
     win.dataLayer = win.dataLayer || [];
-    win.gtag = (command, eventName, parameters) => {
-      win.dataLayer?.push([command, eventName, parameters]);
+    win.gtag = function () {
+      // Google processes gtag commands as Arguments objects, not ordinary arrays.
+      // eslint-disable-next-line prefer-rest-params
+      win.dataLayer?.push(arguments);
     };
   }
 
