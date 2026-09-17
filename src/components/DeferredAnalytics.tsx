@@ -22,8 +22,6 @@ type Fbq = ((...args: unknown[]) => void) & {
 
 function loadAnalytics() {
   if (isPrivateAttendancePath(window.location.pathname)) return;
-  initializeGoogleAnalytics();
-
   const win = window as AnalyticsWindow;
   if (document.documentElement.hasAttribute(META_ANALYTICS_MARKER)) return;
   document.documentElement.setAttribute(META_ANALYTICS_MARKER, 'loaded');
@@ -55,6 +53,9 @@ function loadAnalytics() {
 export default function DeferredAnalytics() {
   useEffect(() => {
     if (isPrivateAttendancePath(window.location.pathname)) return;
+    // GA4 page views must be recorded even when a visitor leaves before interacting.
+    // Keep only the heavier Meta pixel behind the deferred loader.
+    initializeGoogleAnalytics();
     let scheduled = false;
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
