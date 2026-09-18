@@ -122,15 +122,28 @@
 .rosterTotals abbr { text-decoration: none; }
 .rosterSwipe { margin-top: 16px; font-size: 13px; color: #b8bec8; }
 .rosterScroll { max-width: 100%; overflow-x: auto; margin-top: 12px; isolation: isolate; }
-.rosterDetails { width: 100%; min-width: 800px; table-layout: fixed; border-collapse: separate; border-spacing: 0; }
+.rosterDetails { width: 100%; min-width: 1156px; table-layout: fixed; border-collapse: separate; border-spacing: 0; }
 .rosterDetails th, .rosterDetails td { padding: 14px 10px; border-bottom: 1px solid #383838; text-align: left; overflow-wrap: anywhere; background: #151719; }
 .rosterDetails thead th { color: #b8bec8; font-size: 14px; font-weight: 500; }
 .rosterDetails th:first-child, .rosterDetails td:first-child { width: 64px; position: sticky; left: 0; z-index: 2; }
 .rosterDetails th:nth-child(2) { width: 132px; position: sticky; left: 64px; z-index: 2; font-weight: 500; }
 .rosterDetails th:nth-child(3), .rosterDetails td:nth-child(3) { width: 132px; }
-.rosterDetails th:nth-child(4), .rosterDetails td:nth-child(4), .rosterDetails th:nth-child(5), .rosterDetails td:nth-child(5) { width: 64px; text-align: center; font-variant-numeric: tabular-nums; }
-.rosterDetails th:last-child, .rosterDetails td:last-child { width: 280px; }
+.rosterDetails th:nth-child(4), .rosterDetails td:nth-child(4) { width: 340px; text-align: left; overflow-wrap: break-word; }
+.rosterDetails th:nth-child(5), .rosterDetails td:nth-child(5), .rosterDetails th:nth-child(6), .rosterDetails td:nth-child(6) { width: 64px; text-align: center; font-variant-numeric: tabular-nums; }
+.rosterDetails td:nth-child(4) .rosterEditForm { min-width: 0; width: 100%; box-sizing: border-box; }
+.rosterDetails td:last-child .rosterEditForm { min-width: 0; width: 100%; box-sizing: border-box; }
+.rosterDetails td:nth-child(4) .rosterEditTrigger { display: block; margin-top: 6px; white-space: nowrap; }
+.rosterDetails th:nth-child(7), .rosterDetails td:nth-child(7) { width: 280px; }
+.rosterDetails th:last-child, .rosterDetails td:last-child { width: 80px; text-align: center; }
+.removeIcon { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 8px; }
+.removeDialog { width: min(440px, calc(100vw - 40px)); max-height: calc(100dvh - 40px); overflow-y: auto; box-sizing: border-box; padding: 24px; border: 1px solid #59616e; border-radius: 16px; background: #151719; color: #f5f5f5; text-align: left; overflow-wrap: anywhere; }
+.removeDialog::backdrop { background: rgb(0 0 0 / 70%); }
 .rosterDetails abbr { text-decoration: none; }
+.rosterEmail { display: grid; gap: 8px; justify-items: start; }
+.rosterEditTrigger { min-height: 38px; padding: 7px 12px; font-size: 13px; }
+.rosterEditForm { min-width: min(300px, calc(100vw - 80px)); margin-top: 8px; padding: 14px; border: 1px solid #4b5563; border-radius: 10px; background: #1c1f23; }
+.rosterEditForm .field { margin-bottom: 8px; }
+.rosterEditForm .row { gap: 8px; }
 .studentAvatar { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #25384d; color: #dbeafe; font-size: 13px; overflow: hidden; }
 .studentAvatar img { width: 36px; height: 36px; object-fit: cover; }
 @media (min-width: 600px) { .rosterDetails th:nth-child(3), .rosterDetails td:nth-child(3) { position: sticky; left: 196px; z-index: 2; } }

@@ -65,7 +65,7 @@ export default function AttendanceCalendar({data,onRefresh}:{data:CalendarData;o
       {selectedDay.meetings.map((meeting,index)=><div key={meeting.id} className={c.sessionDetail}>
         {selectedDay.meetings.length>1&&<h3>Session {index+1} · {meeting.status==='cancelled'?'Cancelled':meeting.record?.status==='present'?'Present':meeting.record?.status==='absent'?'Absent':'Pending'}</h3>}
         {meeting.record?.checked_in_at&&<p>Checked in · {checkInTime(meeting.record.checked_in_at,data.class.timezone)}</p>}
-        {!meeting.record?.checked_in_at&&meeting.record?.status==='present'&&<p className={s.muted}>{meeting.record.source==='manual'?'Marked present by your instructor. No check-in time recorded.':'Original check-in time unavailable.'}</p>}
+        {!meeting.record?.checked_in_at&&meeting.record?.status==='present'&&<p className={s.muted}>{meeting.record.source==='instructor_credit'?'Instructor-granted credit. No QR check-in required.':meeting.record.source==='manual'?'Marked present by your instructor. No check-in time recorded.':'Original check-in time unavailable.'}</p>}
         {meeting.status==='open'&&<p className={s.muted}>{meeting.record?.status==='present'?'Your check-in is included in your Present total. The attendance window is still open.':'The attendance window is still open. You are not counted as absent while it is open.'}</p>}
         {meeting.status!=='cancelled'&&!['holiday','cancelled'].includes(selectedDay.state)&&<CorrectionRequest key={`${meeting.id}-${meeting.record?.revision}`} classId={data.class.id} meeting={meeting} requests={data.requests} onSaved={onRefresh}/>}
       </div>)}

@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { attendanceApi, errorMessage, locate } from "@/lib/attendance/client";
+import { attendanceApi, errorMessage } from "@/lib/attendance/client";
 import { scheduledClasses } from "@/lib/attendance/schedule";
 import type {
   AttendanceClass,
@@ -35,6 +35,8 @@ export default function InstructorConsole({ owner }: { owner: string }) {
   const selected = classes.find((c) => c.id === classId),
     meeting = data?.meeting?.class_id===classId?data.meeting:null;
   const meetingId=meeting?.id;
+  const classToday = selected ? new Intl.DateTimeFormat('en-CA', { timeZone: selected.timezone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(now)) : '';
+  const reopening = meeting?.meeting_date === classToday && meeting.status !== 'cancelled';
   useEffect(() => {
     void registerOfflineShell().catch(()=>setMessage('Offline setup unavailable. Keep a separate manual record if needed.'));
     attendanceApi<{ classes: AttendanceClass[] }>("classes")
@@ -79,7 +81,6 @@ export default function InstructorConsole({ owner }: { owner: string }) {
     let timer: ReturnType<typeof setTimeout>;
     async function refresh() {
       try {
-        const location = await locate();
         const token = await attendanceApi<{
           token: string;
           expiresAt: string;
@@ -88,7 +89,6 @@ export default function InstructorConsole({ owner }: { owner: string }) {
           action: "token",
           classId,
           meetingId,
-          location,
         });
         if (cancelled) return;
         setQr(token);
@@ -115,13 +115,12 @@ export default function InstructorConsole({ owner }: { owner: string }) {
   async function action(action: string) {
     setBusy(true);
     setError("");
+    if (action === 'open') setQr(null);
     try {
-      const location = action === "open" ? await locate() : undefined;
       const value = await attendanceApi<MeetingResponse>("meetings", {
         action,
         classId,
         meetingId: action==='open'?undefined:meeting?.id,
-        location,
       });
       setData(value);
       await cacheMeeting(owner, selected?.name || "Class", value);
@@ -207,7 +206,7 @@ export default function InstructorConsole({ owner }: { owner: string }) {
             disabled={!classId || busy}
             onClick={() => void action("open")}
           >
-            Take attendance · 10 minutes
+            {reopening ? 'Reopen attendance · 10 minutes' : 'Take attendance · 10 minutes'}
           </button>
         ) : (
           <>
@@ -223,12 +222,10 @@ export default function InstructorConsole({ owner }: { owner: string }) {
                 />
               </div>
             ) : (
-              <p role="status">Getting a fresh location and QR code…</p>
+              <p role="status">Getting your QR code…</p>
             )}
             <p>
-              QR is valid for up to 10 minutes, until this attendance window ends. Students must allow location access
-              within 50 meters. This discourages sharing; it does not prove
-              physical presence.
+              The QR code refreshes automatically during this attendance window. Google sign-in and class enrollment are required. Verify physical presence using your roster.
             </p>
             <div className={s.row}>
               <button
@@ -248,6 +245,7 @@ export default function InstructorConsole({ owner }: { owner: string }) {
             </div>
           </>
         )}
+        {reopening && !open && <p className={s.muted}>Reopening keeps today’s attendance. Students already marked Present stay Present; late arrivals can check in.</p>}
       </section>
       {selected && <ClassRosterSummary key={classId} classId={classId} className={selected.name} revision={data} onRosterChanged={() => { void load() }} />}
       {selected && <ScheduleManager key={`schedule-${classId}`} classId={classId} onChanged={updated=>{setClasses(current=>current.map(item=>item.id===updated.id?updated:item));void load();}} />}
@@ -322,7 +320,7 @@ export default function InstructorConsole({ owner }: { owner: string }) {
               </p>
             ))}
           </details>
-          <details><summary>Check-in issues</summary><p>Refresh the roster to retrieve the latest issues. A location failure is not proof of cheating.</p>{data.failures?.length?data.failures.map(f=><p key={f.id}>{f.created_at} · {f.reason}</p>):<p>No recorded issues for this meeting.</p>}</details>
+          <details><summary>Check-in issues</summary><p>Refresh the roster to retrieve the latest issues.</p>{data.failures?.length?data.failures.map(f=><p key={f.id}>{f.created_at} · {f.reason}</p>):<p>No recorded issues for this meeting.</p>}</details>
         </section>
       )}
       <OfflineStatus owner={owner} onSynced={()=>{void load()}}/>

@@ -1,5 +1,4 @@
 "use client";
-import type { AttendanceLocation } from "./types";
 export class AttendanceApiError extends Error {
   constructor(
     message: string,
@@ -26,32 +25,6 @@ export async function attendanceApi<T>(
       response.status,
     );
   return result as T;
-}
-export function locate(): Promise<AttendanceLocation> {
-  return new Promise((resolve, reject) => {
-    if (!navigator.geolocation)
-      return reject(
-        new Error(
-          "Location is unavailable on this device. Please see your instructor.",
-        ),
-      );
-    navigator.geolocation.getCurrentPosition(
-      (p) =>
-        resolve({
-          latitude: p.coords.latitude,
-          longitude: p.coords.longitude,
-          accuracy: p.coords.accuracy,
-          timestamp: p.timestamp,
-        }),
-      () =>
-        reject(
-          new Error(
-            "We couldn’t verify your location. Allow location access or see your instructor.",
-          ),
-        ),
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
-    );
-  });
 }
 export const errorMessage = (e: unknown) =>
   e instanceof Error ? e.message : "Please try again.";

@@ -6,7 +6,6 @@ import {
   attendanceApi,
   AttendanceApiError,
   errorMessage,
-  locate,
 } from "@/lib/attendance/client";
 import GoogleLogin from "./GoogleLogin";
 import s from "./Attendance.module.css";
@@ -24,8 +23,7 @@ export default function CheckIn({ token, email }: { token: string; email: string
     setBusy(true);
     setError("");
     try {
-      const location = await locate();
-      setSuccess(await attendanceApi("check-in", { token, location }));
+      setSuccess(await attendanceApi("check-in", { token }));
     } catch (e) {
       if (e instanceof AttendanceApiError && e.status === 401) setLogin(true);
       setError(errorMessage(e));
@@ -68,14 +66,13 @@ export default function CheckIn({ token, email }: { token: string; email: string
           </p>
           <p>For an expired code, scan your instructor’s current QR code.</p>
           <button disabled={busy} className={s.button} onClick={check}>
-            Retry location check
+            Retry check-in
           </button>
           <a href="/dashboard">Return to dashboard</a>
         </section>
       ) : (
         <p role="status">
-          Checking your enrollment and location. Allow location access when your
-          browser asks.
+          Checking your Google sign-in and class enrollment.
         </p>
       )}
     </>

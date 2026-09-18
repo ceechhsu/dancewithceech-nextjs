@@ -43,8 +43,16 @@ export async function attendanceRequest(request: Request, resource: string) {
       catch { throw new AttendanceError('Your profile could not be refreshed. Please try checking in again.', 503) }
     }
     const addingStudent = resource === 'enrollments' && action === 'add'
-    if (addingStudent && !actor.instructor) throw new AttendanceError('Instructor access required.', 403)
-    const { data, error } = addingStudent
+    const editingNickname = resource === 'enrollments' && action === 'nickname'
+    const removingStudent = resource === 'enrollments' && action === 'remove_from_class'
+    if ((addingStudent || editingNickname || removingStudent) && !actor.instructor) throw new AttendanceError('Instructor access required.', 403)
+    if (removingStudent && body.confirmation !== 'delete') throw new AttendanceError('Please type delete to confirm.')
+    if (editingNickname && typeof body.nickname !== 'string') throw new AttendanceError('Enter a nickname or leave it blank.')
+    const { data, error } = removingStudent
+      ? await db.rpc('attendance_remove_student', { p_actor: actor.email, p_class_id: body.classId, p_enrollment_id: body.enrollmentId, p_confirmation: body.confirmation })
+      : editingNickname
+      ? await db.rpc('attendance_set_nickname', { p_actor: actor.email, p_class_id: body.classId, p_enrollment_id: body.enrollmentId, p_nickname: body.nickname })
+      : addingStudent
       ? await db.rpc('attendance_add_student', { p_actor: actor.email, p_sub: actor.sub, p_instructor: actor.instructor, p_class_id: body.classId, p_email: body.email, p_first: body.first_name || '', p_last: body.last_name || '' })
       : await db.rpc('attendance_api', { p_actor: actor.email, p_sub: actor.sub, p_instructor: actor.instructor, p_resource: resource, p_action: action, p_body: body })
     if (error) {
