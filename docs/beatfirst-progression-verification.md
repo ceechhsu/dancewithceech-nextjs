@@ -24,8 +24,8 @@ Historical evidence for the initial version. The current nine-level revision and
 - Security advisor's [RLS-without-policy notice](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy) is intentional: browser roles have no table grants, and verified NextAuth identity is enforced by the server API.
 - Existing public.rls_auto_enable security-definer notices were inspected; the function returns event_trigger. No existing attendance functions or permissions were changed. [Advisor reference](https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable).
 
-## Remaining Google setup
-The existing Google client lacks https://beatfirst-ceech.vercel.app/api/auth/callback/google. The field is prepared but Save has not been clicked because adding an authorized OAuth return address requires browser-policy confirmation. The pending user question requests exactly that approval. Once approved: save the staged Google change, verify the redirect-mismatch error is gone, complete Google sign-in in the private preview, confirm guest results import once and unlocks survive reload/sign-out/sign-in. Only then is real account sign-in considered verified.
+## Google setup follow-up
+The original callback-address blocker was resolved with explicit owner approval. Google Cloud confirmed the preview return address was saved. Current verification status is in `beatfirst-unlocks-verification.md`.
 
 ## Limits
 - Guest practice keeps personal best attempts plus the latest 20 rounds locally; accounts keep all server-acknowledged results. Offline account queue is bounded to 200 attempts with an explicit error if full.
