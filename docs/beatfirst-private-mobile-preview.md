@@ -4,7 +4,7 @@ URL: https://beatfirst-ceech.vercel.app
 
 The short address redirects directly to `/beat-first/preview`. Password updated to the owner's requested value, stored only in the deployment environment and ignored local backup.
 
-Vercel project: `dancewithceech-nextjs`. Deployment: `https://dancewithceech-nextjs-2ug3tmuoc-ceechhsus-projects.vercel.app`. Target: **preview**.
+Vercel project: `dancewithceech-nextjs`. Deployment: `https://dancewithceech-nextjs-2thfonio0-ceechhsus-projects.vercel.app`. Target: **preview**.
 
 ## Access
 
@@ -16,19 +16,21 @@ Vercel project: `dancewithceech-nextjs`. Deployment: `https://dancewithceech-nex
 
 ## Verification
 
-- All 65 gameplay, access-control, progress, and recovery tests pass, including preview-only root redirection; modified-file ESLint passes.
+- All 76 gameplay, access-control, progress, and recovery tests pass, including preview-only root redirection; modified-file ESLint passes.
 - Vercel remote build and full-site TypeScript check pass. This supersedes the previous local-only build limitation (the deployment environment has the missing attendance dependencies installed).
 - Vercel-authenticated request without passcode: 401 and authentication challenge, no game HTML.
 - Vercel-authenticated request with wrong passcode: 401, no game HTML.
 - Vercel-authenticated request with correct passcode: 200 with the game HTML.
 - Unauthenticated browser: Vercel sign-in screen.
 - Production deployment remains `dpl_FWFzp2tk7wfiQGKuDHBQAoUGj2wY`; no production promotion, domain changes, or merge.
-- The original one-lane sample was tested on the owner's phone successfully. Expanded levels were verified in a 375×667 browser viewport; a new physical-phone pass remains useful.
+- The owner successfully tested the previous nine levels. The new kick/clap patterns and 100/110 BPM rounds were verified in a 375×667 browser viewport; physical-phone listening and difficulty feedback remain useful.
 
 ## Progression update
 
-Nine levels are implemented, all at 90 BPM and clap-only. Levels 1–3 remain free 10-second samples. Signing in immediately opens level 4 (15 seconds steady), level 5 (20 seconds steady), and level 6 (20 seconds with simple gaps). A personal best of 80 in level 6 opens level 7 (25 seconds of the same pattern); 80 in level 7 opens level 8 (25 seconds adding occasional doubles); 80 in level 8 opens level 9 (15 seconds alternating two lanes). The journey now includes an explicit sign-in reward, requirements on every locked card, personal-best progress, and a play button when a level opens. See `beatfirst-unlocks-verification.md` for this revision’s evidence.
+Eighteen levels are implemented. Levels 1–8 retain their original clap timing and patterns. Level 9 introduces left kick/right clap at the original 90 BPM timing; levels 10–12 gradually add duration, paired hands, and a gap. Levels 13–15 introduce 100 BPM and an extra kick; levels 16–18 introduce 110 BPM, an extra clap, and a 30-second round. Existing scores remain valid. Guests have three free samples, sign-in immediately opens 4–6, and personal best 80 in each preceding level opens the next through 18.
+
+Mastery stars at 80/90/95 and a signed-in three-round daily goal provide replay targets. Six expandable chapters and explicit lock requirements keep the longer journey readable. See `beatfirst-patterns-tempos-verification.md` for this revision’s evidence.
 
 Preview runtime overrides `NEXTAUTH_URL=https://beatfirst-ceech.vercel.app` and `ATTENDANCE_ENABLED=false`. Existing production and attendance-preview configuration is preserved. BeatFirst uses the paired attendance Supabase configuration for the active academy database, in its own `beatfirst_preview_attempts` table; it does not read or modify attendance records.
 
-**Google return address saved:** The owner explicitly approved adding `https://beatfirst-ceech.vercel.app/api/auth/callback/google`. Google Cloud confirmed “OAuth client saved” after a transient first-save error. No scopes, credentials, or other client settings changed. A direct authorization request using the exact saved client and callback now opens Google’s normal account chooser for `beatfirst-ceech.vercel.app`, rather than `redirect_uri_mismatch`. The owner selected `ceechhsu@gmail.com` for testing; automatic account-selection approval was resolved, but the test browser stalled at Vercel’s separate Google sign-in after two attempts. Full app login and guest transfer remain unverified in that browser. The owner should refresh the private preview and retry sign-in on their phone.
+**Google return address saved:** The owner explicitly approved adding `https://beatfirst-ceech.vercel.app/api/auth/callback/google`. Google Cloud confirmed “OAuth client saved” after a transient first-save error. No scopes, credentials, or other client settings changed. A direct authorization request using the exact saved client and callback now opens Google’s normal account chooser for `beatfirst-ceech.vercel.app`, rather than `redirect_uri_mismatch`. The owner selected `ceechhsu@gmail.com` for testing; automatic account-selection approval was resolved, but the test browser stalled at Vercel’s separate Google sign-in after two attempts. That browser did not complete the full OAuth flow. Afterward, the owner reported successfully testing all nine levels. This user confirmation is separate from automated fixture and deployed API verification. No authentication configuration changed for the eighteen-level update.

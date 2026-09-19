@@ -1,10 +1,12 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ArrowDown, Hand, Play, RotateCcw, Volume2, Trophy } from 'lucide-react'
+import { ArrowDown, Drum, Hand, Play, RotateCcw, Volume2, Trophy } from 'lucide-react'
 import { ClapAudio } from './audio'
-import { BEAT_MS, COUNT_IN_MS, LEVEL, advanceRound, createRound, summarize, tapRound } from './engine'
+import { getLevelTiming, LEVEL, advanceRound, createRound, summarize, tapRound } from './engine'
 import { getLevel } from './levels'
+import MasteryStars from './MasteryStars'
+import { nextStarTarget } from './practice-goals'
 import type { Attempt } from './progress'
 import type { Tap } from './engine'
 import styles from './ClapGame.module.css'
@@ -12,10 +14,11 @@ import styles from './ClapGame.module.css'
 type Phase = 'idle' | 'loading' | 'countin' | 'playing' | 'results' | 'interrupted'
 type Feedback = { text: string; detail: string; kind: 'perfect' | 'hit' | 'miss'; id: number }
 
-type Props = { canStart?: boolean; levelId: number; onComplete: (attempt: Attempt) => void; onActive: (active: boolean) => void; onNext?: () => void; nextLabel?: string }
+type Props = { canStart?: boolean; levelId: number; personalBest?: number; onComplete: (attempt: Attempt) => void; onActive: (active: boolean) => void; onNext?: () => void; nextLabel?: string }
 
-export default function ClapGame({ canStart = true, levelId, onComplete, onActive, onNext, nextLabel }: Props) {
+export default function ClapGame({ canStart = true, levelId, personalBest, onComplete, onActive, onNext, nextLabel }: Props) {
   const level = getLevel(levelId)!
+  const { beatMs, countInMs } = getLevelTiming(levelId)
   const tapsRef = useRef<Tap[]>([])
   const attemptId = useRef('')
   const completedRef = useRef(false)
@@ -105,7 +108,7 @@ export default function ClapGame({ canStart = true, levelId, onComplete, onActiv
     const perfect = result.feedback === 'Perfect'
     showFeedback(
       result.feedback,
-      result.offsetMs === undefined ? 'Listen for the next clap' : perfect ? 'Right on the beat' : `${Math.round(Math.abs(result.offsetMs))} ms ${result.feedback.toLowerCase()}`,
+      result.offsetMs === undefined ? 'Listen for the next beat' : perfect ? 'Right on the beat' : `${Math.round(Math.abs(result.offsetMs))} ms ${result.feedback.toLowerCase()}`,
       result.offsetMs === undefined ? 'miss' : perfect ? 'perfect' : 'hit',
     )
   }, [publishRound, showFeedback, level.durationMs])
@@ -151,7 +154,7 @@ export default function ClapGame({ canStart = true, levelId, onComplete, onActiv
     if (tickNumber !== lastTick.current) {
       lastTick.current = tickNumber
       setRemaining(Math.max(0, Math.ceil((level.durationMs - Math.max(0, elapsed)) / 1000)))
-      setCount(Math.max(1, Math.min(4, Math.floor((elapsed + COUNT_IN_MS) / BEAT_MS) + 1)))
+      setCount(Math.max(1, Math.min(4, Math.floor((elapsed + countInMs) / beatMs) + 1)))
       if (feedbackUntil.current < performance.now()) setFeedback(null)
     }
     if (elapsed >= level.durationMs) {
@@ -164,7 +167,7 @@ export default function ClapGame({ canStart = true, levelId, onComplete, onActiv
       return
     }
     frameRef.current = requestAnimationFrame(tick)
-  }, [changePhase, interrupt, publishRound, showFeedback, level.durationMs, levelId])
+  }, [changePhase, interrupt, publishRound, showFeedback, level.durationMs, levelId, beatMs, countInMs])
 
   const start = async () => {
     if (!canStart || ['loading', 'countin', 'playing'].includes(phaseRef.current)) return
@@ -201,13 +204,15 @@ export default function ClapGame({ canStart = true, levelId, onComplete, onActiv
   useEffect(() => { onActive(active || phase === 'loading') }, [active, phase, onActive])
   const stats = summarize(round)
   const completed = phase === 'results'
+  const best = Math.max(personalBest ?? 0, stats.score)
+  const starTarget = nextStarTarget(best)
   const resultTitle = stats.hits === stats.total ? 'You found the beat.' : stats.hits >= stats.total * .65 ? 'You’re finding your groove.' : stats.hits > 0 ? 'A little closer every time.' : 'Listen. Then find the beat.'
 
   return (
-        <section className={styles.game} aria-label="BeatFirst clap rhythm game">
+        <section className={styles.game} aria-label="BeatFirst rhythm game">
           <div className={styles.gameHeader}>
             <div><span className={styles.levelLabel}>LEVEL {String(levelId).padStart(2, '0')}</span><h2>{level.title}</h2></div>
-            <div className={styles.tempo}><span>90</span> BPM</div>
+            <div className={styles.tempo}><span>{level.bpm}</span> BPM</div>
           </div>
           <div className={styles.hud}>
             <span><b>{stats.hits}</b><span> / {stats.total} HITS</span></span>
@@ -220,7 +225,7 @@ export default function ClapGame({ canStart = true, levelId, onComplete, onActiv
             {Array.from({ length: level.lanes }, (_, lane) => <div key={lane} className={styles.track} style={{ left: level.lanes === 1 ? '50%' : lane === 0 ? '25%' : '75%' }} aria-hidden="true" />)}
             <div className={styles.centerLine} aria-hidden="true" />
             <div className={styles.notes} aria-hidden="true">
-              {round.notes.map((note, i) => <span style={{ left: level.lanes === 1 ? '50%' : note.lane === 0 ? '25%' : '75%' }} className={styles.note} key={i} ref={el => { notesRef.current[i] = el }} />)}
+              {round.notes.map((note, i) => <span style={{ left: level.lanes === 1 ? '50%' : note.lane === 0 ? '25%' : '75%' }} className={styles.note} data-sound={level.sounds[note.lane]} key={i} ref={el => { notesRef.current[i] = el }} />)}
             </div>
 
             {active && <div className={styles.liveMessage}>
@@ -229,14 +234,14 @@ export default function ClapGame({ canStart = true, levelId, onComplete, onActiv
 
             {Array.from({ length: level.lanes }, (_, laneIndex) => {
               const lane = laneIndex as 0 | 1
-              return <button key={lane} ref={lane === 0 ? targetRef : undefined} type="button" className={styles.target} data-tap-lane={lane}
+              return <button key={lane} ref={lane === 0 ? targetRef : undefined} type="button" className={styles.target} data-tap-lane={lane} data-sound={level.sounds[lane]}
                 style={{ left: level.lanes === 1 ? '50%' : lane === 0 ? '25%' : '75%' }}
-                aria-label={level.lanes === 1 ? 'Tap the clap beat' : `Tap the ${lane === 0 ? 'left' : 'right'} clap beat`} aria-disabled={!active} tabIndex={active ? 0 : -1}
+                aria-label={level.lanes === 1 ? 'Tap the clap beat' : `Tap the ${lane === 0 ? 'left' : 'right'} ${level.sounds[lane]} beat`} aria-disabled={!active} tabIndex={active ? 0 : -1}
                 onPointerDown={event => { if (!active || event.button !== 0) return; event.preventDefault(); event.currentTarget.focus({ preventScroll: true }); tap(lane) }}
                 onClick={event => { if (event.detail === 0) tap(lane) }}>
                 <span className={styles.hitLine} aria-hidden="true" />
-                <span className={styles.pad} data-feedback={feedback?.kind ?? ''}><Hand size={28} strokeWidth={1.6} /></span>
-                <span className={styles.targetLabel}>{level.lanes === 1 ? 'TAP HERE' : lane === 0 ? 'LEFT · F' : 'RIGHT · J'}</span>
+                <span className={styles.pad} data-feedback={feedback?.kind ?? ''}>{level.sounds[lane] === 'kick' ? <Drum size={28} strokeWidth={1.6} /> : <Hand size={28} strokeWidth={1.6} />}</span>
+                <span className={styles.targetLabel}>{level.lanes === 1 ? 'TAP HERE' : lane === 0 ? 'KICK · F' : 'CLAP · J'}</span>
               </button>
             })}
 
@@ -254,18 +259,19 @@ export default function ClapGame({ canStart = true, levelId, onComplete, onActiv
                 <span className={styles.resultEyebrow}>ROUND COMPLETE</span>
                 <h3>{resultTitle}</h3>
                 <div className={styles.score}><strong>{stats.score}</strong><span>/ 100<br />TIMING SCORE</span></div>
+                <div className={styles.mastery}><MasteryStars score={best} /><span>PERSONAL BEST {best}</span></div>
                 <div className={styles.resultStats}><div><strong>{stats.hits}<span> / {stats.total}</span></strong><span>BEATS HIT</span></div><div><strong>{stats.bestStreak}</strong><span>BEST STREAK</span></div></div>
-                <p className={styles.resultTip}>{stats.hits === stats.total ? 'Keep that feeling. See how close you can get.' : 'Listen for the clap and meet it at the gold line.'}</p>
-                {stats.extraTaps > 0 && <p className={styles.extraTaps}>{stats.extraTaps} extra {stats.extraTaps === 1 ? 'tap' : 'taps'} · One tap per clap.</p>}
+                <p className={styles.resultTip}>{starTarget ? `Aim for ${starTarget} to earn your next star. Listen, then tap with the beat.` : 'All three stars earned. Keep your rhythm sharp.'}</p>
+                {stats.extraTaps > 0 && <p className={styles.extraTaps}>{stats.extraTaps} extra {stats.extraTaps === 1 ? 'tap' : 'taps'} · One tap per note.</p>}
               </> : <><Volume2 className={styles.interruptedIcon} size={32} /><h3>Ready when you are.</h3><p className={styles.resultTip} role="status">{notice}</p></>}
               <button ref={replayRef} className={styles.primary} onClick={start}><RotateCcw size={16} />{completed ? 'Play again' : 'Start again'}</button>
               {completed && onNext && <button className={styles.next} onClick={onNext}>{nextLabel ?? 'Next level'} →</button>}
             </div>}
           </div>
           <div className={styles.gameFooter}>
-            <span><Volume2 size={14} /> CLAP ONLY</span>
+            <span><Volume2 size={14} /> {level.lanes === 1 ? 'CLAP ONLY' : 'KICK + CLAP'}</span>
             <span className={styles.keyboardHint}>{level.lanes === 1 ? <>Tap or press <kbd>SPACE</kbd></> : <>Left <kbd>F</kbd> · Right <kbd>J</kbd></>}</span>
-            <span className={styles.touchHint}>{level.lanes === 1 ? 'Tap the gold pad with your thumb' : 'One thumb on each gold pad'}</span>
+            <span className={styles.touchHint}>{level.lanes === 1 ? 'Tap the gold pad with your thumb' : 'Kick left · Clap right'}</span>
           </div>
           <p className={styles.srOnly} role="status" aria-live="polite">{phase === 'countin' ? 'Four-beat count-in. Get ready to tap.' : phase === 'playing' ? `Go. Tap each note in its lane for ${level.durationMs / 1000} seconds.` : completed ? `Round complete. ${stats.hits} of ${stats.total} beats hit. Best streak ${stats.bestStreak}. Timing score ${stats.score} out of 100.` : ''}</p>
         </section>

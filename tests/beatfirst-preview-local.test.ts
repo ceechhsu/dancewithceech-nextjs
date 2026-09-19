@@ -26,10 +26,10 @@ test('malformed storage safely starts fresh', () => {
 
 test('account queues restore all account levels while guest storage remains limited to introductions', () => {
   let state = emptyLocal()
-  for (const id of [4, 5, 6, 7, 8, 9]) {
+  for (const id of Array.from({ length: 15 }, (_, index) => index + 4)) {
     state = addAttempt(state, attempt(`11111111-1111-4111-8111-${String(id).padStart(12, '0')}`, id), 'google:alice')
   }
-  state = { ...state, guest: [attempt('22222222-2222-4222-8222-222222222222', 3), attempt('33333333-3333-4333-8333-333333333333', 9)] }
+  state = { ...state, guest: [attempt('22222222-2222-4222-8222-222222222222', 3), attempt('33333333-3333-4333-8333-333333333333', 18)] }
   const restored = parseLocal(JSON.stringify(state))
   assert.deepEqual(restored.pending['google:alice'], state.pending['google:alice'])
   assert.deepEqual(restored.guest.map(round => round.levelId), [3])

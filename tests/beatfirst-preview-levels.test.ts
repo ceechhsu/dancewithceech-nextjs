@@ -1,30 +1,103 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
+import { createHash } from 'node:crypto'
 import * as engine from '../src/components/beatfirst-preview/engine'
 import { ClapAudio } from '../src/components/beatfirst-preview/audio'
 import { LEVELS, getLevel, PASS_SCORE, unlockedLevelIds } from '../src/components/beatfirst-preview/levels'
 
 const quarterMs = 60_000 / 90
 
-test('the nine-level catalog has the agreed names, durations, lanes, and tempo', () => {
-  assert.equal(LEVELS.length, 9)
+test('the eighteen-level catalog has the agreed names, durations, lanes, sounds, and tempos', () => {
+  assert.equal(LEVELS.length, 18)
   assert.deepEqual(LEVELS.map(level => level.title), [
     'Find the beat', 'Keep the beat', 'Catch the doubles',
     'Stay in the groove', 'Go a little longer', 'Follow the pattern',
     'Hold the pattern', 'Catch the new rhythm', 'Two-hand rhythm',
+    'Settle into the groove', 'Pair it up', 'Leave some space',
+    'Find 100', 'Hold 100', 'Catch the kick', 'Find 110', 'Catch the clap', 'Keep the pocket',
   ])
-  const durations = [10_000, 10_000, 10_000, 15_000, 20_000, 20_000, 25_000, 25_000, 15_000]
+  const durations = [10_000, 10_000, 10_000, 15_000, 20_000, 20_000, 25_000, 25_000, 15_000,
+    20_000, 20_000, 20_000, 20_000, 25_000, 25_000, 25_000, 25_000, 30_000]
   for (const [index, level] of LEVELS.entries()) {
     assert.equal(level.id, index + 1)
-    assert.equal(level.bpm, 90)
+    assert.equal(level.bpm, level.id < 13 ? 90 : level.id < 16 ? 100 : 110)
     assert.equal(level.durationMs, durations[index])
-    assert.equal(level.lanes, index === 8 ? 2 : 1)
+    assert.equal(level.lanes, level.id >= 9 ? 2 : 1)
+    assert.deepEqual(level.sounds, level.id >= 9 ? ['kick', 'clap'] : ['clap'])
     assert.ok(level.description.length > 0)
     assert.equal(getLevel(level.id), level)
     assert.ok(level.notes.every(note => note.atMs >= 0 && note.atMs + engine.LEVEL.windowMs < level.durationMs))
     assert.ok(level.notes.every((note, i) => i === 0 || note.atMs > level.notes[i - 1].atMs))
   }
-  for (const invalidId of [0, 10, 1.5, NaN, Infinity]) assert.throws(() => getLevel(invalidId))
+  for (const invalidId of [0, 19, 1.5, NaN, Infinity]) assert.throws(() => getLevel(invalidId))
+})
+
+test('the first nine levels preserve their exact persisted note and timing data', () => {
+  const historical = LEVELS.slice(0, 9).map(({ id, durationMs, bpm, lanes, notes }) => ({ id, durationMs, bpm, lanes, notes }))
+  assert.equal(createHash('sha256').update(JSON.stringify(historical)).digest('hex'),
+    '76d9487b4a307d0e02c6bce3c0b5203bee62cc4d27a504f413a032ee7f8ad6d3')
+})
+
+const beatNotes = (id: number) => getLevel(id).notes.map(note => ({
+  beat: Math.round(note.atMs / (60_000 / getLevel(id).bpm) * 2) / 2,
+  lane: note.lane,
+}))
+
+test('levels 10 through 12 extend alternating hands, pair the hands, then add one gap', () => {
+  assert.deepEqual(getLevel(10).notes.slice(0, getLevel(9).notes.length), getLevel(9).notes)
+  assert.ok(getLevel(10).notes.length > getLevel(9).notes.length)
+  assert.deepEqual(beatNotes(10), Array.from({ length: 30 }, (_, beat) => ({ beat, lane: beat % 2 })))
+  assert.deepEqual(beatNotes(11), beatNotes(10).map(note => ({ ...note, lane: Math.floor(note.beat / 2) % 2 })))
+  assert.deepEqual(beatNotes(12), beatNotes(11).filter(note => note.beat % 8 !== 7))
+})
+
+test('tempo and duration steps preserve the existing pattern in beat units', () => {
+  for (const [previousId, nextId] of [[12, 13], [13, 14], [15, 16], [17, 18]]) {
+    const previous = beatNotes(previousId)
+    assert.deepEqual(beatNotes(nextId).slice(0, previous.length), previous)
+    assert.ok(getLevel(nextId).notes.length >= previous.length)
+  }
+  for (const id of [13, 14, 15, 16, 17, 18]) {
+    const level = getLevel(id)
+    const beatMs = 60_000 / level.bpm
+    for (const [index, note] of beatNotes(id).entries()) {
+      assert.ok(Math.abs(level.notes[index].atMs - note.beat * beatMs) < 1e-9)
+    }
+  }
+})
+
+test('levels 15 and 17 each add only their named half-beat sound', () => {
+  for (const [previousId, nextId, afterBeat, lane] of [[14, 15, 5, 0], [16, 17, 6, 1]]) {
+    const previous = beatNotes(previousId)
+    const next = beatNotes(nextId)
+    assert.deepEqual(next.filter(note => previous.some(old => old.beat === note.beat)), previous)
+    const added = next.filter(note => !previous.some(old => old.beat === note.beat))
+    assert.ok(added.length > 0)
+    assert.ok(added.every(note => note.beat % 8 === afterBeat + 0.5 && note.lane === lane))
+  }
+  for (const id of [12, 13, 14, 15, 16, 17, 18]) {
+    const level = getLevel(id)
+    const expected: { beat: number; lane: number }[] = []
+    const add = (beat: number, lane: number) => {
+      if (beat * (60_000 / level.bpm) + engine.LEVEL.windowMs < level.durationMs) expected.push({ beat, lane })
+    }
+    for (let beat = 0; beat * (60_000 / level.bpm) < level.durationMs; beat++) {
+      if (beat % 8 !== 7) add(beat, Math.floor(beat / 2) % 2)
+      if (id >= 15 && beat % 8 === 5) add(beat + 0.5, 0)
+      if (id >= 17 && beat % 8 === 6) add(beat + 0.5, 1)
+    }
+    assert.deepEqual(beatNotes(id), expected.sort((a, b) => a.beat - b.beat))
+  }
+})
+
+test('level timing uses four beats at the selected tempo and preserves default exports', () => {
+  assert.equal(engine.BEAT_MS, quarterMs)
+  assert.equal(engine.COUNT_IN_MS, 4 * quarterMs)
+  assert.equal(typeof engine.getLevelTiming, 'function')
+  for (const level of LEVELS) {
+    assert.deepEqual(engine.getLevelTiming(level.id), { beatMs: 60_000 / level.bpm, countInMs: 4 * (60_000 / level.bpm) })
+  }
+  assert.throws(() => engine.getLevelTiming(19))
 })
 
 test('intro rhythms contain steady beats, specific gaps, and specific doubles', () => {
@@ -69,6 +142,14 @@ test('sign-in opens levels 4 through 6 immediately and later gates honor the exa
   assert.deepEqual(unlockedLevelIds({ 6: 80, 7: 80 }, true), [...initial, 7, 8])
   assert.deepEqual(unlockedLevelIds({ 6: 80, 7: 80, 8: 79 }, true), [...initial, 7, 8])
   assert.deepEqual(unlockedLevelIds({ 6: 80, 7: 80, 8: 80 }, true), [...initial, 7, 8, 9])
+  const scores: Record<string, number> = {}
+  for (let previousId = 6; previousId < 18; previousId++) {
+    const before = Array.from({ length: previousId }, (_, index) => index + 1)
+    assert.deepEqual(unlockedLevelIds({ ...scores, [previousId]: 79, [previousId + 1]: 100 }, true), before)
+    scores[previousId] = 80
+    assert.deepEqual(unlockedLevelIds(scores, true), [...before, previousId + 1])
+  }
+  assert.deepEqual(unlockedLevelIds(scores, false), [1, 2, 3])
 })
 
 test('rounds copy the selected catalog and accept taps during the full level duration', () => {
@@ -169,17 +250,24 @@ test('replay preserves exact early, late, extra, wrong-hand, and ignored tap rul
 })
 
 test('audio schedules four count-in claps plus each selected level note on the same clock', () => {
-  const sourceLog: { at: number, buffer: unknown, stopped: boolean }[] = []
+  type Buffer = { data: Float32Array; channels: number; getChannelData: () => Float32Array }
+  const buffers: Buffer[] = []
+  const sourceLog: { at: number, buffer: Buffer | null, stopped: boolean }[] = []
   class FakeAudioContext {
-    sampleRate = 1000
+    sampleRate = 48_000
     currentTime = 10
     state = 'running'
     destination = {}
-    createBuffer(_channels: number, length: number) { return { getChannelData: () => new Float32Array(length) } }
+    createBuffer(channels: number, length: number) {
+      const data = new Float32Array(length)
+      const buffer = { data, channels, getChannelData: () => data }
+      buffers.push(buffer)
+      return buffer
+    }
     createBufferSource() {
-      const entry = { at: 0, buffer: null as unknown, stopped: false }
+      const entry = { at: 0, buffer: null as Buffer | null, stopped: false }
       return {
-        buffer: null as unknown,
+        buffer: null as Buffer | null,
         connect() {}, disconnect() {},
         start(at: number) { entry.at = at; entry.buffer = this.buffer; sourceLog.push(entry) },
         stop() { entry.stopped = true },
@@ -191,23 +279,57 @@ test('audio schedules four count-in claps plus each selected level note on the s
   Object.defineProperty(globalThis, 'AudioContext', { configurable: true, value: FakeAudioContext })
   try {
     const audio = new ClapAudio()
+    assert.equal(buffers.length, 2, 'clap and kick each need their own reusable buffer')
+    for (const buffer of buffers) {
+      assert.equal(buffer.channels, 1)
+      assert.ok(buffer.data.every(Number.isFinite))
+      assert.ok(buffer.data.some(sample => Math.abs(sample) > 0.1), 'the sound must contain an audible waveform')
+    }
+    let kick: Buffer | null = null
     for (const level of LEVELS) {
       const previous = sourceLog.length
       audio.start(level.id)
       const scheduled = sourceLog.slice(previous)
       const countInStart = 10.12
-      const roundStart = countInStart + engine.COUNT_IN_MS / 1000
+      const beatMs = 60_000 / level.bpm
+      const roundStart = countInStart + 4 * beatMs / 1000
       assert.equal(scheduled.length, 4 + level.notes.length)
       assert.deepEqual(scheduled.map(source => source.at), [
-        ...Array.from({ length: 4 }, (_, i) => countInStart + i * quarterMs / 1000),
+        ...Array.from({ length: 4 }, (_, i) => countInStart + i * beatMs / 1000),
         ...level.notes.map(note => roundStart + note.atMs / 1000),
       ])
-      assert.ok(scheduled.every(source => source.buffer === scheduled[0].buffer))
+      const clap = scheduled[0].buffer
+      assert.ok(scheduled.slice(0, 4).every(source => source.buffer === clap))
+      for (const [index, note] of level.notes.entries()) {
+        const sound = scheduled[index + 4].buffer
+        if (level.lanes === 2 && note.lane === 0) {
+          assert.notEqual(sound, clap, 'the left lane must sound like a kick')
+          kick ??= sound
+          assert.equal(sound, kick)
+        } else assert.equal(sound, clap)
+      }
+      const scheduledCount = sourceLog.length
+      engine.replayRound(level.id, [])
+      assert.equal(sourceLog.length, scheduledCount, 'missed input must not interrupt the beat')
       assert.ok(sourceLog.slice(0, previous).every(source => source.stopped))
       assert.ok(Math.abs(audio.elapsedMs() - ((10 - roundStart) * 1000)) < 0.001)
     }
     audio.dispose()
     assert.ok(sourceLog.every(source => source.stopped))
+    assert.ok(kick)
+    const kickData = kick.data
+    const rms = (start: number, end: number) => Math.sqrt(kickData.slice(start, end).reduce((sum, value) => sum + value ** 2, 0) / (end - start))
+    assert.ok(rms(0, 2400) > rms(kickData.length - 2400, kickData.length) * 4, 'the kick should decay after its attack')
+    const magnitude = (frequency: number) => {
+      let real = 0
+      let imaginary = 0
+      for (let index = 0; index < 1440; index++) {
+        real += kickData[index] * Math.cos(2 * Math.PI * frequency * index / 48_000)
+        imaginary -= kickData[index] * Math.sin(2 * Math.PI * frequency * index / 48_000)
+      }
+      return Math.hypot(real, imaginary) / 1440
+    }
+    assert.ok(magnitude(900) > 0.002, 'the kick needs an attack harmonic audible on small speakers')
   } finally {
     if (original) Object.defineProperty(globalThis, 'AudioContext', original)
     else Reflect.deleteProperty(globalThis, 'AudioContext')

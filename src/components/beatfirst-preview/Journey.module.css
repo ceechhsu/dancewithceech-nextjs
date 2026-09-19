@@ -22,6 +22,22 @@
 .goalProgress progress { appearance:none; width:100%; height:6px; display:block; border:0; border-radius:8px; overflow:hidden; background:#39404b; } .goalProgress progress::-webkit-progress-bar { background:#39404b; } .goalProgress progress::-webkit-progress-value { background:#fdb515; } .goalProgress progress::-moz-progress-bar { background:#fdb515; }
 .levelGroup { margin-top:23px; } .levelGroup h3 { font-size:14px; color:#eef2f8; margin-bottom:11px; font-weight:600; } .levelGroup h3 > span { display:block; font-size:11px; line-height:1.5; color:#a6acb9; font-weight:400; margin-top:4px; }
 .levels { display:grid; gap:7px; }
+.levels[hidden] { display:none; }
+.chapter { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; text-align:left; color:inherit; background:none; border:0; padding:8px 0; cursor:pointer; }
+.chapter > span { display:flex; flex-direction:column; gap:5px; }
+.chapter strong { font-size:14px; font-weight:600; }
+.chapter span span { color:#a6acb9; font-size:11px; line-height:1.5; }
+.chapter small { color:#c7b27c; font-size:10px; }
+.chapter > svg { flex-shrink:0; color:#a6acb9; transform:rotate(-90deg); }
+.chapter[aria-expanded="true"] > svg { transform:none; }
+.starGuide { display:flex; flex-wrap:wrap; gap:6px 12px; justify-content:space-between; padding:13px 0; border-bottom:1px solid #2a3240; font-size:10px; color:#a6acb9; }
+.starGuide b { color:#f1c766; font-weight:600; }
+.levelText > span[role="img"] { color:#fdb515; }
+.dailyGoal { border-top:1px solid #2b3648; padding:17px 0 6px; }
+.dailyGoal h3 { color:#eef2f8; font-size:13px; margin-bottom:7px; }
+.dailyGoal p { color:#aeb9cb; font-size:11px; line-height:1.7; margin-bottom:12px; }
+.dailyGoal label { display:block; color:#f1c766; font-size:10px; margin-bottom:8px; }
+.dailyGoal progress { width:100%; height:6px; accent-color:#fdb515; display:block; }
 .level { display:flex; align-items:center; width:100%; gap:12px; min-height:66px; padding:11px 13px; background:#11151c; border:1px solid #2a3240; color:#eef2f8; border-radius:10px; text-align:left; cursor:pointer; touch-action:manipulation; }
 .level:hover:not(:disabled) { border-color:#6e90bb; background:#172234; }
 .level[data-selected=true] { border-color:#fdb515; background:#211c12; }

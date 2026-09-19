@@ -138,3 +138,11 @@
 .field[data-lanes="2"] .note { width: 68px; }
 .startOverlay p { max-width: 275px; }
 .next { color: #a9ceff; background: none; border: 0; cursor: pointer; font-size: 12px; min-height: 38px; margin-top: 4px; }
+.note[data-sound="kick"] { border-color:#ffe09a; background:linear-gradient(#ffd578,#e49b13); box-shadow:0 0 20px #fdb51544,inset 0 2px #fff0bd80; }
+.field[data-lanes="2"] .target[data-sound="clap"] .pad { border-color:var(--blue); color:#8cc1ff; box-shadow:0 0 0 7px #60a5fa08,0 0 0 8px #60a5fa30; }
+.field[data-lanes="2"] .target[data-sound="clap"] .hitLine { background:linear-gradient(90deg,transparent,#60a5faaa 25%,#60a5faaa 75%,transparent); }
+.field[data-lanes="2"] .target[data-sound="clap"] .targetLabel { color:#9ac6fd; }
+.stars { display:inline-flex; align-items:center; gap:3px; color:var(--gold); }
+.stars [data-earned="false"] { color:#7b8494; }
+.mastery { display:flex; align-items:center; gap:9px; margin:0 0 10px; color:#a6acb9; font-size:8px; letter-spacing:.5px; }
+@media(max-width:720px) { .results .resultIcon { display:none; } .mastery { margin-bottom:8px; } .results .resultTip { margin:8px 0; } }

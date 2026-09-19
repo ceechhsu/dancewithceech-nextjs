@@ -11,6 +11,11 @@ export const LEVEL = {
 export const BEAT_MS = 60_000 / LEVEL.bpm
 export const COUNT_IN_MS = LEVEL.countInBeats * BEAT_MS
 
+export function getLevelTiming(levelId: number) {
+  const beatMs = 60_000 / getLevel(levelId).bpm
+  return { beatMs, countInMs: LEVEL.countInBeats * beatMs }
+}
+
 export type Note = {
   atMs: number
   lane: 0 | 1

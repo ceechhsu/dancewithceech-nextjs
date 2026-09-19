@@ -116,15 +116,16 @@ test('levels 4, 5, and 6 can each save before any introductions or earlier level
   }
 })
 
-test('an ordered batch can pass levels 6 through 8 and immediately play level 9', async () => {
+test('an ordered batch can pass levels 6 through 17 and immediately play level 18', async () => {
+  assert.equal(LEVELS.length, 18)
   const { handlers } = setup()
-  const rounds = [6, 7, 8, 9].map(id => attempt(id))
+  const rounds = Array.from({ length: 13 }, (_, index) => attempt(index + 6))
   const response = await handlers.POST(post(rounds))
   assert.equal(response.status, 200)
   const { acceptedIds, ...summary } = await response.json()
   assert.deepEqual(acceptedIds, rounds.map(round => round.id))
-  assert.deepEqual(summary.unlockedLevelIds, [1, 2, 3, 4, 5, 6, 7, 8, 9])
-  assert.equal(summary.attemptCount, 4)
+  assert.deepEqual(summary.unlockedLevelIds, Array.from({ length: 18 }, (_, index) => index + 1))
+  assert.equal(summary.attemptCount, 13)
 })
 
 test('a locked round rejects the entire batch before inserting earlier valid rounds', async () => {
@@ -133,6 +134,18 @@ test('a locked round rejects the entire batch before inserting earlier valid rou
   assert.equal(response.status, 403)
   assert.equal(store.writes, 0)
   assert.equal(store.rows.size, 0)
+})
+
+test('new account levels reject early or out-of-order submissions before writing', async () => {
+  assert.equal(LEVELS.length, 18)
+  for (const levelId of [10, 11, 12, 13, 14, 15, 16, 17, 18]) {
+    const { store, handlers } = setup()
+    assert.equal((await handlers.POST(post([attempt(levelId)]))).status, 403)
+    const preceding = Array.from({ length: levelId - 7 }, (_, index) => attempt(index + 6))
+    assert.equal((await handlers.POST(post([...preceding, attempt(levelId)]))).status, 403)
+    assert.equal(store.writes, 0)
+    assert.equal(store.rows.size, 0)
+  }
 })
 
 test('an idempotent retry cannot change an existing result or unlock a level using changed taps', async () => {
@@ -152,15 +165,17 @@ test('an idempotent retry cannot change an existing result or unlock a level usi
 })
 
 test('lower later attempts never revoke a previously earned unlock', async () => {
+  assert.equal(LEVELS.length, 18)
   const { handlers } = setup()
-  assert.equal((await handlers.POST(post([6, 7, 8].map(id => attempt(id))))).status, 200)
-  const response = await handlers.POST(post([6, 7, 8].map(id => attempt(id, false))))
+  const gatingIds = Array.from({ length: 12 }, (_, index) => index + 6)
+  assert.equal((await handlers.POST(post(gatingIds.map(id => attempt(id))))).status, 200)
+  const response = await handlers.POST(post(gatingIds.map(id => attempt(id, false))))
   assert.equal(response.status, 200)
   const summary = await response.json()
-  assert.deepEqual(summary.bestScores, { 6: 100, 7: 100, 8: 100 })
-  assert.deepEqual(summary.unlockedLevelIds, [1, 2, 3, 4, 5, 6, 7, 8, 9])
-  assert.equal(summary.attemptCount, 6)
-  assert.equal((await handlers.POST(post([attempt(9)]))).status, 200)
+  assert.deepEqual(summary.bestScores, Object.fromEntries(gatingIds.map(id => [id, 100])))
+  assert.deepEqual(summary.unlockedLevelIds, Array.from({ length: 18 }, (_, index) => index + 1))
+  assert.equal(summary.attemptCount, 24)
+  assert.equal((await handlers.POST(post([attempt(18)]))).status, 200)
 })
 
 test('transient write failure reports a safe error and the same rounds can be retried intact', async () => {

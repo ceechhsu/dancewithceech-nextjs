@@ -1,5 +1,5 @@
-import { BEAT_MS, COUNT_IN_MS, LEVEL } from './engine'
-import { getLevel } from './levels'
+import { getLevelTiming, LEVEL } from './engine'
+import { getLevel, type Sound } from './levels'
 
 /** A single reusable clap, synthesized locally; no downloads or microphone. */
 function createClap(context: AudioContext): AudioBuffer {
@@ -19,15 +19,31 @@ function createClap(context: AudioContext): AudioBuffer {
   return buffer
 }
 
+/** A falling bass tone with a short upper attack that carries on phone speakers. */
+function createKick(context: AudioContext): AudioBuffer {
+  const buffer = context.createBuffer(1, Math.ceil(context.sampleRate * 0.27), context.sampleRate)
+  const data = buffer.getChannelData(0)
+  for (let i = 0; i < data.length; i++) {
+    const t = i / context.sampleRate
+    const phase = 2 * Math.PI * (50 * t + 80 * 0.022 * (1 - Math.exp(-t / 0.022)))
+    const body = Math.sin(phase) * Math.exp(-t / 0.065) * 0.68
+    const harmonic = Math.sin(phase * 3) * Math.exp(-t / 0.045) * 0.15
+    const attack = Math.sin(2 * Math.PI * 900 * t) * Math.exp(-t / 0.009) * 0.16
+    const fade = Math.min(1, (data.length - 1 - i) / (context.sampleRate * 0.012))
+    data[i] = (body + harmonic + attack) * (1 - Math.exp(-t / 0.0006)) * fade
+  }
+  return buffer
+}
+
 export class ClapAudio {
   private context: AudioContext
-  private clap: AudioBuffer
+  private sounds: Record<Sound, AudioBuffer>
   private sources: AudioBufferSourceNode[] = []
   private roundStart = 0
 
   constructor() {
     this.context = new AudioContext({ latencyHint: 'interactive' })
-    this.clap = createClap(this.context)
+    this.sounds = { clap: createClap(this.context), kick: createKick(this.context) }
   }
 
   async resume() {
@@ -39,16 +55,21 @@ export class ClapAudio {
 
   start(levelId = 1) {
     const level = getLevel(levelId)
+    const { beatMs, countInMs } = getLevelTiming(levelId)
     this.stop()
     const countInStart = this.context.currentTime + 0.12
-    this.roundStart = countInStart + COUNT_IN_MS / 1000
-    const times = [
-      ...Array.from({ length: LEVEL.countInBeats }, (_, i) => countInStart + i * BEAT_MS / 1000),
-      ...level.notes.map(note => this.roundStart + note.atMs / 1000),
+    this.roundStart = countInStart + countInMs / 1000
+    const events = [
+      ...Array.from({ length: LEVEL.countInBeats }, (_, i) => ({
+        time: countInStart + i * beatMs / 1000, sound: 'clap' as Sound,
+      })),
+      ...level.notes.map(note => ({
+        time: this.roundStart + note.atMs / 1000, sound: level.sounds[note.lane]!,
+      })),
     ]
-    for (const time of times) {
+    for (const { time, sound } of events) {
       const source = this.context.createBufferSource()
-      source.buffer = this.clap
+      source.buffer = this.sounds[sound]
       source.connect(this.context.destination)
       source.start(time)
       this.sources.push(source)
