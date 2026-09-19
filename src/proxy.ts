@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { protectBeatFirstPreview } from "./lib/beatfirst-preview-access";
 
 const WORDPRESS_SEARCH_PLACEHOLDER = "{search_term_string}";
 const WORDPRESS_PHP_PROBE = /^\/wp-[^/]*\.php$/;
@@ -63,6 +64,9 @@ function getCleanQueryUrl(request: NextRequest) {
 }
 
 export function proxy(request: NextRequest) {
+  const previewAccess = protectBeatFirstPreview(request, process.env.VERCEL_ENV, process.env.BEATFIRST_PREVIEW_PASSWORD);
+  if (previewAccess) return previewAccess;
+
   if (isLegacyWordPressProbe(request.nextUrl.pathname)) {
     return new Response("Gone", {
       status: 410,
