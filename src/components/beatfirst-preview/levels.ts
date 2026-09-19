@@ -14,6 +14,10 @@ function quarterNotes(count: number): Level['notes'] {
   return Array.from({ length: count }, (_, i) => ({ atMs: i * BEAT_MS, lane: 0 }))
 }
 
+function patternNotes(count: number): Level['notes'] {
+  return quarterNotes(count).filter((_, i) => i % 8 !== 7)
+}
+
 export const LEVELS: readonly Level[] = [
   {
     id: 1,
@@ -48,34 +52,59 @@ export const LEVELS: readonly Level[] = [
   {
     id: 4,
     title: 'Stay in the groove',
-    description: 'Hold your timing through 20 seconds of steady claps.',
+    description: 'Hold your timing through 15 seconds of steady claps.',
+    durationMs: 15_000,
+    bpm: 90,
+    lanes: 1,
+    notes: quarterNotes(23),
+  },
+  {
+    id: 5,
+    title: 'Go a little longer',
+    description: 'Keep the steady claps going for 20 seconds.',
     durationMs: 20_000,
     bpm: 90,
     lanes: 1,
     notes: quarterNotes(30),
   },
   {
-    id: 5,
+    id: 6,
     title: 'Follow the pattern',
-    description: 'Learn a repeating rhythm of steady claps, quiet gaps, and doubles.',
+    description: 'Follow a simple repeating rhythm with one quiet gap every eight beats.',
     durationMs: 20_000,
     bpm: 90,
     lanes: 1,
-    notes: quarterNotes(30).flatMap((note, i) => {
-      if ([3, 7].includes(i % 8)) return []
-      return i % 8 === 5
-        ? [note, { atMs: (i + 0.5) * BEAT_MS, lane: 0 as const }]
-        : [note]
-    }),
+    notes: patternNotes(30),
   },
   {
-    id: 6,
+    id: 7,
+    title: 'Hold the pattern',
+    description: 'Keep the same repeating rhythm steady for 25 seconds.',
+    durationMs: 25_000,
+    bpm: 90,
+    lanes: 1,
+    notes: patternNotes(38),
+  },
+  {
+    id: 8,
+    title: 'Catch the new rhythm',
+    description: 'Catch a quick extra tap in the familiar pattern while keeping its quiet gaps.',
+    durationMs: 25_000,
+    bpm: 90,
+    lanes: 1,
+    notes: [
+      ...patternNotes(38),
+      ...[5, 13, 21, 29].map(i => ({ atMs: (i + 0.5) * BEAT_MS, lane: 0 as const })),
+    ].sort((a, b) => a.atMs - b.atMs),
+  },
+  {
+    id: 9,
     title: 'Two-hand rhythm',
     description: 'Alternate left and right on each clap, keeping both hands in time.',
-    durationMs: 20_000,
+    durationMs: 15_000,
     bpm: 90,
     lanes: 2,
-    notes: quarterNotes(30).map((note, i) => ({ ...note, lane: i % 2 === 0 ? 0 : 1 })),
+    notes: quarterNotes(23).map((note, i) => ({ ...note, lane: i % 2 === 0 ? 0 : 1 })),
   },
 ]
 
@@ -89,10 +118,11 @@ export const PASS_SCORE = 80
 
 export function unlockedLevelIds(bestScores: Record<string, number>, signedIn: boolean): number[] {
   const unlocked = [1, 2, 3]
-  if (!signedIn || !unlocked.every(id => bestScores[id] >= PASS_SCORE)) return unlocked
-  unlocked.push(4)
-  if (!(bestScores[4] >= PASS_SCORE)) return unlocked
-  unlocked.push(5)
-  if (bestScores[5] >= PASS_SCORE) unlocked.push(6)
+  if (!signedIn) return unlocked
+  unlocked.push(4, 5, 6)
+  for (const previousId of [6, 7, 8]) {
+    if (!(bestScores[previousId] >= PASS_SCORE)) break
+    unlocked.push(previousId + 1)
+  }
   return unlocked
 }

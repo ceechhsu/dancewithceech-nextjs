@@ -24,6 +24,17 @@ test('malformed storage safely starts fresh', () => {
   for (const raw of ['bad', '{}', 'null', '{"version":1,"guest":{},"pending":[]}']) assert.deepEqual(parseLocal(raw), emptyLocal())
 })
 
+test('account queues restore all account levels while guest storage remains limited to introductions', () => {
+  let state = emptyLocal()
+  for (const id of [4, 5, 6, 7, 8, 9]) {
+    state = addAttempt(state, attempt(`11111111-1111-4111-8111-${String(id).padStart(12, '0')}`, id), 'google:alice')
+  }
+  state = { ...state, guest: [attempt('22222222-2222-4222-8222-222222222222', 3), attempt('33333333-3333-4333-8333-333333333333', 9)] }
+  const restored = parseLocal(JSON.stringify(state))
+  assert.deepEqual(restored.pending['google:alice'], state.pending['google:alice'])
+  assert.deepEqual(restored.guest.map(round => round.levelId), [3])
+})
+
 test('offline batches fit the API byte limit without losing rounds', () => {
   const queue = Array.from({ length: 25 }, (_, i) => ({ ...attempt(`11111111-1111-4111-8111-${String(i).padStart(12, '0')}`), taps: Array.from({ length: 250 }, (_, j) => ({ atMs: j * 33.12345678901234, lane: 0 as const })) }))
   assert.ok(new TextEncoder().encode(JSON.stringify({ attempts: queue })).byteLength > 128 * 1024)

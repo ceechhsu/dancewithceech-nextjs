@@ -4,7 +4,7 @@ URL: https://beatfirst-ceech.vercel.app
 
 The short address redirects directly to `/beat-first/preview`. Password updated to the owner's requested value, stored only in the deployment environment and ignored local backup.
 
-Vercel project: `dancewithceech-nextjs`. Deployment: `https://dancewithceech-nextjs-ki0b9v1ye-ceechhsus-projects.vercel.app`. Target: **preview**.
+Vercel project: `dancewithceech-nextjs`. Deployment: `https://dancewithceech-nextjs-2ug3tmuoc-ceechhsus-projects.vercel.app`. Target: **preview**.
 
 ## Access
 
@@ -16,7 +16,7 @@ Vercel project: `dancewithceech-nextjs`. Deployment: `https://dancewithceech-nex
 
 ## Verification
 
-- All 59 gameplay, access-control, progress, and recovery tests pass, including preview-only root redirection; modified-file ESLint passes.
+- All 65 gameplay, access-control, progress, and recovery tests pass, including preview-only root redirection; modified-file ESLint passes.
 - Vercel remote build and full-site TypeScript check pass. This supersedes the previous local-only build limitation (the deployment environment has the missing attendance dependencies installed).
 - Vercel-authenticated request without passcode: 401 and authentication challenge, no game HTML.
 - Vercel-authenticated request with wrong passcode: 401, no game HTML.
@@ -27,7 +27,7 @@ Vercel project: `dancewithceech-nextjs`. Deployment: `https://dancewithceech-nex
 
 ## Progression update
 
-Three free 10-second introductions and three earned 20-second challenges are implemented. All remain 90 BPM and clap-only. The later challenges add duration, a mixed pattern, then alternating left/right tracks. Logged-in users earn level 4 with scores of at least 80 on each introduction, then earn levels 5 and 6 by reaching 80 on the preceding level.
+Nine levels are implemented, all at 90 BPM and clap-only. Levels 1–3 remain free 10-second samples. Signing in immediately opens level 4 (15 seconds steady), level 5 (20 seconds steady), and level 6 (20 seconds with simple gaps). A personal best of 80 in level 6 opens level 7 (25 seconds of the same pattern); 80 in level 7 opens level 8 (25 seconds adding occasional doubles); 80 in level 8 opens level 9 (15 seconds alternating two lanes). The journey now includes an explicit sign-in reward, requirements on every locked card, personal-best progress, and a play button when a level opens. See `beatfirst-unlocks-verification.md` for this revision’s evidence.
 
 Preview runtime overrides `NEXTAUTH_URL=https://beatfirst-ceech.vercel.app` and `ATTENDANCE_ENABLED=false`. Existing production and attendance-preview configuration is preserved. BeatFirst uses the paired attendance Supabase configuration for the active academy database, in its own `beatfirst_preview_attempts` table; it does not read or modify attendance records.
 

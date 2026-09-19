@@ -70,6 +70,16 @@ test('GET returns only the verified subject’s summary and prevents caching', a
   assert.deepEqual(summary.bestScores, { 1: 100 })
 })
 
+test('an empty signed-in account immediately has levels 1 through 6', async () => {
+  const { handlers } = setup()
+  const response = await handlers.GET(new Request(endpoint))
+  assert.equal(response.status, 200)
+  const summary = await response.json()
+  assert.deepEqual(summary.unlockedLevelIds, [1, 2, 3, 4, 5, 6])
+  assert.deepEqual(summary.bestScores, {})
+  assert.equal(summary.attemptCount, 0)
+})
+
 test('GET and POST reject missing or unverified Google identities before touching the store', async () => {
   for (const authSession of [null, { user: { email: 'owner@example.test' } }, { user: { googleSub: 'owner', googleEmailVerified: false } }]) {
     const { handlers, storeLoads } = setup(new MemoryStore(), authSession)
@@ -93,20 +103,33 @@ test('POST replays taps, ignores client score and owner, and saves only result f
   assert.equal(store.rows.has('google:other'), false)
 })
 
-test('an ordered batch can pass all introductions and immediately play level 4', async () => {
+test('levels 4, 5, and 6 can each save before any introductions or earlier levels', async () => {
+  for (const levelId of [4, 5, 6]) {
+    const { handlers } = setup()
+    const round = attempt(levelId, false)
+    const response = await handlers.POST(post([round]))
+    assert.equal(response.status, 200)
+    const summary = await response.json()
+    assert.deepEqual(summary.acceptedIds, [round.id])
+    assert.deepEqual(summary.bestScores, { [levelId]: 0 })
+    assert.deepEqual(summary.unlockedLevelIds, [1, 2, 3, 4, 5, 6])
+  }
+})
+
+test('an ordered batch can pass levels 6 through 8 and immediately play level 9', async () => {
   const { handlers } = setup()
-  const rounds = [1, 2, 3, 4].map(id => attempt(id))
+  const rounds = [6, 7, 8, 9].map(id => attempt(id))
   const response = await handlers.POST(post(rounds))
   assert.equal(response.status, 200)
   const { acceptedIds, ...summary } = await response.json()
   assert.deepEqual(acceptedIds, rounds.map(round => round.id))
-  assert.deepEqual(summary.unlockedLevelIds, [1, 2, 3, 4, 5])
+  assert.deepEqual(summary.unlockedLevelIds, [1, 2, 3, 4, 5, 6, 7, 8, 9])
   assert.equal(summary.attemptCount, 4)
 })
 
 test('a locked round rejects the entire batch before inserting earlier valid rounds', async () => {
   const { store, handlers } = setup()
-  const response = await handlers.POST(post([attempt(1), attempt(4)]))
+  const response = await handlers.POST(post([attempt(6, false), attempt(7)]))
   assert.equal(response.status, 403)
   assert.equal(store.writes, 0)
   assert.equal(store.rows.size, 0)
@@ -114,18 +137,30 @@ test('a locked round rejects the entire batch before inserting earlier valid rou
 
 test('an idempotent retry cannot change an existing result or unlock a level using changed taps', async () => {
   const { store, handlers } = setup()
-  const original = attempt(1, false)
+  const original = attempt(6, false)
   assert.equal((await handlers.POST(post([original]))).status, 200)
-  const changed = { ...attempt(1), id: original.id }
+  const changed = { ...attempt(6), id: original.id }
   const retried = await handlers.POST(post([changed]))
   assert.equal(retried.status, 200)
   const result = await retried.json()
   assert.deepEqual(result.acceptedIds, [original.id])
   assert.equal(result.attemptCount, 1)
-  assert.equal(result.bestScores[1], 0)
+  assert.equal(result.bestScores[6], 0)
   assert.equal(store.writes, 1)
-  assert.equal((await handlers.POST(post([changed, attempt(2), attempt(3), attempt(4)]))).status, 403)
+  assert.equal((await handlers.POST(post([changed, attempt(7)]))).status, 403)
   assert.equal(store.writes, 1)
+})
+
+test('lower later attempts never revoke a previously earned unlock', async () => {
+  const { handlers } = setup()
+  assert.equal((await handlers.POST(post([6, 7, 8].map(id => attempt(id))))).status, 200)
+  const response = await handlers.POST(post([6, 7, 8].map(id => attempt(id, false))))
+  assert.equal(response.status, 200)
+  const summary = await response.json()
+  assert.deepEqual(summary.bestScores, { 6: 100, 7: 100, 8: 100 })
+  assert.deepEqual(summary.unlockedLevelIds, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+  assert.equal(summary.attemptCount, 6)
+  assert.equal((await handlers.POST(post([attempt(9)]))).status, 200)
 })
 
 test('transient write failure reports a safe error and the same rounds can be retried intact', async () => {
@@ -222,7 +257,7 @@ test('disabled preview endpoints return 404 before authenticating or opening the
 })
 
 test('a concurrent low-score duplicate cannot unlock later rounds with different submitted taps', async () => {
-  const rounds = [1, 2, 3, 4].map(id => attempt(id))
+  const rounds = [6, 7].map(id => attempt(id))
   class ConcurrentStore extends MemoryStore {
     async insert(userId: string, results: AttemptResult[]) {
       if (!this.rows.has(userId)) this.rows.set(userId, [scoreAttempt({ ...rounds[0], taps: [] })])
@@ -232,8 +267,8 @@ test('a concurrent low-score duplicate cannot unlock later rounds with different
   const { handlers, store } = setup(new ConcurrentStore())
   const response = await handlers.POST(post(rounds))
   assert.equal(response.status, 409)
-  assert.equal(store.rows.get('google:owner')!.some(row => row.levelId === 4), false)
-  assert.equal(store.rows.get('google:owner')!.find(row => row.levelId === 1)!.score, 0)
+  assert.equal(store.rows.get('google:owner')!.some(row => row.levelId === 7), false)
+  assert.equal(store.rows.get('google:owner')!.find(row => row.levelId === 6)!.score, 0)
 })
 
 // Keep the server-only import in its own server-conditioned process, so the ordinary

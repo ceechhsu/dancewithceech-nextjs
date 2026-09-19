@@ -6,23 +6,25 @@ import { LEVELS, getLevel, PASS_SCORE, unlockedLevelIds } from '../src/component
 
 const quarterMs = 60_000 / 90
 
-test('the six-level catalog has the agreed names, durations, lanes, and tempo', () => {
-  assert.equal(LEVELS.length, 6)
+test('the nine-level catalog has the agreed names, durations, lanes, and tempo', () => {
+  assert.equal(LEVELS.length, 9)
   assert.deepEqual(LEVELS.map(level => level.title), [
     'Find the beat', 'Keep the beat', 'Catch the doubles',
-    'Stay in the groove', 'Follow the pattern', 'Two-hand rhythm',
+    'Stay in the groove', 'Go a little longer', 'Follow the pattern',
+    'Hold the pattern', 'Catch the new rhythm', 'Two-hand rhythm',
   ])
+  const durations = [10_000, 10_000, 10_000, 15_000, 20_000, 20_000, 25_000, 25_000, 15_000]
   for (const [index, level] of LEVELS.entries()) {
     assert.equal(level.id, index + 1)
     assert.equal(level.bpm, 90)
-    assert.equal(level.durationMs, index < 3 ? 10_000 : 20_000)
-    assert.equal(level.lanes, index === 5 ? 2 : 1)
+    assert.equal(level.durationMs, durations[index])
+    assert.equal(level.lanes, index === 8 ? 2 : 1)
     assert.ok(level.description.length > 0)
     assert.equal(getLevel(level.id), level)
     assert.ok(level.notes.every(note => note.atMs >= 0 && note.atMs + engine.LEVEL.windowMs < level.durationMs))
     assert.ok(level.notes.every((note, i) => i === 0 || note.atMs > level.notes[i - 1].atMs))
   }
-  for (const invalidId of [0, 7, 1.5, NaN, Infinity]) assert.throws(() => getLevel(invalidId))
+  for (const invalidId of [0, 10, 1.5, NaN, Infinity]) assert.throws(() => getLevel(invalidId))
 })
 
 test('intro rhythms contain steady beats, specific gaps, and specific doubles', () => {
@@ -35,50 +37,57 @@ test('intro rhythms contain steady beats, specific gaps, and specific doubles', 
   for (const id of [1, 2, 3]) assert.ok(getLevel(id).notes.every(note => note.lane === 0))
 })
 
-test('long levels contain steady notes, an eight-beat pattern, and alternating hands', () => {
-  const steady = Array.from({ length: 30 }, (_, i) => i * quarterMs)
-  assert.deepEqual(getLevel(4).notes.map(note => note.atMs), steady)
-  const pattern = steady.flatMap((atMs, i) => {
-    if ([3, 7].includes(i % 8)) return []
-    return i % 8 === 5 ? [atMs, (i + 0.5) * quarterMs] : [atMs]
-  })
-  assert.equal(pattern.length, 27)
-  assert.deepEqual(getLevel(5).notes.map(note => note.atMs), pattern)
-  assert.deepEqual(getLevel(6).notes, steady.map((atMs, i) => ({ atMs, lane: i % 2 })))
+test('account levels build duration before introducing gaps, doubles, and alternating hands', () => {
+  const steady = (count: number) => Array.from({ length: count }, (_, i) => ({ atMs: i * quarterMs, lane: 0 }))
+  const pattern = (count: number) => steady(count).filter((_, i) => i % 8 !== 7)
+  assert.deepEqual(getLevel(4).notes, steady(23))
+  assert.deepEqual(getLevel(5).notes, steady(30))
+  assert.deepEqual(getLevel(6).notes, pattern(30))
+  assert.deepEqual(getLevel(7).notes, pattern(38))
+  assert.deepEqual(getLevel(8).notes, [
+    ...pattern(38),
+    ...[5, 13, 21, 29].map(i => ({ atMs: (i + 0.5) * quarterMs, lane: 0 })),
+  ].sort((a, b) => a.atMs - b.atMs))
+  assert.deepEqual(getLevel(9).notes, steady(23).map((note, i) => ({ ...note, lane: i % 2 })))
 })
 
-test('all intros stay unlocked while account progression honors the exact 80 boundary', () => {
+test('sign-in opens levels 4 through 6 immediately and later gates honor the exact 80 boundary', () => {
   assert.equal(PASS_SCORE, 80)
   assert.deepEqual(unlockedLevelIds({}, false), [1, 2, 3])
-  assert.deepEqual(unlockedLevelIds({ 1: 100, 2: 100, 3: 100, 4: 100, 5: 100 }, false), [1, 2, 3])
-  assert.deepEqual(unlockedLevelIds({}, true), [1, 2, 3])
-  for (const id of [1, 2, 3]) {
-    assert.deepEqual(unlockedLevelIds({ 1: 80, 2: 80, 3: 80, [id]: 79 }, true), [1, 2, 3])
+  assert.deepEqual(unlockedLevelIds({ 1: 100, 2: 100, 3: 100, 4: 100, 5: 100, 6: 100, 7: 100, 8: 100 }, false), [1, 2, 3])
+  const initial = [1, 2, 3, 4, 5, 6]
+  assert.deepEqual(unlockedLevelIds({}, true), initial)
+  assert.deepEqual(unlockedLevelIds({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }, true), initial)
+  for (const id of [1, 2, 3, 4, 5]) {
+    assert.deepEqual(unlockedLevelIds({ [id]: 100 }, true), initial)
   }
-  assert.deepEqual(unlockedLevelIds({ 1: 80, 2: 80, 3: 80 }, true), [1, 2, 3, 4])
-  assert.deepEqual(unlockedLevelIds({ 1: 80, 2: 80, 3: 80, 4: 79, 5: 100 }, true), [1, 2, 3, 4])
-  assert.deepEqual(unlockedLevelIds({ 1: 80, 2: 80, 3: 80, 4: 80, 5: 79 }, true), [1, 2, 3, 4, 5])
-  assert.deepEqual(unlockedLevelIds({ 1: 80, 2: 80, 3: 80, 4: 80, 5: 80 }, true), [1, 2, 3, 4, 5, 6])
-  assert.deepEqual(unlockedLevelIds({ 4: 100, 5: 100 }, true), [1, 2, 3])
+  assert.deepEqual(unlockedLevelIds({ 6: 79, 7: 100, 8: 100 }, true), initial)
+  assert.deepEqual(unlockedLevelIds({ 7: 100, 8: 100 }, true), initial)
+  assert.deepEqual(unlockedLevelIds({ 6: 80 }, true), [...initial, 7])
+  assert.deepEqual(unlockedLevelIds({ 6: 80, 7: 79, 8: 100 }, true), [...initial, 7])
+  assert.deepEqual(unlockedLevelIds({ 6: 80, 8: 100 }, true), [...initial, 7])
+  assert.deepEqual(unlockedLevelIds({ 6: 80, 7: 80 }, true), [...initial, 7, 8])
+  assert.deepEqual(unlockedLevelIds({ 6: 80, 7: 80, 8: 79 }, true), [...initial, 7, 8])
+  assert.deepEqual(unlockedLevelIds({ 6: 80, 7: 80, 8: 80 }, true), [...initial, 7, 8, 9])
 })
 
 test('rounds copy the selected catalog and accept taps during the full level duration', () => {
   const round = engine.createRound(4)
   assert.equal(round.levelId, 4)
-  assert.equal(round.durationMs, 20_000)
-  assert.equal(round.notes.length, 30)
-  const last = round.notes[29]
+  assert.equal(round.durationMs, 15_000)
+  assert.equal(round.notes.length, 23)
+  const last = round.notes[22]
   assert.equal(last.lane, 0)
   const hit = engine.tapRound(round, last.atMs + 179)
-  assert.equal(hit.round.notes[29].status, 'hit')
-  assert.equal(engine.tapRound(round, 20_000).round, round)
-  assert.equal(engine.advanceRound(round, 20_000).notes.filter(note => note.status === 'miss').length, 30)
+  assert.equal(hit.round.notes[22].status, 'hit')
+  assert.equal(engine.tapRound(round, 15_000).round, round)
+  assert.equal(engine.advanceRound(round, 15_000).notes.filter(note => note.status === 'miss').length, 23)
   assert.equal(round.notes[0].status, 'pending')
   assert.equal(engine.createRound().levelId, 1)
 })
 
 test('a wrong-hand tap counts as an extra tap without consuming the target', () => {
-  const round = engine.createRound(6)
+  const round = engine.createRound(9)
   const wrong = engine.tapRound(round, 0, 1)
   assert.equal(wrong.feedback, 'Off beat')
   assert.equal(wrong.round.extraTaps, 1)
@@ -99,7 +108,7 @@ test('overlapping windows choose the nearest pending note in the same lane', () 
 
 test('equally near notes choose the earlier note without considering another lane', () => {
   const round = {
-    ...engine.createRound(6),
+    ...engine.createRound(9),
     notes: [
       { atMs: 1000, lane: 0 as const, status: 'pending' as const, points: 0 },
       { atMs: 1150, lane: 1 as const, status: 'pending' as const, points: 0 },
@@ -112,7 +121,7 @@ test('equally near notes choose the earlier note without considering another lan
 })
 
 test('non-finite times and invalid lanes are ignored without mutating a round', () => {
-  const round = engine.createRound(6)
+  const round = engine.createRound(9)
   for (const atMs of [NaN, Infinity, -Infinity]) {
     const result = engine.tapRound(round, atMs)
     assert.equal(result.round, round)
@@ -146,16 +155,16 @@ test('replay preserves exact early, late, extra, wrong-hand, and ignored tap rul
     { atMs: 2 * quarterMs, lane: 1 as const },
     { atMs: 2 * quarterMs + 60, lane: 0 as const },
     { atMs: 3 * quarterMs - 120, lane: 1 as const },
-    { atMs: 20_000, lane: 0 as const },
+    { atMs: 15_000, lane: 0 as const },
     { atMs: NaN, lane: 0 as const },
   ]
-  const round = engine.replayRound(6, taps)
-  let direct = engine.createRound(6)
+  const round = engine.replayRound(9, taps)
+  let direct = engine.createRound(9)
   for (const tap of taps) direct = engine.tapRound(direct, tap.atMs, tap.lane).round
-  assert.deepEqual(round, engine.advanceRound(direct, 20_000))
+  assert.deepEqual(round, engine.advanceRound(direct, 15_000))
   assert.deepEqual(round.notes.slice(0, 4).map(note => note.points), [40, 40, 100, 70])
   assert.equal(round.extraTaps, 2)
-  assert.equal(engine.summarize(round).score, 8)
+  assert.equal(engine.summarize(round).score, 10)
   assert.ok(round.notes.every(note => note.status !== 'pending'))
 })
 

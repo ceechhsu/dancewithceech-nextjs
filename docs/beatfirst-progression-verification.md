@@ -1,4 +1,6 @@
-# BeatFirst progression verification — 2026-09-19
+# BeatFirst progression verification — initial six-level revision
+
+Historical evidence for the initial version. The current nine-level revision and unlock rules are documented in `beatfirst-unlocks-verification.md`.
 
 ## Delivered privately
 - URL: https://beatfirst-ceech.vercel.app
