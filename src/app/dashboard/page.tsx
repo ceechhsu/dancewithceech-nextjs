@@ -28,7 +28,7 @@ export default async function Dashboard() {
           <section className={styles.card}>
             <h2>Keep exploring</h2>
             <div className={styles.row}>
-              <a href="/beat-first?tab=progress">My Progress</a>
+              <a href="/beat-first#progress">My Progress</a>
               <a href="/blog">Dance articles</a>
               <a href="/attendance/history">My Attendance History</a>
             </div>

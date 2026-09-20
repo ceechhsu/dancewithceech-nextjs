@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Check, LockKeyhole, Volume2, ArrowLeft, ArrowRight, CloudCheck, Sparkles, ChevronDown } from 'lucide-react'
 import ClapGame from './ClapGame'
 import { LEVELS, PASS_SCORE } from './levels'
@@ -12,12 +12,12 @@ import type { Attempt } from './progress'
 import gameStyles from './ClapGame.module.css'
 import styles from './Journey.module.css'
 
-export default function BeatFirstJourney() {
-  const progress = useProgress()
-  return <BeatFirstJourneyView progress={progress} />
+export default function BeatFirstJourney({ preview = false, children }: { preview?: boolean; children?: ReactNode }) {
+  const progress = useProgress(preview)
+  return <BeatFirstJourneyView progress={progress} preview={preview}>{children}</BeatFirstJourneyView>
 }
 
-export function BeatFirstJourneyView({ progress }: { progress: ReturnType<typeof useProgress> }) {
+export function BeatFirstJourneyView({ progress, preview = false, children }: { progress: ReturnType<typeof useProgress>; preview?: boolean; children?: ReactNode }) {
   const [chosen, setChosen] = useState(1)
   const [expanded, setExpanded] = useState([0, 1])
   const [now, setNow] = useState<Date | null>(null)
@@ -91,11 +91,11 @@ export function BeatFirstJourneyView({ progress }: { progress: ReturnType<typeof
   return <main className={gameStyles.page}>
     <header className={gameStyles.header}>
       <Link href="/" className={gameStyles.brand}>DANCE<span>WITH</span>CEECH<span className={gameStyles.brandDot}>.</span></Link>
-      <span className={gameStyles.preview}>BEATFIRST <span>/</span> PREVIEW</span>
+      <span className={gameStyles.preview}>BEATFIRST {preview && <><span>/</span> PREVIEW</>}</span>
     </header>
     <div className={styles.layout}>
       <section className={styles.intro}>
-        <Link href="/beat-first" className={styles.back}><ArrowLeft size={14} /> Back to BeatFirst</Link>
+        <Link href={preview ? "/beat-first" : "/"} className={styles.back}><ArrowLeft size={14} /> {preview ? "Back to BeatFirst" : "Back to DanceWithCeech"}</Link>
         <div className={gameStyles.eyebrow}><span /> RHYTHM FIRST. THEN DANCE.</div>
         <h1>Find your <span>beat.</span></h1>
         <p className={styles.description}>Start with ten seconds. Build a rhythm that stays with you.</p>
@@ -154,7 +154,7 @@ export function BeatFirstJourneyView({ progress }: { progress: ReturnType<typeof
         <p className={styles.goal}>Your personal best counts. Once you unlock a level, it stays yours.</p>
         <details className={styles.scoring}><summary>How do I earn 80 points?</summary><p>Tap close to each beat: perfect timing earns 100 points for that note, near hits earn 70, and wider hits earn 40. Misses and extra taps lower your round score. Your best score counts, and you can retry as often as you like.</p></details>
       </section>
-      <section className={styles.account} aria-label="Saved progress">
+      <section id="progress" className={styles.account} aria-label="Saved progress">
         {progress.account ? <>
           <span className={styles.accountEyebrow}><CloudCheck size={15} /> YOUR PROGRESS</span>
           <h2>Welcome back, {progress.account.name}.</h2>
@@ -181,6 +181,7 @@ export function BeatFirstJourneyView({ progress }: { progress: ReturnType<typeof
         {progress.storageWarning && <p className={styles.error} role="alert">{progress.storageWarning}</p>}
       </section>
     </div>
+    {children}
     <footer className={gameStyles.pageFooter}><span>BEATFIRST <span className={gameStyles.footerDivider}>/</span> BY CEECH</span><span>Rhythm is a skill. You can learn it.</span></footer>
   </main>
 }

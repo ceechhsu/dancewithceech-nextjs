@@ -6,7 +6,7 @@ const BASE_URL = 'https://dancewithceech.com'
 const STATIC_ROUTE_LAST_MODIFIED: Record<string, string> = {
   '/': '2026-08-24',
   '/running-man-method': '2026-08-22',
-  '/beat-first': '2026-08-24',
+  '/beat-first': '2026-09-19',
   '/private-lessons': '2026-08-24',
   '/private-lessons/san-jose': '2026-08-24',
   '/private-lessons/bay-area': '2026-08-24',

@@ -1,7 +1,7 @@
-const endpoint = '/api/beatfirst-preview/progress'
+import { beatFirstRoutes } from './routes'
 
 /** The deadline includes reading JSON, since response headers can arrive before a stalled body. */
-export async function progressRequest(options: RequestInit, fetcher: typeof fetch = fetch, timeoutMs = 12_000) {
+export async function progressRequest(options: RequestInit, fetcher: typeof fetch = fetch, timeoutMs = 12_000, endpoint = beatFirstRoutes().progressPath) {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), timeoutMs)
   try {

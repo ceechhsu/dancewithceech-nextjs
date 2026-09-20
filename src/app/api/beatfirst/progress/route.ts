@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 const handlers = createProgressHandlers({
   getSession: () => auth(),
   getStore: getProgressStore,
-  isEnabled: () => progressApiEnabled(true, process.env.VERCEL_ENV),
+  isEnabled: () => progressApiEnabled(false, process.env.VERCEL_ENV),
 })
 
 export const GET = handlers.GET

@@ -7,12 +7,16 @@ import { acknowledge, claimGuest, emptyLocal, nextSaveBatch, STORAGE_KEY, type L
 type Account = { id: string; name: string }
 import { createProgressStorage } from './progress-storage'
 import { progressRequest } from './progress-request'
+import { beatFirstRoutes } from './routes'
+import { signOutAfterAttendanceCleanup } from './logout'
 
-export function useProgress() {
+export function useProgress(preview = false) {
+  const { pagePath, progressPath } = beatFirstRoutes(preview)
   const [local, setLocal] = useState<LocalProgress>(emptyLocal)
   const localRef = useRef(local)
   const [account, setAccount] = useState<Account | null>(null)
   const accountRef = useRef<Account | null>(null)
+  const attendanceEmailRef = useRef<string | null>(null)
   const [ready, setReady] = useState(false)
   const [saved, setSaved] = useState<ProgressSummary>(() => summarizeAttempts([]))
   const [status, setStatus] = useState<'idle' | 'loading' | 'saving' | 'saved' | 'error'>('loading')
@@ -44,17 +48,18 @@ export function useProgress() {
       const nextAccount = id ? { id, name: session?.user?.name?.split(' ')[0] || 'Dancer' } : null
       if (accountRef.current?.id !== id) setSaved(summarizeAttempts([]))
       accountRef.current = nextAccount
+      attendanceEmailRef.current = session?.user?.email ?? null
       setAccount(nextAccount)
       if (!id) { setStatus('idle'); return }
       if (localRef.current.claim && !await updateLocal(state => claimGuest(state, id), true)) throw new Error('Allow website storage, then retry to save your practice rounds securely.')
       setReady(true)
-      const response = await progressRequest({ cache: 'no-store', headers: { 'X-BeatFirst-Owner': id } })
+      const response = await progressRequest({ cache: 'no-store', headers: { 'X-BeatFirst-Owner': id } }, undefined, undefined, progressPath)
       if (!response.ok) throw new Error(response.status === 401 ? 'Please sign in again to save your progress.' : 'Your saved progress could not load. Retry when you’re connected.')
       let summary = response.data as ProgressSummary
       while ((localRef.current.pending[id] ?? []).length > 0) {
         setStatus('saving')
         const attempts = nextSaveBatch(localRef.current.pending[id])
-        const result = await progressRequest({ method: 'POST', headers: { 'Content-Type': 'application/json', 'X-BeatFirst-Owner': id }, body: JSON.stringify({ attempts }) })
+        const result = await progressRequest({ method: 'POST', headers: { 'Content-Type': 'application/json', 'X-BeatFirst-Owner': id }, body: JSON.stringify({ attempts }) }, undefined, undefined, progressPath)
         const data = result.data
         if (!result.ok) throw new Error(typeof data.error === 'string' ? data.error : 'Your round is waiting to save. Please retry.')
         if (!Array.isArray(data.acceptedIds) || data.acceptedIds.length === 0) throw new Error('Your round is waiting to save. Please retry.')
@@ -74,7 +79,7 @@ export function useProgress() {
         if (rerun.current) { rerun.current = false; void syncRef.current() }
       }
     }
-  }, [updateLocal])
+  }, [updateLocal, progressPath])
 
   useEffect(() => { syncRef.current = sync }, [sync])
   useEffect(() => {
@@ -104,12 +109,19 @@ export function useProgress() {
   const login = async () => {
     if (!await updateLocal(state => ({ ...state, claim: true }), true)) return
     setStatus('loading')
-    try { await signIn('google', { redirectTo: '/beat-first/preview' }) }
+    try { await signIn('google', { redirectTo: pagePath }) }
     catch { setMessage('Sign-in could not start. Your rounds are still here. Please retry.'); setStatus('error') }
   }
   const logout = async () => {
     if ((localRef.current.pending[accountRef.current?.id ?? ''] ?? []).length) { setMessage('Save your waiting rounds before signing out.'); setStatus('error'); return }
-    await signOut({ redirectTo: '/beat-first/preview' })
+    try {
+      const endSession = () => signOut({ redirectTo: pagePath })
+      if (preview) await endSession()
+      else await signOutAfterAttendanceCleanup(attendanceEmailRef.current, endSession)
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Sign-out could not finish. Please sync attendance and retry.')
+      setStatus('error')
+    }
   }
   const guest = summarizeAttempts(local.guest.map(scoreAttempt))
   const summary = account ? saved : { ...guest, unlockedLevelIds: [1,2,3] }

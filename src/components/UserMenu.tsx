@@ -80,7 +80,7 @@ export default function UserMenu({ name, email, image }: Props) {
             </div>
           )}
           <Link
-            href="/beat-first?tab=progress"
+            href="/beat-first#progress"
             onClick={() => setOpen(false)}
             style={{
               display: 'block',

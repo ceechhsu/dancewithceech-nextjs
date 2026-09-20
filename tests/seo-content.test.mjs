@@ -128,9 +128,11 @@ test("Blog, About, and Contact include complete social metadata", async () => {
 
 test("BeatFirst provides descriptive metadata, crawlable guidance, and WebApplication schema", async () => {
   const source = await read("src/app/beat-first/page.tsx");
+  const guide = await read("src/components/beatfirst-preview/BeatFirstGuide.tsx");
   assert.match(source, /WebApplication/);
-  assert.match(source, /How BeatFirst works/);
-  assert.match(source, /Frequently asked questions/i);
+  assert.match(source, /<BeatFirstJourney><BeatFirstGuide \/><\/BeatFirstJourney>/);
+  assert.match(guide, /How BeatFirst works/i);
+  assert.match(guide, /Frequently asked questions/i);
   const description = source.match(/description:\s*['"]([^'"]+)/)?.[1] ?? "";
   assert.ok(description.length >= 120, `BeatFirst description is only ${description.length} characters`);
 });
