@@ -79,7 +79,7 @@ export default function Leaderboard({ levelId, onLevelChange, accountId, ready, 
           <th scope="row"><span className={styles.player}>{entry.displayName}{entry.isYou && <span className={styles.you}>You</span>}</span></th>
           <td className={styles.score}>{entry.score}<span> / 100</span></td>
         </tr>)}</tbody>
-      </table> : <div className={styles.empty}><Trophy size={25} /><h3>The first spot is waiting.</h3><p>No public scores for this level yet. {data.profile?.listed ? 'Finish a round to set the pace.' : accountId ? 'Join and finish a round to set the pace.' : 'Sign in, choose a name, and set the pace.'}</p></div>}
+      </table> : <div className={styles.empty}><Trophy size={25} /><h3>The first spot is waiting.</h3><p>No public scores for this level yet. {data.profile?.listed ? 'Finish a round to set the pace.' : accountId ? 'Join the leaderboard and set the pace.' : 'Sign in, choose a name, and set the pace.'}</p></div>}
       <p className={styles.rules}>One personal best per player. Equal scores share a rank. Ten players shown; earlier saved scores appear first in a tie.</p>
       {!accountId ? <div className={styles.join}>
         <h3>Your rhythm deserves a spot.</h3><p>Sign in free, then choose a public player name to join. Your saved best scores count.</p>
