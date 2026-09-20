@@ -1,5 +1,7 @@
 # Private mobile preview — 2026-09-19
 
+**Live release:** The approved 18-level version now replaces the public game at https://dancewithceech.com/beat-first. See [the live release verification](beatfirst-live-release-verification.md) for production, sign-in, and saved-progress evidence. The information below records the private preview deployment, which remains available separately.
+
 URL: https://beatfirst-ceech.vercel.app
 
 The short address redirects directly to `/beat-first/preview`. Password updated to the owner's requested value, stored only in the deployment environment and ignored local backup.
@@ -22,7 +24,7 @@ Vercel project: `dancewithceech-nextjs`. Deployment: `https://dancewithceech-nex
 - Vercel-authenticated request with wrong passcode: 401, no game HTML.
 - Vercel-authenticated request with correct passcode: 200 with the game HTML.
 - Unauthenticated browser: Vercel sign-in screen.
-- Production deployment remains `dpl_FWFzp2tk7wfiQGKuDHBQAoUGj2wY`; no production promotion, domain changes, or merge.
+- At this preview verification, production remained `dpl_FWFzp2tk7wfiQGKuDHBQAoUGj2wY` without promotion or domain changes. The subsequent live release is recorded in the linked document above.
 - The owner successfully tested the previous nine levels. The new kick/clap patterns and 100/110 BPM rounds were verified in a 375×667 browser viewport; physical-phone listening and difficulty feedback remain useful.
 
 ## Progression update
