@@ -1,5 +1,7 @@
 # BeatFirst live replacement — 2026-09-19
 
+This records the initial 18-level launch. See [the leaderboard release verification](beatfirst-leaderboard-verification.md) for the subsequent Top 10 update and current production deployment.
+
 The user-tested 18-level game now replaces the previous six-beat/referral game at **https://dancewithceech.com/beat-first**. The public game has three free samples, Google sign-in that immediately opens levels 4–6, and score-based progression through level 18. The private mobile preview remains available separately.
 
 ## Release
