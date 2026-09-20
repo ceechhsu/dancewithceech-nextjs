@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import SiteLogo from '@/components/SiteLogo'
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Check, LockKeyhole, Volume2, ArrowLeft, ArrowRight, CloudCheck, Sparkles, ChevronDown } from 'lucide-react'
 import ClapGame from './ClapGame'
@@ -106,7 +107,7 @@ export function BeatFirstJourneyView({ progress, preview = false, children }: { 
 
   return <main className={gameStyles.page}>
     <header className={gameStyles.header}>
-      <Link href="/" className={gameStyles.brand}>DANCE<span>WITH</span>CEECH<span className={gameStyles.brandDot}>.</span></Link>
+      <SiteLogo />
       <span className={gameStyles.preview}>BEATFIRST {preview && <><span>/</span> PREVIEW</>}</span>
     </header>
     <div className={styles.layout}>

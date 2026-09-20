@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getSession } from "next-auth/react";
 import { canSeeAttendance } from "@/lib/attendance/navigation";
 import Link from "next/link";
-import Image from "next/image";
+import SiteLogo from "@/components/SiteLogo";
 import MobileMenu from "@/components/MobileMenu";
 import UserMenu from "@/components/UserMenu";
 import SignInButton from "@/components/SignInButton";
@@ -37,18 +37,7 @@ export default function Nav({ user: initialUser }: Props = {}) {
   const showAttendance = canSeeAttendance(user);
   return (
     <nav aria-label="Main navigation" className={`${styles.navigation} fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 py-3 sm:px-6`} style={{ backgroundColor: "var(--background)", borderBottom: "1px solid #1f1f1f" }}>
-      <Link href="/" prefetch={false} className="flex items-center gap-2" style={{ textDecoration: "none" }}>
-        <Image
-          src="/logo-mark.png"
-          alt="DanceWithCeech"
-          title="DanceWithCeech logo"
-          width={36}
-          height={36}
-        />
-        <span style={{ fontSize: "1.05rem", fontWeight: 700, letterSpacing: "-0.02em", color: "#F9F9F9" }}>
-          Dance With <span style={{ color: "var(--accent-primary-accessible)" }}>Ceech</span>
-        </span>
-      </Link>
+      <SiteLogo />
       {/* Desktop nav links */}
       <div className="hidden xl:flex items-center gap-5 text-sm whitespace-nowrap" style={{ color: "var(--muted)" }}>
         <Link href="/private-lessons" prefetch={false} className="hover:text-white transition-colors">Private Lessons</Link>
