@@ -7,8 +7,9 @@ import ClapGame from './ClapGame'
 import { LEVELS, PASS_SCORE } from './levels'
 import { useProgress } from './useProgress'
 import MasteryStars from './MasteryStars'
+import Leaderboard from './LevelLeaderboard'
 import { dailyPractice, masteryStars, nextMasteryLevel, nextStarTarget } from './practice-goals'
-import type { Attempt } from './progress'
+import { scoreAttempt, type Attempt } from './progress'
 import gameStyles from './ClapGame.module.css'
 import styles from './Journey.module.css'
 
@@ -19,6 +20,8 @@ export default function BeatFirstJourney({ preview = false, children }: { previe
 
 export function BeatFirstJourneyView({ progress, preview = false, children }: { progress: ReturnType<typeof useProgress>; preview?: boolean; children?: ReactNode }) {
   const [chosen, setChosen] = useState(1)
+  const [leaderboardLevel, setLeaderboardLevel] = useState(1)
+  const [completed, setCompleted] = useState<{ levelId: number; score: number; owner: string | null } | null>(null)
   const [expanded, setExpanded] = useState([0, 1])
   const [now, setNow] = useState<Date | null>(null)
   const recentKey = progress.summary.recent.map(round => `${round.id}:${round.completedAt}`).join('|')
@@ -38,19 +41,32 @@ export function BeatFirstJourneyView({ progress, preview = false, children }: { 
   useEffect(() => { accountRef.current = progress.account }, [progress.account])
   const levelId = progress.summary.unlockedLevelIds.includes(chosen) ? chosen : 1
   const gameRef = useRef<HTMLDivElement>(null)
+  const leaderboardRef = useRef<HTMLDivElement>(null)
   const onActive = useCallback((playing: boolean) => {
-    if (playing && !wasActive.current) owner.current = accountRef.current?.id ?? null
+    if (playing && !wasActive.current) { owner.current = accountRef.current?.id ?? null; setCompleted(null) }
     wasActive.current = playing
     setActive(playing)
   }, [])
   const { record } = progress
-  const onComplete = useCallback((attempt: Attempt) => { record(attempt, owner.current) }, [record])
+  const onComplete = useCallback((attempt: Attempt) => {
+    setCompleted({ levelId: attempt.levelId, score: scoreAttempt(attempt).score, owner: owner.current })
+    void record(attempt, owner.current)
+  }, [record])
   const choose = (id: number) => {
     if (active || !progress.summary.unlockedLevelIds.includes(id)) return
     if (id === levelId) setGameVersion(version => version + 1)
     setChosen(id)
+    setCompleted(null)
+    setLeaderboardLevel(id)
     setExpanded(current => [...new Set([...current, Math.floor((id - 1) / 3)])])
     gameRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' })
+  }
+  const viewLeaderboard = () => {
+    setLeaderboardLevel(levelId)
+    requestAnimationFrame(() => {
+      leaderboardRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' })
+      leaderboardRef.current?.querySelector<HTMLElement>('section')?.focus({ preventScroll: true })
+    })
   }
   const next = progress.summary.unlockedLevelIds.find(id => id > levelId)
   const introDone = [1,2,3].every(id => progress.guest.completedLevelIds.includes(id))
@@ -109,6 +125,14 @@ export function BeatFirstJourneyView({ progress, preview = false, children }: { 
         <ClapGame key={`${progress.account?.id ?? 'guest'}:${levelId}:${gameVersion}`} canStart={progress.ready} levelId={levelId} personalBest={progress.summary.bestScores[levelId]} onComplete={onComplete} onActive={onActive}
           onNext={next ? () => choose(next) : !progress.account ? () => void progress.login() : highest === LEVELS.length ? () => choose(suggested) : undefined} nextLabel={next ? newChallenge && next === highest ? `Level ${next} unlocked! Play now` : `Try level ${next}` : progress.account ? `Practice level ${suggested}` : 'Sign in to unlock levels 4–6'} />
         <p className={styles.saveStatus} role="status">{progress.account ? progress.pendingCount ? `${progress.pendingCount} ${progress.pendingCount === 1 ? 'round waiting' : 'rounds waiting'} to save` : progress.status === 'saved' ? 'Progress saved to your account' : progress.status === 'loading' ? 'Loading your progress…' : '' : 'Free samples · No account needed'}</p>
+        {!active && completed?.levelId === levelId && completed.owner === (progress.account?.id ?? null) && <div className={styles.resultLeaderboard}>
+          <span>Your best: <b>{Math.max(completed.score, progress.summary.bestScores[levelId] ?? 0)}</b></span>
+          <button type="button" onClick={viewLeaderboard}>View Level {levelId} Top 10 <ArrowRight size={14} /></button>
+        </div>}
+      </div>
+      <div className={styles.leaderboardSlot} ref={leaderboardRef}>
+        <Leaderboard key={progress.account?.id ?? 'guest'} levelId={leaderboardLevel} onLevelChange={setLeaderboardLevel} accountId={progress.account?.id ?? null}
+          ready={progress.ready && progress.status !== 'loading'} active={active} bestScores={progress.summary.bestScores} refreshKey={progress.summary.attemptCount} onLogin={progress.login} />
       </div>
       <section className={styles.journey} aria-label="Your rhythm journey">
         <div className={styles.sectionHeading}><span>YOUR RHYTHM JOURNEY</span><span>{progress.summary.completedLevelIds.length} / {LEVELS.length} PLAYED</span></div>

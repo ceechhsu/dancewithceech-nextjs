@@ -1,0 +1,7 @@
+# BeatFirst level leaderboards
+
+The user approved adding all-time Top 10 rankings for each of the 18 existing levels and publishing the update. Anyone can view. Each signed-in player may opt in by choosing a public display name; their highest saved score per level counts once. Equal scores share a competition rank (1, 1, 3), and the current player's entry is highlighted. A results action opens the completed level's Top 10 alongside a personal-best indicator. Keep the leaderboard below the game and preserve all existing gameplay, score validation, unlocks, progress, attendance safeguards, and private preview behavior.
+
+Existing account names/emails must not be published automatically. Joining explicitly publishes saved personal bests under the chosen name, including existing bests; allow editing that name and hiding the scores again without deleting progress. No fake starter scores. An empty board invites the first player. Fetch/save failures show a retry and do not stop practice. Start with all-time only, without prizes, weekly boards, or added levels.
+
+At most ten players are listed, ordered by best score descending, then the server time when that best was first saved, then stable player identity. Equal scores share a rank regardless of tie order; explain the ten-player cutoff. Only server-scored saved attempts feed rankings. This is a casual practice leaderboard, not a tamper-proof competition: existing tap replay validation is retained, with no new anti-cheat project.
