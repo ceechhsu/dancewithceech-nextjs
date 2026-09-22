@@ -5,6 +5,18 @@ import { syncRosterProfile } from './lib/attendance/profile-sync'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
+  pages: { error: '/auth/retry' },
+  ...(process.env.AUTH_DIAGNOSTICS === 'true' ? { logger: {
+    error(error: Error) {
+      const cause = (error as Error & { cause?: { err?: Error } }).cause?.err
+      const message = cause?.message ?? ''
+      const category = /cookie was missing/i.test(message) ? 'missing-cookie'
+        : /expired|exp.*claim/i.test(message) ? 'expired-cookie'
+        : /decrypt|decryption|matching.*key/i.test(message) ? 'cookie-decryption-failed'
+        : 'other'
+      console.error('auth-diagnostic-error', JSON.stringify({ type: error.name, category }))
+    },
+  } } : {}),
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
