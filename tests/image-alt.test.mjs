@@ -23,8 +23,10 @@ test("video hero exposes a poster and accessible section label", () => {
 test("homepage images provide meaningful title attributes for SEOwallet", () => {
   const homepage = fs.readFileSync(path.join(siteRoot, "src/app/page.tsx"), "utf8");
   const nav = fs.readFileSync(path.join(siteRoot, "src/components/Nav.tsx"), "utf8");
+  const siteLogo = fs.readFileSync(path.join(siteRoot, "src/components/SiteLogo.tsx"), "utf8");
 
-  assert.match(nav, /src="\/logo-mark\.png"[\s\S]{0,120}title="DanceWithCeech logo"/);
+  assert.match(nav, /import SiteLogo from ["']@\/components\/SiteLogo["'];/);
+  assert.match(siteLogo, /src="\/logo-mark\.png"[\s\S]{0,120}title="DanceWithCeech logo"/);
   assert.match(homepage, /dsplayers-performing-americas-got-talent\.jpg[\s\S]{0,180}title="DS Players performing on America's Got Talent in 2010"/);
   assert.match(homepage, /mindtricks-dance-group-photo\.jpg[\s\S]{0,180}title="Mindtricks dance group with future Jabbawockeez founders"/);
   assert.match(homepage, /dsplayers-2006-body-rock-winners\.jpg[\s\S]{0,180}title="DS Players Body Rock dance competition winners"/);

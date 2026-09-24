@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "check:redirects": "node scripts/check-redirects.mjs",
@@ -51,7 +51,7 @@
     "cloudinary": "^2.9.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
-    "supabase": "2.81.3",
+    "supabase": "2.117.0",
     "tailwindcss": "^4",
     "tsx": "4.20.3",
     "typescript": "^5"

@@ -7,110 +7,121 @@ const componentPath = new URL(
   "../src/app/running-man-method/RunningManMethodPage.tsx",
   import.meta.url,
 );
-const enrollmentPanelPath = new URL(
-  "../src/components/running-man/EnrollmentPanel.tsx",
-  import.meta.url,
-);
-const confirmationPagePath = new URL(
-  "../src/app/running-man-method/confirmation/page.tsx",
-  import.meta.url,
-);
-const waitlistRoutePath = new URL(
-  "../src/app/api/running-man-waitlist/route.ts",
-  import.meta.url,
-);
-const waitlistLibraryPath = new URL(
-  "../src/lib/running-man/waitlist.ts",
+const interestFormPath = new URL(
+  "../src/components/running-man/RunningManInterestForm.tsx",
   import.meta.url,
 );
 const sitemapPath = new URL("../src/app/sitemap.ts", import.meta.url);
 
-async function readRouteSource() {
-  const [route, component, enrollmentPanel] = await Promise.all([
-    readFile(routePath, "utf8"),
-    readFile(componentPath, "utf8"),
-    readFile(enrollmentPanelPath, "utf8"),
-  ]);
-
-  return `${route}\n${component}\n${enrollmentPanel}`;
+async function readSourceIfPresent(path) {
+  try {
+    return await readFile(path, "utf8");
+  } catch (error) {
+    if (error?.code === "ENOENT") return "";
+    throw error;
+  }
 }
 
-test("the Running Man Method route presents the approved founding-cohort hero", async () => {
-  const source = await readRouteSource();
+async function readPageSources() {
+  const [route, component, interestForm] = await Promise.all([
+    readFile(routePath, "utf8"),
+    readFile(componentPath, "utf8"),
+    readSourceIfPresent(interestFormPath),
+  ]);
+  return { route, component, interestForm, all: `${route}\n${component}\n${interestForm}` };
+}
 
-  assert.match(
-    source,
-    /Learn the Running Man and Feel Ready to Join the Dance Floor/,
-  );
-  assert.match(source, /September 24 to October 22, 2026/);
-  assert.match(source, /Enrollment closes September 17/);
-  assert.match(source, /Adults 18\+/);
-  assert.match(source, /Limited to 12 students/);
-  assert.match(source, /The iconic hip-hop move that creates the illusion of running in place/i);
-  assert.match(source, /alt="Ceech teaching adult dance students/i);
+test("the page leads with the approved timing-first Running Man explanation", async () => {
+  const { component } = await readPageSources();
+
+  assert.match(component, /Get the Running Man on beat—one count at a time/);
+  assert.match(component, /both feet land on the numbered count/);
+  assert.match(component, /on the “and,” one knee is up as the other leg lands/);
+  assert.match(component, /100–110 BPM/);
+  assert.match(component, /say the count out loud/);
 });
 
-test("the page carries the complete approved offer from problem through enrollment", async () => {
-  const source = await readRouteSource();
+test("the evergreen page preserves the demo, teaching story, and transparently labeled class feedback", async () => {
+  const { component } = await readPageSources();
 
-  const requiredCopy = [
-    /You Don.t Need More Choreography/,
-    /Copying the Steps Isn.t the Same as Learning to Dance/,
-    /A Clear Path From.*I Don.t Know What to Do.*to.*I Can Do This/s,
-    /Is The Running Man Method Right for You/,
-    /dancewithceech\.com\/beat-first/,
-    /Everything You Need to Learn, Practice, and Perform/,
-    /Learn From an Experienced Teacher/,
-    /George.*Clear Instruction and Greater Confidence/s,
-    /Martin.*I.m Not a Dancer/s,
-    /Jordan.*Supportive Place to Learn/s,
+  assert.match(component, /TrackedRunningManVideo/);
+  assert.match(component, /running-man-method-teaser-web\.mp4/);
+  assert.match(component, /high-school dance in San Jose in 1988/);
+  assert.match(component, /ran it all night/);
+  assert.match(component, /challenge them to see who could keep going longest/);
+  assert.match(component, /first class/);
+  assert.match(component, /aren’t reviews from Running Man Method graduates/);
+  assert.match(component, /id: "YT5xMAgGdX0"/);
+  assert.match(component, /id: "XuJAnRRk7fI"/);
+  assert.match(component, /more than 25 years/i);
+  assert.match(component, /MA in Kinesiology/);
+  assert.match(component, /taught adult beginners/);
+});
+
+test("the page provides one clear path to a low-pressure interest form", async () => {
+  const { component, interestForm } = await readPageSources();
+
+  assert.match(component, /<RunningManInterestForm \/>/);
+  assert.match(component, /href="#interest"/);
+  assert.match(component, /Tell me about the next class/);
+  assert.match(component, /id="interest"/);
+  assert.match(interestForm, /name: firstName\.trim\(\)/);
+  assert.match(interestForm, /type="email"[\s\S]*?required/);
+  assert.match(interestForm, /Yes, email me about future Running Man classes/);
+  assert.match(interestForm, /I can unsubscribe anytime/);
+  assert.match(interestForm, /This is an interest list, not enrollment/);
+  assert.match(interestForm, /no obligation/i);
+  assert.match(interestForm, /Keep me posted/);
+  assert.match(interestForm, /\/api\/running-man-waitlist/);
+});
+
+test("the page includes beginner and safety guidance without promising unconfirmed class terms", async () => {
+  const { component } = await readPageSources();
+
+  assert.match(component, /You don’t need dance experience/);
+  assert.match(component, /repeated hopping/);
+  assert.match(component, /hopping may be unsafe for you, skip it or check with a healthcare professional/);
+  assert.match(component, /surface with some grip/);
+  assert.match(component, /Dates, format, and price aren’t set yet/);
+});
+
+test("the live page and its metadata contain no expired registration offer", async () => {
+  const { all, route, component } = await readPageSources();
+
+  for (const obsoleteCopy of [
+    /September 24 to October 22, 2026/,
+    /Enrollment closes September 17/,
+    /Limited to 12 students/,
+    /\$197|\$247|\$297/,
     /First 3 Students/,
     /Next 3 Students/,
     /Remaining 6 Students/,
-    /price: 197/,
-    /price: 247/,
-    /price: 297/,
     /Private Coaching for \$100/,
-    /Frequently Asked Questions/,
+    /Confirm Your Commitment/,
     /Graduate on October 22/,
-  ];
-
-  for (const pattern of requiredCopy) {
-    assert.match(source, pattern);
+    /I Understand and Am Ready to Enroll/,
+    /Claim My Founding-Cohort Seat/,
+    /Enrollment closed/,
+    /View Enrollment/,
+    /Register now/i,
+    /\/api\/running-man\/checkout/,
+    /buy\.stripe\.com/,
+    /spots available at this price/i,
+    /Enrollment closes/i,
+  ]) {
+    assert.doesNotMatch(all, obsoleteCopy);
   }
+
+  assert.match(route, /Learn the Running Man/);
+  assert.match(route, /"@type": "WebPage"/);
+  assert.doesNotMatch(route, /"@type": "Course"|"@type": "Event"|"startDate"|"endDate"/);
+  assert.doesNotMatch(component, /EnrollmentPanel|HeroSeatStatus/);
+  assert.doesNotMatch(component, /\/api\/running-man\/enrollment-state|\/api\/running-man\/checkout|stripe\.com/);
 });
 
-test("the hero exposes live founding-seat urgency with a safe fallback", async () => {
-  const source = await readRouteSource();
-  const heroStatusPath = new URL("../src/components/running-man/HeroSeatStatus.tsx", import.meta.url);
-  const heroStatus = await readFile(heroStatusPath, "utf8");
-
-  assert.match(source, /<HeroSeatStatus \/>/);
-  assert.match(heroStatus, /\/api\/running-man\/enrollment-state/);
-  assert.match(heroStatus, /Only 12 students/);
-  assert.match(heroStatus, /aria-live="polite"/);
-  assert.match(heroStatus, /seatsRemaining/);
-  assert.match(heroStatus, /tier\.held/);
-  assert.match(heroStatus, /currently checking out/);
-});
-
-test("the final enrollment reminder repeats the live seat urgency", async () => {
-  const source = await readRouteSource();
-  const heroStatusPath = new URL("../src/components/running-man/HeroSeatStatus.tsx", import.meta.url);
-  const heroStatus = await readFile(heroStatusPath, "utf8");
-
-  assert.match(source, /Limited to 12 students/);
-  assert.match(source, /<HeroSeatStatus compact showPrice \/>/);
-  assert.doesNotMatch(source, /From \$197 · Paid in full/);
-  assert.match(heroStatus, /activeTier\.priceCents/);
-  assert.match(heroStatus, /Paid in full/);
-  assert.match(heroStatus, /Current price updates live/);
-});
-
-test("the page is discoverable and uses accessible, resilient interaction patterns", async () => {
-  const [source, component, sitemap] = await Promise.all([
-    readRouteSource(),
-    readFile(componentPath, "utf8"),
+test("the route remains discoverable and uses accessible page structure", async () => {
+  const [{ component, route, interestForm }, sitemap] = await Promise.all([
+    readPageSources(),
     readFile(sitemapPath, "utf8"),
   ]);
 
@@ -118,110 +129,8 @@ test("the page is discoverable and uses accessible, resilient interaction patter
   assert.equal(component.match(/<h1\b/g)?.length, 1);
   assert.match(component, /<details\b/);
   assert.match(component, /<summary\b/);
-  assert.match(component, /<iframe[\s\S]*?title=/);
-  assert.match(component, /fixed inset-x-0 bottom-0/);
-  assert.match(source, /application\/ld\+json/);
-  assert.match(source, /"@type": "Course"/);
-  assert.match(source, /"@type": "Event"/);
-});
-
-test("the page delegates enrollment to one dynamic enrollment panel", async () => {
-  const component = await readFile(componentPath, "utf8");
-
-  assert.doesNotMatch(component, /buy\.stripe\.com/);
-  assert.match(component, /EnrollmentPanel/);
-  assert.equal(component.match(/Claim .*\$197/g)?.length ?? 0, 0);
-  assert.match(component, /href="#enroll"/);
-});
-
-test("the hero uses one primary enrollment CTA instead of repeating it", async () => {
-  const component = await readFile(componentPath, "utf8");
-
-  assert.equal(
-    component.match(/<PrimaryCta label="View Founding-Cohort Enrollment" \/>/g)?.length ?? 0,
-    1,
-  );
-});
-
-test("the enrollment panel handles a completed attempt response", async () => {
-  const enrollmentPanel = await readFile(enrollmentPanelPath, "utf8");
-
-  assert.match(enrollmentPanel, /window\.location\.assign\(body\.confirmationUrl\)/);
-});
-
-test("the Method page reports video, enrollment, checkout, coaching, and waitlist funnel actions", async () => {
-  const [component, enrollmentPanel] = await Promise.all([
-    readFile(componentPath, "utf8"),
-    readFile(enrollmentPanelPath, "utf8"),
-  ]);
-
-  assert.match(component, /TrackedRunningManVideo/);
-  assert.match(component, /placement="method_page_hero"/);
-  assert.match(component, /TrackedRunningManLink/);
-  assert.match(component, /placement="method_page_enrollment"/);
-  assert.match(component, /destination="enrollment_section"/);
-  assert.match(enrollmentPanel, /trackRunningManCheckoutThen/);
-  assert.match(enrollmentPanel, /trackRunningManEvent\(RUNNING_MAN_EVENTS\.privateCoachingSelected/);
-  assert.match(enrollmentPanel, /trackRunningManEvent\(RUNNING_MAN_EVENTS\.waitlistJoined/);
-  assert.match(enrollmentPanel, /placement: "method_page_enrollment"/);
-});
-
-test("the active price card shows live claimed and remaining seats", async () => {
-  const enrollmentPanel = await readFile(enrollmentPanelPath, "utf8");
-
-  assert.match(enrollmentPanel, /tier\.claimed/);
-  assert.match(enrollmentPanel, /tier\.remaining/);
-});
-
-test("the enrollment panel separates paid availability from active checkout holds", async () => {
-  const enrollmentPanel = await readFile(enrollmentPanelPath, "utf8");
-
-  assert.match(enrollmentPanel, /tier\.held/);
-  assert.match(enrollmentPanel, /temporarily held in checkout/);
-  assert.match(enrollmentPanel, /coachingSeatsHeld/);
-});
-
-test("the current enrollment summary separates enrollment and coaching prices", async () => {
-  const enrollmentPanel = await readFile(enrollmentPanelPath, "utf8");
-
-  assert.match(enrollmentPanel, /Enrollment price/);
-  assert.match(enrollmentPanel, /Private coaching add-on/);
-  assert.match(enrollmentPanel, /Total paid/);
-});
-
-test("sold-out offers are visibly stamped and remain non-interactive", async () => {
-  const enrollmentPanel = await readFile(enrollmentPanelPath, "utf8");
-
-  assert.match(enrollmentPanel, /SOLD OUT/);
-  assert.match(enrollmentPanel, /Private Coaching: Sold Out/);
-  assert.match(enrollmentPanel, /tier\.status === "complete"/);
-  assert.match(enrollmentPanel, /coachingStatus === "sold_out"/);
-  assert.match(enrollmentPanel, /\/running-man\/sold-out-stamp-option-2\.png/);
-  assert.match(enrollmentPanel, /alt="SOLD OUT"/);
-  assert.match(enrollmentPanel, /object-contain/);
-  assert.match(enrollmentPanel, /relative rounded-3xl border p-7/);
-  assert.match(enrollmentPanel, /absolute inset-0 z-0 overflow-hidden rounded-3xl/);
-  assert.match(enrollmentPanel, /disabled=\{!coachingAvailable \|\| isSubmitting\}/);
-});
-
-test("sold-out enrollment offers a dedicated consent-based waitlist", async () => {
-  const [enrollmentPanel, waitlistRoute, waitlistLibrary] = await Promise.all([
-    readFile(enrollmentPanelPath, "utf8"),
-    readFile(waitlistRoutePath, "utf8"),
-    readFile(waitlistLibraryPath, "utf8"),
-  ]);
-
-  assert.match(enrollmentPanel, /showWaitlist/);
-  assert.match(enrollmentPanel, /\/api\/running-man-waitlist/);
-  assert.match(enrollmentPanel, /marketingConsent/);
-  assert.match(enrollmentPanel, /Joining the waitlist is not a paid reservation/);
-  assert.match(waitlistLibrary, /RUNNING_MAN_SYSTEME_WAITLIST_TAG_ID/);
-  assert.match(waitlistRoute, /SYSTEME_API_KEY/);
-  assert.match(waitlistRoute, /x-vercel-forwarded-for/);
-});
-
-test("the confirmation page returns students to the Dance With Ceech homepage", async () => {
-  const confirmationPage = await readFile(confirmationPagePath, "utf8");
-
-  assert.match(confirmationPage, /href="\/"[\s\S]*Dance With Ceech Homepage/);
+  assert.match(interestForm, /<form\b/);
+  assert.match(route, /alternates:[\s\S]*?canonical:/);
+  assert.match(route, /application\/ld\+json/);
+  assert.match(component, /<Footer \/>/);
 });

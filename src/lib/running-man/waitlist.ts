@@ -8,12 +8,38 @@ export type WaitlistInputResult =
   | { ok: true; value: ParsedRunningManWaitlistInput }
   | { ok: false; code: "invalid_request" | "bot_detected"; message: string };
 
-export type WaitlistRateLimitEntry = {
-  count: number;
-  resetAt: number;
+export type WaitlistRateLimitBucket = "network" | "email";
+
+export type WaitlistRateLimitRequest = {
+  bucket: WaitlistRateLimitBucket;
+  subject: string;
+  limit: number;
+  windowSeconds: number;
+  now: number;
 };
 
-export type WaitlistRateLimitStore = Map<string, WaitlistRateLimitEntry>;
+export type WaitlistRateLimitDecision = {
+  allowed: boolean;
+  retryAfterSeconds?: number;
+};
+
+export type WaitlistRateLimitStore = {
+  increment(input: WaitlistRateLimitRequest): Promise<WaitlistRateLimitDecision>;
+};
+
+export type WaitlistRateLimitPolicy = {
+  networkLimit: number;
+  networkWindowSeconds: number;
+  emailLimit: number;
+  emailWindowSeconds: number;
+};
+
+const DEFAULT_RATE_LIMIT_POLICY: WaitlistRateLimitPolicy = {
+  networkLimit: 10,
+  networkWindowSeconds: 60,
+  emailLimit: 3,
+  emailWindowSeconds: 60 * 60,
+};
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_NAME_LENGTH = 120;
@@ -25,6 +51,10 @@ export function parseRunningManWaitlistInput(input: unknown): WaitlistInputResul
   }
 
   const candidate = input as Record<string, unknown>;
+  if (candidate.name !== undefined && typeof candidate.name !== "string") {
+    return { ok: false, code: "invalid_request", message: "Please enter a valid email and consent to receive Running Man class updates." };
+  }
+
   const name = typeof candidate.name === "string" ? candidate.name.trim() : "";
   const email = typeof candidate.email === "string" ? candidate.email.trim().toLowerCase() : "";
   const marketingConsent = candidate.marketingConsent === true;
@@ -34,36 +64,44 @@ export function parseRunningManWaitlistInput(input: unknown): WaitlistInputResul
     return { ok: false, code: "bot_detected", message: "Unable to submit this request." };
   }
 
-  if (!name || name.length > MAX_NAME_LENGTH || email.length > MAX_EMAIL_LENGTH || !EMAIL_PATTERN.test(email) || !marketingConsent) {
+  if (name.length > MAX_NAME_LENGTH || email.length > MAX_EMAIL_LENGTH || !EMAIL_PATTERN.test(email) || !marketingConsent) {
     return {
       ok: false,
       code: "invalid_request",
-      message: "Please enter your name, a valid email, and consent to receive Running Man Method updates.",
+      message: "Please enter a valid email and consent to receive Running Man class updates.",
     };
   }
 
   return { ok: true, value: { name, email, marketingConsent: true } };
 }
 
-export function checkRunningManWaitlistRateLimit(
+export async function checkRunningManWaitlistRateLimits(
   store: WaitlistRateLimitStore,
-  key: string,
-  now = Date.now(),
-  limit = 5,
-  windowMs = 60_000,
-): { allowed: boolean; retryAfterSeconds?: number } {
-  const existing = store.get(key);
-  if (!existing || existing.resetAt <= now) {
-    store.set(key, { count: 1, resetAt: now + windowMs });
-    return { allowed: true };
-  }
+  input: { networkSignal: string; email: string; now?: number; policy?: WaitlistRateLimitPolicy },
+): Promise<WaitlistRateLimitDecision> {
+  const now = input.now ?? Date.now();
+  const policy = input.policy ?? DEFAULT_RATE_LIMIT_POLICY;
+  const network = await store.increment({
+    bucket: "network",
+    subject: input.networkSignal,
+    limit: policy.networkLimit,
+    windowSeconds: policy.networkWindowSeconds,
+    now,
+  });
+  if (!network.allowed) return network;
 
-  if (existing.count >= limit) {
-    return { allowed: false, retryAfterSeconds: Math.max(1, Math.ceil((existing.resetAt - now) / 1000)) };
-  }
+  return store.increment({
+    bucket: "email",
+    subject: input.email,
+    limit: policy.emailLimit,
+    windowSeconds: policy.emailWindowSeconds,
+    now,
+  });
+}
 
-  existing.count += 1;
-  return { allowed: true };
+export function runningManWaitlistNetworkSignal(headers: Headers, isTrustedPlatform: boolean): string | null {
+  if (!isTrustedPlatform) return "local-development";
+  return headers.get("x-forwarded-for")?.split(",", 1)[0]?.trim() || null;
 }
 
 export function getRunningManWaitlistTagId(value = process.env.RUNNING_MAN_SYSTEME_WAITLIST_TAG_ID): number {

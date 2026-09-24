@@ -1,80 +1,36 @@
 import type { Metadata } from "next";
 import RunningManMethodPage from "./RunningManMethodPage";
 
+const title = "How to Do the Running Man: Rhythm-First Tutorial | Ceech";
+const description =
+  "Learn the Running Man one count at a time. Ceech explains the numbered counts, the “and,” and how beginners can build rhythm around 100–110 BPM.";
+
 const structuredData = {
   "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Course",
-      name: "The Running Man Method",
-      description:
-        "A four-week online cohort for adult beginners to learn the Running Man through progressive drills, personal feedback, and a live graduation challenge.",
-      url: "https://dancewithceech.com/running-man-method",
-      provider: {
-        "@type": "Organization",
-        name: "Dance With Ceech",
-        url: "https://dancewithceech.com",
-      },
-      instructor: {
-        "@type": "Person",
-        name: "Ceech Hsu",
-        url: "https://dancewithceech.com/about",
-      },
-      educationalLevel: "Beginner",
-      inLanguage: "en-US",
-      teaches:
-        "Running Man rhythm, balance, coordination, muscle memory, and performance confidence",
-      hasCourseInstance: {
-        "@type": "CourseInstance",
-        name: "Founding Cohort, Fall 2026",
-        courseMode: "Online",
-        startDate: "2026-09-24",
-        endDate: "2026-10-22",
-        offers: {
-          "@type": "Offer",
-          price: "197",
-          priceCurrency: "USD",
-          availability: "https://schema.org/LimitedAvailability",
-          url: "https://dancewithceech.com/running-man-method#enroll",
-        },
-      },
-    },
-    {
-      "@type": "Event",
-      name: "The Running Man Method: Live Graduation Challenge",
-      description:
-        "Students perform the Running Man continuously and on beat for at least 30 seconds live in front of Ceech and their cohort.",
-      startDate: "2026-10-22T20:00:00-07:00",
-      endDate: "2026-10-22T21:30:00-07:00",
-      eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
-      eventStatus: "https://schema.org/EventScheduled",
-      location: {
-        "@type": "VirtualLocation",
-        url: "https://dancewithceech.com/running-man-method",
-      },
-      organizer: {
-        "@type": "Organization",
-        name: "Dance With Ceech",
-        url: "https://dancewithceech.com",
-      },
-      performer: {
-        "@type": "Person",
-        name: "Ceech Hsu",
-      },
-    },
-  ],
+  "@type": "WebPage",
+  name: "The Running Man Method",
+  description,
+  url: "https://dancewithceech.com/running-man-method",
+  about: {
+    "@type": "Thing",
+    name: "Running Man (dance move)",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Dance With Ceech",
+    url: "https://dancewithceech.com",
+  },
 };
 
 export const metadata: Metadata = {
-  title: "Learn the Running Man | 4-Week Online Cohort | Ceech",
-  description: "Join Ceech's four-week online beginner cohort to learn the Running Man through progressive drills, personal feedback, and live practice.",
+  title,
+  description,
   alternates: {
     canonical: "https://dancewithceech.com/running-man-method",
   },
   openGraph: {
-    title: "Learn the Running Man | 4-Week Online Cohort | Ceech",
-    description:
-      "Join Ceech's four-week online beginner cohort to build Running Man rhythm, coordination, and confidence with personal feedback.",
+    title,
+    description,
     url: "https://dancewithceech.com/running-man-method",
     siteName: "Dance With Ceech",
     images: [
@@ -89,9 +45,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Learn the Running Man | 4-Week Online Cohort | Ceech",
-    description:
-      "Learn the Running Man in a four-week online beginner cohort with progressive drills and personal feedback from Ceech.",
+    title,
+    description,
     images: ["https://dancewithceech.com/images/ceech/ceech-teaching-running-man-adult-class.webp"],
   },
 };

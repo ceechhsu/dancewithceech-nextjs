@@ -6,7 +6,7 @@ import type { ComponentProps } from "react";
 import { RUNNING_MAN_EVENTS, trackRunningManEvent } from "@/lib/analytics/client";
 
 type Placement = "homepage_campaign_banner" | "homepage_teaser" | "method_page_hero" | "method_page_enrollment";
-type Destination = "method_page" | "enrollment_section";
+type Destination = "method_page" | "enrollment_section" | "class_interest";
 
 type Props = ComponentProps<typeof Link> & {
   placement: Placement;

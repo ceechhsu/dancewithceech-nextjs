@@ -13,8 +13,8 @@ test("priority commercial pages use intent-aligned SEO metadata", () => {
       description: "Book private hip-hop dance lessons with Ceech in San Jose or online. Get personalized feedback, real-time corrections, and a clear practice plan.",
     },
     "src/app/running-man-method/page.tsx": {
-      title: "Learn the Running Man | 4-Week Online Cohort | Ceech",
-      description: "Join Ceech's four-week online beginner cohort to learn the Running Man through progressive drills, personal feedback, and live practice.",
+      title: "How to Do the Running Man: Rhythm-First Tutorial | Ceech",
+      description: "Learn the Running Man one count at a time. Ceech explains the numbered counts, the “and,” and how beginners can build rhythm around 100–110 BPM.",
     },
     "src/app/private-lessons/san-jose/page.tsx": {
       title: "Hip-Hop Dance Lessons in San Jose | DanceWithCeech",
@@ -44,8 +44,22 @@ test("priority commercial pages use intent-aligned SEO metadata", () => {
 
   for (const [relativePath, metadata] of Object.entries(expectations)) {
     const source = fs.readFileSync(path.join(siteRoot, relativePath), "utf8");
-    assert.ok(source.includes(`title: "${metadata.title}"`) || source.includes(`title: '${metadata.title}'`), `${relativePath} should have the approved title`);
-    assert.ok(source.includes(`description: "${metadata.description}"`) || source.includes(`description: '${metadata.description}'`), `${relativePath} should have the approved description`);
+    assert.ok(
+      source.includes(`title: "${metadata.title}"`) ||
+      source.includes(`title: '${metadata.title}'`) ||
+      source.includes(`const title = "${metadata.title}"`) ||
+      source.includes(`const title = '${metadata.title}'`),
+      `${relativePath} should have the approved title`,
+    );
+    assert.ok(
+      source.includes(`description: "${metadata.description}"`) ||
+      source.includes(`description: '${metadata.description}'`) ||
+      source.includes(`const description =\n  "${metadata.description}"`) ||
+      source.includes(`const description =\n  '${metadata.description}'`) ||
+      source.includes(`const description = "${metadata.description}"`) ||
+      source.includes(`const description = '${metadata.description}'`),
+      `${relativePath} should have the approved description`,
+    );
   }
 });
 
