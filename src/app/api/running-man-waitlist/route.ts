@@ -12,6 +12,7 @@ import {
   type WaitlistRateLimitRpcClient,
 } from "@/lib/running-man/waitlist-rate-limit-store";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { getSupabaseServerKey } from "@/lib/supabase-server-key";
 
 export const runtime = "nodejs";
 
@@ -103,7 +104,7 @@ export async function POST(request: NextRequest) {
   try {
     const rateLimitStore: WaitlistRateLimitStore = createRunningManWaitlistRateLimitStore(
       supabaseAdmin as unknown as WaitlistRateLimitRpcClient,
-      process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
+      getSupabaseServerKey() ?? "",
     );
     rateLimit = await checkRunningManWaitlistRateLimits(rateLimitStore, {
       networkSignal,

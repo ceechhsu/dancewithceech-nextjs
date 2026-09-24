@@ -2,6 +2,7 @@ import 'server-only'
 import { auth } from '@/auth'
 import { createClient } from '@supabase/supabase-js'
 import { after } from 'next/server'
+import { getSupabaseServerKey } from '../supabase-server-key'
 import { googleAttendanceIdentity } from './google-identity'
 import { rosterGoogleProfile } from './google-profile'
 import { syncRosterProfile } from './profile-sync'
@@ -9,7 +10,7 @@ import { syncRosterProfile } from './profile-sync'
 export function attendanceDb() {
   if (process.env.ATTENDANCE_ENABLED !== 'true') throw new AttendanceError('Attendance is not available yet.', 503)
   const url = process.env.ATTENDANCE_SUPABASE_URL || process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.ATTENDANCE_SUPABASE_URL ? process.env.ATTENDANCE_SUPABASE_SERVICE_ROLE_KEY : process.env.SUPABASE_SERVICE_ROLE_KEY
+  const key = process.env.ATTENDANCE_SUPABASE_URL ? process.env.ATTENDANCE_SUPABASE_SERVICE_ROLE_KEY : getSupabaseServerKey()
   if (!url || !key) throw new AttendanceError('Attendance is not configured yet.', 503)
   return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } })
 }

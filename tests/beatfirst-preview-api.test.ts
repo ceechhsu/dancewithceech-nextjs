@@ -302,6 +302,8 @@ test('the store selects one complete trimmed environment pair without mixing cre
   checkServerStore(`
     const fallback = { NEXT_PUBLIC_SUPABASE_URL: ' https://default.example.test ', SUPABASE_SERVICE_ROLE_KEY: ' default-key ' };
     assert.deepEqual(resolveProgressDatabaseConfig(fallback), { url: 'https://default.example.test', key: 'default-key' });
+    const migrated = { ...fallback, SUPABASE_SECRET_KEY: ' new-secret-key ' };
+    assert.deepEqual(resolveProgressDatabaseConfig(migrated), { url: 'https://default.example.test', key: 'new-secret-key' });
     const attendance = { ...fallback, ATTENDANCE_SUPABASE_URL: ' https://attendance.example.test ', ATTENDANCE_SUPABASE_SERVICE_ROLE_KEY: ' attendance-key ' };
     assert.deepEqual(resolveProgressDatabaseConfig(attendance), { url: 'https://attendance.example.test', key: 'attendance-key' });
     const beatfirst = { ...attendance, BEATFIRST_SUPABASE_URL: ' https://beatfirst.example.test ', BEATFIRST_SUPABASE_SERVICE_ROLE_KEY: ' beatfirst-key ' };

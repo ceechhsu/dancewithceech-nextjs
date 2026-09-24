@@ -2,6 +2,7 @@ import 'server-only'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import type { AttemptResult } from '../components/beatfirst-preview/progress'
 import type { ProgressStore } from './beatfirst-progress-service'
+import { getSupabaseServerKey } from './supabase-server-key'
 
 type ProgressRow = {
   attempt_id: string
@@ -25,7 +26,9 @@ export function resolveProgressDatabaseConfig(environment: Record<string, string
   for (const [urlName, keyName] of pairs) {
     const url = environment[urlName]?.trim()
     if (!url) continue
-    const key = environment[keyName]?.trim()
+    const key = keyName === 'SUPABASE_SERVICE_ROLE_KEY'
+      ? getSupabaseServerKey(environment)
+      : environment[keyName]?.trim()
     if (!key) throw new Error('Saved progress database is not configured.')
     return { url, key }
   }
