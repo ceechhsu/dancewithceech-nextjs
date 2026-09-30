@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { getAllPosts } from '@/lib/posts'
+import { postLastModified } from '@/lib/sitemap-date'
 
 const BASE_URL = 'https://dancewithceech.com'
 
@@ -57,7 +58,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const postRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
-    lastModified: post.date || undefined,
+    lastModified: postLastModified(post),
     changeFrequency: 'monthly',
     priority: 0.7,
   }))

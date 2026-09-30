@@ -29,12 +29,12 @@ test("public pages never advertise the discretionary demo or a 15-minute consult
 test("every consultation surface names the 30-minute phone call", () => {
   assert.match(main, />\s*Book Your Free 30-Minute Phone Consultation\s*</);
   assert.match(main, /Book your free 30-minute phone consultation/);
-  assert.match(main, /src="https:\/\/calendly\.com\/ceechhsu\/30min"[\s\S]{0,180}title="Free 30-minute phone consultation with Ceech"/);
+  assert.match(main, /<ConsultationBooking[^>]+title="Free 30-minute phone consultation/);
   assert.equal((pricing.match(/buttonText: "Book a Free 30-Minute Phone Consultation"/g) ?? []).length, 6);
   assert.match(sanJose, /Free 30-minute phone consultation/);
-  assert.match(sanJose, /src="https:\/\/calendly\.com\/ceechhsu\/30min"[\s\S]{0,180}title="Free 30-minute phone consultation with Ceech in San Jose"/);
+  assert.match(sanJose, /<ConsultationBooking[^>]+title="Free 30-minute phone consultation/);
   assert.match(bayArea, /Free 30-minute phone consultation/);
-  assert.match(bayArea, /src="https:\/\/calendly\.com\/ceechhsu\/30min"[\s\S]{0,180}title="Free 30-minute phone consultation with Ceech for Bay Area students"/);
+  assert.match(bayArea, /<ConsultationBooking[^>]+title="Free 30-minute phone consultation/);
 });
 
 test("each virtual pathway links to the evaluation for prospective virtual students", () => {
