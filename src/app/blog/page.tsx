@@ -3,8 +3,10 @@ import Footer from '@/components/Footer';
 import BlogLibrary from '@/components/BlogLibrary';
 import { getAllPosts } from '@/lib/posts';
 import { readBlogQuery } from '@/lib/blog-library';
+import { blogMetadata } from '@/lib/blog-metadata';
+import type { Metadata } from 'next';
 
-export const metadata = {
+const metadata: Metadata = {
   title: 'Dance Tutorials, Wellbeing & Stories | DanceWithCeech Blog',
   description: 'Explore dance tutorials, practice tips, wellbeing, and stories from the dance community with Ceech.',
   alternates: { canonical: 'https://dancewithceech.com/blog' },
@@ -20,6 +22,11 @@ export const metadata = {
     images: ['https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg'],
   },
 };
+
+export async function generateMetadata({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }): Promise<Metadata> {
+  const { alternates, canonical } = blogMetadata(await searchParams, getAllPosts());
+  return { ...metadata, alternates, openGraph: { ...metadata.openGraph, url: canonical } };
+}
 
 export default async function BlogPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const params = await searchParams;

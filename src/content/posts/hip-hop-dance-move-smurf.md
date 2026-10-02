@@ -12,7 +12,7 @@ video:
   playerTitle: "Smurf dance demonstration by Buddha Stretch"
   description: "Hip-hop pioneer Buddha Stretch explains and demonstrates his version of the Smurf dance, an early 1980s street and social dance."
   thumbnailUrl: "https://i.ytimg.com/vi/0A6t9uUWPBQ/maxresdefault.jpg"
-  uploadDate: "2024-05-11"
+  uploadDate: "2024-05-10T21:25:20-07:00"
   duration: "PT1M49S"
   embedUrl: "https://www.youtube.com/embed/0A6t9uUWPBQ"
 ---

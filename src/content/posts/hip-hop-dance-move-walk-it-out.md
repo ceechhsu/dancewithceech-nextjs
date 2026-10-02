@@ -12,7 +12,7 @@ video:
   playerTitle: "Walk It Out dance demonstration by Buddha Stretch"
   description: "Hip-hop pioneer Buddha Stretch explains and demonstrates the Walk It Out dance, including its Dirty South roots and pivoting footwork."
   thumbnailUrl: "https://i.ytimg.com/vi/OtI4W6YcLbc/maxresdefault.jpg"
-  uploadDate: "2024-05-11"
+  uploadDate: "2024-05-11T08:51:56-07:00"
   duration: "PT33S"
   embedUrl: "https://www.youtube.com/embed/OtI4W6YcLbc"
 ---
