@@ -1,16 +1,24 @@
 ---
-title: "Stomping Dance in Hip Hop"
-seoTitle: "Stomping Dance in Hip Hop | Steps, Counts and Practice"
+title: "Stomp Dance in Hip Hop: Learn the Stomping Move"
+seoTitle: "Stomp Dance in Hip Hop: Learn the Stomping Move"
 slug: "hip-hop-dance-move-stomping"
 date: "2024-06-18 12:05:31"
 updated: "2026-10-01"
 category: "hip-hop-dance-moves"
 description: "Learn hip-hop Stomping with Ceech’s knee-lift and heel-pivot cues, clear beat timing, a Buddha Stretch video, and flexible practice combinations."
+video:
+  name: "Hip Hop Dance Move - Stomping"
+  playerTitle: "Stomping demonstration by Buddha Stretch of Elite Force Crew on Ceech Hsu’s channel"
+  description: "Buddha Stretch of the Elite Force Crew demonstrates Stomping in a video published on Ceech Hsu’s channel."
+  thumbnailUrl: "https://i.ytimg.com/vi/IfBzRqLRh5s/hqdefault.jpg"
+  uploadDate: "2024-05-11T15:16:31Z"
+  duration: "PT37S"
+  embedUrl: "https://www.youtube.com/embed/IfBzRqLRh5s"
 ---
 
-Stomping is a hip-hop dance move built from two actions: a knee lift and a heel pivot. You combine those actions in different ways while keeping their timing clear. The knee lift accents the beat as the knee comes up. In the pivot, both toes turn outward as the knees bend.
+Stomping is a hip-hop dance move built from two actions: a knee lift and a heel pivot. If you’re looking for a stomp dance tutorial in hip hop, start with the demonstration below, then use the written steps to practice the timing.
 
-This guide covers hip-hop Stomping. Below, you can watch Buddha Stretch demonstrate the move, then use my beginner breakdown to learn its two parts and put them together.
+You combine those actions in different ways while keeping their timing clear. The knee lift accents the beat as the knee comes up. In the pivot, both toes turn outward as the knees bend.
 
 ## Watch the Stomping demonstration
 
