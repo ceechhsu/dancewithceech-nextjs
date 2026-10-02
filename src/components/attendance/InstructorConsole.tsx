@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { attendanceApi, errorMessage } from "@/lib/attendance/client";
+import { attendanceCheckInUrl } from "@/lib/attendance/check-in-url";
 import { scheduledClasses } from "@/lib/attendance/schedule";
 import type {
   AttendanceClass,
@@ -216,7 +217,7 @@ export default function InstructorConsole({ owner }: { owner: string }) {
             {qr && new Date(qr.expiresAt).getTime() > now ? (
               <div className={s.qr}>
                 <QRCodeSVG
-                  value={`${window.location.origin}/attendance/checkin/${qr.token}`}
+                  value={attendanceCheckInUrl(qr.token, process.env.NODE_ENV === 'development' ? window.location.origin : undefined)}
                   size={280}
                   title="Scan to check in to this class"
                 />
