@@ -1,0 +1,53 @@
+.owner-sync-workspace .viewer-panel{overflow:visible}
+.owner-sync-workspace .stage{position:sticky;top:0;z-index:3;background:#0b100e;height:min(38vh,420px);aspect-ratio:auto;display:flex;justify-content:center}
+.owner-sync-workspace .stage canvas{height:100%;width:auto;max-width:100%;object-fit:contain}
+.owner-sync-workspace #audioWaveforms{max-width:none;padding:16px;margin:0;border-top:1px solid #343d36;background:#1a211e;color:#c5d7cc}
+.owner-sync-workspace #audioWaveforms h2{margin:0;font-size:18px}
+.owner-sync-workspace .mirror-row{flex-direction:row;flex-wrap:wrap;gap:8px}
+.owner-sync-workspace .mirror-row button,.sync-shortcuts button{min-height:44px;margin:0;font-size:12px;padding:8px 12px}
+.sync-shortcuts{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}
+.sync-shortcuts button{background:#29372e;color:#f2f0e7;border:1px solid #485347;border-radius:20px}
+.sync-shortcuts label{margin-left:auto}
+.sync-waveform-track{position:relative}
+#syncPlayhead{position:absolute;top:12px;bottom:25px;width:2px;background:#fff;pointer-events:none;z-index:1;box-shadow:0 0 3px #111}
+.owner-sync-workspace #waveformCanvas{height:160px!important;margin-top:0!important}
+.original-waveforms{margin:10px 0}
+@media(max-width:600px){.owner-sync-workspace .stage{height:32vh}.owner-sync-workspace #audioWaveforms{padding:12px}.sync-shortcuts label{margin-left:0}}
+
+/* Comparison shares the website palette; video identity colors remain distinct. */
+body.compare-page{--bg:#0a0a0a;--panel:#161618;--line:#2c2c30;--ink:#f9f9f9;--muted:#a8a8b1;--accent:#2563eb;background:var(--bg)}
+body:not(.is-owner) [data-owner-only]{display:none!important}
+.compare-page header{height:72px;max-width:1120px;padding:0 24px}
+.compare-page .brand{font-size:21px;letter-spacing:-.7px;font-weight:750}
+.compare-page .brand>span:first-child{color:#3b82f6}
+.compare-page main{max-width:1040px;padding:20px 24px 40px}
+.compare-page .primary,.compare-page .play{background:var(--accent);color:white}
+.compare-page .primary:hover,.compare-page .play:hover{background:#1d4ed8}
+.compare-page .secondary,.compare-page .transport-options>label,.compare-page .play-buttons,.compare-page select{background:#171719;border-color:var(--line);color:var(--ink)}
+.compare-page .secondary:hover{background:#252529}
+.compare-page .text-button,.compare-page .score-open-hint,.compare-page .score-summary-number strong{color:#93c5fd}
+.compare-page input[type=range],.compare-page progress{accent-color:#3b82f6}
+.compare-page :is(button,a,input,select,summary):focus-visible{outline-color:#60a5fa}
+.compare-page .transport-options{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:8px}
+.compare-page .transport-options>label{min-width:0;min-height:44px}
+.compare-page .transport-options select{max-width:70%}
+.compare-page .compact-result,.compare-page .score-breakdown,.compare-page .score-guide{background:var(--panel);border-color:var(--line)}
+.compare-page .score-summary{padding:18px 20px}
+.compare-page #practiceActions{max-width:none;margin-top:24px}
+.compare-page #practiceActions h2{font-size:18px;color:var(--ink);margin-bottom:12px}
+.compare-page #practiceActions p{display:inline-flex;flex-wrap:wrap;gap:8px;margin:0 8px 8px 0}
+.compare-page #practiceActions a{display:inline-flex;align-items:center;min-height:44px;border-radius:10px;text-decoration:none;font-size:13px;margin:0;padding:10px 14px}
+.compare-page .owner-sync-workspace #audioWaveforms,.compare-page .sync-shortcuts button{background:var(--panel);color:var(--ink);border-color:var(--line)}
+.compare-page .waiting-music-control{background:var(--panel);border-color:var(--line);color:var(--muted)}
+.compare-page .waiting-music-control button{background:var(--accent);color:white;border-color:var(--accent)}
+@media(max-width:600px){.compare-page main{padding:12px 16px 28px}.compare-page header{padding:0 16px;height:64px}.compare-page .score-summary{padding:16px}.compare-page .transport{padding:12px}}
+
+/* One stable, quiet result beside the dance; no flashing or covering feet. */
+.compare-page .beat-feedback{display:flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:8px 16px;box-sizing:border-box;background:var(--panel);border-bottom:1px solid var(--line);font-size:14px;line-height:20px;font-variant-numeric:tabular-nums}
+.compare-page .beat-feedback[hidden]{display:none}
+.beat-feedback-number,.beat-feedback-divider{color:var(--muted)}
+.beat-feedback strong{font-weight:650;color:var(--ink)}
+.beat-feedback[data-tone="onbeat"] strong{color:#93c5fd}
+.beat-feedback[data-tone="offbeat"] strong{color:#fcd34d}
+.beat-feedback[data-tone="missed"] strong{color:#fda4af}
+.beat-feedback[data-tone="pending"] strong{color:var(--muted)}
