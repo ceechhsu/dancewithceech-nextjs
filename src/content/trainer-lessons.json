@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "lessons": [
+    {
+      "id": "marching",
+      "version": 4,
+      "title": "Marching",
+      "description": "Keep a steady march through four bars at 100 BPM.",
+      "bpm": 100,
+      "bars": 4,
+      "audio_duration": 12,
+      "reference_duration": 12.573,
+      "reference_width": 1080,
+      "reference_height": 1920,
+      "reference_audio_offset": 0.573,
+      "reference_audio_offset_status": "verified",
+      "reference_audio_offset_note": "The clean original WAV begins 0.573 seconds into the official gray silhouette video. Decoded audio correlation with the lesson WAV peaks at exactly 573 ms (0.9991 correlation at 8 kHz).",
+      "audio_source": "approved-master",
+      "audio_note": "Original clean track: spoken 5, 6, 7, 8 over drums, then four bars at 100 BPM. 12 seconds of audio, after your separate 3-second preparation.",
+      "timing_note": "All 16 teacher landings are confirmed. Record a take for on-device comparison; review audio alignment before treating the score as final.",
+      "practice_ready": true,
+      "reference_url": "/practice/lessons/marching/reference.mp4",
+      "audio_url": "/practice/lessons/marching/track.m4a",
+      "markers_url": "/practice/lessons/marching/foot-reference.json",
+      "reference_hash": "a5a5fd3494ee5ad0e9af5221f5574e99261075b422d1a97be25a86165ce2e821"
+    },
+    {
+      "id": "2step",
+      "version": 3,
+      "title": "2-Step",
+      "description": "Learn the 2-step over four bars at 100 BPM.",
+      "bpm": 100,
+      "bars": 4,
+      "audio_duration": 12,
+      "reference_duration": 12.821,
+      "reference_width": 1080,
+      "reference_height": 1920,
+      "reference_audio_offset": 0.341,
+      "reference_audio_offset_status": "verified",
+      "reference_audio_offset_note": "Version 4 compressed silhouette soundtrack shifted 70 ms earlier at owner request. Previous clean-track placement 411 ms becomes 341 ms. Confirmed foot-contact frames are unchanged.",
+      "audio_source": "clean-wav",
+      "audio_note": "Spoken count-in and four bars of drums at 100 BPM.",
+      "timing_note": "All 16 version 4 teacher landings are confirmed. Record a take for on-device comparison; review audio alignment before treating the score as final.",
+      "practice_ready": true,
+      "reference_url": "/practice/lessons/2step/reference.mp4",
+      "audio_url": "/practice/lessons/2step/track.m4a",
+      "poster_url": "/practice/lessons/2step/poster.jpg",
+      "markers_url": "/practice/lessons/2step/foot-reference.json",
+      "reference_hash": "2b905a0019d4582a447a886d92efff91414a9f2a191403030d0cbc155e50b1ff"
+    }
+  ]
+}

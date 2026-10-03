@@ -50,6 +50,13 @@ const PRACTICE_CONTENT_SECURITY_POLICY = [
   "upgrade-insecure-requests",
 ].join("; ");
 
+const TRAINER_CONTENT_SECURITY_POLICY = [
+  "default-src 'self'", "script-src 'self' 'wasm-unsafe-eval' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'", "img-src 'self' data: blob: https://googleusercontent.com https://*.googleusercontent.com",
+  "font-src 'self' data:", "connect-src 'self' blob:", "worker-src 'self' blob:",
+  "media-src 'self' blob:", "object-src 'none'", "base-uri 'self'", "form-action 'self'", "frame-ancestors 'self'",
+].join('; ');
+
 const BLOCKED_PERMISSIONS = "camera=(), microphone=(), geolocation=(), browsing-topics=()";
 const PRACTICE_PERMISSIONS = "camera=(self), microphone=(self), geolocation=(), browsing-topics=()";
 
@@ -127,6 +134,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'i.ytimg.com' },
     ],
   },
+  async rewrites() { return [{ source: '/practice', destination: '/practice/index.html' }]; },
   async headers() {
     return [
       {
@@ -180,6 +188,14 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: PRACTICE_PERMISSIONS,
           },
+        ],
+      },
+      {
+        source: '/practice/:path*',
+        headers: [
+          {key:'Content-Security-Policy',value:TRAINER_CONTENT_SECURITY_POLICY},
+          {key:'Permissions-Policy',value:PRACTICE_PERMISSIONS},
+          {key:'X-Robots-Tag',value:'noindex, nofollow'},
         ],
       },
       {
