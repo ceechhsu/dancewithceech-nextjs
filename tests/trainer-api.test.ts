@@ -8,7 +8,7 @@ const origin = 'https://dancewithceech.com'
 function request(path: string, data?: unknown) { return new Request(origin + '/practice' + path, data === undefined ? {} : { method:'POST', headers:{origin, 'content-type':'application/json'}, body:JSON.stringify(data) }) }
 
 test('HTTP handlers use authenticated identity, protect profiles, compute scores, and return safe configuration errors', async () => {
-  const envKeys = ['TRAINER_SUPABASE_URL','TRAINER_SUPABASE_SECRET_KEY','NEXT_PUBLIC_SUPABASE_URL','SUPABASE_SECRET_KEY','SUPABASE_SERVICE_ROLE_KEY','TRAINER_SYNC_SIGNING_KEY']
+  const envKeys = ['TRAINER_SUPABASE_URL','TRAINER_SUPABASE_SECRET_KEY','NEXT_PUBLIC_SUPABASE_URL','SUPABASE_SECRET_KEY','SUPABASE_SERVICE_ROLE_KEY','TRAINER_SYNC_SIGNING_KEY','VERCEL_ENV']
   const savedEnv = Object.fromEntries(envKeys.map(k=>[k,process.env[k]])), originalFetch = global.fetch
   const calls: { url:URL; body:Record<string,unknown> | null }[] = []
   try {
@@ -23,8 +23,8 @@ test('HTTP handlers use authenticated identity, protect profiles, compute scores
       const url = new URL(typeof input === 'string' ? input : input instanceof URL ? input.href : input.url)
       const body = init?.body ? JSON.parse(String(init.body)) : null
       calls.push({url,body})
-      if (url.pathname.endsWith('/trainer_profiles')) return Response.json(null)
-      if (url.pathname.endsWith('/rpc/trainer_rewards')) return Response.json({points:0,rewards:[]})
+      if (/\/trainer_(preview_)?profiles$/.test(url.pathname)) return Response.json(null)
+      if (/\/rpc\/trainer_(preview_)?rewards$/.test(url.pathname)) return Response.json({points:0,rewards:[]})
       if (url.pathname.endsWith('/trainer_scores')) return Response.json([])
       if (url.pathname.endsWith('/trainer_challenges')) {
         const l=catalog.lessons.find(x=>x.id==='marching')!
@@ -46,6 +46,12 @@ test('HTTP handlers use authenticated identity, protect profiles, compute scores
     assert.equal(saved.account,who.account); assert.equal(saved.score,25)
     const challenge=await (await handleTrainerApi(request('/api/challenges/'+'a'.repeat(32)),'/api/challenges/'+'a'.repeat(32),null)).json()
     assert.equal(challenge.name,'Public name'); assert.equal(challenge.sender,undefined); assert.equal(challenge.take,undefined); assert.deepEqual(challenge.results,[])
+    process.env.VERCEL_ENV='preview'
+    const beforePreview=calls.length
+    assert.equal((await handleTrainerApi(request('/api/profile'),'/api/profile',who)).status,200)
+    assert.ok(calls.slice(beforePreview).some(c=>c.url.pathname.endsWith('/trainer_preview_profiles')), 'Preview must not access production profiles')
+    assert.ok(calls.slice(beforePreview).every(c=>c.url.pathname.includes('trainer_preview_')), 'All preview reads use isolated storage')
+    process.env.VERCEL_ENV='production'
     const sync={action:'save',comparison:'local-00000000-0000-0000-0000-000000000001',offset:0.5}
     assert.equal((await handleTrainerApi(request('/api/manual-sync',sync),'/api/manual-sync',who)).status,403)
     const signature=await (await handleTrainerApi(request('/api/manual-sync',sync),'/api/manual-sync',{...who,owner:true})).json()

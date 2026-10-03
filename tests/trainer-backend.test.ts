@@ -94,3 +94,25 @@ test('Postgres RPC: empty start, atomic rewards, idempotence, revision/evidence 
     assert.equal(rls.rows.length,6); assert.ok(rls.rows.every(r => r.relrowsecurity))
   } finally { await db.close() }
 })
+
+
+test('preview challenges and rewards cannot affect the fresh production dataset', async () => {
+  const db = new PGlite()
+  try {
+    await db.exec('create role anon; create role authenticated; create role service_role bypassrls;')
+    await db.exec(await readFile(migration, 'utf8'))
+    await db.exec(await readFile(new URL('../supabase/migrations/20261003232430_trainer_preview_isolation.sql', import.meta.url), 'utf8'))
+    async function preview(action: string, actor: string, payload: Record<string, unknown>) {
+      return (await db.query<{r: Record<string, unknown>}>('select trainer_preview_mutate($1,$2,$3::jsonb) as r', [action, actor, JSON.stringify(payload)])).rows[0].r
+    }
+    await preview('create', 'google:alice', {id:id(1),take:take(1),...base,name:'Alice',score:100,measured:16})
+    await preview('accept', 'google:bob', {id:id(1),...revision,name:'Bob'})
+    const result = await preview('complete','google:bob',{id:id(1),...base,...revision,take:take(2),video_hash:hash(2),aligned:true,deltas:Array(16).fill(0),source:'browser-recording',completed:true,interrupted:false,created_at:Date.now()+1000})
+    assert.equal(result.points,100)
+    const row=(await db.query<{preview: {points:number}; production: {points:number}; count:number}>("select trainer_preview_rewards('google:alice') as preview, trainer_rewards('google:alice') as production, (select count(*)::int from trainer_challenges) as count")).rows[0]
+    assert.equal(row.preview.points,100); assert.equal(row.production.points,0); assert.equal(row.count,0)
+    await db.exec('set role anon')
+    await assert.rejects(db.query('select * from trainer_preview_profiles'), /permission denied/)
+    await assert.rejects(db.query("select trainer_preview_rewards('google:alice')"), /permission denied/)
+  } finally { await db.close() }
+})

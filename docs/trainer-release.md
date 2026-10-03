@@ -8,6 +8,8 @@ Production starts with zero challenge points and no challenge history. The profi
 
 The additive migration was applied to the existing production Supabase project on October 3, 2026. All six trainer tables have RLS enabled with no anon/authenticated grants. Server-only functions use invoker security. One custom profile was imported; no challenge rows or points were imported. The Mac test database remains unchanged.
 
+Vercel previews automatically use the separate `trainer_preview_*` tables and RPCs. Preview practice, profile edits and challenge tests cannot change the production dataset. Both datasets are server-only; future storage migrations must update both. Preview profiles begin from Google and are not imported from production.
+
 ## Configuration
 
 - `TRAINER_SUPABASE_URL`: current project URL. Set explicitly for preview because this project's general preview database settings point to an older project.

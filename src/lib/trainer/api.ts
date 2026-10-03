@@ -13,6 +13,8 @@ const lessons = catalog.lessons as Lesson[]
 const headers = { 'Cache-Control': 'private, no-store', 'X-Content-Type-Options': 'nosniff' }
 const json = (value: unknown, status = 200) => Response.json(value, { status, headers })
 const now = () => Date.now() / 1000
+// Vercel previews must never write launch profiles, scores, or reward history.
+function storage(name: string) { return process.env.VERCEL_ENV === 'preview' ? name.replace(/^trainer_/, 'trainer_preview_') : name }
 function db(): SupabaseClient {
   const url = process.env.TRAINER_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.TRAINER_SUPABASE_SECRET_KEY || process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -40,7 +42,7 @@ function requireIdentity(identity: TrainerIdentity | null): TrainerIdentity {
   return identity
 }
 async function profileRow(client: SupabaseClient, who: TrainerIdentity): Promise<Profile> {
-  const row = await checked(client.from('trainer_profiles').select('*').eq('account', who.account).maybeSingle())
+  const row = await checked(client.from(storage('trainer_profiles')).select('*').eq('account', who.account).maybeSingle())
   const display = who.name.trim().replace(/\s+/g, ' ').slice(0, 40)
   return row ?? { first_name: who.firstName.slice(0, 80), last_name: who.lastName.slice(0, 80), display_name: display && !display.includes('@') ? display : 'Dancer', photo_mode: 'google', photo: null, updated: 0 }
 }
@@ -49,7 +51,7 @@ function publicProfile(row: Profile, who: TrainerIdentity) {
 }
 export async function readTrainerProfile(who: TrainerIdentity) { return publicProfile(await profileRow(db(), who), who) }
 async function rewards(client: SupabaseClient, account: string): Promise<{ points: number; rewards: { lesson: string; points: number; completed: number }[] }> {
-  return checked(client.rpc('trainer_rewards', { actor: account }))
+  return checked(client.rpc(storage('trainer_rewards'), { actor: account }))
 }
 async function profile(request: Request, client: SupabaseClient, who: TrainerIdentity, photo: boolean) {
   let row = await profileRow(client, who)
@@ -77,7 +79,7 @@ async function profile(request: Request, client: SupabaseClient, who: TrainerIde
     }
     if (mode === 'custom' && !photoData) throw new TrainerError('Choose a photo first.')
     row = { first_name, last_name, display_name, photo_mode: mode as string, photo: mode === 'custom' ? photoData : null, updated: now() }
-    await checked(client.from('trainer_profiles').upsert({ ...row, account: who.account }))
+    await checked(client.from(storage('trainer_profiles')).upsert({ ...row, account: who.account }))
   } else if (!['GET', 'HEAD'].includes(request.method)) throw new TrainerError('Method not allowed.', 405)
   return json({ ...publicProfile(row, who), ...await rewards(client, who.account) })
 }
@@ -86,19 +88,19 @@ async function scores(request: Request, client: SupabaseClient, who: TrainerIden
     const data = await readBody(request, 4096)
     if (!['marching', '2step'].includes(data.lesson as string)) throw new TrainerError('This score could not be saved.', 400)
     const result = timingResult(data, false)
-    await checked(client.from('trainer_scores').upsert({ account: who.account, take: data.take, lesson: data.lesson, ...result, saved: now() }, { onConflict: 'account,take' }))
+    await checked(client.from(storage('trainer_scores')).upsert({ account: who.account, take: data.take, lesson: data.lesson, ...result, saved: now() }, { onConflict: 'account,take' }))
     return json({ saved: true, score: result.score })
   }
   if (!['GET', 'HEAD'].includes(request.method)) throw new TrainerError('Method not allowed.', 405)
-  return json({ scores: await checked(client.from('trainer_scores').select('lesson,score,measured,onbeat,saved').eq('account', who.account).order('saved', { ascending: false }).limit(50)) })
+  return json({ scores: await checked(client.from(storage('trainer_scores')).select('lesson,score,measured,onbeat,saved').eq('account', who.account).order('saved', { ascending: false }).limit(50)) })
 }
 async function load(client: SupabaseClient, id: string): Promise<Challenge> {
-  const value = await checked(client.from('trainer_challenges').select('*').eq('id', id).maybeSingle())
+  const value = await checked(client.from(storage('trainer_challenges')).select('*').eq('id', id).maybeSingle())
   if (!value) throw new TrainerError('This challenge could not be found.', 404)
   return value
 }
 async function mutate(client: SupabaseClient, action: string, who: TrainerIdentity, payload: Input): Promise<{ id: string; existing?: boolean; error?: string; status?: number; reservation?: string; payload?: unknown }> { // RPC JSON is checked before use.
-  const out = await checked(client.rpc('trainer_mutate', { action, actor: who.account, payload }))
+  const out = await checked(client.rpc(storage('trainer_mutate'), { action, actor: who.account, payload }))
   if (out.error) throw new TrainerError(out.error, out.status)
   return out
 }
@@ -107,23 +109,23 @@ async function detail(client: SupabaseClient, c: Challenge, who: TrainerIdentity
   let available = true, reason: string | null = null
   try { usable(c) } catch (error) { available = false; reason = (error as Error).message }
   const [entry, done, results] = await Promise.all([
-    who ? checked(client.from('trainer_challenge_entries').select('accepted').eq('challenge', c.id).eq('recipient', who.account).maybeSingle()) : null,
-    who ? checked(client.from('trainer_challenge_completions').select('score,measured,points').eq('challenge', c.id).eq('recipient', who.account).maybeSingle()) : null,
-    who?.account === c.sender ? checked(client.from('trainer_challenge_completions').select('score,measured,points,trainer_challenge_entries(name)').eq('challenge', c.id).order('completed', { ascending: false }).limit(30)) : [],
+    who ? checked(client.from(storage('trainer_challenge_entries')).select('accepted').eq('challenge', c.id).eq('recipient', who.account).maybeSingle()) : null,
+    who ? checked(client.from(storage('trainer_challenge_completions')).select('score,measured,points').eq('challenge', c.id).eq('recipient', who.account).maybeSingle()) : null,
+    who?.account === c.sender ? checked(client.from(storage('trainer_challenge_completions')).select(process.env.VERCEL_ENV === 'preview' ? 'score,measured,points,trainer_challenge_entries:trainer_preview_challenge_entries(name)' : 'score,measured,points,trainer_challenge_entries(name)').eq('challenge', c.id).order('completed', { ascending: false }).limit(30)) : [],
   ])
   return { server_time: now(), results: (results ?? []).map(x => ({ score: x.score, measured: x.measured, points: x.points, name: (x.trainer_challenge_entries as unknown as { name: string }).name })), id: c.id, name: c.name, lesson: c.lesson, title: item?.title ?? c.lesson, score: c.score, measured: c.measured, expires: c.expires, version: c.version, reference_hash: c.reference_hash, available, reason, is_sender: who?.account === c.sender, accepted: !!entry, completed: done, poster: item?.poster_url || '/practice/marching-library.jpg', test_only: true }
 }
 async function dashboard(client: SupabaseClient, who: TrainerIdentity) {
   const [owned, entries, balance] = await Promise.all([
-    checked(client.from('trainer_challenges').select('*').eq('sender', who.account).order('created', { ascending: false }).limit(30)),
-    checked(client.from('trainer_challenge_entries').select('accepted,trainer_challenges(*)').eq('recipient', who.account).order('accepted', { ascending: false }).limit(30)),
+    checked(client.from(storage('trainer_challenges')).select('*').eq('sender', who.account).order('created', { ascending: false }).limit(30)),
+    checked(client.from(storage('trainer_challenge_entries')).select(process.env.VERCEL_ENV === 'preview' ? 'accepted,trainer_challenges:trainer_preview_challenges(*)' : 'accepted,trainer_challenges(*)').eq('recipient', who.account).order('accepted', { ascending: false }).limit(30)),
     rewards(client, who.account),
   ])
   const list = [...(owned ?? []).map(c => ({ c: c as Challenge, at: c.created })), ...(entries ?? []).map(e => ({ c: e.trainer_challenges as unknown as Challenge, at: e.accepted }))].sort((a, b) => b.at - a.at).slice(0, 30)
   const challenges = await Promise.all(list.map(async ({ c }) => {
     const out = await detail(client, c, who)
     if (c.sender !== who.account) return out
-    const [done, accepted] = await Promise.all([client.from('trainer_challenge_completions').select('*', { count: 'exact', head: true }).eq('challenge', c.id), client.from('trainer_challenge_entries').select('*', { count: 'exact', head: true }).eq('challenge', c.id)])
+    const [done, accepted] = await Promise.all([client.from(storage('trainer_challenge_completions')).select('*', { count: 'exact', head: true }).eq('challenge', c.id), client.from(storage('trainer_challenge_entries')).select('*', { count: 'exact', head: true }).eq('challenge', c.id)])
     if (done.error || accepted.error) throw new TrainerError('Your challenge list could not be loaded. Please retry.', 503)
     return { ...out, finishes: done.count, accepted_count: accepted.count }
   }))
@@ -148,9 +150,9 @@ async function invite(client: SupabaseClient, c: Challenge, who: TrainerIdentity
     const response = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', 'Idempotency-Key': `dance-challenge-${reservation.reservation}` }, body: JSON.stringify(reservation.payload), signal: AbortSignal.timeout(12000) })
     const result = await response.json()
     if (!response.ok || typeof result.id !== 'string') throw new Error('No receipt')
-    await checked(client.from('trainer_email_invites').update({ state: 'sent', payload: null, receipt: result.id, lease_until: 0 }).eq('id', reservation.reservation).eq('sender', who.account))
+    await checked(client.from(storage('trainer_email_invites')).update({ state: 'sent', payload: null, receipt: result.id, lease_until: 0 }).eq('id', reservation.reservation).eq('sender', who.account))
   } catch {
-    await client.from('trainer_email_invites').update({ lease_until: 0 }).eq('id', reservation.reservation).eq('sender', who.account).eq('state', 'pending')
+    await client.from(storage('trainer_email_invites')).update({ lease_until: 0 }).eq('id', reservation.reservation).eq('sender', who.account).eq('state', 'pending')
     throw new TrainerError('Sending could not be confirmed. Retry to check safely, or use Copy link.', 503)
   }
   return json({ sent: true, already_sent: false })
