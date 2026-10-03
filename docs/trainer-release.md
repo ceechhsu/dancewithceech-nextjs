@@ -35,3 +35,17 @@ Do not merge unrelated changes in the main checkout. Keep the Mac test site runn
 ## Updating reviewed application assets
 
 Run `node scripts/import-trainer.mjs <reviewed-prototype-directory>` and `node --test tests/trainer-assets.test.mjs`. The importer scopes routes to `/practice`, excludes development pages, removes Mac-only submission controls, and records asset checksums. Regenerate only from an explicitly reviewed prototype revision.
+
+## Hosted preview checkpoint (October 3, 2026)
+
+- Branch: `codex/trainer-production-integration`; preview entry: `https://dancewithceech-nextjs-git-codex-train-4bd06d-ceechhsus-projects.vercel.app/practice/`.
+- Deploy from the linked Git branch. A CLI upload without Git metadata did not pick up the branch-specific database settings and returned storage errors; the Git-source deployment reaches the correct database.
+- Branch-specific `NEXTAUTH_URL` and `TRAINER_PUBLIC_ORIGIN` use the stable preview alias. Its `/api/auth/callback/google` is registered on the existing Google client; the production and attendance callbacks remain present.
+- Actual Google owner sign-in, profile photo, empty reward history and zero points verified in the in-app browser.
+- Approved compressed Two-Step reference used as a local smoke-test take: analysis completed, 16/16 on beat, 100/100. Playback reached Beat 16 and displayed its feedback. This is a deployment smoke test, not accuracy validation on a new student recording.
+- Original HEVC `2step_v4.mp4` fails the existing strict frame check: first parsed sample 0.011144s versus browser frame 0.000000s. The original file has an edit list and reordered frames. The hosted parsing/analysis code is unchanged from the prototype apart from rooted asset URLs. Do not widen the tolerance or shift scores without resolving its media timeline. New Samsung recordings, Marching analysis and this camera-file case still need release verification.
+- Vercel authentication protects the preview on new devices. A temporary share link requires owner approval; Google sign-in inside the app remains separate.
+- Preview email sending remains disabled pending access verification for recipients. No invitation was sent during these checks.
+- Latest targeted suite: 12 passing trainer tests, including SQL preview/production isolation; type checking and hosted production build passed.
+
+Public promotion remains pending mobile recording/analysis, invitation delivery and completion with both accounts, the camera-file decoding investigation, and production environment completion. Production points/history are still empty. Never promote the preview deployment directly: create a production-environment build so it uses production storage and origin settings.
