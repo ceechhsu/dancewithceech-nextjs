@@ -1,7 +1,7 @@
 import {CONTACT_VERSION} from './local-contacts.mjs';
 import {showDebugUpload} from './debug-upload.mjs';
 let waveformData=null,waveformGeneration=0,waveformViewport=null,waveformDrag=null;
-import {playbackBounds as reviewBounds, sourceTimes, PlaybackIntent, frameTimecode, markerFrameLabels, markerLabelsAtTime, marchingTimingDefault} from './timeline.mjs';
+import {playbackBounds as reviewBounds, sourceTimes, frameStepTime, PlaybackIntent, frameTimecode, markerFrameLabels, markerLabelsAtTime, marchingTimingDefault} from './timeline.mjs';
 import {FootReview, beatWindow} from './foot-review.mjs';
 import {getLocalTake,saveLocalTake,deleteLocalTake} from './local-store.mjs';
 import {localJob} from './local-video.mjs';
@@ -288,9 +288,17 @@ async function play() {
     if(playbackIntent.isCurrent(request)){pause();$('controlError').textContent='Playback was interrupted. Press Play to try again.';}
   }
 }
+function stepReviewFrame(direction){
+ if(!ready||busy)return;
+ const studentClock=videoFrameTimes.student.length>0;
+ const times=studentClock?videoFrameTimes.student:videoFrameTimes.reference;
+ const target=frameStepTime(current,times,direction,interval,studentClock?offset:0);
+ if(target===null){$('controlError').textContent=times.length?'No adjacent frame is available in this review section.':'Frame timestamps are unavailable. Use the timeline or playback to review this video.';return;}
+ $('controlError').textContent='';return seek(target);
+}
 $('play').onclick=play;
 $('seek').oninput=()=>seek(Number($('seek').value));
-$('back').onclick=()=>seek(current-1/30);$('forward').onclick=()=>seek(current+1/30);
+$('back').onclick=()=>stepReviewFrame(-1);$('forward').onclick=()=>stepReviewFrame(1);
 $('speed').onchange=()=>{ref.playbackRate=stu.playbackRate=Number($('speed').value);};
 function setAudio(){if(!canAdjustSync)$('audio').value='reference';const both=canAdjustSync&&$('audio').value==='both';ref.muted=!both&&$('audio').value!=='reference';stu.muted=!both&&$('audio').value!=='student';ref.volume=stu.volume=both?.5:1;}
 $('audio').onchange=setAudio;

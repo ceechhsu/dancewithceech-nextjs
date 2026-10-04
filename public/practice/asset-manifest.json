@@ -10,7 +10,7 @@
     },
     {
       "name": "app.js",
-      "sha256": "c685c0ae14085b8b1671e2a8ca1036b27a5f1762456cd9030121c9dd0850417e"
+      "sha256": "ea76db1f24c9769869f48b2cb017ffa5bfdfc906183bfde4bed6c0099ef0ded2"
     },
     {
       "name": "audio-alignment.mjs",
@@ -38,7 +38,7 @@
     },
     {
       "name": "compare.html",
-      "sha256": "52fa4a2ba265dfc2b23060d7f40428bacb103851968af00e51ac12d52d1ee0dc"
+      "sha256": "19deebd1eb79eb095f591c32f84fa23401649ae400041ff1c58b21a2779a0c40"
     },
     {
       "name": "debug-upload.mjs",
@@ -154,7 +154,7 @@
     },
     {
       "name": "timeline.mjs",
-      "sha256": "a296170b89b5895740849d296d937d95164a6a031ae236f3298f951053ebe697"
+      "sha256": "cb75180253e4316eb5e5471a6aaf4bff81e58c213ca2967fa05fc3569fbf492a"
     },
     {
       "name": "trainer-frame.css",

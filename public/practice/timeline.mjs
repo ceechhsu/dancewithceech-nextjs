@@ -32,6 +32,19 @@ function upperBoundTime(frameTimes,time){
  while(low<high){const middle=(low+high)>>>1;if(Number(frameTimes[middle])<=time)low=middle+1;else high=middle;}
  return low;
 }
+// Step through the displayed source frame, then map back to comparison time.
+export function frameStepTime(time,frameTimes,direction,bounds,offset=0){
+ if(!Number.isFinite(time+offset)||![1,-1].includes(direction)||!bounds||!Number.isFinite(bounds.start+bounds.end)||bounds.end<bounds.start||!Array.isArray(frameTimes)||!frameTimes.length)return null;
+ if(frameTimes.some((t,i)=>!Number.isFinite(t)||(i&&t<=frameTimes[i-1])))return null;
+ const index=upperBoundTime(frameTimes,time+offset)-1,next=index+direction;
+ if(next<0||next>=frameTimes.length)return null;
+ // Seek just inside the frame: browser currentTime may round exact boundaries.
+ const width=next+1<frameTimes.length?frameTimes[next+1]-frameTimes[next]:.004;
+ const target=frameTimes[next]+Math.min(.001,width/4)-offset;
+ const clamped=Math.max(bounds.start,Math.min(bounds.end,target));
+ if(upperBoundTime(frameTimes,clamped+offset)-1!==next||(direction>0?clamped<=time:clamped>=time))return null;
+ return clamped;
+}
 export function frameTimecode(time,frameTimes){
  if(!Number.isFinite(time)||!Array.isArray(frameTimes)||!frameTimes.length)return null;
  const after=upperBoundTime(frameTimes,time),frameIndex=Math.max(0,after-1);
