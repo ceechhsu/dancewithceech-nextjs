@@ -26,7 +26,7 @@
     },
     {
       "name": "challenge.html",
-      "sha256": "348480a4446a964e9db43d2537e14a0ee3dca28de357acb3cd536962c624b471"
+      "sha256": "b90e436be759b8e3f2c62e80d24a8d0c221907dff462c0b1ea77294f7b3dc178"
     },
     {
       "name": "challenges.css",
@@ -38,7 +38,7 @@
     },
     {
       "name": "compare.html",
-      "sha256": "36c65dcc39f1f1b52942740a581a9e414a868a2b18d5ec29e982852ce329fe94"
+      "sha256": "d04124e10b0b386cde1efaf607ebb1b2270f41737481119f0f048d333d81b3d6"
     },
     {
       "name": "debug-upload.mjs",
@@ -54,7 +54,7 @@
     },
     {
       "name": "index.html",
-      "sha256": "e2cc580556936e0c7368401c466cecc2287b254512aea995e0151e8ce4863185"
+      "sha256": "908c76308a16d34835206640d65a319ce660a89c69e73025765e9d0294d54492"
     },
     {
       "name": "lesson-navigation.mjs",
@@ -126,7 +126,7 @@
     },
     {
       "name": "profile.html",
-      "sha256": "64223615ad508ed83136fad45cb6b8cd1c50cf7339ec95f94b25de26de578c9d"
+      "sha256": "8a71c76a5c98e62c61a49d462bc78f8b9b9f49d361d1e35ce1587c4c0a412976"
     },
     {
       "name": "profile.mjs",
