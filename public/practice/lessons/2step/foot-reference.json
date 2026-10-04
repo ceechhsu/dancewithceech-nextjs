@@ -1,11 +1,11 @@
 {
-  "version": "2step-feet-3",
+  "version": "2step-feet-4",
   "lesson_id": "2step",
-  "lesson_version": 3,
+  "lesson_version": 4,
   "reviewed": true,
   "calibration_reviewed": false,
   "period": 0.6,
-  "reference_sha256": "2b905a0019d4582a447a886d92efff91414a9f2a191403030d0cbc155e50b1ff",
+  "reference_sha256": "f41908f1df4f3b09e0a3f9a64729980d009ea23e6ff43ff8ccc8b5c243bf8933",
   "source_sha256": "bd84daf0a036ab711409ea5ec46923749b5c62e79ed67a4293ddee73b6ef8cda",
   "frame_times": [
     0.0,

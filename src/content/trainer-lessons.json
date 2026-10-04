@@ -26,18 +26,18 @@
     },
     {
       "id": "2step",
-      "version": 3,
+      "version": 4,
       "title": "2-Step",
       "description": "Learn the 2-step over four bars at 100 BPM.",
       "bpm": 100,
       "bars": 4,
       "audio_duration": 12,
-      "reference_duration": 12.821,
+      "reference_duration": 12.808056,
       "reference_width": 1080,
       "reference_height": 1920,
-      "reference_audio_offset": 0.341,
+      "reference_audio_offset": 0.35,
       "reference_audio_offset_status": "verified",
-      "reference_audio_offset_note": "Version 4 compressed silhouette soundtrack shifted 70 ms earlier at owner request. Previous clean-track placement 411 ms becomes 341 ms. Confirmed foot-contact frames are unchanged.",
+      "reference_audio_offset_note": "Owner-selected clean WAV placement at +350 ms relative to video start. The compressed video stream and all 16 confirmed foot-contact frames are unchanged.",
       "audio_source": "clean-wav",
       "audio_note": "Spoken count-in and four bars of drums at 100 BPM.",
       "timing_note": "All 16 version 4 teacher landings are confirmed. Record a take for on-device comparison; review audio alignment before treating the score as final.",
@@ -46,7 +46,7 @@
       "audio_url": "/practice/lessons/2step/track.m4a",
       "poster_url": "/practice/lessons/2step/poster.jpg",
       "markers_url": "/practice/lessons/2step/foot-reference.json",
-      "reference_hash": "2b905a0019d4582a447a886d92efff91414a9f2a191403030d0cbc155e50b1ff"
+      "reference_hash": "f41908f1df4f3b09e0a3f9a64729980d009ea23e6ff43ff8ccc8b5c243bf8933"
     }
   ]
 }
