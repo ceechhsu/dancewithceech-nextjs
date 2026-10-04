@@ -47,11 +47,11 @@ function variance(signal,start,end){
  for(let i=start;i<end;i++){const value=signal[i];sum+=value;squares+=value*value;}
  const n=end-start;return n>0?(squares-sum*sum/n)/n:0;
 }
-function endingContinues(reference,student,end,shift,period,beatWidth,rate){
+function endingContinues(reference,student,end,shift,period,beatWidth,rate,minimumWidth=beatWidth){
  if(!period)return false;
  const available=student.length-end-shift;
- const width=Math.min(period,Math.floor(available/beatWidth)*beatWidth);
- if(width<beatWidth)return false;
+ const width=Math.min(period,minimumWidth<beatWidth?Math.floor(available):Math.floor(available/beatWidth)*beatWidth);
+ if(width<minimumWidth)return false;
  const at=end+shift,start=end-period,radius=Math.round(.03*rate);
  // A smoothing tail after the final attack can correlate despite being almost
  // silent. Continued music must retain meaningful energy, as well as its shape.
@@ -190,9 +190,11 @@ function alignMusicalPattern(reference,student,{audioStart,audioDuration=12,bpm=
    return {beat:i-countInBeats+1,...best,supported:best.score>=.68};
   });
   const dance=windows.slice(countInBeats),prefix=windows.slice(0,countInBeats),matched=dance.filter(w=>w.supported).length;
-  const continues=active.some(b=>endingContinues(reference[b],student[b],end,shift,repeatPeriod(reference[b],first,end,beatWidth),beatWidth,rate));
+  // A cropped recording can leave less than one beat after a false ending.
+  // Check even that partial continuation rather than accepting an earlier bar.
+  const continues=active.some(b=>endingContinues(reference[b],student[b],end,shift,repeatPeriod(reference[b],first,end,beatWidth),beatWidth,rate,Math.max(1,Math.round(.04*rate))));
   const supportedBars=bars.every((bar,i)=>bar.score>=.6&&dance.slice(i*4,i*4+4).filter(w=>w.supported).length>=Math.min(3,dance.slice(i*4,i*4+4).length));
-  const prefixSupported=!countInBeats||(prefix[0].supported&&prefix.filter(w=>w.supported).length>=Math.ceil(countInBeats/2));
+  const prefixSupported=!countInBeats||(prefix.slice(0,Math.min(2,countInBeats)).every(w=>w.supported)&&prefix.filter(w=>w.supported).length>=Math.ceil(countInBeats/2));
   const valid=spreadMs<=30&&supportedBars&&matched>=Math.ceil(beats*.75)&&dance.at(-1).supported&&prefixSupported&&!continues;
   const quality=bars.reduce((sum,b)=>sum+b.score,0)/bars.length;
   return {shift,quality,bars,windows,matched,spreadMs,continues,valid};

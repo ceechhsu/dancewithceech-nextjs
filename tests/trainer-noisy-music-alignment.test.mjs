@@ -68,3 +68,17 @@ test('a few obscured musical hits do not discard consistent timing through all f
  assert.equal(result.verified,true,result.reason);
  assert.ok(Math.abs(result.offset-.432)<=.01);
 });
+
+test('extra beginning hits cannot disguise a cropped dance as an earlier complete section',async()=>{
+ for(const earlyHits of [1,2]){
+  const actualOffset=1.3;
+  const student=track(actualOffset,{noise:true}).slice(0,Math.round((danceEnd+actualOffset-.8)*sampleRate));
+  for(let hit=0;hit<earlyHits;hit++)for(let i=0;i<Math.round(.42*sampleRate);i++){
+   const t=i/sampleRate,index=Math.round((audioStart+.1+hit*.6)*sampleRate)+i;
+   const attack=Math.min(1,t/.004)*Math.exp(-t/.055);
+   student[index]+=(hit%2?.24:.07)*attack*Math.sin(2*Math.PI*(hit%2?2800:100)*t);
+  }
+  const result=await align(track(),student);
+  assert.equal(result.verified,false,`cropped dance with ${earlyHits} early hits: ${JSON.stringify(result)}`);
+ }
+});
