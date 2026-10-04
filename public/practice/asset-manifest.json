@@ -10,11 +10,11 @@
     },
     {
       "name": "app.js",
-      "sha256": "ea76db1f24c9769869f48b2cb017ffa5bfdfc906183bfde4bed6c0099ef0ded2"
+      "sha256": "1cb39872889d25974bb16c18a2041ca5f6c0f246516b92b29899aa248d1623ce"
     },
     {
       "name": "audio-alignment.mjs",
-      "sha256": "4c662ba34434d334a7e5db3fef38a04caec5f379294e3e45746311510670fb4e"
+      "sha256": "dde3c6858124952d057174e375ee44cee79a9e43d907e5eaebf14d685bb45492"
     },
     {
       "name": "auth-recovery.js",
@@ -38,7 +38,7 @@
     },
     {
       "name": "compare.html",
-      "sha256": "19deebd1eb79eb095f591c32f84fa23401649ae400041ff1c58b21a2779a0c40"
+      "sha256": "36c65dcc39f1f1b52942740a581a9e414a868a2b18d5ec29e982852ce329fe94"
     },
     {
       "name": "debug-upload.mjs",

@@ -141,6 +141,7 @@ function loadVideo(video,url) {
   });
 }
 async function loadResult(job) {
+  $('comparison').hidden=false;
   activeSyncJob=job;
   await syncPermission;
   if($('ownerSyncOpen'))$('ownerSyncOpen').hidden=!canAdjustSync;
@@ -185,6 +186,8 @@ async function loadResult(job) {
     $('originalTake').href=stu.src;
     $('originalTake').download=`${job.lesson.id}-take-${job.id||jobId}.mp4`;
     $('chooseAnother').href=`/practice/#lesson=${encodeURIComponent(job.lesson.id)}`;
+    $('chooseAnother').hidden=false;
+    $('recordAgain').hidden=false;$('recordAgain').textContent='Record again';
     $('recordAgain').href=`/practice/#lesson=${encodeURIComponent(job.lesson.id)}&action=record`;
     if(/^[a-f0-9]{32}$/.test(localRecord?.challenge?.id||'')){
       $('appReturn').href='/practice/challenge.html?id='+localRecord.challenge.id;$('appReturnLabel').textContent='Challenge';
@@ -621,7 +624,7 @@ function applyTimingTest(milliseconds=27){
 
 async function openLocalComparison(key){
  if(busy)return;
- setBusy(true);setReady(false);$('sourceSelection').hidden=true;$('timingResult').hidden=true;
+ setBusy(true);setReady(false);$('sourceSelection').hidden=true;$('timingResult').hidden=true;$('practiceActions').hidden=true;
  let tools=$('localProgress');
  if(!tools){tools=document.createElement('div');tools.id='localProgress';tools.className='local-progress';tools.innerHTML='<div id="waitingMusicControl" class="waiting-music-control" hidden><span id="waitingMusicNote">A little music while we check your steps.</span><button id="waitingMusicToggle" type="button" aria-pressed="false">Play waiting music</button></div><p>Your recording stays on this device. Browser storage can be cleared; download a copy to keep it.</p><p id="localScreen" role="status"></p><button id="localRetry" hidden>Retry analysis</button><button id="localCancel">Cancel analysis</button>';$('status').after(tools);
   $('waitingMusicToggle').onclick=()=>{
@@ -650,8 +653,8 @@ async function openLocalComparison(key){
    if(checked.verified)localRecord.offset=localRecord.manualSync.offset;
   }
   if(!localRecord.manualSync?.verified&&(!localRecord.audioAlignment?.verified||localRecord.audioAlignment?.version!==ALIGNMENT_VERSION)){
-   status('Synchronizing your videos…','Matching the count-in, music, and ending on this device.');
-   try{localRecord.audioAlignment=await alignRecordedAudio(localRecord.referenceBlob,localRecord.studentBlob,localRecord.lesson.reference_audio_offset,{audioDuration:localRecord.lesson.audio_duration,signal:localAbort.signal});}
+   status('Synchronizing your videos…','Matching the complete dance music from the first beat through the last on this device.');
+   try{localRecord.audioAlignment=await alignRecordedAudio(localRecord.referenceBlob,localRecord.studentBlob,localRecord.lesson.reference_audio_offset,{audioDuration:localRecord.lesson.audio_duration,bpm:localRecord.lesson.bpm||100,beats:(localRecord.lesson.bars||4)*4,signal:localAbort.signal});}
    catch(error){if(localAbort.signal.aborted)throw error;localRecord.audioAlignment={version:ALIGNMENT_VERSION,verified:false,reason:error.message};}
    if(localAbort.signal.aborted)throw Error('Analysis cancelled. Your recording is kept; tap Retry to analyze it again.');
    if(localRecord.audioAlignment.verified){
@@ -661,10 +664,21 @@ async function openLocalComparison(key){
    await saveLocalTake(localRecord);
   }
   // Never analyze or present a synchronized comparison using an unverified fallback.
-  // Failed matches remain retryable, including records saved by older app versions.
+  // Content uncertainty needs a different recording, not the same deterministic
+  // retry. Decoder failures still offer retry; old automatic matches are rechecked.
   if(!localRecord.manualSync?.verified&&!localRecord.audioAlignment?.verified){
-   status('Could not align the audio',`${localRecord.audioAlignment?.reason||'The music did not match confidently.'} Comparison is paused until the audio is aligned. Tap Retry audio alignment to try again. Your recording is still saved on this device.`,true);
-   $('localRetry').textContent='Retry audio alignment';$('localRetry').hidden=false;
+   const retake=localRecord.audioAlignment?.recovery==='retake';
+   status('Could not synchronize this recording',`${localRecord.audioAlignment?.reason||'The music did not match confidently.'} ${retake?'Record another take with the lesson music audible from beginning to end.':'Tap Retry audio alignment to try again.'} Your recording is still saved on this device.`,true);
+   $('localRetry').textContent='Retry audio alignment';$('localRetry').hidden=retake;
+   if(retake){
+    $('comparison').hidden=true;
+    const lesson=encodeURIComponent(localRecord.lesson.id),challenge=/^[a-f0-9]{32}$/.test(localRecord.challenge?.id||'')?localRecord.challenge.id:null;
+    $('practiceActions').hidden=false;
+    $('originalTake').hidden=false;$('originalTake').href=studentURL;$('originalTake').download=`${localRecord.lesson.id}-take-${key}.mp4`;
+    $('recordAgain').textContent='Record another take';$('recordAgain').hidden=false;
+    $('recordAgain').href=challenge?`/practice/?challenge=${challenge}#lesson=${lesson}&action=record`:`/practice/#lesson=${lesson}&action=record`;
+    $('chooseAnother').textContent='Choose another recording';$('chooseAnother').hidden=!!challenge;$('chooseAnother').href=`/practice/#lesson=${lesson}`;
+   }
    $('localCancel').hidden=true;
    return;
   }
@@ -700,10 +714,10 @@ async function openLocalComparison(key){
   $('stageBadge').hidden=true;
   $('localCancel').hidden=true;tools.hidden=true;
   if(!localRecord.manualSync?.verified&&!localRecord.audioAlignment?.verified){
-   status('Audio alignment needs review',localRecord.audioAlignment?.reason||'Could not verify the count-in.',true);
+   status('Audio alignment needs review',localRecord.audioAlignment?.reason||'Could not verify the complete dance music.',true);
    $('timingDetails').hidden=false;
    $('scoreState').textContent='Alignment needs review';$('scoreMessage').textContent='We could not confidently synchronize this recording. Review the audio before scoring.';
-  }else status(reusedAnalysis?'Using saved analysis':'Analyzed on your device',`${localRecord.analysis.frames} frames checked. ${localRecord.audioAlignment?.verified?(localRecord.audioAlignment.method==='stable_music_refinement'?'Dance music matched throughout. The spoken count-in has a small timing difference.':'Count-in, music, and ending audio matched.'):'Using your saved alignment.'} Your recording was not uploaded; the score remains an estimate.`);
+  }else status(reusedAnalysis?'Using saved analysis':'Analyzed on your device',`${localRecord.analysis.frames} frames checked. ${localRecord.audioAlignment?.verified?'The complete dance music matched from the first beat through the last.':'Using your saved alignment.'} Your recording was not uploaded; the score remains an estimate.`);
   await import('./account.js'); // Register result actions before cached analysis can finish.
   window.dispatchEvent(new CustomEvent('dance-result',{detail:{record:localRecord}}));
   await openOwnerSync(activeSyncJob);
