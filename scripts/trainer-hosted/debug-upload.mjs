@@ -3,7 +3,7 @@ export function debugPayload(record){
  const metadata=JSON.stringify({comparison:record.id,lesson:record.lesson,recording:record.metadata,
   offset:record.offset,audioAlignment:record.audioAlignment,manualSync:record.manualSync,
   duration:record.duration,referenceVersion:record.reference?.version,
-  analysis:record.analysis?{frames:record.analysis.frames,events:record.analysis.events,detectorVersion:record.analysis.detectorVersion,analysisMs:record.analysis.analysisMs}:null});
+  analysis:record.analysis?{frames:record.analysis.frames,events:record.analysis.events,detectorVersion:record.analysis.detectorVersion,detectorProfile:record.analysis.detectorProfile,analysisMs:record.analysis.analysisMs}:null});
  const bytes=new TextEncoder().encode(metadata),prefix=new Uint8Array(4);
  if(bytes.length>65536||!record.studentBlob||record.studentBlob.size>90*1024*1024)throw Error('Choose a recording under 90 MB with valid analysis details.');
  new DataView(prefix.buffer).setUint32(0,bytes.length);

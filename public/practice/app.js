@@ -661,7 +661,7 @@ async function openLocalComparison(key){
    return;
   }
   const previousAnalysis=localRecord.analysis;
-  localRecord.analysis=refreshCachedAnalysis(previousAnalysis);
+  localRecord.analysis=refreshCachedAnalysis(previousAnalysis,localRecord.lesson?.id);
   const reusedAnalysis=!!localRecord.analysis;
   if(localRecord.analysis&&localRecord.analysis!==previousAnalysis)await saveLocalTake(localRecord);
   if(!localRecord.analysis){
@@ -669,7 +669,7 @@ async function openLocalComparison(key){
    // A stale cache skipped music on entry but now requires full inference.
    if(previousAnalysis)void waitingMusic.begin();
    status('Checking your steps…','Analysis runs on this device. Keep this page open.');
-   localRecord.analysis=await analyzeOnDevice(stu,localRecord.samples,{signal:localAbort.signal,onScreen:message=>$('localScreen').textContent=message,onProgress:(value,message)=>{$('progress').value=value;$('statusText').textContent=message;}});
+   localRecord.analysis=await analyzeOnDevice(stu,localRecord.samples,{lessonId:localRecord.lesson?.id,signal:localAbort.signal,onScreen:message=>$('localScreen').textContent=message,onProgress:(value,message)=>{$('progress').value=value;$('statusText').textContent=message;}});
    if(localAbort.signal.aborted)throw Error('Analysis cancelled. Your recording is kept; tap Retry to analyze it again.');
    await saveLocalTake(localRecord);
   }

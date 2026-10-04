@@ -10,7 +10,7 @@
     },
     {
       "name": "app.js",
-      "sha256": "1a18c0970e12dc58b1cec88ca1133fa7d891df45b7778d3a9d9f15bfd38cf931"
+      "sha256": "c685c0ae14085b8b1671e2a8ca1036b27a5f1762456cd9030121c9dd0850417e"
     },
     {
       "name": "audio-alignment.mjs",
@@ -42,7 +42,7 @@
     },
     {
       "name": "debug-upload.mjs",
-      "sha256": "4e954e73c3a94059c19a66b792b81223d335bcec9247ec03971197a2b109c603"
+      "sha256": "cbacaf8cf1006d801506025284ed853bddc3f750f39987949b9ca28b56d9ae7a"
     },
     {
       "name": "foot-review.css",
@@ -90,11 +90,11 @@
     },
     {
       "name": "local-contacts.mjs",
-      "sha256": "f2c0b2611a8631c786f5a8de481accef8f3a2f3318d7583d034fef9489a35ec2"
+      "sha256": "b66be4c49e187791c4f6f36623119ef94c6ed101c533cf6074410ee456d5d33f"
     },
     {
       "name": "local-engine.mjs",
-      "sha256": "6cce7c38f4d701aa4e2960e59f08e15ae9a382b71e0d973b99bb389f329d68d4"
+      "sha256": "193886df54d3bdf6b431c39dc51a67f2a5ad7fbabd671192c43a9e6765a13af7"
     },
     {
       "name": "local-pose-worker.mjs",

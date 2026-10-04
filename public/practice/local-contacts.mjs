@@ -1,14 +1,16 @@
-export const CONTACT_VERSION=4;
+export const CONTACT_VERSION=5;
 // Port of feet-1 + front-foot settling. No teacher markers enter detection.
 const feet={left:[27,29,31],right:[28,30,32]};
 const finite=a=>a.filter(Number.isFinite);
 const quantile=(a,q)=>{a=finite(a).sort((a,b)=>a-b);if(!a.length)return NaN;const x=(a.length-1)*q,i=Math.floor(x);return a[i]+(a[Math.min(i+1,a.length-1)]-a[i])*(x-i);};
 const min=a=>Math.min(...finite(a));
-export function detectLocalContacts(rows){
+export function detectLocalContacts(rows,{lessonId}={}){
  const times=rows.map(r=>r.time),n=rows.length,p=(i,k,v='y')=>rows[i].points?.[k]?.[v]??(v==='x'||v==='y'?NaN:0);
  if(n>22000||times.some((t,i)=>!Number.isFinite(t)||t<0||t>181||(i&&t<=times[i-1])))throw Error('Invalid frame timestamps.');
  const scale=quantile(rows.map((_,i)=>(p(i,31)+p(i,32)-p(i,23)-p(i,24))/2),.5);
  if(n<5||!Number.isFinite(scale)||scale<.12)return [];
+ // Two-Step uses XY settling only: vertical candidates cannot suppress a sideways landing.
+ if(lessonId==='2step')return lateralContacts(rows,scale,{stableWindow:true}).filter(e=>e.settled_confirmed&&e.confidence>=.8).sort((a,b)=>a.time-b.time);
  const hip=rows.map((_,i)=>(p(i,23)+p(i,24))/2),hx=rows.map((_,i)=>(p(i,23,'x')+p(i,24,'x'))/2);
  const valid=rows.map((r,i)=>r.poses===1&&[23,24,27,28,29,30,31,32].every(k=>['x','y'].every(v=>p(i,k,v)>.015&&p(i,k,v)<.985)&&p(i,k,'visibility')>=.8&&p(i,k,'presence')>=.8)&&Math.abs(p(i,31,'x')-p(i,32,'x'))>.025&&r.blur.left>=8&&r.blur.right>=8);
  const invalidate=(a,b)=>{for(let j=Math.max(0,a);j<Math.min(n,b);j++)valid[j]=false;};
@@ -56,7 +58,7 @@ export function pairTrial(events,reference,offset){
 }
 
 // Detect a moving foot settling at a new screen position. No beat grid is used.
-function lateralContacts(rows,scale){
+function lateralContacts(rows,scale,{stableWindow=false}={}){
  const events=[];
  for(const [foot,keys] of Object.entries(feet)){
   const key=keys[2],quality=p=>p&&Math.min(p.visibility??0,p.presence??p.visibility??0)>=.8;
@@ -71,13 +73,22 @@ function lateralContacts(rows,scale){
   };
   for(let i=2;i<rows.length-2;i++){
    const p=points[i];if(!p||p.x<=.015||p.x>=.985||p.y<=.015||p.y>=.985||!Number.isFinite(rows[i].blur?.[foot])||rows[i].blur[foot]<8)continue;
-   if(speed(i)>.45||speed(i+1)>.45)continue;
+   if(speed(i)>.45)continue;
+   if(stableWindow){
+    // Confirm a compact XY plateau over time, allowing small tracking wobble
+    // instead of moving contact late until every single interval looks still.
+    let end=i+1;while(end<rows.length-1&&rows[end].time-rows[i].time<.09)end++;
+    const duration=rows[end].time-rows[i].time;
+    if(end<i+2||duration<.09||duration>.17)continue;
+    if(!points.slice(i,end+1).every((q,j)=>q&&Number.isFinite(q.x)&&Number.isFinite(q.y)&&Math.hypot(q.x-p.x,q.y-p.y)<=.04*scale&&(!j||rows[i+j].time-rows[i+j-1].time<=.085)))continue;
+    if(Math.hypot(points[end].x-p.x,points[end].y-p.y)/(duration*scale)>.45)continue;
+   }else if(speed(i+1)>.45)continue;
    const history=[];for(let j=i-1;j>=0&&rows[i].time-rows[j].time<=.45;j--)if(points[j])history.push(j);
    const moving=history.filter(j=>Number.isFinite(speed(j))&&speed(j)>.6);
    if(moving.length<2||rows[i].time-rows[moving[0]+1].time>.17)continue;
    const lateral=Math.max(0,...history.map(j=>Math.abs(p.x-points[j].x)))/scale;
    // A sliding or sideways closing step can settle without downward travel.
-   // Require substantial lateral motion followed by two stable intervals;
+   // Require substantial lateral motion followed by confirmed XY stability;
    // tracking quality, recent motion, blur, and duplicate guards still apply.
    if(lateral<.12)continue;
    if(events.some(e=>e.foot===foot&&rows[i].time-e.time<.23))continue;

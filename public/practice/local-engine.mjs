@@ -2,16 +2,17 @@ import {detectLocalContacts,CONTACT_VERSION} from './local-contacts.mjs';
 
 // Bump when pose model, frame sampling, image sizing, or tracking changes.
 export const TRACKING_VERSION=1;
-export function refreshCachedAnalysis(analysis){
+export function refreshCachedAnalysis(analysis,lessonId){
+ const detectorProfile=lessonId==='2step'?'two-step-xy':'marching';
  if(!analysis)return null;
  if(analysis.tracking&&analysis.tracking.version!==TRACKING_VERSION)return null;
- if(analysis.detectorVersion===CONTACT_VERSION)return analysis;
+ if(analysis.detectorVersion===CONTACT_VERSION&&(analysis.detectorProfile||'marching')===detectorProfile)return analysis;
  const tracking=analysis.tracking;
  if(tracking?.version!==TRACKING_VERSION||!Array.isArray(tracking.rows)||!tracking.rows.length)return null;
- return {...analysis,detectorVersion:CONTACT_VERSION,events:detectLocalContacts(tracking.rows)};
+ return {...analysis,detectorVersion:CONTACT_VERSION,detectorProfile,events:detectLocalContacts(tracking.rows,{lessonId})};
 }
 
-export async function analyzeOnDevice(video,samples,{onProgress=()=>{},onScreen=()=>{},signal}={}){
+export async function analyzeOnDevice(video,samples,{onProgress=()=>{},onScreen=()=>{},signal,lessonId}={}){
  let worker,lock,interrupted=false;
  const hidden=()=>{if(document.hidden)interrupted=true;};document.addEventListener('visibilitychange',hidden);
  const check=()=>{if(signal?.aborted)throw Error('Analysis cancelled. Your take is saved on this device.');if(interrupted)throw Error('Analysis interrupted when the screen locked or the page was hidden. Your take is saved; tap Retry to start again.');};
@@ -45,6 +46,6 @@ export async function analyzeOnDevice(video,samples,{onProgress=()=>{},onScreen=
    const result=await rpc({type:'frame',bitmap,time:sample.time},[bitmap]);rows.push(result.row);inferenceMs+=result.inferenceMs;last=sample.time;
    onProgress(100*(i+1)/samples.length,`Analyzing on your device · ${i+1} / ${samples.length} frames`);
   }
-  check();return {tracking:{version:TRACKING_VERSION,rows},detectorVersion:CONTACT_VERSION,events:detectLocalContacts(rows),frames:rows.length,analysisMs:performance.now()-started,setupMs,inferenceMs};
+  check();return {tracking:{version:TRACKING_VERSION,rows},detectorVersion:CONTACT_VERSION,detectorProfile:lessonId==='2step'?'two-step-xy':'marching',events:detectLocalContacts(rows,{lessonId}),frames:rows.length,analysisMs:performance.now()-started,setupMs,inferenceMs};
  }finally{document.removeEventListener('visibilitychange',hidden);worker?.terminate();try{await lock?.release();}catch{}onScreen('');}
 }
