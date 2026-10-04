@@ -28,8 +28,9 @@ export default function GoogleLogin({
     <section className={styles.card}>
       <h2>Sign in with Google</h2>
       <p className={styles.muted}>
-        Use the Google email you gave your instructor. Everyone can use the
-        website; enrolled classes appear automatically.
+        {returnTo.startsWith('/practice')
+          ? 'Sign in to save your scores, edit your profile, and challenge a friend.'
+          : 'Use the Google email you gave your instructor. Everyone can use the website; enrolled classes appear automatically.'}
       </p>
       <button
         className={styles.button}

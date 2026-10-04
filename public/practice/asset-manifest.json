@@ -1,0 +1,204 @@
+{
+  "files": [
+    {
+      "name": "account.js",
+      "sha256": "21276885e835d507e42b3bd4d398c616df25178a580efe957396cb9148063dc4"
+    },
+    {
+      "name": "analysis-waiting-loop.mp3",
+      "sha256": "2727f47076eb9cd49f52b540b662ccc97c29e3e23c1a572c4b3d470d711b67bf"
+    },
+    {
+      "name": "app.js",
+      "sha256": "0b1aed2a561ce1ae51735b98b0920eb99a57bb6b014b07893788c1e54e02ea2b"
+    },
+    {
+      "name": "audio-alignment.mjs",
+      "sha256": "dde3c6858124952d057174e375ee44cee79a9e43d907e5eaebf14d685bb45492"
+    },
+    {
+      "name": "auth-recovery.js",
+      "sha256": "48beaca3eb78aa1bb49e2c839ed80c2318bfd5ad7f73177c1281f095cbef25e9"
+    },
+    {
+      "name": "challenge-page.mjs",
+      "sha256": "115b1fdef77d9ad877d9971833f6576182c5fa35390add930489056bc5adab54"
+    },
+    {
+      "name": "challenge.html",
+      "sha256": "348480a4446a964e9db43d2537e14a0ee3dca28de357acb3cd536962c624b471"
+    },
+    {
+      "name": "challenges.css",
+      "sha256": "bac087d35d75e0c81c8b912e39210494bbe7706242fed14762da49fa9ae3e941"
+    },
+    {
+      "name": "challenges.mjs",
+      "sha256": "93cc9212c34d790529fdccdf2a0cafb1ae66841d363422c8edaac47f81a85ec8"
+    },
+    {
+      "name": "compare.html",
+      "sha256": "36c65dcc39f1f1b52942740a581a9e414a868a2b18d5ec29e982852ce329fe94"
+    },
+    {
+      "name": "debug-upload.mjs",
+      "sha256": "cbacaf8cf1006d801506025284ed853bddc3f750f39987949b9ca28b56d9ae7a"
+    },
+    {
+      "name": "foot-review.css",
+      "sha256": "70947809e02a26b911c850a8c628ff08e6aa14d067e8114a52ca0e813d0f750b"
+    },
+    {
+      "name": "foot-review.mjs",
+      "sha256": "c4e1a4d7ecf6606f5c98aa8ffebb21f3c8b122287b064798b3be61ae071fb42a"
+    },
+    {
+      "name": "index.html",
+      "sha256": "e2cc580556936e0c7368401c466cecc2287b254512aea995e0151e8ce4863185"
+    },
+    {
+      "name": "lesson-navigation.mjs",
+      "sha256": "7064caac04518f8c7b4090da8d1baae0f5d701695e92a8224c36f576e203e328"
+    },
+    {
+      "name": "lessons/2step/foot-reference.json",
+      "sha256": "e23767c65997e8688d1c1bd56adc3629b2a210363ccb68956712194b90259e48"
+    },
+    {
+      "name": "lessons/2step/poster.jpg",
+      "sha256": "1b91bf87aee67bdc41cd706c4a73110c6833f23fb803ea96f1fedf04d6e6717a"
+    },
+    {
+      "name": "lessons/2step/reference.mp4",
+      "sha256": "f41908f1df4f3b09e0a3f9a64729980d009ea23e6ff43ff8ccc8b5c243bf8933"
+    },
+    {
+      "name": "lessons/2step/track.m4a",
+      "sha256": "16f816fef5f4103f3daea289d056c17e05d17fea921287d835579c4210f79dd4"
+    },
+    {
+      "name": "lessons/marching/foot-reference.json",
+      "sha256": "d2e3f229dccedb093c60dee95685b672f6beffe8b3978314fe2d4bb6e8d0e25c"
+    },
+    {
+      "name": "lessons/marching/reference.mp4",
+      "sha256": "a5a5fd3494ee5ad0e9af5221f5574e99261075b422d1a97be25a86165ce2e821"
+    },
+    {
+      "name": "lessons/marching/track.m4a",
+      "sha256": "1a70f5d388095d5758fe3ec4484ca0d4be7eaa001ed677e6f3858114ded59af3"
+    },
+    {
+      "name": "local-contacts.mjs",
+      "sha256": "b66be4c49e187791c4f6f36623119ef94c6ed101c533cf6074410ee456d5d33f"
+    },
+    {
+      "name": "local-engine.mjs",
+      "sha256": "540f72670f11eb7627daffc4c08c23dc2910c4d0350eb15472c66a96e7e68b33"
+    },
+    {
+      "name": "local-pose-worker.mjs",
+      "sha256": "06a90f31e46cf6af976bbc3a408d36e2fca4b37b4e84677f5e0b33fe7abff101"
+    },
+    {
+      "name": "local-store.mjs",
+      "sha256": "ab84c805026358fcafa1ba50df703314c0984fd875a561b4121247d3a6ade5b0"
+    },
+    {
+      "name": "local-video.mjs",
+      "sha256": "229427ac9f359db5a791edb8699764d1db25ad3b01b5b40f8307eb125ffeccc9"
+    },
+    {
+      "name": "logo-mark.png",
+      "sha256": "8425752979963f7ab2abe830201dcb5f666148f4ad4e4bcebf7d34aa070bfefa"
+    },
+    {
+      "name": "marching-library.jpg",
+      "sha256": "79d2347a7109098d6048892153e275c4e431c7b1009ae0ef2805ef48250b1cb1"
+    },
+    {
+      "name": "navigation.css",
+      "sha256": "198e9f24cd2273f138dcc96c8c739923136e9d5760dabb53eb36f33e3fd6f0e9"
+    },
+    {
+      "name": "profile.css",
+      "sha256": "ce9e566c71f555000771905894255e08bccc856968bedf58d618e3abe5c63b29"
+    },
+    {
+      "name": "profile.html",
+      "sha256": "64223615ad508ed83136fad45cb6b8cd1c50cf7339ec95f94b25de26de578c9d"
+    },
+    {
+      "name": "profile.mjs",
+      "sha256": "ab91f8ccb43e09b9165b7ff83efd906238204ba3bc4dc2bf8d98a0a47ac773ff"
+    },
+    {
+      "name": "recorder.mjs",
+      "sha256": "34300dc956ef1b122e1c24811a17cdcf3865cfa1a79b1d9272879a79800a372d"
+    },
+    {
+      "name": "style.css",
+      "sha256": "e412c3c96b33678430ac116785ca373166e8629a25a53b4161078852fc87dbef"
+    },
+    {
+      "name": "submission.mjs",
+      "sha256": "439eb6ca290f2c863702cb21588be22c059034691d4b860d72a3f69436ac79d2"
+    },
+    {
+      "name": "sync-controls.mjs",
+      "sha256": "1a2aed33e58467fcedd2b85f117a82e9227481c6b421cd269099748829cc0035"
+    },
+    {
+      "name": "sync-review.css",
+      "sha256": "f3caa6d30895071adad32aa9676c4c50dff5ff988ad01908c72fab43777bb10d"
+    },
+    {
+      "name": "timeline.mjs",
+      "sha256": "cb75180253e4316eb5e5471a6aaf4bff81e58c213ca2967fa05fc3569fbf492a"
+    },
+    {
+      "name": "trainer-frame.css",
+      "sha256": "19cb4c5b1f0f419bf5205e803d1ffac2d3007554ec4a2acca04d05aa5bf68541"
+    },
+    {
+      "name": "trainer.css",
+      "sha256": "bdcbb78760b5dfa75eb2db9d3124cbb817ec9f51786fccab8ac5ef02917a60dd"
+    },
+    {
+      "name": "trainer.js",
+      "sha256": "a6daa5a973170d902e3b16b97267dd3116c985e1b98f1f13d0e7b187a62240b7"
+    },
+    {
+      "name": "trial-assets/mp4box.js",
+      "sha256": "97674029b9b113fdc7991a4a23b03e99574ac3fdc19f2df098ee07ab15a9efc4"
+    },
+    {
+      "name": "trial-assets/pose_landmarker_full.task",
+      "sha256": "4eaa5eb7a98365221087693fcc286334cf0858e2eb6e15b506aa4a7ecdcec4ad"
+    },
+    {
+      "name": "trial-assets/vision_bundle.mjs",
+      "sha256": "55d7ab624fbb70dcc5adc4ae6d7ea9cfcb569139d3dbfbf2b1deafcb966bc0fe"
+    },
+    {
+      "name": "trial-assets/vision_wasm_internal.js",
+      "sha256": "e7fd9858e8e8f221d9b96eddc11f8e077f263e0b7bbd79d3cbe882b134274f8c"
+    },
+    {
+      "name": "trial-assets/vision_wasm_internal.wasm",
+      "sha256": "6a5c64584c2ab61c763b6e204afbdbc7ce1caf7f5216187322bca8df94f646bc"
+    },
+    {
+      "name": "trial-assets/vision_wasm_nosimd_internal.js",
+      "sha256": "438d1fe8ff7f4d946025bc211c291543c037d8a3785ed4eee60f1f521b236296"
+    },
+    {
+      "name": "trial-assets/vision_wasm_nosimd_internal.wasm",
+      "sha256": "8a3092d34c79d3f57e6ba8592105e8a90f6b07c27891ffecd14cca428bfd3e31"
+    },
+    {
+      "name": "waiting-music.mjs",
+      "sha256": "ab995c41db279cd7c7de13f4a05506a3ae7e30f38952ca7ea125ad1e7d349d3d"
+    }
+  ]
+}

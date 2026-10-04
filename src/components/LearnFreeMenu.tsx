@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 
 export const freeLinks = [
+  { label: "Dance Timing Practice", href: "/practice/" },
   { label: "Dance Tutorials", href: "/#dance-tutorials" },
   { label: "BeatFirst Rhythm Trainer", href: "/beat-first" },
   { label: "Blog", href: "/blog" },
