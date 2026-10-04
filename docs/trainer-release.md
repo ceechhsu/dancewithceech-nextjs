@@ -16,6 +16,7 @@ Vercel previews automatically use the separate `trainer_preview_*` tables and RP
 - `TRAINER_SUPABASE_SECRET_KEY`: server-only secret for that same project. Production may use existing `SUPABASE_SECRET_KEY`; never expose either to a browser.
 - `TRAINER_OWNER_EMAIL`: verified Google email that receives owner controls.
 - `TRAINER_SYNC_SIGNING_KEY`: random secret hexadecimal key of at least 32 bytes for saved manual sync.
+- `TRAINER_DEBUG_TRANSFER_KEY`: optional 32-byte hexadecimal key shared with the private Mac receiver; configured only on the authorized preview branch. Never expose this key in browser code.
 - `TRAINER_PUBLIC_ORIGIN`: approved HTTPS origin, without a trailing slash, for emailed challenge links.
 - `TRAINER_EMAIL_ENABLED=true`: enable after invitation origin/sign-in is verified. Uses existing `RESEND_API_KEY`.
 - Existing Google/NextAuth configuration is reused; preview needs an authorized callback on its own stable origin. Do not redirect trainer preview sign-ins to the attendance preview.
@@ -24,7 +25,7 @@ Points remain non-redeemable until the paid-content eligibility design is implem
 
 ## Deliberate test-only tools
 
-Raw owner debug uploads and automatic camera diagnostic submissions are not sent to the Mac from the hosted trainer. Those tools remain available on the private test site. Owner waveform/manual sync and local beat review remain supported. Legacy two-file server comparisons are not migrated; new comparisons begin with a library drill and a local recording.
+The owner can explicitly send a recording and analysis details directly to the Mac. `/practice/api/debug-transfer` issues a five-minute, single-use grant bound to the verified owner, calling origin, exact receiver, byte count and SHA-256. The browser uploads directly to `https://test.dancewithceech.com/api/owner-debug-transfer` without Mac cookies. The Mac must be awake with its test server and tunnel running. Its private `debug-transfer.json` contains the matching key, exact approved origins, owner email and audience; it is not committed. Ordinary accounts cannot obtain grants. Automatic camera diagnostic submissions remain disabled on hosted pages. Owner waveform/manual sync and local beat review remain supported. Legacy two-file server comparisons are not migrated; new comparisons begin with a library drill and a local recording.
 
 ## Verification and release gate
 
@@ -34,7 +35,7 @@ Do not merge unrelated changes in the main checkout. Keep the Mac test site runn
 
 ## Updating reviewed application assets
 
-Run `node scripts/import-trainer.mjs <reviewed-prototype-directory>` and `node --test tests/trainer-assets.test.mjs`. The importer scopes routes to `/practice`, excludes development pages, removes Mac-only submission controls, and records asset checksums. Regenerate only from an explicitly reviewed prototype revision.
+Run `node scripts/import-trainer.mjs <reviewed-prototype-directory>` and `node --test tests/trainer-assets.test.mjs`. The importer scopes routes to `/practice`, excludes development pages, removes automatic Mac-only diagnostics, installs the signed owner upload module, and records asset checksums. Regenerate only from an explicitly reviewed prototype revision.
 
 ## Hosted preview checkpoint (October 3, 2026)
 
@@ -49,3 +50,7 @@ Run `node scripts/import-trainer.mjs <reviewed-prototype-directory>` and `node -
 - Latest targeted suite: 12 passing trainer tests, including SQL preview/production isolation; type checking and hosted production build passed.
 
 Public promotion remains pending mobile recording/analysis, invitation delivery and completion with both accounts, the camera-file decoding investigation, and production environment completion. Production points/history are still empty. Never promote the preview deployment directly: create a production-environment build so it uses production storage and origin settings.
+
+## Owner debugging transfer restoration
+
+The preview restores “Send recording for debugging” after an owner opens a local comparison. The Mac receiver preserves the existing `.data/debug-recordings/<id>` format. Expired/tampered grants, mismatched files, unsupported origins and duplicate attempts are rejected. Failed transfers require a fresh grant; the recording remains on the device. Rollback can remove the branch key and private receiver config to disable hosted transfers without changing the original Mac debug upload route.

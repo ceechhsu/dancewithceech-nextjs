@@ -6,9 +6,7 @@ export function scopeTrainerText(text) {
   return text.replace(/(["'`])\/(?=(?:api|auth|login|logout|trial-assets|lessons)(?:[/?"'`])|[^/"'`\s]+\.(?:html|m?js|css|png|jpg|svg|mp3)|[?#"'`])/g, '$1/practice/').replace(/next=%2F(?!practice)/g, 'next=%2Fpractice%2F');
 }
 export function adaptHostedTrainer(name,text) {
- if(name==='debug-upload.mjs') return `// Raw debug uploads remain on the private test site; normal analysis stays local.
-export function showDebugUpload(){document.getElementById('debugUpload')?.remove();}
-`;
+ if(name==='debug-upload.mjs') return fs.readFileSync(new URL('./trainer-hosted/debug-upload.mjs',import.meta.url),'utf8');
  if(name==='trainer.js') text=text.replace(/ fetch\('\/api\/camera-diagnostics',[^\n]+/, " $('cameraReportStatus').textContent='Camera settings are shown on this device only.';");
  if(name==='index.html') text=text.replace(/<details id="cameraDiagnostics">[\s\S]*?<\/details>/, '<details id="cameraDiagnostics" hidden><summary>Camera settings</summary><p id="cameraReportStatus"></p><pre id="cameraDetails"></pre></details>');
  return scopeTrainerText(text);

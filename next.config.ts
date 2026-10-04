@@ -53,7 +53,7 @@ const PRACTICE_CONTENT_SECURITY_POLICY = [
 const TRAINER_CONTENT_SECURITY_POLICY = [
   "default-src 'self'", "script-src 'self' 'wasm-unsafe-eval' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'", "img-src 'self' data: blob: https://googleusercontent.com https://*.googleusercontent.com",
-  "font-src 'self' data:", "connect-src 'self' blob:", "worker-src 'self' blob:",
+  "font-src 'self' data:", "connect-src 'self' blob: https://test.dancewithceech.com", "worker-src 'self' blob:",
   "media-src 'self' blob:", "object-src 'none'", "base-uri 'self'", "form-action 'self'", "frame-ancestors 'self'",
 ].join('; ');
 

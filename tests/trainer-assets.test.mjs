@@ -20,7 +20,7 @@ test('practice navigation keeps challenge context while moving between screens',
 
 test('concatenated challenge actions are not mistaken for application roots',()=>{assert.equal(scopeTrainerText("request('/api/challenges/'+id+'/accept'); request('/api/challenges/'+id+'/email')"),"request('/practice/api/challenges/'+id+'/accept'); request('/practice/api/challenges/'+id+'/email')");});
 
-test('hosted trainer does not offer private Mac-only diagnostic endpoints',()=>{
+test('hosted trainer omits legacy Mac-only diagnostic endpoints',()=>{
  const trainer=fs.readFileSync(new URL('../public/practice/trainer.js',import.meta.url),'utf8');
  const debug=fs.readFileSync(new URL('../public/practice/debug-upload.mjs',import.meta.url),'utf8');
  assert.ok(!trainer.includes('/api/camera-diagnostics'));assert.ok(!debug.includes('/api/debug-recording'));

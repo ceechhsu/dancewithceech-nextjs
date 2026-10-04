@@ -192,9 +192,24 @@ async function manualSync(request: Request, who: TrainerIdentity | null) {
   if (!who?.owner) throw new TrainerError('Only the owner can adjust synchronization.', 403)
   return json({ verified: true, comparison: data.comparison, offset: data.offset, signature })
 }
+async function debugTransfer(request: Request, who: TrainerIdentity | null) {
+  if (!who?.owner || !who.account.startsWith('google:')) throw new TrainerError('Only the owner can send debugging recordings.', 403)
+  if (request.method !== 'POST') throw new TrainerError('Method not allowed.', 405)
+  const key = process.env.TRAINER_DEBUG_TRANSFER_KEY
+  if (!key || !/^[a-fA-F0-9]{64}$/.test(key)) throw new TrainerError('Debugging uploads are not configured here yet.', 503)
+  const data = await readBody(request, 2048)
+  if (Object.keys(data).some(k => !['length', 'sha256'].includes(k)) || !Number.isInteger(data.length) || (data.length as number) < 13 || (data.length as number) > 90 * 1024 * 1024 + 65540 || typeof data.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(data.sha256)) throw new TrainerError('This recording could not be prepared for debugging.')
+  const url = 'https://test.dancewithceech.com/api/owner-debug-transfer'
+  const iat = Math.floor(now())
+  const claims = {v:1,aud:url,origin:new URL(request.url).origin,sub:who.account,email:who.email.toLowerCase(),id:randomBytes(16).toString('hex'),iat,exp:iat+300,length:data.length,sha256:data.sha256}
+  const encoded = Buffer.from(JSON.stringify(claims)).toString('base64url')
+  const signature = createHmac('sha256', Buffer.from(key, 'hex')).update(encoded).digest('base64url')
+  return json({url,token:encoded+'.'+signature})
+}
 export async function handleTrainerApi(request: Request, path: string, identity: TrainerIdentity | null): Promise<Response> {
   try {
     if (request.method === 'POST' && request.headers.get('origin') !== new URL(request.url).origin) throw new TrainerError('This request must come from this website.', 403)
+    if (path === '/api/debug-transfer') return await debugTransfer(request, identity)
     if (path === '/api/manual-sync') return await manualSync(request, identity)
     if (path === '/api/profile' || path === '/api/profile/photo') { const who = requireIdentity(identity); return await profile(request, db(), who, path.endsWith('/photo')) }
     if (path === '/api/scores') { const who = requireIdentity(identity); return await scores(request, db(), who) }
