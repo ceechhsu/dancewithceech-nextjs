@@ -58,6 +58,35 @@ function endingContinues(reference,student,end,shift,period,beatWidth,rate,minim
  if(power(student,at,at+width)<.2*power(student,at-period,at-period+width))return false;
  return match(reference,student,start,start+width,shift+period-radius,shift+period+radius).score>=.65;
 }
+function attacksContinue(reference,student,end,shift,period,beatWidth,rate){
+ if(!period)return false;
+ const lead=Math.round(Math.min(.06,beatWidth/rate*.1)*rate),radius=Math.round(.01*rate);
+ // Use the recent musical onset templates, independently of the full-window
+ // repeat-period estimate; off-beat reference sounds can change that estimate.
+ // Check the onsets of any further cadence, not the entire tail. A burst
+ // between attacks can drown the long-window continuation comparison too.
+ // The already established clock bounds this check to 10 ms; searching a wider
+ // neighborhood can mistake an unrelated off-clock footstep for further music.
+ for(let next=0;next<period;next+=beatWidth){
+  const at=end+next,template=end-period+next;
+  for(const seconds of [.04,.18]){
+   const width=Math.round(seconds*rate);
+   if(at+shift+width>student.length)continue;
+   const start=Math.max(0,template-lead),stop=template+width;
+   for(let delta=-radius;delta<=radius;delta++){
+    const clock=shift+period+delta;
+    const target=start+clock,post=template+clock;
+    if(target<0||stop+clock>student.length)continue;
+    // Reject continued meaningful musical attacks, not a near-silent tail.
+    const previous=post-period;
+    if(previous<0||power(student,post,post+width)<.2*power(student,previous,previous+width)||variance(student,target,stop+clock)<1e-10)continue;
+    if(correlation(reference,student,start,stop,clock)>=.8)return true;
+   }
+  }
+ }
+ return false;
+}
+
 export function alignEnvelopes(reference,student,{audioStart,audioDuration=12,bpm=100,beats=16,countInBeats=4,rate=500,maxOffset=3}={}){
  const fail=(reason,diagnostics={})=>({verified:false,recovery:'retake',reason,...diagnostics});
  if(!Number.isFinite(audioStart)||audioStart<0||!Number.isFinite(bpm)||bpm<=0||!Number.isInteger(beats)||beats<4||!Number.isInteger(countInBeats)||countInBeats<0||!Number.isFinite(rate)||rate<=0||!Number.isFinite(maxOffset)||maxOffset<0)
@@ -236,7 +265,10 @@ function alignMusicalPattern(reference,student,{audioStart,audioDuration=12,bpm=
   const dance=windows.slice(countInBeats),prefix=windows.slice(0,countInBeats),matched=dance.filter(w=>w.supported).length;
   // A cropped recording can leave less than one beat after a false ending.
   // Check even that partial continuation rather than accepting an earlier bar.
-  const continues=active.some(b=>endingContinues(reference[b],student[b],end,shift,repeatPeriod(reference[b],first,end,beatWidth),beatWidth,rate,Math.max(1,Math.round(.04*rate))));
+  const continues=active.some(b=>{
+   const period=repeatPeriod(reference[b],first,end,beatWidth);
+   return endingContinues(reference[b],student[b],end,shift,period,beatWidth,rate,Math.max(1,Math.round(.04*rate)))||(attacksOnly&&[1,2,4].some(beats=>end-beats*beatWidth>=first&&attacksContinue(reference[b],student[b],end,shift,beats*beatWidth,beatWidth,rate)));
+  });
   const supportedBars=bars.every((bar,i)=>bar.score>=.6&&dance.slice(i*4,i*4+4).filter(w=>w.supported).length>=Math.min(3,dance.slice(i*4,i*4+4).length));
   const prefixSupported=!countInBeats||(prefix.slice(0,Math.min(2,countInBeats)).every(w=>w.supported)&&prefix.filter(w=>w.supported).length>=Math.ceil(countInBeats/2));
   const anchorsSupported=!attacksOnly||(bars.every((bar,i)=>bar.score>=.8&&dance.slice(i*4,i*4+4).filter(w=>w.anchored).length>=Math.min(2,dance.slice(i*4,i*4+4).length))&&dance.at(-1).anchored&&prefix.slice(0,Math.min(2,countInBeats)).every(w=>w.anchored));

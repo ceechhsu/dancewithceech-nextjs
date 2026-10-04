@@ -115,3 +115,47 @@ test('between-beat bursts cannot manufacture the reference music from unrelated 
  const result=await align(track(),addBetweenBeatBursts(track(offset,{unrelated:true}),offset));
  assert.equal(result.verified,false);
 });
+
+test('noise after a false ending cannot hide the continuation of a cropped dance',async()=>{
+ for(const delay of [.05,.1,.2]){
+  const actualOffset=1.3;
+  const student=addBetweenBeatBursts(track(actualOffset),actualOffset).slice(0,Math.round((danceEnd+actualOffset-.8)*sampleRate));
+  for(let hit=0;hit<2;hit++)for(let i=0;i<Math.round(.42*sampleRate);i++){
+   const t=i/sampleRate,index=Math.round((audioStart+.1+hit*.6)*sampleRate)+i;
+   student[index]+=(hit%2?.24:.07)*Math.min(1,t/.004)*Math.exp(-t/.055)*Math.sin(2*Math.PI*(hit%2?2800:100)*t);
+  }
+  for(let i=0;i<Math.round(.24*sampleRate);i++){
+   const t=i/sampleRate,index=Math.round((danceEnd+.1+delay)*sampleRate)+i;
+   if(index>=student.length)continue;
+   student[index]+=.5*Math.min(1,t/.004)*Math.exp(-t/.055)*(Math.sin(2*Math.PI*100*t)+Math.sin(2*Math.PI*2800*t));
+  }
+  const result=await align(track(),Float32Array.from(student,value=>value*.2));
+  assert.equal(result.verified,false,`cropped ending with burst delay ${delay}: ${JSON.stringify(result)}`);
+ }
+});
+
+test('off-beat sounds in the reference cannot hide a cropped repeating dance',async()=>{
+ const reference=track(),actualOffset=1.3;
+ let seed=881;
+ const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+ for(let beat=0;beat<20;beat++){
+  const at=audioStart+beat*.6+.29,gain=.1+random(),decay=.02+.1*random();
+  for(let i=0;i<Math.round(.25*sampleRate);i++){
+   const t=i/sampleRate,index=Math.round(at*sampleRate)+i;
+   reference[index]+=gain*Math.min(1,t/.01)*Math.exp(-t/decay)*(Math.sin(2*Math.PI*100*t)+Math.sin(2*Math.PI*2800*t));
+  }
+ }
+ const student=new Float32Array(Math.round((danceEnd+actualOffset-.8)*sampleRate));
+ student.set(reference.slice(0,student.length-Math.round(actualOffset*sampleRate)),Math.round(actualOffset*sampleRate));
+ addBetweenBeatBursts(student,actualOffset);
+ for(let hit=0;hit<2;hit++)for(let i=0;i<Math.round(.42*sampleRate);i++){
+  const t=i/sampleRate,index=Math.round((audioStart+.1+hit*.6)*sampleRate)+i;
+  student[index]+=(hit%2?.24:.07)*Math.min(1,t/.004)*Math.exp(-t/.055)*Math.sin(2*Math.PI*(hit%2?2800:100)*t);
+ }
+ for(let i=0;i<Math.round(.24*sampleRate);i++){
+  const t=i/sampleRate,index=Math.round((danceEnd+.3)*sampleRate)+i;
+  if(index<student.length)student[index]+=.5*Math.min(1,t/.004)*Math.exp(-t/.055)*(Math.sin(2*Math.PI*100*t)+Math.sin(2*Math.PI*2800*t));
+ }
+ const result=await align(reference,student);
+ assert.equal(result.verified,false,JSON.stringify(result));
+});
