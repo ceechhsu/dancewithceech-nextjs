@@ -2,7 +2,9 @@
 
 import { GlassyPricingSection } from "@/components/ui/animated-glassy-pricing";
 
-const scrollToBooking = () => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' });
+import { trackConsultation } from "@/lib/analytics/consultation";
+
+const scrollToBooking = () => { trackConsultation("consultation_link_clicked", "pricing"); document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' }); };
 
 const ghostButtonStyle = {
   background: "none",

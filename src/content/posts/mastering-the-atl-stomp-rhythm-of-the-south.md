@@ -12,7 +12,7 @@ video:
   playerTitle: "ATL Stomp dance demonstration by Buddha Stretch"
   description: "Hip-hop pioneer Buddha Stretch demonstrates the ATL Stomp's alternating kicks, lateral hops, and two-foot landings."
   thumbnailUrl: "https://i.ytimg.com/vi/OwXM1o2vZ8A/maxresdefault.jpg"
-  uploadDate: "2024-05-10"
+  uploadDate: "2024-05-09T18:58:50-07:00"
   duration: "PT44S"
   embedUrl: "https://www.youtube.com/embed/OwXM1o2vZ8A"
 ---

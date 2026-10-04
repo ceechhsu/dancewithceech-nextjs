@@ -12,7 +12,7 @@ video:
   playerTitle: "Buddha Stretch explains the Reebok and Cabbage Patch dances"
   description: "Hip-hop pioneer Buddha Stretch explains and demonstrates the difference between the Reebok and Cabbage Patch party dances."
   thumbnailUrl: "https://i.ytimg.com/vi/hl9rxRREBb4/maxresdefault.jpg"
-  uploadDate: "2025-07-08"
+  uploadDate: "2025-07-08T18:22:44-07:00"
   duration: "PT5M12S"
   embedUrl: "https://www.youtube.com/embed/hl9rxRREBb4"
 ---

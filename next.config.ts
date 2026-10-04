@@ -226,6 +226,12 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      {
+        source: "/:path*",
+        has: [{ type: "host" as const, value: "attendance-preview.dancewithceech.com" }],
+        destination: "https://dancewithceech.com/:path*",
+        permanent: true,
+      },
       ...Object.entries(BLOG_CATEGORY_REDIRECTS).map(([category, destination]) => ({
         source: "/blog",
         has: [{ type: "query" as const, key: "category", value: category }],

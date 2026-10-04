@@ -1,12 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+
+import { trackConsultation } from "@/lib/analytics/consultation";
 
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
+  const started = useRef(false);
+  const sending = useRef(false);
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (sending.current || status === "success") return;
+    sending.current = true;
     setStatus("sending");
 
     const form = e.currentTarget;
@@ -22,7 +29,8 @@ export default function ContactForm() {
         body: JSON.stringify({ name, email, subject, message }),
       });
 
-      if (res.ok) {
+      if (res.ok && (await res.json()).success === true) {
+        trackConsultation("inquiry_confirmed", "contact_form");
         setStatus("success");
         form.reset();
       } else {
@@ -30,11 +38,17 @@ export default function ContactForm() {
       }
     } catch {
       setStatus("error");
+    } finally {
+      sending.current = false;
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onChange={() => {
+      if (started.current) return;
+      started.current = true;
+      trackConsultation("inquiry_form_started", "contact_form");
+    }} onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div>
         <label className="block text-sm font-medium mb-2" style={{ color: "var(--muted)" }}>
           Your Name
@@ -99,7 +113,7 @@ export default function ContactForm() {
 
       <button
         type="submit"
-        disabled={status === "sending"}
+        disabled={status === "sending" || status === "success"}
         className="w-full py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90 disabled:opacity-50"
         style={{ backgroundColor: "var(--accent-primary)" }}
       >

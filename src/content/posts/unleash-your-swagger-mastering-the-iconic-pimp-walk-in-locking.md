@@ -12,7 +12,7 @@ video:
   playerTitle: "Pimp Walk demonstration by Skeeter Rabbit and Flo Master"
   description: "Skeeter Rabbit and Flo Master demonstrate the Pimp Walk from the locking dance vocabulary."
   thumbnailUrl: "https://i.ytimg.com/vi/ESPOjS5vH_s/maxresdefault.jpg"
-  uploadDate: "2024-06-13"
+  uploadDate: "2024-06-12T22:06:30-07:00"
   duration: "PT1M36S"
   embedUrl: "https://www.youtube.com/embed/ESPOjS5vH_s"
 ---

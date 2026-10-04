@@ -12,7 +12,7 @@ video:
   playerTitle: "Link and Buddha Stretch demonstrate the Running Man dance"
   description: "Link and Buddha Stretch demonstrate the Running Man dance move."
   thumbnailUrl: "https://i.ytimg.com/vi/CmCVTuKZeQo/maxresdefault.jpg"
-  uploadDate: "2024-05-11"
+  uploadDate: "2024-05-10T21:15:02-07:00"
   duration: "PT59S"
   embedUrl: "https://www.youtube.com/embed/CmCVTuKZeQo"
 ---

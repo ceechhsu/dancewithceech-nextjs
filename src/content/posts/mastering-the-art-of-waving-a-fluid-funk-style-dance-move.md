@@ -12,7 +12,7 @@ video:
   playerTitle: "Ceech teaches an inside-out arm-wave drill"
   description: "Ceech teaches an outward arm wave by isolating the shoulder, elbow, wrist, and hand before connecting the movements with music."
   thumbnailUrl: "https://i.ytimg.com/vi/Y1yURow9_4Q/maxresdefault.jpg"
-  uploadDate: "2020-01-24"
+  uploadDate: "2020-01-24T11:20:13-08:00"
   duration: "PT15M27S"
   embedUrl: "https://www.youtube.com/embed/Y1yURow9_4Q"
 ---

@@ -12,7 +12,7 @@ video:
   playerTitle: "Dolphin Dive demonstration by Caleaf Sellers"
   description: "Buddha Stretch explains the Dolphin Dive while Caleaf Sellers demonstrates the house dance floor move."
   thumbnailUrl: "https://i.ytimg.com/vi/2ScBJ-zBMwM/maxresdefault.jpg"
-  uploadDate: "2024-05-10"
+  uploadDate: "2024-05-09T21:23:31-07:00"
   duration: "PT44S"
   embedUrl: "https://www.youtube.com/embed/2ScBJ-zBMwM"
 ---

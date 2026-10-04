@@ -1,3 +1,4 @@
+import ConsultationBooking from "@/components/ConsultationBooking";
 import { LessonIntroduction, LessonProcess, CelebrationLessons, SpecializedLessons, LessonFaqs, LessonLocation } from "@/components/PrivateLessonDetails";
 import { buildLessonSchema, lessonFaqs, instructorSchema } from "@/lib/private-lesson-details";
 import Nav from "@/components/Nav";
@@ -273,13 +274,7 @@ title="Ceech teaching knee pop footwork"
         </div>
 
         <div className="max-w-3xl mx-auto rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
-          <iframe
-            src="https://calendly.com/ceechhsu/30min"
-            width="100%"
-            className="h-[700px]"
-            style={{ border: 0 }}
-            title="Free 30-minute phone consultation with Ceech"
-          />
+          <ConsultationBooking surface="private_lessons" title="Free 30-minute phone consultation with Ceech" />
         </div>
 
         <div className="text-center mt-8">

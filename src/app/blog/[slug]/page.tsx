@@ -50,10 +50,17 @@ function readingTime(content: string): number {
 }
 
 function displayDate(date: string): string {
-  return new Date(date).toLocaleDateString("en-US", {
+  const calendarDay = /^\d{4}-\d{2}-\d{2}$/.test(date);
+  const parsed = new Date(date);
+  // Date-only metadata represents a calendar day, not an instant in local time.
+  if (calendarDay && (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== date)) {
+    return "Invalid Date";
+  }
+  return parsed.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
+    ...(calendarDay ? { timeZone: "UTC" } : {}),
   });
 }
 
@@ -74,6 +81,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
+  // Stomping uses its primary demonstration before the image; other articles keep their existing layout.
+  const videoFirst = post.slug === "hip-hop-dance-move-stomping";
   const mins = readingTime(post.content);
   const faqs = extractFAQs(post.content);
   const pageUrl = `https://dancewithceech.com/blog/${post.slug}`;
@@ -141,9 +150,24 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     /<a[^>]+href="(https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([\w-]+)[^"]*)"[^>]*>[^<]+<\/a>/g,
     (_match, _href, videoId) =>
       `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:2rem 0;border-radius:12px;">` +
-      `<iframe loading="lazy" src="https://www.youtube.com/embed/${videoId}" title="${post.video?.playerTitle ?? "YouTube video"}" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen ` +
+      `<iframe loading="${videoFirst && videoId === "IfBzRqLRh5s" ? "eager" : "lazy"}" src="https://www.youtube.com/embed/${videoId}" title="${post.video?.playerTitle ?? "YouTube video"}" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen ` +
       `style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></iframe></div>`
   ));
+
+  const articleImage = post.hasImage ? (
+    <div className="relative mb-12 rounded-2xl overflow-hidden" style={{ aspectRatio: "16/9" }}>
+      <Image
+        src={`/images/posts/${post.slug}.jpg`}
+        alt={post.imageAlt ?? post.title}
+        title={post.imageAlt ?? post.title}
+        fill
+        sizes="(max-width: 672px) calc(100vw - 3rem), 672px"
+        priority={!videoFirst}
+        loading={videoFirst ? "lazy" : undefined}
+        className="object-cover"
+      />
+    </div>
+  ) : null;
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
@@ -197,23 +221,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           <span>{mins} min read</span>
         </div>
 
-        {/* Hero image */}
-        {post.hasImage && (
-          <div className="relative mb-12 rounded-2xl overflow-hidden" style={{ aspectRatio: "16/9" }}>
-            <Image
-              src={`/images/posts/${post.slug}.jpg`}
-              alt={post.imageAlt ?? post.title}
-              title={post.imageAlt ?? post.title}
-              fill
-              sizes="(max-width: 672px) calc(100vw - 3rem), 672px"
-              priority
-              className="object-cover"
-            />
-          </div>
-        )}
+        {!videoFirst && articleImage}
 
         {/* Content */}
         <div className="prose" dangerouslySetInnerHTML={{ __html: html }} />
+
+        {videoFirst && <div className="mt-12">{articleImage}</div>}
 
         {relatedPosts.length > 0 && (
           <section className="mt-14 p-6 rounded-2xl" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>

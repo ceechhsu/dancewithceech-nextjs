@@ -1,3 +1,4 @@
+import ConsultationBooking from "@/components/ConsultationBooking";
 import { LessonFaqs } from "@/components/PrivateLessonDetails";
 import { buildLessonSchema, bayAreaFaqs } from "@/lib/private-lesson-details";
 import Nav from "@/components/Nav";
@@ -192,13 +193,7 @@ export default async function BayAreaPrivateLessonsPage() {
         </div>
 
         <div className="max-w-3xl mx-auto mt-8 rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
-          <iframe
-            src="https://calendly.com/ceechhsu/30min"
-            width="100%"
-            className="h-[700px]"
-            style={{ border: 0 }}
-            title="Free 30-minute phone consultation with Ceech for Bay Area students"
-          />
+          <ConsultationBooking surface="bay_area" title="Free 30-minute phone consultation with Ceech for Bay Area students" />
         </div>
       </section>
 
