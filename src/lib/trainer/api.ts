@@ -143,7 +143,16 @@ async function invite(client: SupabaseClient, c: Challenge, who: TrainerIdentity
   if (parsed.protocol !== 'https:' || parsed.origin !== origin || parsed.username || parsed.password) throw new TrainerError('Email invitations are not available yet. Use Copy link.', 503)
   const url = `${origin}/practice/challenge.html?id=${c.id}`
   const text = `${c.name} challenged you to ${item.title} on Dance With Ceech.\n\nTheir timing score: ${c.score}/100 (${c.measured}/16 estimated steps).\n\nAccept the challenge: ${url}\n\nSign in with Google and record a new take. Your video stays on your phone. Both players earn test points for completing the challenge; these points do not unlock paid content.\n\nThis link expires after 30 days or when the drill changes. Anyone with the link can join.\n\nSent at your friend’s request. You have not been subscribed to a mailing list. If you did not expect this invitation, you can ignore it.`
-  const message = { from: 'Dance With Ceech <noreply@dancewithceech.com>', to: [recipient], subject: `${c.name} challenged you to ${item.title}`, text, html: `<div style="font-family:Arial,sans-serif;line-height:1.6">${escapeHtml(text).replace(/\n/g, '<br>')}<p><a href="${escapeHtml(url)}">Accept challenge</a></p></div>` }
+  const html = `<div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;padding:16px;line-height:1.6;color:#171717">
+    <h1 style="font-size:26px;line-height:1.25">${escapeHtml(c.name)} challenged you.</h1>
+    <p>Try <strong>${escapeHtml(item.title)}</strong> on Dance With Ceech.</p>
+    <p>Their timing score: <strong>${c.score}/100</strong> · ${c.measured}/16 estimated steps.</p>
+    <p><a href="${escapeHtml(url)}" style="display:inline-block;padding:12px 20px;background:#2563eb;color:#fff;border-radius:8px;text-decoration:none;font-weight:600">Accept challenge</a></p>
+    <p>Sign in with Google and record a new take. Your video stays on your phone. Both players earn test points for finishing—no need to beat their score.</p>
+    <p style="font-size:13px;color:#666">Test points do not unlock paid content. Links expire after 30 days or when the drill changes. Anyone with the link can join.</p>
+    <p style="font-size:13px;color:#666">Sent at your friend’s request. You have not been subscribed to a mailing list. If you did not expect this invitation, you can ignore it.</p>
+  </div>`
+  const message = { from: 'Dance With Ceech <noreply@dancewithceech.com>', to: [recipient], subject: `${c.name} challenged you to ${item.title}`, text, html }
   const reservation = await mutate(client, 'email_reserve', who, { id: c.id, current_version: item.version, current_reference_hash: item.reference_hash, recipient_hash: createHash('sha256').update(recipient).digest('hex'), reservation: randomBytes(16).toString('hex'), message })
   if (!reservation.reservation) return json(reservation, reservation.status ?? 200)
   try {
