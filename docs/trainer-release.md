@@ -47,10 +47,12 @@ Run `node scripts/import-trainer.mjs <reviewed-prototype-directory>` and `node -
 - Original HEVC `2step_v4.mp4` fails the existing strict frame check: first parsed sample 0.011144s versus browser frame 0.000000s. The original file has an edit list and reordered frames. The hosted parsing/analysis code is unchanged from the prototype apart from rooted asset URLs. Do not widen the tolerance or shift scores without resolving its media timeline. New Samsung recordings, Marching analysis and this camera-file case still need release verification.
 - Vercel authentication protects the preview on new devices. The owner approved a temporary share link for phone testing; it was created and verified in a browser that previously showed the Vercel login. Open it in each test recipient browser first. Google sign-in inside the app remains separate. Keep the bearer link out of Git.
 - Preview email sending is enabled after callback and temporary-access verification. No invitation was sent during these checks; actual delivery/completion is still part of the two-account phone test.
-- Latest targeted suite: 12 passing trainer tests, including SQL preview/production isolation; type checking and hosted production build passed.
+- Latest targeted suite: 14 passing trainer tests, including SQL preview/production isolation; type checking and hosted production build passed.
 
 Public promotion remains pending mobile recording/analysis, invitation delivery and completion with both accounts, the camera-file decoding investigation, and production environment completion. Production points/history are still empty. Never promote the preview deployment directly: create a production-environment build so it uses production storage and origin settings.
 
 ## Owner debugging transfer restoration
 
 The preview restores “Send recording for debugging” after an owner opens a local comparison. The Mac receiver preserves the existing `.data/debug-recordings/<id>` format. Expired/tampered grants, mismatched files, unsupported origins and duplicate attempts are rejected. Failed transfers require a fresh grant; the recording remains on the device. Rollback can remove the branch key and private receiver config to disable hosted transfers without changing the original Mac debug upload route.
+
+The restored button was verified with a real owner session on the hosted preview. A reference smoke-test recording reached the Mac with an identical SHA-256 and its analysis events. Ten receiver security tests and 25 existing Mac authentication tests passed. Type checking, lint, all 14 trainer integration tests, and the Vercel build passed. The browser needed a fresh page URL to replace its cached pre-update CSP; reopen the comparison after deployment.
