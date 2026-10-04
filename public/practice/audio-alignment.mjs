@@ -1,5 +1,5 @@
 // Offsets always mean student time = reference time + offset.
-export const ALIGNMENT_VERSION=5;
+export const ALIGNMENT_VERSION=6;
 export function envelope(samples,sampleRate,rate=500){
  // A rounded, fixed block size changes the clock at 44.1 kHz. Bin by time.
  const out=new Float32Array(Math.floor(samples.length*rate/sampleRate));
@@ -151,7 +151,7 @@ function musicBands(buffer,rate=500){
  return bands.map(band=>Float32Array.from(band,Math.sqrt));
 }
 
-function alignMusicalPattern(reference,student,{audioStart,audioDuration=12,bpm=100,beats=16,countInBeats=4,rate=500,maxOffset=3}={}){
+function alignMusicalPattern(reference,student,{audioStart,audioDuration=12,bpm=100,beats=16,countInBeats=4,rate=500,maxOffset=3,attacksOnly=false}={}){
  const fail=(reason,details={})=>({verified:false,recovery:'retake',reason,...details});
  if(!Number.isFinite(audioStart)||audioStart<0||!Number.isFinite(audioDuration)||!Number.isFinite(bpm)||bpm<=0||!Number.isInteger(beats)||beats<4||!Number.isInteger(countInBeats)||countInBeats<0||!Number.isFinite(rate)||rate<=0||!Number.isFinite(maxOffset)||maxOffset<0)
   return fail('The lesson music timing is unavailable.');
@@ -165,8 +165,42 @@ function alignMusicalPattern(reference,student,{audioStart,audioDuration=12,bpm=
  // from being replaced by an earlier repeating section of the same rhythm.
  const minimum=Math.max(-Math.round(maxOffset*rate),-trackStart),maximum=Math.min(Math.round(maxOffset*rate),student[0].length-end);
  if(maximum<minimum)return fail('The recording does not contain the complete lesson audio.');
+ const attackWidth=Math.round(Math.min(.18,beatSeconds*.3)*rate),attackLead=Math.round(Math.min(.06,beatSeconds*.1)*rate);
+ const attackWindows=Array.from({length:beats},(_,i)=>{
+  const at=first+i*beatWidth,start=Math.max(0,at-attackLead),stop=Math.min(end,at+attackWidth);
+  const variances=active.map(b=>({band:b,value:variance(reference[b],start,stop)}));
+  const strongest=Math.max(...variances.map(v=>v.value));
+  return {start,end:stop,bands:variances.filter(v=>v.value>=strongest*.025&&v.value>1e-10).map(v=>v.band)};
+ });
+ // Normalize each musical attack independently. A loud unrelated burst later
+ // within a beat must not outweigh the correctly timed music at its beginning.
+ const attackScore=(startBeat,stopBeat,shift)=>{
+  // Strong onset evidence must span every bar. A few masked weak hits may not
+  // supply a clock, but the short attack-shape checks below still inspect all.
+  let sum=0,n=0;
+  for(let at=startBeat;at<stopBeat;at+=4){
+   const scores=[];
+   for(let i=at;i<Math.min(stopBeat,at+4);i++){
+    const w=attackWindows[i];
+    scores.push(Math.max(0,...w.bands.map(b=>correlation(reference[b],student[b],w.start,w.end,shift))));
+   }
+   const count=Math.min(2,scores.length);scores.sort((a,b)=>b-a);
+   sum+=scores.slice(0,count).reduce((total,value)=>total+value,0);n+=count;
+  }
+  return sum/n;
+ };
+ const attackMatch=(startBeat,stopBeat,min,max)=>{
+  let best={score:-1,shift:min};
+  for(let shift=min;shift<=max;shift++){const score=attackScore(startBeat,stopBeat,shift);if(score>best.score)best={score,shift};}
+  return best;
+ };
  const peaks=[];
- for(const band of active){
+ if(attacksOnly){
+  const scores=[];for(let shift=minimum;shift<=maximum;shift++)scores.push({shift,score:attackScore(0,beats,shift)});
+  scores.sort((a,b)=>b.score-a.score);
+  for(const c of scores){if(c.score<.8)break;if(!peaks.some(p=>Math.abs(p.shift-c.shift)<=.15*rate))peaks.push(c);if(peaks.length===4)break;}
+ }
+ for(const band of attacksOnly?[]:active){
   const scores=[];for(let shift=minimum;shift<=maximum;shift++)scores.push({shift,score:correlation(reference[band],student[band],first,end,shift)});
   scores.sort((a,b)=>b.score-a.score);
   const separated=[];
@@ -178,16 +212,26 @@ function alignMusicalPattern(reference,student,{audioStart,audioDuration=12,bpm=
  const checked=peaks.map(candidate=>{
   const bars=Array.from({length:Math.ceil(beats/4)},(_,i)=>{
    const start=first+i*4*beatWidth,stop=Math.min(end,start+4*beatWidth);
+   if(attacksOnly)return {bar:i+1,...attackMatch(i*4,Math.min(beats,i*4+4),Math.max(minimum,candidate.shift-barRadius),Math.min(maximum,candidate.shift+barRadius))};
    const matches=active.map(band=>({band,...match(reference[band],student[band],start,stop,Math.max(minimum,candidate.shift-barRadius),Math.min(maximum,candidate.shift+barRadius))}));
    return {bar:i+1,...matches.sort((a,b)=>b.score-a.score)[0]};
   });
   const shifts=bars.map(b=>b.shift).sort((a,b)=>a-b),shift=Math.round(shifts[Math.floor(shifts.length/2)]),spreadMs=(shifts.at(-1)-shifts[0])/rate*1000;
   const windows=Array.from({length:countInBeats+beats},(_,i)=>{
    const start=i<countInBeats?trackStart+i*beatWidth:first+(i-countInBeats)*beatWidth,stop=i===countInBeats+beats-1?end:start+beatWidth;
-   const eligible=active.filter(b=>variance(reference[b],start,stop)>=refVariances[b]*.025);
-   const matches=eligible.map(band=>({band,...match(reference[band],student[band],start,stop,Math.max(minimum,shift-radius),Math.min(maximum,shift+radius))}));
+   const checkStart=start,checkEnd=attacksOnly?Math.min(stop,start+attackWidth):stop;
+   const strongest=Math.max(...active.map(b=>variance(reference[b],checkStart,checkEnd)));
+   const eligible=active.filter(b=>variance(reference[b],checkStart,checkEnd)>1e-10&&variance(reference[b],checkStart,checkEnd)>=(attacksOnly?strongest:refVariances[b])*.025);
+   const matches=eligible.map(band=>({band,...match(reference[band],student[band],checkStart,checkEnd,Math.max(minimum,shift-radius),Math.min(maximum,shift+radius))}));
    const best=matches.sort((a,b)=>b.score-a.score)[0]||{score:-1,shift};
-   return {beat:i-countInBeats+1,...best,supported:best.score>=.68};
+   let anchored=false;
+   if(attacksOnly){
+    const anchorStart=Math.max(0,start-attackLead);
+    const vars=active.map(b=>({band:b,value:variance(reference[b],anchorStart,checkEnd)})),strongest=Math.max(...vars.map(v=>v.value));
+    const anchorBands=vars.filter(v=>v.value>=strongest*.025&&v.value>1e-10).map(v=>v.band);
+    anchored=anchorBands.some(b=>match(reference[b],student[b],anchorStart,checkEnd,Math.max(minimum,shift-radius),Math.min(maximum,shift+radius)).score>=.8);
+   }
+   return {beat:i-countInBeats+1,...best,supported:best.score>=.68,anchored};
   });
   const dance=windows.slice(countInBeats),prefix=windows.slice(0,countInBeats),matched=dance.filter(w=>w.supported).length;
   // A cropped recording can leave less than one beat after a false ending.
@@ -195,15 +239,16 @@ function alignMusicalPattern(reference,student,{audioStart,audioDuration=12,bpm=
   const continues=active.some(b=>endingContinues(reference[b],student[b],end,shift,repeatPeriod(reference[b],first,end,beatWidth),beatWidth,rate,Math.max(1,Math.round(.04*rate))));
   const supportedBars=bars.every((bar,i)=>bar.score>=.6&&dance.slice(i*4,i*4+4).filter(w=>w.supported).length>=Math.min(3,dance.slice(i*4,i*4+4).length));
   const prefixSupported=!countInBeats||(prefix.slice(0,Math.min(2,countInBeats)).every(w=>w.supported)&&prefix.filter(w=>w.supported).length>=Math.ceil(countInBeats/2));
-  const valid=spreadMs<=30&&supportedBars&&matched>=Math.ceil(beats*.75)&&dance.at(-1).supported&&prefixSupported&&!continues;
+  const anchorsSupported=!attacksOnly||(bars.every((bar,i)=>bar.score>=.8&&dance.slice(i*4,i*4+4).filter(w=>w.anchored).length>=Math.min(2,dance.slice(i*4,i*4+4).length))&&dance.at(-1).anchored&&prefix.slice(0,Math.min(2,countInBeats)).every(w=>w.anchored));
+  const valid=spreadMs<=30&&supportedBars&&anchorsSupported&&matched>=Math.ceil(beats*.75)&&dance.at(-1).supported&&prefixSupported&&!continues;
   const quality=bars.reduce((sum,b)=>sum+b.score,0)/bars.length;
   return {shift,quality,bars,windows,matched,spreadMs,continues,valid};
  });
  const viable=checked.filter(c=>c.valid).sort((a,b)=>b.quality-a.quality),best=viable[0],rival=viable.find(c=>Math.abs(c.shift-best.shift)>.15*rate);
  const compact=c=>({offset:c.shift/rate,matchedBeats:c.matched,spreadMs:c.spreadMs,continues:c.continues,bars:c.bars.map(b=>({bar:b.bar,offset:b.shift/rate,correlation:b.score})),valid:c.valid});
- if(!best)return fail('The musical peaks did not identify one consistent complete dance.',{method:'musical_pattern',candidates:checked.map(compact)});
- if(rival&&best.quality-rival.quality<.08)return fail('More than one complete musical pattern matches. We could not identify the correct first and last beats.',{method:'musical_pattern',candidates:viable.map(compact)});
- return {verified:true,method:'musical_pattern',offset:best.shift/rate,referenceStart:first/rate,referenceEnd:end/rate,studentStart:(first+best.shift)/rate,studentEnd:(end+best.shift)/rate,beats,matchedBeats:best.matched,expectedPeaks:countInBeats+beats,matchedPeaks:best.windows.filter(w=>w.supported).length,spreadMs:best.spreadMs,endingChecked:true,bars:compact(best).bars,windows:best.windows.map(w=>({beat:w.beat,band:w.band,correlation:w.score,supported:w.supported})),correlation:best.quality};
+ if(!best)return fail('The musical peaks did not identify one consistent complete dance.',{method:attacksOnly?'musical_attacks':'musical_pattern',candidates:checked.map(compact)});
+ if(rival&&best.quality-rival.quality<.08)return fail('More than one complete musical pattern matches. We could not identify the correct first and last beats.',{method:attacksOnly?'musical_attacks':'musical_pattern',candidates:viable.map(compact)});
+ return {verified:true,method:attacksOnly?'musical_attacks':'musical_pattern',offset:best.shift/rate,referenceStart:first/rate,referenceEnd:end/rate,studentStart:(first+best.shift)/rate,studentEnd:(end+best.shift)/rate,beats,matchedBeats:best.matched,expectedPeaks:countInBeats+beats,matchedPeaks:best.windows.filter(w=>w.supported).length,spreadMs:best.spreadMs,endingChecked:true,bars:compact(best).bars,windows:best.windows.map(w=>({beat:w.beat,band:w.band,correlation:w.score,supported:w.supported,...(attacksOnly?{anchored:w.anchored}:{})})),correlation:best.quality};
 }
 
 export async function alignRecordedAudio(referenceBlob,studentBlob,audioStart,{audioDuration=12,bpm=100,beats=16,signal}={}){
@@ -225,6 +270,9 @@ export async function alignRecordedAudio(referenceBlob,studentBlob,audioStart,{a
   signal?.throwIfAborted();
   const bandSignals=buffers.map(buffer=>musicBands(buffer));
   await new Promise(resolve=>setTimeout(resolve,0));signal?.throwIfAborted();
-  return {version:ALIGNMENT_VERSION,...alignMusicalPattern(...bandSignals,options)};
+  const pattern=alignMusicalPattern(...bandSignals,options);
+  if(pattern.verified)return {version:ALIGNMENT_VERSION,...pattern};
+  signal?.throwIfAborted();
+  return {version:ALIGNMENT_VERSION,...alignMusicalPattern(...bandSignals,{...options,attacksOnly:true})};
  }finally{await context.close();}
 }

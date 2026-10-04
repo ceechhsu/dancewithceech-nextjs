@@ -82,3 +82,36 @@ test('extra beginning hits cannot disguise a cropped dance as an earlier complet
   assert.equal(result.verified,false,`cropped dance with ${earlyHits} early hits: ${JSON.stringify(result)}`);
  }
 });
+
+function addBetweenBeatBursts(student,offset){
+ for(const beat of [2,4,8,13])for(let i=0;i<Math.round(.24*sampleRate);i++){
+  const t=i/sampleRate,index=Math.round((audioStart+beat*.6+offset+.2)*sampleRate)+i;
+  if(index>=student.length)continue;
+  const attack=Math.min(1,t/.004)*Math.exp(-t/.055);
+  student[index]+=2*attack*(Math.sin(2*Math.PI*100*t)+Math.sin(2*Math.PI*2800*t));
+ }
+ return student;
+}
+test('loud bursts between musical attacks do not overpower the complete beat sequence',async()=>{
+ for(const offset of [-.084,.432]){
+  const result=await align(track(),addBetweenBeatBursts(track(offset),offset));
+  assert.equal(result.verified,true,result.reason);
+  assert.equal(result.method,'musical_attacks');
+  assert.ok(Math.abs(result.offset-offset)<=.01,JSON.stringify(result));
+ }
+});
+test('between-beat bursts cannot hide a changed musical clock',async()=>{
+ const offset=-.084;
+ const result=await align(track(),addBetweenBeatBursts(track(offset,{drift:.09}),offset));
+ assert.equal(result.verified,false);
+});
+test('between-beat bursts cannot replace a missing ending',async()=>{
+ const offset=-.084;
+ const result=await align(track(),addBetweenBeatBursts(track(offset,{missing:[19]}),offset));
+ assert.equal(result.verified,false);
+});
+test('between-beat bursts cannot manufacture the reference music from unrelated sound',async()=>{
+ const offset=-.084;
+ const result=await align(track(),addBetweenBeatBursts(track(offset,{unrelated:true}),offset));
+ assert.equal(result.verified,false);
+});
