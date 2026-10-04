@@ -1,4 +1,5 @@
 import {detectLocalContacts,CONTACT_VERSION} from './local-contacts.mjs';
+import {seekVideoFrame} from './local-video.mjs';
 
 // Bump when pose model, frame sampling, image sizing, or tracking changes.
 export const TRACKING_VERSION=1;
@@ -33,14 +34,7 @@ export async function analyzeOnDevice(video,samples,{onProgress=()=>{},onScreen=
    check();const sample=samples[i];if(sample.time-last<.028)continue;
    const target=Math.min(video.duration-.0001,sample.time+Math.min(sample.duration/2,.01));
    // One frame operation owns both listeners and cleans up on all exits.
-   const metadata=await new Promise((resolve,reject)=>{
-    let frameId,timer,meta,seeked=false;
-    const cleanup=()=>{clearTimeout(timer);video.cancelVideoFrameCallback(frameId);video.removeEventListener('seeked',onSeek);video.removeEventListener('error',onError);};
-    const finish=()=>{if(meta&&seeked){cleanup();resolve(meta);}};
-    const onSeek=()=>{seeked=true;finish();};const onError=()=>{cleanup();reject(Error('This video frame could not be decoded.'));};
-    frameId=video.requestVideoFrameCallback((_,m)=>{meta=m;finish();});video.addEventListener('seeked',onSeek);video.addEventListener('error',onError);
-    timer=setTimeout(()=>{cleanup();reject(Error('Video decoding paused. Keep this page open and retry.'));},15000);video.currentTime=target;
-   });
+   const metadata=await seekVideoFrame(video,target,{signal});
    check();if(Math.abs(metadata.mediaTime-sample.time)>.008)throw Error(`The browser returned a different frame than requested (${i}: expected ${sample.time.toFixed(6)}s, received ${metadata.mediaTime.toFixed(6)}s). No score is reported for this recording.`);
    const bitmap=await createImageBitmap(video,{resizeWidth:width,resizeHeight:height,resizeQuality:'high'});
    const result=await rpc({type:'frame',bitmap,time:sample.time},[bitmap]);rows.push(result.row);inferenceMs+=result.inferenceMs;last=sample.time;

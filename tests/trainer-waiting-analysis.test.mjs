@@ -4,12 +4,13 @@ import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 import {ALIGNMENT_VERSION} from '../public/practice/audio-alignment.mjs';
 import {CONTACT_VERSION} from '../public/practice/local-contacts.mjs';
+import {VIDEO_TIMELINE_VERSION} from '../public/practice/local-video.mjs';
 import {refreshCachedAnalysis} from '../public/practice/local-engine.mjs';
 const source=readFileSync(new URL('../public/practice/app.js',import.meta.url),'utf8');
 const flow=source.slice(source.indexOf('async function openLocalComparison('),source.indexOf('async function openOwnerSync('));
 function fixture({owner=false,lesson='marching',cached=false,alignmentVersion=ALIGNMENT_VERSION,verified=true,manual=false,align=async()=>({version:ALIGNMENT_VERSION,verified:true,offset:-.246}),analysis=async()=>({frames:377,events:[]})}={}){
   const elements=new Map(),events=[];
-  const record={id:'local-test',lesson:{id:lesson,reference_audio_offset:.573,audio_duration:12},offset:-.283,audioAlignment:{version:alignmentVersion,verified},settings:{offset:-.283,start:4,end:5},samples:[],analysis:cached?{detectorVersion:CONTACT_VERSION,detectorProfile:lesson==='2step'?'two-step-xy':'marching',frames:377,events:[]}:null};
+  const record={id:'local-test',lesson:{id:lesson,reference_audio_offset:.573,audio_duration:12},offset:-.283,audioAlignment:{version:alignmentVersion,verified},settings:{offset:-.283,start:4,end:5},samples:[],videoTimeline:{version:VIDEO_TIMELINE_VERSION},analysis:cached?{detectorVersion:CONTACT_VERSION,detectorProfile:lesson==='2step'?'two-step-xy':'marching',frames:377,events:[]}:null};
   if(manual)record.manualSync={offset:-.281,signature:'saved-owner-confirmation'};
   const context={CONTACT_VERSION,refreshCachedAnalysis,busy:false,localRecord:null,localAbort:null,jobId:null,demo:false,AbortController,
     syncPermission:Promise.resolve(),canAdjustSync:owner,showDebugUpload(){},
@@ -17,7 +18,9 @@ function fixture({owner=false,lesson='marching',cached=false,alignmentVersion=AL
     waitingMusic:{begin(){events.push('music');},end(){events.push('stop');}},
     setBusy:value=>{context.busy=value;},setReady(){},status(){},getLocalTake:async()=>record,
     mediaURLs:new Map(),URL:{createObjectURL:()=> 'blob:video',revokeObjectURL(){}},ref:{},stu:{},
-    loadVideo:async()=>{},ALIGNMENT_VERSION,saveLocalTake:async()=>{events.push('save');},
+    loadVideo:async()=>{},ALIGNMENT_VERSION,VIDEO_TIMELINE_VERSION,
+    prepareLocalVideo:async()=>({samples:record.samples,duration:record.duration,edited:false}),
+    calibrateVideoTimeline:async(_video,prepared)=>{events.push('clock');return {...prepared,clockOffset:0};},saveLocalTake:async()=>{events.push('save');},
     bounds:{start:0,end:12},interval:null,setAudio(){},updateWindow(){},seek:async()=>{},
     api:async()=>({verified:true}),alignRecordedAudio:async(...args)=>{events.push('align');return align(...args);},
     analyzeOnDevice:async(...args)=>{events.push('analysis');return analysis(...args);},
@@ -42,7 +45,7 @@ test('saved owner-confirmed alignment takes priority over automatic alignment',a
  assert.equal(events.includes('align'),false);assert.equal(record.offset,-.281);
 });
 test('a regular user cannot reuse an owner-only manual sync record',async()=>{
- const {events,record,run}=fixture({cached:true,alignmentVersion:1,manual:true});await run();
+ const {events,record,run}=fixture({cached:true,alignmentVersion:1,manual:true});record.manualSync.verified=true;await run();
  assert.ok(events.includes('align'));assert.equal(record.offset,-.246);
 });
 test('an uncertain dance match stops before scoring and offers a retake instead of the same retry loop',async()=>{
@@ -126,4 +129,26 @@ test('outdated cache starts waiting music before full reanalysis',async()=>{
  assert.ok(events.indexOf('music')<events.indexOf('analysis'));
  assert.equal(events.filter(e=>e==='music').length,1);
  assert.ok(events.indexOf('stop')>events.indexOf('analysis'));
+});
+
+
+test('an unchanged legacy video clock preserves cached tracking and records its verification once',async()=>{
+ const {record,events,run}=fixture({cached:true});delete record.videoTimeline;
+ record.samples=[{time:0,duration:.0334}];record.duration=1;
+ await run();assert.ok(events.includes('clock'));assert.equal(events.includes('analysis'),false);
+ assert.equal(record.videoTimeline.version,VIDEO_TIMELINE_VERSION);
+ await run();assert.equal(events.filter(e=>e==='clock').length,1);
+});
+test('a verified edited clock change discards tracking on the old clock before scoring',async()=>{
+ const {record,events,run,context}=fixture({cached:true});delete record.videoTimeline;
+ record.samples=[{time:.011144444,duration:.0334}];record.duration=1;
+ context.calibrateVideoTimeline=async()=>({samples:[{time:0,duration:.0334}],duration:.988855556,edited:true,clockOffset:-.011144444});
+ await run();assert.ok(events.includes('analysis'));assert.ok(events.indexOf('analysis')<events.indexOf('result'));
+ assert.equal(record.samples[0].time,0);assert.equal(record.videoTimeline.clockOffset,-.011144444);
+ assert.equal(record.offset,-.283);
+});
+test('an unverified video clock cannot reuse cached analysis or present a score',async()=>{
+ const {record,events,run,context}=fixture({cached:true});delete record.videoTimeline;
+ context.calibrateVideoTimeline=async()=>{throw Error('This edited video timeline changes during playback.');};
+ await run();assert.equal(events.includes('analysis'),false);assert.equal(events.includes('result'),false);
 });

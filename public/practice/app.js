@@ -4,7 +4,7 @@ let waveformData=null,waveformGeneration=0,waveformViewport=null,waveformDrag=nu
 import {playbackBounds as reviewBounds, sourceTimes, frameStepTime, PlaybackIntent, frameTimecode, markerFrameLabels, markerLabelsAtTime, marchingTimingDefault} from './timeline.mjs';
 import {FootReview, beatWindow} from './foot-review.mjs';
 import {getLocalTake,saveLocalTake,deleteLocalTake} from './local-store.mjs';
-import {localJob} from './local-video.mjs';
+import {localJob,prepareLocalVideo,calibrateVideoTimeline,VIDEO_TIMELINE_VERSION} from './local-video.mjs';
 import {analyzeOnDevice,refreshCachedAnalysis} from './local-engine.mjs';
 import {alignRecordedAudio,ALIGNMENT_VERSION} from './audio-alignment.mjs';
 import {frameShift} from './sync-controls.mjs';
@@ -647,6 +647,7 @@ async function openLocalComparison(key){
   mediaURLs.set(ref,referenceURL);mediaURLs.set(stu,studentURL);
   await Promise.all([loadVideo(ref,referenceURL),loadVideo(stu,studentURL)]);
   if(localAbort.signal.aborted)throw Error('Analysis cancelled. Your recording is kept; tap Retry to analyze it again.');
+  if(localRecord.manualSync)localRecord.manualSync.verified=false;
   if(localRecord.manualSync&&canAdjustSync){
    const checked=await api('/practice/api/manual-sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify',comparison:localRecord.id,offset:localRecord.manualSync.offset,signature:localRecord.manualSync.signature})});
    localRecord.manualSync.verified=checked.verified===true;
@@ -681,6 +682,16 @@ async function openLocalComparison(key){
    }
    $('localCancel').hidden=true;
    return;
+  }
+  if(localRecord.videoTimeline?.version!==VIDEO_TIMELINE_VERSION){
+   status('Checking video frame timing…','Verifying the recording’s playback clock on this device.');
+   const prepared=await prepareLocalVideo(localRecord.studentBlob);
+   const timeline=await calibrateVideoTimeline(stu,prepared,{signal:localAbort.signal});
+   const changed=localRecord.samples.length!==timeline.samples.length||localRecord.samples.some((s,i)=>Math.abs(s.time-timeline.samples[i].time)>1e-6);
+   if(changed&&localRecord.analysis){localRecord.analysis=null;void waitingMusic.begin();}
+   localRecord.samples=timeline.samples;localRecord.duration=timeline.duration;
+   localRecord.videoTimeline={version:VIDEO_TIMELINE_VERSION,clockOffset:timeline.clockOffset,edited:timeline.edited};
+   await saveLocalTake(localRecord);
   }
   const previousAnalysis=localRecord.analysis;
   localRecord.analysis=refreshCachedAnalysis(previousAnalysis,localRecord.lesson?.id);

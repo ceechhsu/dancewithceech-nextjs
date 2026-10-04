@@ -1,3 +1,4 @@
+import {VIDEO_TIMELINE_VERSION} from './local-video.mjs';
 const DB='dance-local-comparisons',STORE='takes';
 function open(){return new Promise((resolve,reject)=>{const request=indexedDB.open(DB,1);request.onupgradeneeded=()=>request.result.createObjectStore(STORE,{keyPath:'id'});request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(Error('Local storage is unavailable. Your recording is still here; download it before leaving.'));});}
 async function transaction(mode,action){const db=await open();try{return await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,mode);const request=action(tx.objectStore(STORE));tx.oncomplete=()=>resolve(request.result);tx.onerror=tx.onabort=()=>reject(Error('Could not save this take on your device. Free some storage or download your recording.'));});}finally{db.close();}}
@@ -21,6 +22,11 @@ export async function videoFingerprint(blob){
 export function reusableEvidence(saved,record){
  const result={};
  if(saved.analysis)result.analysis=saved.analysis;
+ // Reused tracking must keep the same verified frame clock. IndexedDB evidence
+ // is local to this browser; reuseLocalEvidence requires an identical video hash.
+ if(saved.videoTimeline?.version===VIDEO_TIMELINE_VERSION&&saved.samples?.length){
+  result.videoTimeline=saved.videoTimeline;result.samples=saved.samples;result.duration=saved.duration;
+ }
  // Alignment depends on both soundtracks. Never carry owner signatures or settings
  // into a new comparison, or reuse sync against a changed reference.
  if(saved.referenceHash===record.referenceHash&&saved.lesson?.id===record.lesson?.id&&saved.lesson?.version===record.lesson?.version&&saved.audioAlignment?.verified){
