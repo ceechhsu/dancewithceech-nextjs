@@ -263,5 +263,3 @@ Try the [Cabbage Patch](https://dancewithceech.com/blog/cabbage-patch) for a con
 The Running Man can travel, turn, repeat, and change character. None of those additions will fix an unstable count.
 
 Start with the front-and-back landing. Make both feet arrive together. Add the knee on the “and.” Count aloud. Increase the speed only when your movement agrees with the rhythm.
-
-If you want direct correction instead of trying to diagnose every timing, balance, and coordination problem alone, [explore the four-week Running Man Method](https://dancewithceech.com/running-man-method). The program builds the movement through progressive drills and personalized feedback.

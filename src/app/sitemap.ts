@@ -5,8 +5,7 @@ import { postLastModified } from '@/lib/sitemap-date'
 const BASE_URL = 'https://dancewithceech.com'
 
 const STATIC_ROUTE_LAST_MODIFIED: Record<string, string> = {
-  '/': '2026-08-24',
-  '/running-man-method': '2026-08-22',
+  '/': '2026-10-06',
   '/beat-first': '2026-09-19',
   '/private-lessons': '2026-08-24',
   '/private-lessons/san-jose': '2026-08-24',
@@ -39,7 +38,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticRoutes: MetadataRoute.Sitemap = [
     route('/', 'weekly', 1),
-    route('/running-man-method', 'weekly', 0.9),
     route('/beat-first', 'monthly', 0.9),
     route('/private-lessons', 'monthly', 0.9),
     route('/private-lessons/san-jose', 'monthly', 0.8),

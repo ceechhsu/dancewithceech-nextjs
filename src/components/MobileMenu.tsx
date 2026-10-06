@@ -10,7 +10,6 @@ import UserMenu from "./UserMenu";
 import styles from "./Navigation.module.css";
 
 const links = [
-  { label: "Running Man", href: "/running-man-method" },
   { label: "About Ceech", href: "/about" },
 ];
 type Props = { user?: { name?: string | null; email?: string | null; image?: string | null } | null; showAttendance?: boolean; alwaysVisible?: boolean };

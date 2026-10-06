@@ -27,7 +27,6 @@ test("approved homepage sections, hero copy, and CTAs remain present", async () 
   for (const component of [
     "VideoHero",
     "StatsBar",
-    "RunningManCampaignBanner",
     "DeferredHomeTestimonials",
   ]) {
     assert.match(home, new RegExp(component));
@@ -100,7 +99,7 @@ test("college history distinguishes the four employers from guest teaching", asy
   assert.ok(bayArea.includes("taught dance since 1998"));
 });
 
-test("private lesson and Running Man pages have descriptive internal links", async () => {
+test("private lessons and the Running Man article retain useful internal links", async () => {
   const [hub, footer, article] = await Promise.all([
     read("src/app/private-lessons/page.tsx"),
     read("src/components/Footer.tsx"),
@@ -110,7 +109,8 @@ test("private lesson and Running Man pages have descriptive internal links", asy
     assert.ok(source.includes('/private-lessons/san-jose'));
     assert.ok(source.includes('/private-lessons/bay-area'));
   }
-  assert.ok(article.includes('/running-man-method'));
+  assert.ok(article.includes('/blog/hip-hop-dance-move-roger-rabbit'));
+  assert.doesNotMatch(article, /running-man-method/);
 });
 
 test("Blog, About, and Contact include complete social metadata", async () => {
@@ -167,15 +167,4 @@ test("sitemap uses stable route dates and includes both 30-day programs", async 
   assert.ok(source.includes('/ftl-popping-training-series-volume-1'));
   assert.doesNotMatch(source, /lastModified:\s*new Date\(\)/);
   assert.doesNotMatch(source, /:\s*new Date\(\),/);
-});
-
-test("Running Man campaign enrollment references remain intact", async () => {
-  const [banner, panel, teaser] = await Promise.all([
-    read("src/components/RunningManCampaignBanner.tsx"),
-    read("src/components/running-man/EnrollmentPanel.tsx"),
-    read("src/components/RunningManTeaser.tsx"),
-  ]);
-  assert.match(banner, /enrollment-state|RunningManTeaser|running-man-method/);
-  assert.match(panel, /currentPrice|coaching|checkout/i);
-  assert.match(teaser, /running-man-method-teaser-web\.mp4/);
 });

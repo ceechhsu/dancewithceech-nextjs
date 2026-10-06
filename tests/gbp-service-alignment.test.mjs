@@ -28,10 +28,3 @@ test('biography preserves four college roles and explains Gavilan history', () =
   assert.match(page, /hip-hop at Gavilan from 2018 to 2020/);
   for (const name of ['Mission College', 'West Valley College', 'Cabrillo College', 'Gavilan College']) assert.ok(page.includes(name));
 });
-
-test('Running Man retains four-college credential with current subjects', () => {
-  const page = read('src/app/running-man-method/RunningManMethodPage.tsx');
-  assert.match(page, /college teaching includes hip-hop at Mission College, West Valley College, and Cabrillo College/);
-  assert.match(page, /weight training at Gavilan College/);
-  assert.match(page, /where I also taught hip-hop from 2018 to 2020/);
-});

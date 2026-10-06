@@ -85,7 +85,7 @@ export default async function RunningManConfirmationPage({ searchParams }: Confi
             <p className="mt-5 text-sm leading-6 text-white/55">If you completed payment, contact Ceech at dancewithceech@gmail.com with the email address used at checkout.</p>
           </>
         )}
-        {result.kind === "success" ? null : <a href="/running-man-method#enroll" className="mt-9 inline-flex min-h-12 items-center justify-center rounded-full bg-[#2563EB] px-6 text-sm font-bold text-white transition hover:bg-[#1D4ED8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FDB515]">Return to the Running Man Method</a>}
+        {result.kind === "success" ? null : <Link href="/blog/hip-hop-dance-move-running-man" className="mt-9 inline-flex min-h-12 items-center justify-center rounded-full bg-[#2563EB] px-6 text-sm font-bold text-white transition hover:bg-[#1D4ED8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FDB515]">Read the Running Man tutorial</Link>}
       </div>
     </main>
   );

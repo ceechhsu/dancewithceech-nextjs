@@ -47,7 +47,6 @@ test("meaningful site images provide title attributes for SEOwallet", () => {
     "src/app/locking-dance-moves/page.tsx",
     "src/app/locking-fundamentals-volume-1/page.tsx",
     "src/app/private-lessons/page.tsx",
-    "src/app/running-man-method/RunningManMethodPage.tsx",
     "src/components/ui/circular-testimonials.tsx",
     "src/components/ui/stories-carousel.tsx",
     "src/components/UserMenu.tsx",
@@ -139,15 +138,13 @@ test("largest local images have WebP versions and use them in references", () =>
     "src/app/page.tsx",
     "src/app/about/page.tsx",
     "src/app/academy/page.tsx",
-    "src/app/running-man-method/page.tsx",
-    "src/app/running-man-method/RunningManMethodPage.tsx",
     "src/content/posts/how-krazy-deals-started.md",
   ];
   const combinedSource = referenceFiles
     .map((relativePath) => fs.readFileSync(path.join(siteRoot, relativePath), "utf8"))
     .join("\n");
 
-  for (const filename of optimizedImages.filter(name => name !== "ceech-teaching-adult-dance-class.webp")) {
+  for (const filename of optimizedImages.filter(name => !["ceech-teaching-adult-dance-class.webp", "ceech-teaching-running-man-adult-class.webp"].includes(name))) {
     assert.ok(combinedSource.includes(filename), `${filename} should be referenced by the site`);
   }
   // The adult-class photo belonged to the retired Academy offer. Keep the

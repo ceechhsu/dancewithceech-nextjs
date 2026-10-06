@@ -9,7 +9,6 @@ test("shared navigation and footer links do not prefetch routes", () => {
   const files = [
     "src/components/Nav.tsx",
     "src/components/MobileMenu.tsx",
-    "src/components/CampaignNavLink.tsx",
     "src/components/Footer.tsx",
     "src/app/page.tsx",
   ];

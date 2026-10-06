@@ -3,7 +3,7 @@ import { businessSchema } from "@/lib/private-lesson-details";
 export const homepageFaqs = [
   {
     question: "What can I learn with Dance With Ceech?",
-    answer: "Explore hip-hop, locking, popping, and house dance, with an emphasis on rhythm, balance, and coordination. You can learn through dance tutorials, private coaching, and focused programs such as the Running Man Method.",
+    answer: "Explore hip-hop, locking, popping, and house dance, with an emphasis on rhythm, balance, and coordination. You can learn through dance tutorials and private coaching.",
   },
   {
     question: "How is personal coaching different from following a dance tutorial?",
@@ -14,7 +14,7 @@ export const homepageFaqs = [
     answer: "Ceech breaks movement into clear steps and helps you understand what to change when a move feels awkward. The focus is on building rhythm, balance, and coordination through specific corrections and practice, one step at a time.",
   },
   {
-    question: "What can I explore before choosing a dance program?",
+    question: "What can I explore before booking a lesson?",
     answer: "Watch the dance tutorials to see how Ceech teaches, try the free BeatFirst rhythm trainer, and read about the available coaching options. If you would like help choosing, book a free 30-minute phone consultation to discuss your goals.",
   },
 ];

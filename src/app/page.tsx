@@ -4,7 +4,6 @@ import Nav from "@/components/Nav";
 import VideoHero from "@/components/VideoHero";
 import StatsBar from "@/components/StatsBar";
 import DeferredHomeTestimonials from "@/components/DeferredHomeTestimonials";
-import RunningManCampaignBanner from "@/components/RunningManCampaignBanner";
 import HomePrivateCoaching from "@/components/HomePrivateCoaching";
 import { homepageFaqs, homepageSchema } from "@/lib/homepage-details";
 import HomeTutorials from "@/components/HomeTutorials";
@@ -162,9 +161,6 @@ export default async function Home() {
           { videoId: "h32DyBzyi4Q" },
         ]}
       />
-
-      {/* TEMPORARY FOUNDING-COHORT CAMPAIGN */}
-      <RunningManCampaignBanner />
 
       <section id="faq" aria-labelledby="homepage-faq-heading" className="py-16 px-6 scroll-mt-24" style={{ borderTop: "1px solid #1f1f1f" }}>
         <div className="max-w-3xl mx-auto">

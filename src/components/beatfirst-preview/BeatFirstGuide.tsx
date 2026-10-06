@@ -16,7 +16,7 @@ export default function BeatFirstGuide() {
       <details><summary>Is BeatFirst free?</summary><p>Yes. The three samples are available without signing in. A free Google sign-in lets you save progress and continue through all 18 levels.</p></details>
       <details><summary>Can I play on my phone?</summary><p>Yes. Turn your volume on and tap the pad with your thumb. In two-lane levels, play the gold kick on the left and the blue clap on the right. On a computer, use Space for one lane or F and J for two lanes.</p></details>
       <details><summary>How do I unlock levels and earn stars?</summary><p>Signing in opens levels 4–6. From level 6 onward, a personal best of 80 opens the next level. Earn one star at 80, two at 90, and three at 95. Lower scores on later attempts never take away your best or unlocked levels.</p></details>
-      <details><summary>What should I do after BeatFirst?</summary><p>Bring that timing into your movement. Explore <Link href="/hip-hop-dance-moves">free dance tutorials</Link> or build your next skill with the <Link href="/running-man-method">Running Man Method</Link>.</p></details>
+      <details><summary>What should I do after BeatFirst?</summary><p>Bring that timing into your movement. Explore <Link href="/hip-hop-dance-moves">free dance tutorials</Link> or practice the <Link href="/blog/hip-hop-dance-move-running-man">Running Man tutorial</Link>.</p></details>
     </div>
   </section>
 }

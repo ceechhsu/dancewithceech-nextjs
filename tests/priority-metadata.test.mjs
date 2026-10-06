@@ -12,10 +12,6 @@ test("priority commercial pages use intent-aligned SEO metadata", () => {
       title: "Private Hip-Hop Dance Lessons in San Jose | DanceWithCeech",
       description: "Book private hip-hop dance lessons with Ceech in San Jose or online. Get personalized feedback, real-time corrections, and a clear practice plan.",
     },
-    "src/app/running-man-method/page.tsx": {
-      title: "How to Do the Running Man: Rhythm-First Tutorial | Ceech",
-      description: "Learn the Running Man one count at a time. Ceech explains the numbered counts, the “and,” and how beginners can build rhythm around 100–110 BPM.",
-    },
     "src/app/private-lessons/san-jose/page.tsx": {
       title: "Hip-Hop Dance Lessons in San Jose | DanceWithCeech",
       description: "Book private hip-hop dance lessons in San Jose with Ceech at Get Down Dance Studios. Beginner-friendly coaching, personal feedback, and a free consultation.",

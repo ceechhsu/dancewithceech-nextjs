@@ -8,7 +8,6 @@ import SiteLogo from "@/components/SiteLogo";
 import MobileMenu from "@/components/MobileMenu";
 import UserMenu from "@/components/UserMenu";
 import SignInButton from "@/components/SignInButton";
-import CampaignNavLink from "@/components/CampaignNavLink";
 import LearnFreeMenu from "@/components/LearnFreeMenu";
 import styles from "./Navigation.module.css";
 
@@ -42,7 +41,6 @@ export default function Nav({ user: initialUser }: Props = {}) {
       <div className="hidden xl:flex items-center gap-5 text-sm whitespace-nowrap" style={{ color: "var(--muted)" }}>
         <Link href="/private-lessons" prefetch={false} className="hover:text-white transition-colors">Private Lessons</Link>
         <LearnFreeMenu />
-        <CampaignNavLink />
         <Link href="/about" prefetch={false} className="hover:text-white transition-colors">About Ceech</Link>
         {/* Fresh document applies attendance permissions and unloads marketing scripts. */}
         {showAttendance && <a href="/attendance/instructor" className="inline-flex min-h-11 items-center font-semibold text-blue-300 hover:text-white">Attendance</a>}
