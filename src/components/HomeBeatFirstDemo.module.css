@@ -1,0 +1,9 @@
+.demo { --gold: #fdb515; --blue: #60a5fa; scroll-margin-top: 88px; width: 100%; max-width: 440px; min-width: 0; margin-inline: auto; color: #f4f5f7; }
+.loading { display: grid; place-items: center; min-height: 560px; border: 1px solid #303642; border-radius: 20px; background: #101319; color: #a6acb9; font-size: 13px; }
+.controls { min-height: 44px; display: flex; align-items: center; justify-content: center; text-align: center; padding-top: 10px; }
+.controls p { color: #a6acb9; font-size: 11px; line-height: 1.5; }
+.controls button { min-height: 44px; padding-inline: 18px; border: 1px solid #454c5b; border-radius: 999px; color: #f4f5f7; background: transparent; font-size: 12px; cursor: pointer; }
+.controls button:hover { background: #1c2230; }
+.demo button:not(:disabled) { min-height: 44px; }
+.demo button:focus-visible { outline: 2px solid #93c5fd; outline-offset: 4px; }
+@media (max-width: 767px) { .demo { max-width: 440px; } .loading { min-height: 520px; } }

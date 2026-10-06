@@ -125,6 +125,7 @@
   .layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "intro" "online" "inperson" "details" "footer"; max-width: 640px; }
   .intro { text-align: left; }
   .inPerson { margin-top: 32px; }
+  .secondaryCta { display: flex; width: fit-content; max-width: 100%; margin-inline: auto; }
   .heading { font-size: clamp(36px, 6vw, 48px); }
   .imageNote { left: 24px; bottom: 24px; }
   .imageNote p { font-size: 28px; }

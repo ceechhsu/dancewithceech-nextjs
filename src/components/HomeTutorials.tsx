@@ -70,7 +70,7 @@ export default function HomeTutorials() {
                   </button>
                 )}
               </div>
-              <div className="p-6">
+              <div className="p-6 md:p-4 lg:p-6">
                 <div className="flex flex-wrap items-center gap-2 mb-4 text-xs">
                   <span className="font-semibold uppercase tracking-wider" style={{ color: "var(--accent-primary-accessible)" }}>{tutorial.style}</span>
                   <span className="rounded-full border border-white/15 px-2.5 py-1" style={{ color: "var(--muted)" }}>{tutorial.level}</span>

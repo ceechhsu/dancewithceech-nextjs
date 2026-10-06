@@ -57,7 +57,7 @@
 .primary:active { transform: scale(.98); }
 .primary:disabled { cursor: wait; opacity: .65; }
 .startMeta { font-size: 8px; color: #929aaa; letter-spacing: 1px; margin-top: 13px; }
-.results { position: absolute; inset: 0; background: #0e121bf7; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px 30px; }
+.results { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; background: #0e121bf7; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: safe center; text-align: center; padding: 20px 30px; }
 .resultIcon { color: var(--gold); margin-bottom: 9px; }
 .resultEyebrow { color: #a6acb9; font-size: 9px; letter-spacing: 2px; margin-bottom: 10px; }
 .results h3 { font-family: var(--font-barlow-condensed), sans-serif; font-weight: 600; font-size: 30px; line-height: 1.05; }

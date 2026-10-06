@@ -1,0 +1,25 @@
+/* Keep homepage interactions accessible without changing other pages. */
+.page a:focus-visible, .page button:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 4px;
+}
+.skipLink {
+  position: fixed;
+  top: 12px;
+  left: 16px;
+  z-index: 100;
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: #fff;
+  background: #1d4ed8;
+  transform: translateY(-200%);
+}
+.skipLink:focus { transform: translateY(0); }
+.contentStart { scroll-margin-top: 76px; }
+.footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}

@@ -7,7 +7,9 @@ import DeferredHomeTestimonials from "@/components/DeferredHomeTestimonials";
 import HomePrivateCoaching from "@/components/HomePrivateCoaching";
 import { homepageFaqs, homepageSchema } from "@/lib/homepage-details";
 import HomeTutorials from "@/components/HomeTutorials";
+import HomeBeatFirstDemo from "@/components/HomeBeatFirstDemo";
 import { getReviewSummary } from "@/lib/reviews";
+import styles from "./HomePage.module.css";
 
 export const metadata = {
   title: "DanceWithCeech: Hip-Hop Dance Lessons with Ceech",
@@ -33,15 +35,18 @@ export default async function Home() {
   const reviewSummary = await getReviewSummary();
 
   return (
-    <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
+    <main className={`${styles.page} min-h-screen`} style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageSchema).replace(/</g, "\\u003c") }}
       />
 
+      <a href="#homepage-content" className={styles.skipLink}>Skip to content</a>
       <Nav />
 
-      <VideoHero />
+      <div id="homepage-content" tabIndex={-1} className={styles.contentStart}>
+        <VideoHero />
+      </div>
 
       {/* SOCIAL PROOF BAR */}
       <StatsBar />
@@ -115,35 +120,25 @@ export default async function Home() {
       </section>
 
       {/* BEATFIRST TEASER */}
-      <section id="rhythm-trainer" className="py-24 px-6 scroll-mt-20" style={{ backgroundColor: "var(--surface)" }}>
+      <section id="rhythm-trainer" className="py-16 px-6 scroll-mt-20" style={{ backgroundColor: "var(--surface)" }}>
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-14 items-center">
           <div>
           <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary-accessible)" }}>
             BeatFirst Rhythm Trainer
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl text-balance font-bold mb-6">
             Build your rhythm. One beat at a time.
           </h2>
           <p className="text-lg mb-10 max-w-xl mx-auto leading-relaxed" style={{ color: "var(--muted)" }}>
             Practice between lessons. Tap along to real beats and see whether you’re early, late, or right on time.
           </p>
-          <Link href="/beat-first" className="inline-block px-8 py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: "var(--accent-primary)" }}>
-            Play BeatFirst Free
-          </Link>
+          <div className="flex justify-center xl:justify-start">
+            <Link href="/beat-first" className="inline-block px-8 py-4 rounded-full text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: "var(--accent-primary)" }}>
+              Play BeatFirst Free
+            </Link>
           </div>
-          <figure className="min-w-0">
-            <Image
-              src="/images/beatfirst-results.jpg"
-              alt="Ceech’s BeatFirst results: 100%, 32 of 32 beats hit, a beat-by-beat timeline, average timing of minus 3 milliseconds, and consistency of plus or minus 50 milliseconds."
-              width={714}
-              height={1239}
-              sizes="(min-width: 768px) 540px, calc(100vw - 48px)"
-              className="w-full aspect-[714/650] object-cover object-[center_83%] rounded-2xl border border-white/10"
-            />
-            <figcaption className="text-xs mt-3 text-center" style={{ color: "var(--muted)" }}>
-              Ceech’s practice round. See your timing, beat by beat.
-            </figcaption>
-          </figure>
+          </div>
+          <HomeBeatFirstDemo />
         </div>
       </section>
 
@@ -193,7 +188,7 @@ export default async function Home() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-12 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
+      <footer className={`${styles.footer} py-12 px-6`} style={{ borderTop: "1px solid #1f1f1f" }}>
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between gap-8">
           <div>
             <div className="font-bold text-lg mb-2">Dance With Ceech</div>
