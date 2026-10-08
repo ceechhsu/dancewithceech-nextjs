@@ -32,17 +32,17 @@ function json(body: Record<string, unknown>, status = 200, headers?: HeadersInit
   });
 }
 
-function contactFields(name: string): Array<{ slug: string; value: string | null }> {
+function contactFields(name: string): Array<{ slug: string; value: string }> {
   const [firstName = "", ...rest] = name.trim().split(/\s+/).filter(Boolean);
   if (!firstName) return [];
   return [
     { slug: "first_name", value: firstName },
-    { slug: "surname", value: rest.length > 0 ? rest.join(" ") : null },
+    ...(rest.length > 0 ? [{ slug: "surname", value: rest.join(" ") }] : []),
   ];
 }
 
 async function findContact(apiKey: string, email: string): Promise<SystemeContact | null> {
-  const response = await fetch(`https://api.systeme.io/api/contacts?email=${encodeURIComponent(email)}&limit=1`, {
+  const response = await fetch(`https://api.systeme.io/api/contacts?email=${encodeURIComponent(email)}&limit=10`, {
     headers: { "X-API-Key": apiKey },
     cache: "no-store",
   });
@@ -66,9 +66,25 @@ async function createContact(apiKey: string, input: { name: string; email: strin
 
   if (response.status === 201) return await response.json() as SystemeContact;
   if (response.status === 422) {
+    // Keep submission values and provider messages out of production logs.
+    let validationSummary = "No structured validation details.";
+    try {
+      const body = await response.json() as { violations?: Array<{ propertyPath?: unknown; code?: unknown }> };
+      if (Array.isArray(body.violations)) {
+        const fields = body.violations.map(({ propertyPath }) =>
+          typeof propertyPath === "string" && /^(email|locale|fields(?:\[\d+\]|\.\d+)?(?:\.(slug|value))?)$/.test(propertyPath) ? propertyPath : "other",
+        );
+        const codes = body.violations.map(({ code }) =>
+          typeof code === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(code) ? code : "unknown",
+        );
+        validationSummary = `Validation fields: ${fields.join(", ")}; codes: ${codes.join(", ")}.`;
+      }
+    } catch {
+      // A malformed provider error must not mask the original rejection.
+    }
     const existing = await findContact(apiKey, input.email);
     if (existing) return existing;
-    throw new Error("Systeme contact already exists but could not be retrieved.");
+    throw new Error(`Systeme contact creation failed with 422; retry lookup returned no contact. ${validationSummary}`);
   }
   throw new Error(`Systeme contact creation failed with ${response.status}.`);
 }
