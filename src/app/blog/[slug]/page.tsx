@@ -81,8 +81,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
-  // Stomping uses its primary demonstration before the image; other articles keep their existing layout.
-  const videoFirst = post.slug === "hip-hop-dance-move-stomping";
+  // Selected lessons show their primary demonstration before the image.
+  const videoFirst = [
+    "hip-hop-dance-move-stomping",
+    "mastering-the-crazy-legs-a-funky-hip-hop-dance-move",
+    "mastering-the-6-step-the-foundation-of-breakdancing-footwork",
+  ].includes(post.slug);
   const mins = readingTime(post.content);
   const faqs = extractFAQs(post.content);
   const pageUrl = `https://dancewithceech.com/blog/${post.slug}`;
@@ -150,7 +154,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     /<a[^>]+href="(https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([\w-]+)[^"]*)"[^>]*>[^<]+<\/a>/g,
     (_match, _href, videoId) =>
       `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:2rem 0;border-radius:12px;">` +
-      `<iframe loading="${videoFirst && videoId === "IfBzRqLRh5s" ? "eager" : "lazy"}" src="https://www.youtube.com/embed/${videoId}" title="${post.video?.playerTitle ?? "YouTube video"}" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen ` +
+      `<iframe loading="${videoFirst ? "eager" : "lazy"}" src="https://www.youtube.com/embed/${videoId}" title="${post.video?.playerTitle ?? "YouTube video"}" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen ` +
       `style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></iframe></div>`
   ));
 

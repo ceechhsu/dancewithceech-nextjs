@@ -1,71 +1,92 @@
 ---
-title: "6 Step Breakdance: How to Do the Foundation B-Boy Footwork"
-seoTitle: "6 Step Breakdance: Beginner Footwork Tutorial"
+title: "6 Step Breakdance: Video, Rhythm and Practice"
+seoTitle: "6 Step Breakdance: Video, Rhythm & Practice Guide"
 slug: "mastering-the-6-step-the-foundation-of-breakdancing-footwork"
 date: "2024-06-21 14:40:40"
+updated: "2026-10-07"
 category: "breaking-dance-moves"
-description: "6 Step breakdance tutorial , the foundation b-boy downrock footwork pattern every breaker learns first. 8 steps covering the circular 6-count sequence."
+description: "Watch FloMaster’s 6 Step demonstration, learn Ceech’s “1 and 2, 3 and 4” rhythm, and use a focused practice guide for this breaking footwork pattern."
+video:
+  name: "6 Step | Breaking Dance | Old School Dictionary"
+  playerTitle: "6 Step demonstration credited to FloMaster and Wicket on Ceech Hsu’s channel"
+  description: "The video description credits FloMaster and Wicket demonstrating the 6 Step in breaking, published on Ceech Hsu’s channel."
+  thumbnailUrl: "https://i.ytimg.com/vi/MHyit4MQTH8/hqdefault.jpg"
+  uploadDate: "2024-06-13T09:24:06-07:00"
+  duration: "PT1M29S"
+  embedUrl: "https://www.youtube.com/embed/MHyit4MQTH8"
 ---
-## Introduction
 
-The 6 Step is a fundamental footwork pattern in breakdancing that forms the basis for many other moves. This circular, six-count sequence allows dancers to move smoothly across the floor while maintaining a low center of gravity. As one of the most recognizable and widely used techniques in breaking, the 6 Step is essential for beginners to master and serves as a launching pad for more complex footwork combinations. Its versatility and flow make it a staple in any b-boy or b-girl's repertoire, providing a rhythmic foundation for freestyle sessions and choreographed routines alike.
+The 6 Step is a circular floor-footwork pattern in breaking, also called breakdancing. It has six movements. In the version I teach, those movements fit into four beats.
 
-## Video Demonstration
+Watch the demonstration first, then use the rhythm breakdown below to connect the movement order to the music.
 
-[Watch: Tutorial](https://youtu.be/MHyit4MQTH8)
+## Watch the 6 Step demonstration
 
-## Dance History
+[Watch the 6 Step demonstration](https://www.youtube.com/watch?v=MHyit4MQTH8)
 
-The 6 Step emerged as a key element of breaking during the early development of hip-hop culture in the 1970s in New York City. While the exact creator is not definitively known, it evolved alongside other foundational breaking moves as dancers experimented with ways to transition between different floor-based movements. The 6 Step became popular due to its effectiveness in maintaining continuous motion and its adaptability to various music tempos. It has since become a globally recognized technique taught in breaking workshops and competitions worldwide.
+FloMaster demonstrates the 6 Step portion of this video, published on Ceech Hsu’s YouTube channel. The original video description credits FloMaster and Wicket.
 
-## Step By Step Instruction
+<a href="https://www.youtube.com/watch?v=MHyit4MQTH8"><span>Watch the demonstration on YouTube</span></a>
 
-1. Start in a push-up position with legs spread apart.
-2. Step your right foot forward to the side (step 1).
-3. Bring your left leg behind, stepping to the back corner (step 2).
-4. Move your right leg in, crossing it behind the left (step 3).
-5. Swing your left leg diagonally across your body (step 4).
-6. Step back with your right foot (step 5).
-7. Finally, step back with your left foot to return to the starting position (step 6).
-8. Repeat the sequence, maintaining a continuous circular motion.
+## Count six movements in four beats
 
-## Tips For Learning
+Counting one through six helps track steps; counting one-and-two, three-and-four tells when to place them in music.
 
-- Keep your chest up and only lower it during the all-fours position.
-- Stay on your toes throughout the movement for better mobility.
-- Practice the footwork pattern standing up before attempting it on the ground.
-- Focus on alternating your feet (right, left, right, left) throughout the sequence.
-- Keep your hands in the "crab" position with fingers spread and thumbs facing inward.
-- Start slowly to perfect the form before increasing speed.
-- Ensure your right foot is positioned to the side, not too far forward or back, on the first step.
-- Practice weight transfer between your hands as you move through the steps.
+For the pattern I teach, count “1 and 2, 3 and 4.” The six movements fit into one four-beat bar as two groups of three:
 
-## Conclusion
+- Movement 1: beat 1
+- Movement 2: the “and” after 1
+- Movement 3: beat 2
+- Movement 4: beat 3
+- Movement 5: the “and” after 3
+- Movement 6: beat 4
 
-The 6 Step is more than just a dance move; it's a gateway to the world of breaking. By mastering this fundamental technique, dancers develop the coordination, rhythm, and floor awareness necessary for more advanced footwork. Regular practice of the 6 Step will improve overall flow and help breakers transition smoothly between different elements of their dance. As you become more comfortable with the basic pattern, experiment with variations and incorporate it into your unique style to truly make the 6 Step your own.
+Keep the underlying pulse of 1, 2, 3, 4 steady. The “and” falls halfway between the numbered beats. Do not spread the six movements evenly across six beats.
 
-## Frequently Asked Questions
+Say “1 and 2, 3 and 4” before adding the footwork. Hear the two groups first. The movement numbers help you remember the order; the musical counts tell you when each movement happens.
 
-### What is the 6 Step in breakdancing?
-The 6 Step is a foundational breakdancing footwork pattern built on a six-count circular sequence that keeps the dancer moving smoothly around a center point on the floor. It's the most-taught downrock pattern in breaking, used as the base layer over which breakers add kicks, freezes, and power moves. Every b-boy and b-girl learns the 6 Step early in their training.
+## Follow the pattern in the video
 
-### Is the 6 Step hard to learn?
-It's moderate difficulty. The six individual foot positions are simple, but coordinating the leg motion with the arm/hand support and maintaining continuous circular movement takes practice. Most beginners can perform a rough 6 Step in 1-2 weeks of daily practice, and look clean in 4-6 weeks.
+Choose a recognizable starting position and follow one complete circle back to that position. Use the same reference point when you replay the clip.
 
-### Where did the 6 Step come from?
-The 6 Step emerged during the development of breaking in 1970s New York City. The exact creator isn't documented , it evolved organically as dancers experimented with floor-based movement patterns. It became the most widely taught downrock pattern because it works at any tempo, transitions cleanly into other moves, and gives beginners a solid framework to build on.
+On one viewing, follow the feet. On the next, watch how the hands change support as the feet move. Then watch both together at the transition you find confusing.
 
-### How long does it take to master the 6 Step?
-The basic pattern takes 1-2 weeks. Clean, smooth execution at musical speed takes 4-6 weeks. Building variations (adding kicks, sweeps, direction changes) takes 2-3 months. The 6 Step is never really "mastered" , experienced breakers keep finding new ways to modify it years into their practice.
+Use the demonstration for the movement path. The rhythm list above tells you when to move; it is not a written left-foot, right-foot or hand-placement sequence.
 
-### What's the most common 6 Step mistake?
-Hips too high. The 6 Step requires a LOW, crouched body position , your hips should stay close to the floor so you can move fluidly through the steps. Beginners with high hips lose the smooth circular motion and turn the 6 Step into a series of disconnected squats. Drop lower and commit to the crouch.
+## Pay attention to the hand support
 
-## More Breaking Dance Moves
+Watch FloMaster’s raised palms and how he switches hand support. Your hands and arms help support your body as the feet move, so those changes deserve attention too.
 
-If you liked the 6 Step, these moves build directly on the floor-level coordination and continuous motion you develop from it:
+Use comfortable, stable support. Do not force weight onto your fingertips to copy a hand position. If you are unsure how to support the transition, have your setup checked before repeating it.
 
-- [Mastering the CC: A Fundamental Breaking Move](/blog/mastering-the-cc-a-fundamental-breaking-move) , The CC is one of the first variations added on top of the 6 Step, using the same squat-to-arm-support base to create kicks and extensions within your footwork flow.
-- [Mastering the 3 Step: A Breaking Footwork Move for B-Boys & B-Girls](/blog/mastering-the-3-step-a-fundamental-breaking-move-for-aspiring-b-boys-and-b-girls-2) , The 3 Step shares the circular, continuous floor movement of the 6 Step and is commonly mixed into footwork sequences once the 6 Step is solid.
-- [Cutting in Breaking: How to Master This Essential Footwork Move](/blog/cutting-in-breaking-how-to-master-this-essential-footwork-move) , Cutting is the transitional technique that links footwork patterns like the 6 Step together and adds stylistic flair between the repetitions.
-- [Mastering the Freeze: A Fundamental Breaking Move](/blog/mastering-the-freeze-a-fundamental-breaking-move) , Learning to punctuate a 6 Step with a freeze is one of the most fundamental skills in breaking, and the two elements are trained together from the beginning.
+## Try one focused practice
+
+Start with the count: “1 and 2, 3 and 4.” Once you can keep that rhythm clear, use it with the movement pattern you are learning from the demonstration.
+
+Record a short attempt with your hands, feet and whole body in view. Check one thing at a time:
+
+- Order: Did I remember which movement came next?
+- Rhythm: Did my six movements fit “1 and 2, 3 and 4”?
+- Connection: Where did I pause or lose the flow?
+
+If the order is unclear, replay a shorter section. If the rhythm is unclear, say the counts again before another attempt. If a hand change feels unstable, get that transition checked rather than trying to push through it faster.
+
+## 6 Step questions
+
+### Are “6 Step” and “six step” the same move?
+
+Yes. In breaking, those are two ways of writing the same name.
+
+### Does the 6 Step take six beats?
+
+The version I teach uses six movements in four beats: “1 and 2, 3 and 4.” Counting the movements from one to six is useful for remembering their order, but those numbers are not the musical timing.
+
+### How long does it take to learn?
+
+There is no single timeline for everyone. Check whether you can remember the order, keep the rhythm clear and connect the transitions. Work on the part that needs attention rather than rushing toward a deadline.
+
+## Get feedback on your 6 Step
+
+If you can identify where the pattern breaks down but cannot see why, I can help you work out what to practice next. I offer private dance instruction for adults 18 and older, including beginners.
+
+[Book a free 30-minute phone consultation](/private-lessons#booking) to talk about your goals and find a starting point.
