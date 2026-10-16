@@ -12,7 +12,7 @@ import { getReviewSummary } from "@/lib/reviews";
 import styles from "./HomePage.module.css";
 
 export const metadata = {
-  title: "DanceWithCeech: Hip-Hop Dance Lessons with Ceech",
+  title: "Online Hip-Hop Dance Lessons for Adults | Dance With Ceech",
   description: "Learn hip-hop, locking, popping, and house dance with Ceech through beginner-friendly online training and private lessons in San Jose.",
   alternates: { canonical: "https://dancewithceech.com" },
   openGraph: {
