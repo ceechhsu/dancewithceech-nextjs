@@ -1,0 +1,668 @@
+.page {
+  min-height:100vh;
+  background:var(--background);
+  color:var(--foreground);
+  padding:40px 24px 0}
+.header,.direction,.footer {
+  max-width:1200px;
+  margin-inline:auto}
+.header {
+  padding:0 0 52px}
+.back {
+  display:inline-flex;
+  align-items:center;
+  min-height:44px;
+  color:var(--accent-primary-accessible);
+  font-size:14px;
+  margin-bottom:36px}
+.kicker {
+  font-size:11px;
+  line-height:1.6;
+  letter-spacing:.16em;
+  font-weight:700;
+  color:var(--accent-primary-accessible);
+  margin-bottom:14px}
+.header h1 {
+  font-size:clamp(38px,5vw,68px);
+  line-height:1.04;
+  letter-spacing:-.04em;
+  font-weight:700;
+  text-wrap:balance}
+.intro {
+  max-width:650px;
+  margin-top:24px;
+  color:var(--muted);
+  font-size:17px;
+  line-height:1.65}
+.jumpLinks {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:28px}
+.jumpLinks a {
+  border:1px solid #ffffff29;
+  border-radius:999px;
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  padding:10px 18px;
+  font-size:14px}
+.jumpLinks a:hover {
+  border-color:var(--accent-primary-accessible);
+  background:#ffffff08}
+.direction {
+  padding:36px;
+  border:1px solid #ffffff1f;
+  border-radius:28px;
+  margin-bottom:36px;
+  scroll-margin-top:24px;
+  --ink:#f1f3f9;
+  --canvas:#172534;
+  --screen:#203a50;
+  --line:#8ba5c0;
+  --blue:#528df5;
+  --yellow:#ffd45a;
+  --skin:#e8ae81;
+  --hair:#272025}
+.directionHeading {
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:24px;
+  margin-bottom:32px}
+.directionHeading h2 {
+  font-size:clamp(25px,3vw,36px);
+  font-weight:700;
+  line-height:1.15;
+  letter-spacing:-.025em;
+  text-wrap:balance;
+  max-width:650px}
+.description {
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+  margin-top:12px;
+  max-width:560px}
+.controls {
+  display:flex;
+  gap:8px;
+  flex-shrink:0}
+.controls button {
+  border:1px solid #ffffff30;
+  border-radius:10px;
+  min-height:44px;
+  padding:10px 12px;
+  font-size:12px;
+  cursor:pointer;
+  background:#ffffff06;
+  color:var(--foreground);
+  white-space:nowrap}
+.controls button:hover {
+  background:#ffffff12;
+  border-color:#ffffff60}
+.controls button:disabled {
+  cursor:default;
+  opacity:.65}
+.steps {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:22px;
+  list-style:none;
+  padding:0;
+  margin:0}
+.step {
+  min-width:0}
+.art {
+  position:relative;
+  overflow:hidden;
+  border-radius:20px}
+.number {
+  position:absolute;
+  left:15px;
+  top:13px;
+  z-index:1;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.12em;
+  color:var(--line)}
+.scene {
+  display:block;
+  width:100%;
+  height:auto;
+  overflow:visible}
+.stepCopy {
+  padding:20px 2px 0}
+.timing {
+  font-size:10px!important;
+  line-height:1.6!important;
+  font-weight:600;
+  letter-spacing:.015em;
+  color:var(--accent-primary-accessible)!important;
+  margin-bottom:10px}
+.stepCopy h3 {
+  font-size:20px;
+  line-height:1.25;
+  letter-spacing:-.02em;
+  font-weight:650;
+  margin-bottom:10px}
+.stepCopy p {
+  font-size:14px;
+  line-height:1.7;
+  color:#b0b7c3}
+.motionNote {
+  font-size:12px;
+  line-height:1.6;
+  color:var(--muted);
+  margin-top:28px}
+.footer {
+  border-top:1px solid #ffffff1a;
+  padding:28px 0 48px}
+.footer strong {
+  font-size:16px;
+  font-weight:600}
+.footer p {
+  font-size:14px;
+  line-height:1.7;
+  color:var(--muted);
+  max-width:720px;
+  margin-top:12px}
+.footer a {
+  display:inline-flex;
+  align-items:center;
+  min-height:44px;
+  font-size:14px;
+  color:var(--accent-primary-accessible);
+  margin-top:16px}
+.playful {
+  background:#141b24;
+  --canvas:#e8edf5;
+  --screen:#cfdded;
+  --ink:#24374f;
+  --line:#49627e;
+  --blue:#3976dd;
+  --yellow:#efbb37}
+.polished {
+  background:#10161e;
+  --canvas:#13202e;
+  --screen:#1a3045;
+  --ink:#dce8f8;
+  --line:#7e9dbd;
+  --blue:#6ca4ff;
+  --yellow:#f1cb71;
+  --skin:#bd926e}
+.polished .sceneBackground {
+  stroke:#ffffff0e}
+.sceneBackground {
+  fill:var(--canvas)}
+.grid {
+  color:var(--line);
+  opacity:.06}
+.playful .grid {
+  opacity:0}
+.orbit {
+  fill:var(--blue);
+  opacity:.07}
+.floor {
+  stroke:var(--line);
+  stroke-width:1;
+  opacity:.25}
+.shadow {
+  fill:var(--ink);
+  opacity:.09}
+.legs {
+  stroke:var(--ink);
+  stroke-width:11;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  fill:none}
+.shoes {
+  stroke:var(--ink);
+  stroke-width:8;
+  stroke-linecap:round;
+  fill:none}
+.shirt {
+  fill:var(--blue)}
+.teacher .shirt {
+  fill:var(--yellow)}
+.skin {
+  fill:var(--skin)}
+.teacher .skin {
+  fill:#bc815f}
+.hair {
+  fill:var(--hair)}
+.face {
+  stroke:var(--hair);
+  stroke-width:2;
+  stroke-linecap:round}
+.smile {
+  stroke:var(--hair);
+  stroke-width:1;
+  fill:none}
+.arm {
+  fill:none;
+  stroke:var(--blue);
+  stroke-width:9;
+  stroke-linecap:round;
+  stroke-linejoin:round}
+.teacher .arm {
+  stroke:var(--yellow)}
+.device {
+  fill:var(--ink)}
+.screen {
+  fill:var(--screen)}
+.speaker {
+  fill:var(--canvas);
+  opacity:.6}
+.phoneSmall {
+  fill:var(--ink);
+  stroke:var(--canvas);
+  stroke-width:1.5}
+.smallCheck {
+  fill:none;
+  stroke:#a7dcba;
+  stroke-width:2;
+  stroke-linecap:round}
+.microLabel {
+  font-size:8px;
+  fill:var(--line);
+  font-weight:700;
+  letter-spacing:1px}
+.label {
+  fill:var(--ink);
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:.2px}
+.whiteLabel {
+  fill:white;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.4px}
+.blueFill {
+  fill:#2c68d0}
+.playCircle {
+  fill:#2c68d0}
+.playIcon {
+  fill:#fff}
+.sendTrack {
+  stroke:var(--line);
+  stroke-width:1.5;
+  stroke-dasharray:3 4;
+  fill:none;
+  opacity:.5}
+.packetFill {
+  fill:var(--blue)}
+.packetPlay {
+  fill:#fff}
+.recipient {
+  fill:var(--screen);
+  stroke:var(--line);
+  stroke-width:1}
+.checkCircle {
+  fill:#2c7d56}
+.checkMark {
+  stroke:white;
+  stroke-width:2;
+  fill:none;
+  stroke-linecap:round;
+  stroke-linejoin:round}
+.timelineBase {
+  stroke:var(--line);
+  stroke-width:2;
+  opacity:.4}
+.timeline {
+  stroke:var(--yellow);
+  stroke-width:3;
+  stroke-linecap:round;
+  transform-origin:37px 155px}
+.stand {
+  stroke:var(--ink);
+  stroke-width:8;
+  stroke-linecap:round}
+.annotation {
+  stroke:var(--yellow);
+  stroke-width:3;
+  stroke-linecap:round;
+  fill:none;
+  stroke-dasharray:60;
+  stroke-dashoffset:0}
+.annotationCircle {
+  stroke:var(--yellow);
+  stroke-width:1.5;
+  fill:none;
+  stroke-dasharray:3 3;
+  opacity:.8}
+.pointerArm {
+  stroke:var(--yellow);
+  stroke-width:8;
+  stroke-linecap:round;
+  fill:none}
+.feedbackClip {
+  fill:var(--screen);
+  stroke:var(--line);
+  stroke-width:.6}
+.feedbackLabel {
+  fill:var(--ink);
+  font-size:8px;
+  letter-spacing:.6px;
+  font-weight:700}
+.waveform {
+  fill:var(--blue);
+  transform-origin:120px 218px}
+.returnArrow {
+  stroke:var(--blue);
+  stroke-width:2;
+  fill:none;
+  stroke-linecap:round;
+  stroke-linejoin:round}
+.badge {
+  fill:var(--screen)}
+.nameBadge {
+  fill:#15202d}
+.callButton {
+  fill:var(--line);
+  opacity:.5}
+.endCall {
+  fill:#bb4d59}
+.callLine {
+  fill:none;
+  stroke:white;
+  stroke-width:1.5}
+.liveBadge {
+  fill:#244e3b}
+.liveDot {
+  fill:#a2e4ba}
+.liveLabel {
+  fill:#cef2dd;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.6px}
+.syncArrow {
+  stroke:var(--line);
+  stroke-width:1.5;
+  fill:none}
+.polished .legs {
+  stroke-width:9}
+.polished .arm {
+  stroke-width:7}
+.polished .hair {
+  fill:#202a36}
+.playful .scene {
+  filter:saturate(.9)}
+
+/* All actions are 4.8 seconds. Pausing freezes the exact frame;
+   replay remounts only illustrations. */
+.packet {
+  animation:sendVideo 4.8s ease-in-out infinite}
+.check {
+  animation:sentCheck 4.8s ease-in-out infinite;
+  transform-box:fill-box;
+  transform-origin:center}
+.timeline {
+  animation:reviewTimeline 4.8s linear infinite}
+.annotation {
+  animation:markCorrection 4.8s ease-in-out infinite}
+.waveform {
+  animation:voiceNote 4.8s ease-in-out infinite}
+.returnArrow {
+  animation:returnFeedback 4.8s ease-in-out infinite}
+.danceBody {
+  animation:practiceStep 4.8s ease-in-out infinite;
+  transform-box:fill-box;
+  transform-origin:bottom center}
+.danceArm {
+  animation:practiceArm 4.8s ease-in-out infinite;
+  transform-origin:-14px 27px}
+.otherArm {
+  animation:practiceOtherArm 4.8s ease-in-out infinite;
+  transform-origin:14px 27px}
+.liveDot {
+  animation:liveSignal 4.8s ease-in-out infinite}
+.polished .danceBody {
+  animation-name:practiceSubtle}
+.direction[data-playing="false"] * {
+  animation-play-state:paused!important}
+
+@keyframes sendVideo {
+  0%,12% {
+  transform:translate(-25px,13px);
+  opacity:0}
+20% {
+  opacity:1}
+55%,75% {
+  transform:translate(13px,-49px);
+  opacity:1}
+85%,100% {
+  transform:translate(13px,-49px);
+  opacity:0}
+}
+
+@keyframes sentCheck {
+  0%,48% {
+  opacity:.25;
+  scale:.8}
+58%,88% {
+  opacity:1;
+  scale:1}
+100% {
+  opacity:.25;
+  scale:.8}
+}
+
+@keyframes reviewTimeline {
+  0%,5% {
+  transform:scaleX(.04)}
+50%,90% {
+  transform:scaleX(1)}
+100% {
+  transform:scaleX(.04)}
+}
+
+@keyframes markCorrection {
+  0%,20% {
+  stroke-dashoffset:60;
+  opacity:.25}
+45%,90% {
+  stroke-dashoffset:0;
+  opacity:1}
+100% {
+  stroke-dashoffset:60;
+  opacity:.25}
+}
+
+@keyframes voiceNote {
+  0%,25%,90%,100% {
+  transform:scaleY(.6)}
+35%,55%,75% {
+  transform:scaleY(1)}
+45%,65%,85% {
+  transform:scaleY(.4)}
+}
+
+@keyframes returnFeedback {
+  0%,45% {
+  opacity:.3;
+  transform:translateX(-6px)}
+65%,90% {
+  opacity:1;
+  transform:translateX(0)}
+100% {
+  opacity:.3;
+  transform:translateX(-6px)}
+}
+
+@keyframes practiceStep {
+  0%,100% {
+  transform:translateX(-3px) rotate(-3deg)}
+25%,75% {
+  transform:translateY(-3px)}
+50% {
+  transform:translateX(3px) rotate(3deg)}
+}
+
+@keyframes practiceSubtle {
+  0%,100% {
+  transform:translateX(-2px) rotate(-1deg)}
+50% {
+  transform:translateX(2px) rotate(1deg)}
+}
+
+@keyframes practiceArm {
+  0%,100% {
+  transform:rotate(0)}
+25%,75% {
+  transform:rotate(-15deg)}
+50% {
+  transform:rotate(10deg)}
+}
+
+@keyframes practiceOtherArm {
+  0%,100% {
+  transform:rotate(0)}
+25%,75% {
+  transform:rotate(12deg)}
+50% {
+  transform:rotate(-12deg)}
+}
+
+@keyframes liveSignal {
+  0%,100% {
+  opacity:1}
+50% {
+  opacity:.65}
+}
+
+@media(max-width:1050px) {
+  .direction {
+  padding:26px}
+.directionHeading {
+  align-items:flex-start;
+  flex-direction:column;
+  gap:20px}
+.steps {
+  gap:16px}
+.stepCopy h3 {
+  font-size:18px}
+}
+
+@media(max-width:700px) {
+  .page {
+  padding:24px 16px 0}
+.header {
+  padding-bottom:32px}
+.back {
+  margin-bottom:26px}
+.header h1 {
+  font-size:38px}
+.intro {
+  font-size:15px}
+.direction {
+  padding:22px 16px;
+  border-radius:22px;
+  margin-bottom:24px}
+.directionHeading {
+  margin-bottom:24px}
+.directionHeading h2 {
+  font-size:28px}
+.steps {
+  grid-template-columns:1fr;
+  gap:30px}
+.art {
+  max-width:410px;
+  width:100%;
+  margin-inline:auto}
+.stepCopy {
+  padding-top:16px;
+  max-width:410px;
+  margin-inline:auto}
+.stepCopy h3 {
+  font-size:22px}
+.stepCopy p {
+  font-size:15px}
+.description {
+  font-size:13px}
+.motionNote {
+  font-size:11px}
+.controls {
+  flex-wrap:wrap}
+.footer {
+  padding-bottom:32px}
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .direction * {
+  animation:none!important}
+.packet {
+  transform:translate(13px,-49px)}
+.check {
+  opacity:1}
+.timeline {
+  transform:scaleX(1)}
+.annotation {
+  stroke-dashoffset:0}
+}
+
+/* Direction B uses a restrained line illustration rather than A's filled cartoon figures. */
+.polished .shirt {
+  fill:var(--screen);
+  stroke:var(--blue);
+  stroke-width:2.5;
+  stroke-linejoin:round}
+.polished .teacher .shirt {
+  stroke:var(--yellow)}
+.polished .legs {
+  stroke-width:4;
+  stroke-linecap:square}
+.polished .arm {
+  stroke-width:3.5}
+.polished .shoes {
+  stroke-width:4}
+.polished .pointerArm {
+  stroke-width:3.5}
+.polished .skin {
+  stroke:var(--line);
+  stroke-width:.7}
+.polished .smile {
+  display:none}
+.polished .device {
+  fill:#b7c9df}
+.polished .sceneBackground {
+  rx:12px}
+.polished .art {
+  border-radius:12px}
+.playful .stepCopy h3 {
+  letter-spacing:-.025em}
+
+
+/* The selected illustration sits in the existing online coaching section. */
+.embedded {
+  max-width:1152px;
+  padding:64px 24px;
+  margin-bottom:0;
+  border:0;
+  border-radius:0;
+  background:var(--surface);
+  scroll-margin-top:88px;
+}
+.embeddedHeading {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:24px;
+  margin-bottom:32px;
+}
+.embeddedHeading > div:first-child {
+  width:100%;
+}
+.embeddedHeading :global(.home-section-tagline) {
+  max-width:800px;
+  margin-inline:auto;
+}
+.cycleNote {
+  margin-top:28px;
+  font-size:14px;
+  line-height:1.65;
+  color:var(--muted);
+}
+.embedded .motionNote {
+  margin-top:12px;
+}

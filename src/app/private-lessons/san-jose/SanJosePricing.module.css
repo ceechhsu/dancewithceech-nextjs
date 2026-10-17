@@ -1,0 +1,41 @@
+/* Size cards from the space this section actually has, including narrow app panels. */
+.pricing {
+  container-type: inline-size;
+}
+
+.pricing [class~="md:flex-row"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  width: 100%;
+  max-width: 560px;
+  align-items: stretch;
+}
+
+.pricing [class~="max-w-xs"] {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  height: 100%;
+  scale: 1;
+  transform: none;
+}
+
+/* Keep the amount and session unit intact; wrap the unit as a whole when needed. */
+.pricing [class~="max-w-xs"] > [class~="my-6"] {
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+
+.pricing [class~="max-w-xs"] > [class~="my-6"] > span {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Three columns only when each card has at least 300px of usable width. */
+@container (min-width: 1060px) {
+  .pricing [class~="md:flex-row"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: none;
+  }
+}

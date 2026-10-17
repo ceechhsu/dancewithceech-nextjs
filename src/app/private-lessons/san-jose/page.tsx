@@ -1,200 +1,304 @@
-import ConsultationBooking from "@/components/ConsultationBooking";
-import { LessonFaqs } from "@/components/PrivateLessonDetails";
-import { buildLessonSchema, sanJoseFaqs } from "@/lib/private-lesson-details";
-import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
+import approvedStyles from "@/components/approved-pages/PageScope.module.css";
+import ConsultationBooking from "@/components/approved-pages/ConsultationBooking";
+import { LessonIntroduction, CelebrationLessons, LessonFaqs, LessonLocation } from "@/components/PrivateLessonDetails";
+import { buildLessonSchema, sanJoseFaqs, instructorSchema } from "@/lib/private-lesson-details";
+import Nav from "@/components/approved-pages/Nav";
+import Footer from "@/components/approved-pages/Footer";
+import Image from "next/image";
 import Link from "next/link";
-import { formatReviewProof, getReviewSummary } from "@/lib/reviews";
+import TestimonialsCarousel from "@/components/TestimonialsCarousel";
+import TestimonialsMarquee from "@/components/approved-pages/TestimonialsMarquee";
+import SanJosePricing from "./SanJosePricing";
+import { SanJoseLessonProcess, SanJoseSpecializedLessons } from "./SanJoseLessonSections";
+import { getReviewSummary } from "@/lib/reviews";
 
 export const metadata = {
-  title: "Hip-Hop Dance Lessons in San Jose | DanceWithCeech",
-  description: "Book private hip-hop dance lessons in San Jose with Ceech at Get Down Dance Studios. Beginner-friendly coaching, personal feedback, and a free consultation.",
+  title: "In-Person Hip-Hop Dance Lessons in San Jose | Dance With Ceech",
+  description: "Book in-person hip-hop dance lessons with Ceech at Get Down Dance Studios in San Jose. Adults 18+, 60-minute lessons, studio fee included and a free phone consultation.",
   alternates: { canonical: "https://dancewithceech.com/private-lessons/san-jose" },
   openGraph: {
-    title: "Hip-Hop Dance Lessons in San Jose | DanceWithCeech",
-    description: "Private hip-hop dance lessons in San Jose, CA, taught by Ceech at Get Down Dance Studios. Free 30-minute phone consultation.",
+    title: "In-Person Hip-Hop Dance Lessons in San Jose | Dance With Ceech",
+    description: "Book a private 1-on-1 dance lesson with Ceech in San Jose. Personalized hip-hop instruction for adults 18 and older at Get Down Dance Studios.",
     url: "https://dancewithceech.com/private-lessons/san-jose",
     siteName: "Dance With Ceech",
-    images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Private dance lessons in San Jose with Ceech" }],
+    images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Private Dance Lessons with Ceech" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hip-Hop Dance Lessons in San Jose | DanceWithCeech",
-    description: "Private hip-hop dance lessons in San Jose, CA, taught by Ceech at Get Down Dance Studios. Free 30-minute phone consultation.",
+    title: "In-Person Hip-Hop Dance Lessons in San Jose | Dance With Ceech",
+    description: "Book a private 1-on-1 dance lesson with Ceech in San Jose. Personalized hip-hop instruction for adults 18 and older at Get Down Dance Studios.",
     images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"],
   },
 };
+
+const inPersonFaqs = [...sanJoseFaqs, {
+  question: "What should I wear or set up?",
+  answer: "In person, wear comfortable, loose clothing and comfortable shoes; no bare feet or sandals. For homework, use a phone or video recorder and a way to play music. A tripod helps keep you in view.",
+}];
 
 export default async function SanJosePrivateLessonsPage() {
   const reviewSummary = await getReviewSummary();
 
   return (
-    <main className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildLessonSchema("/private-lessons/san-jose", "San Jose private dance lessons", sanJoseFaqs, false)).replace(/</g, "\\u003c") }} />
+    <div className={approvedStyles.scope}><a href="#main-content" className={approvedStyles.skipLink}>Skip to content</a><main id="main-content" className="min-h-screen" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
 
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": [...buildLessonSchema("/private-lessons/san-jose", "In-Person Hip-Hop Dance Lessons in San Jose", inPersonFaqs, false)["@graph"].map(node => node["@type"] === "LocalBusiness" ? { ...node, priceRange: "$250 per in-person lesson" } : node), instructorSchema],
+      }).replace(/</g, "\\u003c") }} />
       <Nav />
 
       {/* HERO */}
-      <section className="pt-40 pb-12 px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary)" }}>
-            San Jose, CA
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-balance">
-            Private Hip-Hop Dance Lessons in San Jose
-          </h1>
-          <p className="text-lg leading-relaxed mb-8" style={{ color: "var(--muted)" }}>
-            1-on-1 private dance lessons for adults 18 and older in San Jose, taught by Ceech. He has a degree in Electrical Engineering and Computer Science from UC Berkeley and has taught dance since 1998, with direct training in Electric Boogaloos movement. Hip-hop, locking, popping, breaking, and house dance are available in person at <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}>Get Down Dance Studios</a> in Japantown.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a
-              href="#booking"
-              className="px-8 py-4 rounded-full text-white font-semibold text-center transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "var(--accent-primary)" }}
-            >
-              Book a Free 30-Minute Phone Consultation
-            </a>
-            <a
-              href="sms:4086573771"
-              className="px-8 py-4 rounded-full font-semibold text-center transition-colors hover:text-white"
-              style={{ border: "1px solid #333", color: "var(--muted)" }}
-            >
-              Text (408) 657-3771
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* WHY SAN JOSE */}
-      <section className="py-16 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-balance">Why train with Ceech in San Jose</h2>
-          <div className="space-y-5 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-            <p>
-              San Jose has a deep dance scene, and private lessons can give adult students focused time on foundations rather than a full choreography sequence. I&apos;ve held college faculty positions at Mission College, West Valley College, Gavilan College, and Cabrillo College. I&apos;ve also guest taught at Stanford, UC Berkeley, UC Santa Cruz, Santa Clara University, De Anza College, San Jose City College, and Ohlone College. My teaching approach draws on engineering: identify the movement problem, apply a specific correction, and build up systematically.
+      <section className="pt-40 pb-0 px-6">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary-accessible)" }}>
+              1-on-1 Instruction
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-balance">
+              In-Person Hip-Hop Dance Lessons in San Jose
+            </h1>
+            <p className="text-lg leading-relaxed mb-8" style={{ color: "var(--muted)" }}>
+              Real-time feedback, personalized to your current ability and goals. Private lessons are designed for adults 18 and older and are available in person at <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}>Get Down Dance Studios</a> in San Jose.
             </p>
-            <p>
-              My funk styles training includes direct study with Electric Boogaloos members Pop&apos;in Pete and Skeeter Rabbit. That background informs lessons in popping, waving, and Boogaloo alongside the fundamentals of each movement.
-            </p>
-            <p>
-              Lessons happen at <strong style={{ color: "var(--foreground)" }}>Get Down Dance Studios at 196 Jackson St</strong> in Japantown, a professional studio with sprung floors, mirrors, and sound, a few minutes from downtown San Jose. Paid street parking only. Check posted signs for fees and time limits, and allow time to park.
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a
+                href="#booking"
+                className="px-8 py-4 rounded-full text-white font-semibold text-center transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "var(--accent-primary)" }}
+              >
+                Book Your Free 30-Minute Phone Consultation
+              </a>
+              <a
+                href="#pricing"
+                className="px-8 py-4 rounded-full font-semibold text-center transition-colors hover:text-white"
+                style={{ border: "1px solid #333", color: "var(--muted)" }}
+              >
+                View Pricing
+              </a>
+            </div>
+            <p className="mt-6 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
+              Explore details for <Link href="/private-lessons/bay-area" className="hover:text-white" style={{ color: "var(--accent-primary-accessible)" }}>Bay Area dance lessons</Link>.
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* SOCIAL PROOF */}
-      <section className="py-16 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-balance">Trusted by San Jose dancers</h2>
-          <p className="text-lg leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
-            {formatReviewProof(reviewSummary)}
-          </p>
-          <div className="flex flex-wrap gap-3 text-sm">
-            <a
-              href="https://www.yelp.com/biz/dance-with-ceech-san-jose-3"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-4 py-2 rounded-full transition-colors hover:opacity-90"
-              style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f", color: "var(--accent-primary)" }}
-            >
-              Read Yelp Reviews →
-            </a>
-            <a
-              href="https://maps.app.goo.gl/UwJFWssFCYNC5Zyc7"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-4 py-2 rounded-full transition-colors hover:opacity-90"
-              style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f", color: "var(--accent-primary)" }}
-            >
-              Read Google Reviews →
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* PRICING LINK */}
-      <section className="py-16 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-balance">Pricing</h2>
-          <p className="text-lg leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
-            In-person 60-min lessons at Get Down Dance Studios, San Jose. Studio fee included:
-          </p>
-          <ul className="space-y-3 text-lg" style={{ color: "var(--muted)" }}>
-            <li><strong style={{ color: "var(--foreground)" }}>10-Pack:</strong> $2,100 ($210/session, save $400) <em className="text-sm">Most popular</em></li>
-            <li><strong style={{ color: "var(--foreground)" }}>5-Pack:</strong> $1,150 ($230/session)</li>
-            <li><strong style={{ color: "var(--foreground)" }}>Single Session:</strong> $250</li>
-          </ul>
-          <p className="mt-6" style={{ color: "var(--muted)" }}>
-            <Link href="/private-lessons#video-eval" aria-label="Free video evaluation for prospective virtual students" className="hover:text-white transition-colors" style={{ color: "var(--accent-primary)" }}>
-              Free video evaluation for prospective virtual students
-            </Link>.
-          </p>
-        </div>
-      </section>
-
-      <LessonFaqs faqs={sanJoseFaqs} />
-
-      {/* BOOKING */}
-      <section id="booking" className="py-24 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4 text-balance">Book your free 30-minute phone consultation</h2>
-          <p className="mb-3" style={{ color: "var(--muted)" }}>
-            We&apos;ll go over your goals, experience level, and schedule your first lesson in San Jose.
-          </p>
-          <p style={{ color: "var(--muted)" }}>
-            Or skip the form and text me directly:{" "}
-            <a href="sms:4086573771" className="font-semibold hover:text-white transition-colors" style={{ color: "var(--accent-primary)" }}>
-              (408) 657-3771
-            </a>
-          </p>
-        </div>
-
-        <div className="max-w-3xl mx-auto mt-8 rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
-          <ConsultationBooking surface="san_jose" title="Free 30-minute phone consultation with Ceech in San Jose" />
-        </div>
-      </section>
-
-      {/* LOCATION */}
-      <section className="py-16 px-6" style={{ borderTop: "1px solid #1f1f1f" }}>
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-balance">Where we train</h2>
-          <div className="mb-6">
-            <a href="https://getdowndancestudios.com/" target="_blank" rel="noopener noreferrer" className="text-lg font-medium mb-1 hover:underline block" style={{ color: 'var(--foreground)' }}>
-              Get Down Dance Studios
-            </a>
-            <p className="mb-4" style={{ color: "var(--muted)" }}>
-              196 Jackson St<br />
-              San Jose, CA 95112<br />
-              Japantown
-            </p>
-            <a
-              href="https://maps.app.goo.gl/UwJFWssFCYNC5Zyc7"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block text-sm px-4 py-2 rounded-full transition-colors hover:opacity-90"
-              style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f", color: "var(--accent-primary)" }}
-            >
-              View on Google Maps →
-            </a>
-          </div>
-          <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
-            <iframe
-              src="https://www.google.com/maps?q=37.3488633,-121.8944247&output=embed"
-              width="100%"
-              height="300"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Get Down Dance Studios location in San Jose"
+          <div className="flex justify-center md:justify-end">
+            <Image
+src="/images/ceech/ceech-teaching-private-student-neck-control.jpg"
+alt="Ceech teaching a private lesson"
+title="Ceech teaching a private lesson"
+              width={500}
+              height={400}
+              className="rounded-2xl object-cover"
+              style={{ maxHeight: '420px', width: '100%', objectFit: 'cover' }}
             />
           </div>
         </div>
       </section>
 
+      <LessonIntroduction />
+
+      {/* WHAT YOU GET */}
+      <section className="py-24 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary-accessible)" }}>
+              What You Get
+            </div>
+            <h2 className="text-3xl font-bold text-balance">Every lesson is built around you</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                title: "Personalized Curriculum",
+                description: "Every lesson is built around your current level, your goals, and the style you want to learn.",
+              },
+              {
+                title: "Real-Time Corrections",
+                description: "Ceech watches you move and gives immediate feedback, with corrections you can't get from a prerecorded video.",
+              },
+              {
+                title: "Any Style, Any Level",
+                description: "Hip-hop, locking, popping, breaking, and house dance for adults 18 and older, from complete beginners to experienced dancers.",
+              },
+            ].map(({ title, description }) => (
+              <div key={title} className="rounded-2xl p-6" style={{ backgroundColor: "var(--surface)", border: "1px solid #1f1f1f" }}>
+                <div className="w-8 h-1 rounded mb-4" style={{ backgroundColor: "var(--accent-primary)" }} />
+                <h3 className="font-bold text-lg mb-2">{title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <SanJoseLessonProcess />
+
+      {/* TEACHING VIDEOS */}
+      <section className="pb-24 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary-accessible)" }}>
+              The Method in Action
+            </div>
+            <h2 className="text-3xl font-bold mb-3 text-balance">Watch Ceech teach</h2>
+            <p style={{ color: "var(--muted)" }}>These videos show Ceech teaching, not just performing. This is what your lesson looks like.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[
+              { videoId: "6OctgBz5jPU", label: "1-on-1 Final Routine", desc: "Student performing what they learned in a private session" },
+              { videoId: "2Xcd7XoI2Vg", label: "Breaking Down the Steps", desc: "Ceech counting through moves with students in real time" },
+              { videoId: "kmv1R6y4eH0", label: "3 Drills to Practice", desc: "Simple drills you can follow along at home" },
+            ].map(({ videoId, label, desc }) => (
+              <div key={videoId}>
+                <div className="rounded-2xl overflow-hidden mb-3" style={{ aspectRatio: "9/16", position: "relative" }}>
+                  <iframe
+                    src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+                    title={label}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    loading="lazy"
+                    style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
+                  />
+                </div>
+                <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--accent-primary-accessible)" }}>{label}</div>
+                <p className="text-sm" style={{ color: "var(--muted)" }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* LESSON PHOTOS */}
+      <section className="pb-24 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-bold mb-2 text-balance">What a lesson looks like</h2>
+            <p className="text-sm" style={{ color: "var(--muted)" }}>Hands-on. Specific. No vague instructions.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Image
+src="/images/ceech/ceech-teaching-private-student-neck-control.jpg"
+alt="Ceech correcting neck movement during a private lesson"
+title="Ceech correcting neck movement during a private lesson"
+              width={600}
+              height={400}
+              className="rounded-2xl object-cover w-full"
+              style={{ height: '280px', objectFit: 'cover' }}
+            />
+            <Image
+src="/images/ceech/ceech-samy-popping-arm-drill.jpg"
+alt="Ceech teaching arm popping technique"
+title="Ceech teaching arm popping technique"
+              width={600}
+              height={400}
+              className="rounded-2xl object-cover w-full"
+              style={{ height: '280px', objectFit: 'cover' }}
+            />
+            <Image
+src="/images/ceech/ceech-samy-teaching-knee-pop.jpg"
+alt="Ceech teaching knee pop footwork"
+title="Ceech teaching knee pop footwork"
+              width={600}
+              height={400}
+              className="rounded-2xl object-cover w-full sm:col-span-2"
+              style={{ height: '280px', objectFit: 'cover' }}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* WHO IT'S FOR */}
+      <section className="py-16 px-6" style={{ backgroundColor: "var(--surface)", borderTop: "1px solid #1f1f1f", borderBottom: "1px solid #1f1f1f" }}>
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-6 text-balance">Who private lessons are for</h2>
+          <div className="flex flex-col gap-4 text-left max-w-xl mx-auto">
+            {[
+              "You want to learn faster than a group class allows",
+              "You're too self-conscious to dance in front of others yet",
+              "You have a specific move or style you want to learn",
+              "You've been dancing for years but hit a plateau",
+              "You want direct, honest feedback, not just encouragement",
+            ].map((item) => (
+              <div key={item} className="flex items-start gap-3">
+                <span style={{ color: "var(--accent-primary-accessible)" }}>→</span>
+                <span style={{ color: "var(--muted)" }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CelebrationLessons />
+      <SanJoseSpecializedLessons />
+
+      {/* TESTIMONIALS */}
+      <section data-approved-testimonials className="py-24 px-6" style={{ backgroundColor: "var(--background)" }}>
+        <div className="text-center mb-12">
+          <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary-accessible)" }}>
+            Student Results
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-balance">Real students. Real progress.</h2>
+          <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}>Click any card to watch on YouTube</p>
+        </div>
+        <div className="max-w-4xl mx-auto">
+          <TestimonialsCarousel />
+        </div>
+      </section>
+
+      {/* PRICING */}
+      <div id="pricing">
+        <SanJosePricing />
+      </div>
+
+      <TestimonialsMarquee summary={reviewSummary} />
+
+      <LessonFaqs faqs={inPersonFaqs} />
+      <LessonLocation />
+
+
+      {/* BOOKING */}
+      <section id="booking" className="py-24 px-6">
+        <div className="max-w-3xl mx-auto text-center mb-12">
+          <div className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: "var(--accent-primary-accessible)" }}>
+            Let&apos;s Talk
+          </div>
+          <h2 className="text-3xl font-bold mb-4 text-balance">Book your free 30-minute phone consultation</h2>
+          <p className="mb-3" style={{ color: "var(--muted)" }}>
+            We&apos;ll talk by phone about your goals, experience level, and which lesson option fits you best. No obligation.
+          </p>
+          <p style={{ color: "var(--muted)" }}>
+            Or skip the form and text me directly:{" "}
+            <a
+              href="sms:4086573771"
+              className="font-semibold hover:text-white transition-colors"
+              style={{ color: "var(--accent-primary-accessible)" }}
+            >
+              (408) 657-3771
+            </a>
+          </p>
+        </div>
+
+        <div className="max-w-3xl mx-auto rounded-2xl overflow-hidden" style={{ border: "1px solid #1f1f1f" }}>
+          <ConsultationBooking surface="san_jose" title="Free 30-minute phone consultation with Ceech in San Jose" />
+        </div>
+
+        <div className="text-center mt-8">
+          <p className="text-sm" style={{ color: "var(--muted)" }}>
+            Questions?{" "}
+            <a href="sms:4086573771" className="hover:text-white transition-colors" style={{ color: "var(--accent-primary-accessible)" }}>
+              Text (408) 657-3771
+            </a>
+            {" "}or{" "}
+            <Link href="/contact" className="hover:text-white transition-colors" style={{ color: "var(--accent-primary-accessible)" }}>
+              send a message
+            </Link>
+          </p>
+        </div>
+      </section>
+
       <Footer />
-    </main>
+
+    </main></div>
   );
 }
