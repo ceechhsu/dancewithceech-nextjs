@@ -5,8 +5,10 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { danceLessons, lessonTime } from "@/lib/approved-pages/dance-lessons";
+import { lessonTime } from "@/lib/approved-pages/dance-lessons";
 import { trackFunnelEvent } from "@/lib/approved-pages/funnel";
+import { useTeachingLessons } from "./useTeachingLessons";
+import LessonFeedStatus from "./LessonFeedStatus";
 import styles from "./RecentDanceLessons.module.css";
 
 const ShortLessonModal = dynamic(() => import("./ShortLessonModal"), { ssr: false });
@@ -14,6 +16,8 @@ const ShortLessonModal = dynamic(() => import("./ShortLessonModal"), { ssr: fals
 // The homepage needs playback only. Keep catalog search, style filtering and
 // storage restoration in the catalog route rather than its initial bundle.
 export default function RecentDanceLessons() {
+  const feed = useTeachingLessons();
+  const danceLessons = feed.lessons;
   const [playing, setPlaying] = useState<string | null>(null);
   const [returnFocus, setReturnFocus] = useState<HTMLElement | null>(null);
   const selected = danceLessons.find(lesson => lesson.id === playing);
@@ -30,7 +34,15 @@ export default function RecentDanceLessons() {
     observer.observe(element);
     element.addEventListener("scroll", update, { passive: true });
     return () => { observer.disconnect(); element.removeEventListener("scroll", update); };
-  }, []);
+  }, [danceLessons.length]);
+  useEffect(() => {
+    if (playing && !danceLessons.some(lesson => lesson.id === playing)) {
+      // The external playlist removed this selection; do not reopen it on a later refresh.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPlaying(null);
+      rail.current?.focus({ preventScroll: true });
+    }
+  }, [danceLessons, playing]);
   function move(direction: number) {
     const element = rail.current;
     if (!element) return;
@@ -43,11 +55,13 @@ export default function RecentDanceLessons() {
     <div className={styles.header}>
       <div className={styles.actions}><Link href="/dance-tutorials" prefetch={false} className={styles.browse}>Browse All Lessons <span aria-hidden="true">→</span></Link><div className={styles.arrows}><button type="button" aria-label="Show previous short lessons" aria-controls={railID} disabled={edges.start} onClick={() => move(-1)}><ChevronLeft size={18} aria-hidden="true" /></button><button type="button" aria-label="Show next short lessons" aria-controls={railID} disabled={edges.end} onClick={() => move(1)}><ChevronRight size={18} aria-hidden="true" /></button></div></div>
     </div>
-    <ul ref={rail} id={railID} className={styles.rail} tabIndex={0} aria-label="Short lessons. Use left and right arrow keys to browse." onKeyDown={event => {
+    <LessonFeedStatus {...feed} count={danceLessons.length} />
+    <ul aria-busy={feed.loading} ref={rail} id={railID} className={styles.rail} tabIndex={0} aria-label="Short lessons. Use left and right arrow keys to browse." onKeyDown={event => {
       if (event.target !== event.currentTarget) return;
       if (event.key === "ArrowLeft" || event.key === "ArrowRight") { event.preventDefault(); move(event.key === "ArrowLeft" ? -1 : 1); }
       if (event.key === "Home" || event.key === "End") { event.preventDefault(); setPlaying(null); event.currentTarget.scrollTo({ left: event.key === "Home" ? 0 : event.currentTarget.scrollWidth, behavior: "auto" }); }
     }}>
+      {feed.loading && Array.from({ length: 6 }, (_, i) => <li key={i} aria-hidden="true" className={styles.slide}><div className={styles.card}><div className={styles.visual} /><div className="h-24" /></div></li>)}
       {danceLessons.slice(0, 6).map(lesson => <li key={lesson.id} className={styles.slide}><article className={styles.card}>
         <div className={styles.visual}>
           <button type="button" className="lesson-control group absolute inset-0 w-full cursor-pointer" aria-label={`Watch ${lesson.title}`} aria-haspopup="dialog" onClick={event => { setReturnFocus(event.currentTarget); setPlaying(lesson.id); trackFunnelEvent("tutorial_open", { lesson_id: lesson.id, placement: "home", destination_type: "tutorial" }); }}>

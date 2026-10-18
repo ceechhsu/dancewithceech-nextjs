@@ -2,7 +2,9 @@ import inventory from "@/content/approved-pages/dance-lessons.json";
 
 export const lessonFilters = ["All", "Rhythm", "Footwork", "Isolations"] as const;
 export type LessonFilter = typeof lessonFilters[number];
-export type DanceLesson = typeof inventory[number];
+export type DanceLesson = Omit<typeof inventory[number], "sourceID" | "timestamp" | "actualLiveDate"> & {
+  sourceID: string | null; timestamp: number | null; actualLiveDate: string | null;
+};
 
 // Only confirmed public releases enter the library. A future date never means live.
 export function publicLessons(items: DanceLesson[], now = Date.now()) {
@@ -10,7 +12,7 @@ export function publicLessons(items: DanceLesson[], now = Date.now()) {
   return items.filter(lesson => lesson.status === "public" && Date.parse(lesson.publishedAt) <= now)
     .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))
     .filter(lesson => {
-      const key = `${lesson.sourceID}:${Math.floor(lesson.timestamp)}`;
+      const key = lesson.sourceID && lesson.timestamp !== null ? `${lesson.sourceID}:${Math.floor(lesson.timestamp)}` : lesson.publishedVideoID;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
@@ -30,5 +32,5 @@ export function lessonTime(seconds: number) {
   return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
 }
 export function sourceURL(lesson: DanceLesson) {
-  return `https://www.youtube.com/watch?v=${lesson.sourceID}&t=${Math.floor(lesson.timestamp)}s`;
+  return lesson.sourceID && lesson.timestamp !== null ? `https://www.youtube.com/watch?v=${lesson.sourceID}&t=${Math.floor(lesson.timestamp)}s` : null;
 }

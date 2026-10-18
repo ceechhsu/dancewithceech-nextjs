@@ -38,7 +38,7 @@ export default function ShortLessonModal({ lesson, onClose, returnFocus }: { les
     <div className={styles.content}>
       <div className={styles.player}><YouTubeLessonPlayer videoID={lesson.publishedVideoID} title={lesson.title} url={lesson.publishedVideoURL} /></div>
       <div className={styles.details}><p className={styles.tags}>{lesson.tags.join(" · ")}</p><h2 id={titleID}>{lesson.title}</h2><p id={cueID} className={styles.cue}><strong>Practice: </strong>{lesson.practiceCue}</p>
-        <a href={sourceURL(lesson)} target="_blank" rel="noopener noreferrer" className={styles.link}>Full Live · {lesson.actualLiveDate} · {lessonTime(lesson.timestamp)} ↗<span className="sr-only"> (opens in a new tab)</span></a>
+        {sourceURL(lesson) && <a href={sourceURL(lesson)!} target="_blank" rel="noopener noreferrer" className={styles.link}>Full Live{lesson.actualLiveDate ? ` · ${lesson.actualLiveDate}` : ""} · {lessonTime(lesson.timestamp!)} ↗<span className="sr-only"> (opens in a new tab)</span></a>}
         <Link href={lesson.nextStep === "beat" ? "/beat-first" : "/private-lessons#booking"} prefetch={false} className={styles.link}>{lesson.nextStep === "beat" ? "Practice with free BeatFirst →" : "Get coaching on this move →"}</Link>
         <a href={lesson.publishedVideoURL} target="_blank" rel="noopener noreferrer" className={styles.youtube}>Watch on YouTube ↗<span className="sr-only"> (opens in a new tab)</span></a>
         <p className={styles.keyboardHint}>Use Close or Escape to return to the lessons. From YouTube’s controls, Tab back to this view first.</p>

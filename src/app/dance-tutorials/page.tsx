@@ -18,7 +18,7 @@ export default function DanceTutorialsPage() {
     <Link href="/#dance-tutorials" className="lesson-control mb-8 inline-block rounded py-2 text-sm text-accent-primary-accessible hover:underline">← See how I teach</Link>
     <p className="mb-4 text-sm font-medium uppercase tracking-widest text-accent-primary-accessible">Learn free · Dance with Ceech</p>
     <h1 className="text-4xl font-bold md:text-5xl">Your next move starts here.</h1>
-    <p className="mb-10 mt-5 max-w-2xl text-lg leading-relaxed text-muted">Pick one skill, watch a short lesson, and give it a try. Each clip links to the full Live so you can practice in context.</p>
+    <p className="mb-10 mt-5 max-w-2xl text-lg leading-relaxed text-muted">Pick one skill, watch a short lesson, and give it a try. Use the full Live links, when available, to practice in context.</p>
     <DanceLessonLibrary articles={getAllPosts().filter(post => post.category !== "general").map(post => ({ slug: post.slug, title: post.title, description: post.description ?? "", category: post.category, hasImage: Boolean(post.hasImage) }))} />
   </main><Footer /></div>;
 }

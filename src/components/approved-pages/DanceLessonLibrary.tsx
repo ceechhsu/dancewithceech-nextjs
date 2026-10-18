@@ -5,14 +5,26 @@ import Image from "next/image";
 import Link from "next/link";
 import { trackFunnelEvent } from "@/lib/approved-pages/funnel";
 import YouTubeLessonPlayer from "@/components/approved-pages/YouTubeLessonPlayer";
-import { danceLessons, lessonFilters, lessonTime, searchLessons, sourceURL, type LessonFilter } from "@/lib/approved-pages/dance-lessons";
+import { lessonFilters, lessonTime, searchLessons, sourceURL, type LessonFilter } from "@/lib/approved-pages/dance-lessons";
+
+import { useTeachingLessons } from "./useTeachingLessons";
+import LessonFeedStatus from "./LessonFeedStatus";
 
 type Article = { slug: string; title: string; description: string; category: string; hasImage: boolean };
 const styleLabels: Record<string, string> = { "hip-hop-dance-moves": "Hip-Hop", "locking-dance-moves": "Locking", "breaking-dance-moves": "Breaking", "funk-style-dance-moves": "Funk & Popping", "house-dance": "House" };
 export default function DanceLessonLibrary({ recent = false, articles = [] }: { recent?: boolean; articles?: Article[] }) {
+  const feed = useTeachingLessons();
+  const danceLessons = feed.lessons;
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<LessonFilter>("All");
   const [playing, setPlaying] = useState<string | null>(null);
+  useEffect(() => {
+    if (playing && !danceLessons.some(lesson => lesson.id === playing)) {
+      // External membership changes invalidate selection, including if the item returns later.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPlaying(null);
+    }
+  }, [danceLessons, playing]);
   const [style, setStyle] = useState("All");
   const [limit, setLimit] = useState(12);
   const [restored, setRestored] = useState(false);
@@ -62,7 +74,8 @@ export default function DanceLessonLibrary({ recent = false, articles = [] }: { 
       <p role="status" aria-live="polite" className="text-sm text-muted">{lessons.length} short lessons{articles.length > 0 ? ` · ${matchingArticles.length} full tutorials` : ""}{filter !== "All" ? ` · ${filter}` : ""}{query.trim() ? ` matching “${query.trim()}”` : " · Newest first"}</p>
     </div>}
 
-    {lessons.length === 0 && matchingArticles.length === 0 ? <div className="rounded-2xl border border-white/10 bg-surface px-6 py-12 text-center">
+    <LessonFeedStatus {...feed} count={danceLessons.length} />
+    {!feed.loading && !feed.failed && lessons.length === 0 && matchingArticles.length === 0 && (query || filter !== "All" || style !== "All") ? <div className="rounded-2xl border border-white/10 bg-surface px-6 py-12 text-center">
       <h2 className="text-xl font-semibold">No lessons found</h2><p className="mt-3 text-muted">Try a move like two-step, a skill like balance, or clear your filters.</p>
       <button type="button" onClick={reset} className="lesson-control mt-6 rounded-full bg-accent-primary px-6 py-3 font-semibold text-white">Reset search and filters</button>
     </div> : <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -77,11 +90,11 @@ export default function DanceLessonLibrary({ recent = false, articles = [] }: { 
             </button>}
         </div>
         <div className="flex flex-1 flex-col p-5">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent-primary-accessible">Short lesson · {lesson.tags.join(" · ")}</p>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent-primary-accessible">Short lesson{lesson.tags.length ? ` · ${lesson.tags.join(" · ")}` : ""}</p>
           <h3 className="text-xl font-bold leading-snug">{lesson.title}</h3>
           <p className="mt-4 text-sm leading-relaxed text-muted"><span className="font-semibold text-foreground">Try this: </span>{lesson.practiceCue}</p>
           <div className="mt-auto pt-5">
-            <a className="lesson-control block rounded text-sm text-accent-primary-accessible hover:underline" href={sourceURL(lesson)} target="_blank" rel="noopener noreferrer">Full Live · {lesson.actualLiveDate} · {lessonTime(lesson.timestamp)} <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>
+            {sourceURL(lesson) && <a className="lesson-control block rounded text-sm text-accent-primary-accessible hover:underline" href={sourceURL(lesson)!} target="_blank" rel="noopener noreferrer">Full Live{lesson.actualLiveDate ? ` · ${lesson.actualLiveDate}` : ""} · {lessonTime(lesson.timestamp!)} <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>}
             <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-white/10 pt-3 text-sm">
               <Link prefetch={false} href={lesson.nextStep === "beat" ? "/beat-first" : "/private-lessons#booking"} onClick={() => trackFunnelEvent("tutorial_next_step", { lesson_id: lesson.id, placement: recent ? "home" : "library", destination_type: lesson.nextStep === "beat" ? "rhythm_trainer" : "coaching", destination: lesson.nextStep === "beat" ? "/beat-first" : "/private-lessons#booking" })} className="lesson-control rounded py-2 font-semibold hover:underline">{lesson.nextStep === "beat" ? "Practice with free BeatFirst →" : "Get coaching on this move →"}</Link>
               <a href={lesson.publishedVideoURL} target="_blank" rel="noopener noreferrer" className="lesson-control rounded py-2 text-muted hover:text-white">YouTube<span className="sr-only"> (opens in a new tab)</span> ↗</a>
