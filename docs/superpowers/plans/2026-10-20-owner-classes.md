@@ -1,0 +1,13 @@
+# Owner dashboard Classes implementation plan
+
+Goal: Add a collapsible sidebar group for exactly the four requested current Fall2026 classes; show current roster names, linked Google accounts, enrollment emails and read-only attendance history.
+
+Verified current classes: Mission Weight Training35, Mission Hip Hop41, West Valley Hip Hop20, Cabrillo Hip Hop22. Manifest uses their exact existing IDs; never create classes or enrollments. Exclude archery/test classes. Server must authorize sole owner before any database client or class query, then enforce manifest ID, owner email, Fall2026 and unarchived status.
+
+1. Write failing model/service tests for cancellations/holidays, enrollment dates, open absence vs finalized absence, missing records, instructor credit, unlinked students, and zero storage access for denied sessions/out-of-scope classes.
+2. Add minimal typed readonly class store. Select only needed class schedule metadata, current enrollments (effective_to/removed_at null), meeting ID/date/status, schedule exceptions date/kind, and attendance record status/source/timestamps. Paginate complete data; stable sort. No meeting tokens/location/notes/corrections or unrelated classes.
+3. Reuse existing calendarDay and semesterSummary semantics. Count immediate present/instructor credit, finalized absent only, exclude cancellations/exceptions and dates outside enrollment. Keep missing closed-meeting records explicitly No record; no invented absences. Roster/account sign-in are separate facts.
+4. Add shared sidebar with native collapsible Classes group and four full-document links. Keep current studio dark/gold tokens, visible focus and44px controls. Selected class leads with roster and counts; searchable student disclosures show account/email and date history. Phone layout preserves readable labels without page overflow.
+5. Add /admin/classes/[classId] and GET /api/admin/classes/[classId] using same loader and private/no-store/analytics protections. Read-only; no attendance editing or emailing. Update privacy notice to accurately describe separate owner class views and deletion scope.
+6. Run focused unit/HTTP fixture tests, TypeScript, scoped lint, build. Verify unauthorized requests cause zero backend reads and out-of-scope IDs are404. Independent review before release.
+7. Stage production, verify guest API protections, promote and push source. No database migration/configuration change expected. Refresh/open existing owner IAB; verify all4 current roster counts and display semantics with private aggregate DOM checks, desktop/mobile layout. Keep actual view open and notify user. Save only nonidentifying screenshot areas; never put student lists into chat or repo artifacts.

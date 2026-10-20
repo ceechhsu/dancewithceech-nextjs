@@ -1,10 +1,10 @@
 /* Full document navigation isolates private data from previously loaded marketing scripts. */
-/* eslint-disable @next/next/no-html-link-for-pages */
 'use client'
 import { useState } from 'react'
-import { Activity, ArrowUpRight, LockKeyhole, Search, ShieldCheck } from 'lucide-react'
+import { ArrowUpRight, LockKeyhole, Search, ShieldCheck } from 'lucide-react'
 import type { Overview, Service } from '@/lib/owner-dashboard/model'
 import styles from './Dashboard.module.css'
+import OwnerSidebar from './OwnerSidebar'
 const names = { beatfirst: 'BeatFirst', trainer: 'Practice trainer' }
 function time(value: string | null) {
   if (!value) return 'Not recorded'
@@ -37,12 +37,7 @@ export default function Dashboard({ initial }: { initial: Overview }) {
   }
   if (accessLost) return <div className={styles.shell}><main className={styles.main}><h1>Owner access required</h1><p>Your owner session is no longer available. The private snapshot has been cleared.</p><a href="/admin">Sign in again</a></main></div>
   return <div className={styles.shell}>
-    <aside className={styles.rail}>
-      <a className={styles.brand} href="/">DANCE<span>WITH CEECH</span></a>
-      <p className={styles.eyebrow}>Studio / Owner</p>
-      <nav aria-label="Owner navigation"><a href="#accounts" className={styles.current}><Activity size={17} /> Account activity</a><a href="#coverage"><ShieldCheck size={17} /> Data & privacy</a></nav>
-      <div className={styles.railFoot}><LockKeyhole size={17} /><p>Private workspace<span>Owner access only</span></p></div>
-    </aside>
+    <OwnerSidebar />
     <main className={styles.main}>
       <div className={styles.topline}><span>DanceWithCeech.com</span><span><LockKeyhole size={13} /> Owner only</span></div>
       {data.demo && <div className={styles.demo} role="note"><strong>LOCAL DESIGN PREVIEW</strong><span>All accounts and activity below are synthetic. No production data is connected.</span><a href="/admin">Open protected dashboard <ArrowUpRight size={15} /></a></div>}

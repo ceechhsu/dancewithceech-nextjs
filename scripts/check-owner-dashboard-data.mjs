@@ -7,9 +7,15 @@ import { once } from 'node:events'
 import { setTimeout as delay } from 'node:timers/promises'
 import { encode } from 'next-auth/jwt'
 const origin='http://127.0.0.1:3151', database='http://127.0.0.1:3152'
+const classId='85031666-dc8f-4f0f-9c73-efa2e5f0e397'
 const calls=[]
 let failTrainer=false, failHistorical=false
 const fixtures={
+  attendance_classes:[{id:classId,name:'Mission Weight Training',college:'Mission College',instructor_email:'dancewithceech@gmail.com',term:'Fall',year:2026,archived:false,timezone:'America/Los_Angeles',start_date:'2026-09-01',end_date:'2026-12-15',days:[1,3],start_time:'10:00:00'}],
+  attendance_enrollments:[{id:'fixture-student',name:'Fixture Student',first_name:'Fixture',last_name:'Student',email:'student@example.invalid',google_sub:'fixture-student',effective_from:'2026-09-01',effective_to:null,removed_at:null},{id:'fixture-unlinked',name:'Unlinked Student',first_name:null,last_name:null,email:null,google_sub:null,effective_from:'2026-09-01',effective_to:null,removed_at:null}],
+  attendance_meetings:[{id:'fixture-meeting',meeting_date:'2026-10-19',status:'closed',private_token:'NEVER_EXPOSE_TOKEN',location_lat:123}],
+  attendance_records:[{meeting_id:'fixture-meeting',enrollment_id:'fixture-student',status:'present',source:'instructor_credit',revision:1,checked_in_at:null,updated_at:'2026-10-19T17:00:00Z'}],
+  attendance_schedule_exceptions:[],
   owner_account_directory:[{user_id:'google:fixture-signin-only',email:'signin-only@example.invalid',first_sign_in_at:'2026-10-18T08:00:00Z',last_sign_in_at:'2026-10-19T08:00:00Z'}],
   owner_account_email_matches:[{user_id:'google:fixture-practice',email:'historical@example.invalid',matched_at:'2026-10-20T00:00:00Z'}],
   beatfirst_preview_attempts:[{user_id:'google:fixture-unknown',attempt_id:'00000000-0000-4000-8000-000000000002',level_id:2,saved_at:'2026-09-20T08:00:00Z'},{user_id:'google:fixture-practice',attempt_id:'00000000-0000-4000-8000-000000000001',level_id:4,saved_at:'2026-10-19T08:10:00Z'}],
@@ -24,6 +30,7 @@ const db=http.createServer((req,res)=>{
   if(table==='owner_directory_erase_account'){
     assert.equal(req.method,'POST');let payload='';req.on('data',c=>payload+=c);req.on('end',()=>{assert.deepEqual(JSON.parse(payload),{p_user_id:'google:fixture-owner'});res.end('null')});return
   }
+  if(table==='attendance_meetings')assert.equal(url.searchParams.get('merged_into'),'is.null','Merged roll calls must be excluded')
   const data=fixtures[table]
   if(!data){res.statusCode=404;res.end('{}');return}
   assert.equal(req.method,'GET','No tracking writes are permitted during local read QA')
@@ -31,7 +38,7 @@ const db=http.createServer((req,res)=>{
   res.end(JSON.stringify(data))
 })
 await new Promise((resolve,reject)=>{db.once('error',reject);db.listen(3152,'127.0.0.1',resolve)})
-const server=spawn(process.execPath,['node_modules/next/dist/bin/next','start','--hostname','127.0.0.1','--port','3151'],{stdio:['ignore','pipe','pipe'],env:{...process.env,NODE_ENV:'production',AUTH_SECRET:'owner-dashboard-local-test-only',OWNER_DASHBOARD_ENABLED:'true',OWNER_DASHBOARD_LOCAL_PREVIEW:'true',SITE_PROFILE_LOCAL_TEST_STORAGE:'true',OWNER_SOCIAL_IMPORTED_SNAPSHOTS:'true',OWNER_SIGNIN_RECORDING_ENABLED:'false',OWNER_SIGNIN_PRIVACY_REVIEWED:'false',OWNER_DIRECTORY_SUPABASE_URL:database,OWNER_DIRECTORY_SUPABASE_SERVER_KEY:'local-fixture-placeholder',BEATFIRST_SUPABASE_URL:database,BEATFIRST_SUPABASE_SERVICE_ROLE_KEY:'local-fixture-placeholder',TRAINER_SUPABASE_URL:database,TRAINER_SUPABASE_SECRET_KEY:'local-fixture-placeholder',RESEND_API_KEY:'re_local_fixture_placeholder',NEXT_PUBLIC_SUPABASE_URL:database,NEXT_PUBLIC_SUPABASE_ANON_KEY:'local-fixture-placeholder',SUPABASE_SERVICE_ROLE_KEY:'local-fixture-placeholder'}})
+const server=spawn(process.execPath,['node_modules/next/dist/bin/next','start','--hostname','127.0.0.1','--port','3151'],{stdio:['ignore','pipe','pipe'],env:{...process.env,NODE_ENV:'production',AUTH_SECRET:'owner-dashboard-local-test-only',OWNER_DASHBOARD_ENABLED:'true',OWNER_DASHBOARD_LOCAL_PREVIEW:'true',ATTENDANCE_SUPABASE_URL:database,ATTENDANCE_SUPABASE_SERVICE_ROLE_KEY:'local-fixture-placeholder',SITE_PROFILE_LOCAL_TEST_STORAGE:'true',OWNER_SOCIAL_IMPORTED_SNAPSHOTS:'true',OWNER_SIGNIN_RECORDING_ENABLED:'false',OWNER_SIGNIN_PRIVACY_REVIEWED:'false',OWNER_DIRECTORY_SUPABASE_URL:database,OWNER_DIRECTORY_SUPABASE_SERVER_KEY:'local-fixture-placeholder',BEATFIRST_SUPABASE_URL:database,BEATFIRST_SUPABASE_SERVICE_ROLE_KEY:'local-fixture-placeholder',TRAINER_SUPABASE_URL:database,TRAINER_SUPABASE_SECRET_KEY:'local-fixture-placeholder',RESEND_API_KEY:'re_local_fixture_placeholder',NEXT_PUBLIC_SUPABASE_URL:database,NEXT_PUBLIC_SUPABASE_ANON_KEY:'local-fixture-placeholder',SUPABASE_SERVICE_ROLE_KEY:'local-fixture-placeholder'}})
 let logs='';server.stdout.on('data',chunk=>logs+=chunk);server.stderr.on('data',chunk=>logs+=chunk)
 async function token(email='dancewithceech@gmail.com',verified=true){return 'authjs.session-token='+await encode({secret:'owner-dashboard-local-test-only',salt:'authjs.session-token',token:{email,googleSub:'fixture-owner',googleEmailVerified:verified},maxAge:600})}
 try {
@@ -64,6 +71,23 @@ try {
   const withoutHistorical=await(await fetch(origin+'/api/admin/overview',{headers:ownerHeaders})).json()
   assert.equal(withoutHistorical.coverage.find(x=>x.id==='historical-emails').state,'unavailable')
   assert.equal(withoutHistorical.accounts.find(x=>x.id==='google:fixture-practice').email,null)
+  const classBefore=calls.length
+  for(const headers of [{},{cookie:await token('ordinary@example.invalid')},{cookie:await token('dancewithceech@gmail.com',false)}]) {
+    const result=await fetch(origin+'/api/admin/classes/'+classId,{headers});assert.ok([401,403].includes(result.status))
+    assert.ok(!(await result.text()).includes('student@example.invalid'))
+    const deniedHtml=await(await fetch(origin+'/admin/classes/'+classId,{headers})).text();assert.ok(!deniedHtml.includes('student@example.invalid'))
+  }
+  assert.equal((await fetch(origin+'/api/admin/classes/outside-scope',{headers:ownerHeaders})).status,404)
+  assert.equal(calls.length,classBefore,'Denied class requests must not construct/read storage')
+  const classResult=await fetch(origin+'/api/admin/classes/'+classId,{headers:ownerHeaders})
+  assert.equal(classResult.status,200);assert.match(classResult.headers.get('cache-control'),/private, no-store/)
+  const classView=await classResult.json()
+  assert.equal(classView.students.length,2)
+  assert.equal(classView.students.find(s=>s.account==='google:fixture-student').summary.present,1)
+  assert.equal(classView.students.find(s=>s.account===null).summary.absent,0)
+  assert.ok(!JSON.stringify(classView).includes('NEVER_EXPOSE_TOKEN'))
+  assert.ok(calls.filter(c=>c.table?.startsWith('attendance_')).every(c=>!/(token|location|note|college_id)/.test(c.select)))
+  assert.equal((await fetch(origin+'/api/admin/classes/'+classId,{method:'POST',headers:ownerHeaders})).status,405)
   const erasureBefore=calls.length
   assert.equal((await fetch(origin+'/api/account/signin-record',{method:'DELETE',headers:{origin}})).status,401)
   assert.equal((await fetch(origin+'/api/account/signin-record',{method:'DELETE',headers:{...ownerHeaders,origin:'https://other.invalid'}})).status,403)
@@ -74,7 +98,7 @@ try {
   assert.equal(calls.at(-1).table,'owner_directory_erase_account')
   const preview=await fetch(origin+'/admin/preview');assert.equal(preview.status,404)
   assert.equal((await fetch(origin+'/profile/preview')).status,404)
-  console.log(JSON.stringify({fixtureBackendsOnly:true,ownerRead:200,verifiedJoin:true,signinWithoutPlay:true,historicalEmailWithoutInventedSignin:true,unknownEmailPreserved:true,atomicErasureRpc:true,missingEmailPreserved:true,serverCapDetected:true,sourceFailureIsolated:true,expiryFilter:true,denied,backendCallsOnDenial:0,productionDemo:preview.status,methods:[...new Set(calls.map(x=>x.method))]},null,2))
+  console.log(JSON.stringify({fixtureBackendsOnly:true,ownerRead:200,verifiedJoin:true,signinWithoutPlay:true,historicalEmailWithoutInventedSignin:true,unknownEmailPreserved:true,atomicErasureRpc:true,privateClassRead:true,classDenialBeforeStorage:true,unlinkedStudentIncluded:true,classSensitiveFieldsExcluded:true,missingEmailPreserved:true,serverCapDetected:true,sourceFailureIsolated:true,expiryFilter:true,denied,backendCallsOnDenial:0,productionDemo:preview.status,methods:[...new Set(calls.map(x=>x.method))]},null,2))
 } finally {
-  server.kill('SIGTERM'); await once(server,'exit').catch(()=>{});await new Promise(resolve=>db.close(resolve))
+  if(server.exitCode===null){server.kill('SIGTERM');await once(server,'exit').catch(()=>{})}await new Promise(resolve=>db.close(resolve))
 }
