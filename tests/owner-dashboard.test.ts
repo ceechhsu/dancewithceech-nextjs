@@ -42,7 +42,7 @@ test('directory schema enforces private grants, server timestamps, retention and
   const db=new PGlite()
   try {
     await db.exec('create role anon; create role authenticated; create role service_role bypassrls;')
-    await db.exec((await readFile(new URL('../supabase/migrations/20261020161706_owner_account_directory.sql',import.meta.url),'utf8')).split('-- CRON_SETUP:')[0])
+    await db.exec((await readFile(new URL('../supabase/migrations/20261020162031_owner_account_directory.sql',import.meta.url),'utf8')).split('-- CRON_SETUP:')[0])
     assert.equal((await db.query<{relrowsecurity:boolean}>("select relrowsecurity from pg_class where relname='owner_account_directory'")).rows[0].relrowsecurity,true)
     for(const role of ['anon','authenticated']) {
       await db.exec(`set role ${role}`)

@@ -17,3 +17,5 @@ Live database: project ywianppupnxduthvyeyb. Applied owner_account_directory mig
 Production flags: OWNER_DASHBOARD_ENABLED, OWNER_SIGNIN_RECORDING_ENABLED and OWNER_SIGNIN_PRIVACY_REVIEWED are true. Uses existing server Supabase configuration; no new secrets exported or copied.
 
 Live owner OAuth and the final promoted deployment are verified separately after staging; do not interpret fixture HTTP checks as Google OAuth validation.
+
+Browser follow-up: owner-denied sessions now have the existing Google account chooser on /admin, with fixed /admin callback and select-account prompt. Live migration history uses version 20261020162031; the generated local file is aligned to that recorded version to prevent a duplicate future push.
