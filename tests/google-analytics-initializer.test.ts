@@ -7,7 +7,7 @@ test("Google commands use the Arguments protocol and initialize only once", () =
   const originalDocument = Object.getOwnPropertyDescriptor(globalThis, "document");
   const attributes = new Set<string>();
   const scripts: Array<{ id?: string; src?: string }> = [];
-  const win = { dataLayer: [] as IArguments[] };
+  const win = { location: { pathname: "/" }, dataLayer: [] as IArguments[] };
   Object.defineProperty(globalThis, "window", { configurable: true, value: win });
   Object.defineProperty(globalThis, "document", { configurable: true, value: {
     documentElement: {
@@ -31,6 +31,10 @@ test("Google commands use the Arguments protocol and initialize only once", () =
     assert.equal(win.dataLayer[0].length, 2);
     assert.deepEqual(Array.from(win.dataLayer[1]), ["config", GA_MEASUREMENT_ID]);
     assert.deepEqual(Array.from(win.dataLayer[2]), ["event", "running_man_video_started", { source: "test" }]);
+    win.location.pathname = '/admin';
+    trackRunningManEvent("should_not_send", { source: "private" });
+    initializeGoogleAnalytics();
+    assert.equal(win.dataLayer.length, 3, 'admin events must not enter an already-loaded analytics queue');
     assert.equal(scripts.length, 1);
     assert.equal(scripts[0].src, `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`);
   } finally {

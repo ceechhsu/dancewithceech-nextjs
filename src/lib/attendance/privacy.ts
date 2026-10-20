@@ -1,1 +1,1 @@
-export const isPrivateAttendancePath=(path:string)=>path==='/dashboard'||path==='/attendance'||path.startsWith('/attendance/')
+export const isPrivateAttendancePath=(path:string)=>path==='/dashboard'||path==='/attendance'||path.startsWith('/attendance/')||path==='/admin'||path.startsWith('/admin/')||path.startsWith('/api/admin/')||path==='/privacy'||path.startsWith('/api/account/')

@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
+import { isPrivateAttendancePath } from "@/lib/attendance/privacy";
 import { trackConsultation } from "@/lib/analytics/consultation";
 
 export default function ConsultationLinkTracking() {
   useEffect(() => {
+    if (isPrivateAttendancePath(window.location.pathname)) return;
     const surfaceForPath = (path: string) => ({
       "/": "home",
       "/private-lessons": "private_lessons",

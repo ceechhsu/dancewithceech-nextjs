@@ -79,6 +79,7 @@ export default function UserMenu({ name, email, image }: Props) {
               {name}
             </div>
           )}
+          {email?.trim().toLowerCase() === 'dancewithceech@gmail.com' && <a href="/admin" className="block px-3.5 py-3 text-sm text-white hover:bg-white/5">Owner dashboard</a>}
           <Link
             href="/beat-first#progress"
             onClick={() => setOpen(false)}

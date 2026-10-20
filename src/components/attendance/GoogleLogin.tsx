@@ -39,6 +39,7 @@ export default function GoogleLogin({
       >
         {busy ? "Opening Google…" : "Continue with Google"}
       </button>
+      <p className={styles.muted}><a href="/privacy">Sign-in records and deletion</a></p>
       {error && <p role="alert">{error}</p>}
     </section>
   );

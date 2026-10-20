@@ -1,5 +1,7 @@
 "use client";
 
+import { isPrivateAttendancePath } from "@/lib/attendance/privacy";
+
 export const GA_MEASUREMENT_ID = "G-BS0RYYMYHZ";
 
 const ANALYTICS_MARKER = "data-dwc-analytics";
@@ -50,7 +52,7 @@ function checkoutParameters(input: CheckoutInput) {
 }
 
 export function initializeGoogleAnalytics() {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || isPrivateAttendancePath(window.location.pathname)) return;
 
   const win = window as AnalyticsWindow;
   if (!win.gtag) {
@@ -110,7 +112,7 @@ export function createRunningManAnalytics(dependencies: RunningManAnalyticsDepen
 }
 
 export function trackRunningManEvent(name: string, parameters: Record<string, unknown> = {}) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || isPrivateAttendancePath(window.location.pathname)) return;
   createBrowserAnalytics().track(name, parameters);
 }
 

@@ -5,6 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
+      disallow: ['/admin', '/api/admin/', '/api/account/'],
     },
     sitemap: 'https://dancewithceech.com/sitemap.xml',
   }

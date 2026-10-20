@@ -46,6 +46,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   events: {
     async signIn({ profile }) {
+      const { recordOwnerDirectorySignIn } = await import('./lib/owner-dashboard/recording')
+      await recordOwnerDirectorySignIn(profile)
       const fields = rosterGoogleProfile(profile)
       if (!fields || process.env.ATTENDANCE_ENABLED !== 'true') return
       const url = process.env.ATTENDANCE_SUPABASE_URL || process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
