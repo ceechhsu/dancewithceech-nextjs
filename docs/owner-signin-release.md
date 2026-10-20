@@ -19,3 +19,11 @@ Production flags: OWNER_DASHBOARD_ENABLED, OWNER_SIGNIN_RECORDING_ENABLED and OW
 Live owner OAuth and the final promoted deployment are verified separately after staging; do not interpret fixture HTTP checks as Google OAuth validation.
 
 Browser follow-up: owner-denied sessions now have the existing Google account chooser on /admin, with fixed /admin callback and select-account prompt. Live migration history uses version 20261020162031; the generated local file is aligned to that recorded version to prevent a duplicate future push.
+
+## Final live verification
+
+- Final runtime release b6915f6a3c90b2473c5725ce686acbea7ae49f56 is READY as deployment dpl_3TD8eC8quZAiQz4yaik1t8gYPM4z. Vercel lookup for dancewithceech.com resolves to that deployment. GitHub main and the scoped release branch contain the runtime commit.
+- Live guest /api/admin/overview returns 401 with private/no-store, no-referrer, noindex and strict private CSP. Staged privacy notice loads; synthetic preview is 404. Actual nonowner/unverified browser session was denied before changing accounts.
+- Actual Google OAuth account chooser selected the already-signed-in authorized owner, returned to /admin, and displayed the real dashboard. No fixture cookie, new credential, consent expansion or account list export was used. SQL boolean verification confirms the live owner directory entry and 90-day expiry; first live recorded sign-in was October 20, 2026 at 09:28:44 America/Los_Angeles (16:28:44 UTC).
+- Real dashboard refresh succeeded; DOM inspection found zero Google/Meta analytics script elements, no synthetic banner, and viewport/page width both 1280px. Owner first recorded sign-in was expanded for verification and collapsed again. The tab remains open as a deliverable. Its opening is also queued for original chat 01a15a12-c757-75d3-a990-0f7e56600774.
+- No remaining user action. Historical sign-in-only users remain unknowable; existing sessions are recorded only on a new completed Google sign-in. Daily cron is active and its scheduler is running; the purge function passed a rollback-only live expiry test. The first scheduled daily run has not yet occurred.
