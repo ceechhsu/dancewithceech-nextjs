@@ -29,3 +29,13 @@ test('directory pagination includes sign-in-only users beyond the server row cap
  const result=await readDirectory(async offset=>({rows:rows.slice(offset,offset+750),count:rows.length}))
  assert.equal(result.length,2101);assert.equal(result.at(-1)?.user_id,'google:2100')
 })
+
+test('empty streamed DELETE bodies are accepted while any body content is rejected',async()=>{
+ let erased=0
+ const handler=createSignInErasureHandler({getSession:async()=>({user}),erase:async()=>{erased++}})
+ for(const [body,status] of [['',200],['{}',400]] as const) {
+  const response=await handler(new Request('https://site.invalid/api/account/signin-record',{method:'DELETE',headers:{origin:'https://site.invalid'},body}))
+  assert.equal(response.status,status)
+ }
+ assert.equal(erased,1)
+})

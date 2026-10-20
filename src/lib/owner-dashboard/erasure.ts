@@ -8,7 +8,18 @@ export function createSignInErasureHandler(deps: { getSession: () => Promise<unk
       const record = signInRecord({ sub: user?.googleSub, email: user?.email, email_verified: user?.googleEmailVerified })
       if (!record) return reply({ error: 'Sign in with your verified Google account.' }, 401)
       if (request.headers.get('origin') !== new URL(request.url).origin) return reply({ error: 'Request must come from this site.' }, 403)
-      if (new URL(request.url).search || request.body) return reply({ error: 'Account selectors are not accepted.' }, 400)
+      if (new URL(request.url).search) return reply({ error: 'Account selectors are not accepted.' }, 400)
+      // Next may supply an empty stream for DELETE. Reject bytes, not the stream itself.
+      const reader = request.body?.getReader()
+      if (reader) {
+        try {
+          while (true) {
+            const chunk = await reader.read()
+            if (chunk.done) break
+            if (chunk.value.byteLength) { await reader.cancel(); return reply({ error: 'Account selectors are not accepted.' }, 400) }
+          }
+        } finally { reader.releaseLock() }
+      }
       await deps.erase(record.p_user_id)
       return reply({ deleted: true }, 200)
     } catch { return reply({ error: 'Could not delete the sign-in record. Please try again.' }, 503) }

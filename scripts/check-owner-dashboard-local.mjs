@@ -17,7 +17,7 @@ for(const [name,user,expected] of cases) {
   assert.equal(response.status,expected,name)
   assert.match(response.headers.get('cache-control'),/no-store/)
   if(expected!==200) assert.deepEqual(Object.keys(body),['error'])
-  else {assert.equal(body.demo,false);assert.equal(body.accounts.length,0);assert.equal(body.coverage.length,3);assert.ok(body.coverage.every(x=>x.state==='unavailable'))}
+  else {assert.equal(body.demo,false);assert.equal(body.accounts.length,0);assert.equal(body.coverage.length,4);assert.ok(body.coverage.every(x=>x.state==='unavailable'))}
   const html=await (await fetch(`${base}/admin`,{headers:user?{cookie:await cookie(user)}:{}})).text()
   assert.ok(!html.includes('alex@example.invalid'))
   if(expected!==200) { assert.ok(!html.includes('Observed accounts')); assert.ok(!html.includes('google:local-owner-fixture')) }

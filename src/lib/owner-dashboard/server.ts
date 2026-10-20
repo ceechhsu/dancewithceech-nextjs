@@ -2,7 +2,7 @@ import 'server-only'
 import { auth } from '@/auth'
 import { createClient } from '@supabase/supabase-js'
 import { ownerAccess } from './access'
-import { buildOverview, snapshotState, type ActivityRow, type Coverage, type DirectoryRow } from './model'
+import { buildOverview, snapshotState, type ActivityRow, type Coverage, type DirectoryRow, type HistoricalEmailRow } from './model'
 import { resolveDirectoryConfig } from './config'
 import { readDirectory } from './directory'
 import { resolveProgressDatabaseConfig } from '@/lib/beatfirst-progress-store'
@@ -28,6 +28,7 @@ export async function loadOwnerOverview() {
   const coverage: Coverage[] = []
   const activity: ActivityRow[] = []
   let directory: DirectoryRow[] = []
+  let historical: HistoricalEmailRow[] = []
   // Independent sources fail independently. A missing source is never shown as zero usage.
   await Promise.all([
     (async () => {
@@ -42,6 +43,18 @@ export async function loadOwnerOverview() {
         })
         coverage.push({ id: 'directory', name, state: 'available', detail: `Showing ${directory.length} nonexpired recorded accounts. Collection began October 20, 2026; earlier sign-in-only accounts cannot be reconstructed.` })
       } catch { coverage.push({ id: 'directory', name, state: 'unavailable', detail: 'No directory connected. Sign-in-only accounts and historical sign-in dates are unknown.' }) }
+    })(),
+    (async () => {
+      const name = 'Historical email matches'
+      try {
+        const db = directoryClient(), cutoff = new Date().toISOString()
+        historical = await readDirectory(async offset => {
+          const { data, error, count } = await db.from('owner_account_email_matches').select('user_id,email,matched_at', { count: 'exact' }).gt('expires_at', cutoff).order('user_id').range(offset, offset + 999)
+          if (error || !data) throw new Error('Historical matches unavailable')
+          return { rows: data as HistoricalEmailRow[], count }
+        })
+        coverage.push({ id: 'historical-emails', name, state: 'available', detail: `${historical.length} nonexpired exact Google-account ID matches from previously saved attendance account records. These are email associations, not recorded website sign-ins. No attendance details are included.` })
+      } catch { coverage.push({ id: 'historical-emails', name, state: 'unavailable', detail: 'Historical associations unavailable. No email is guessed.' }) }
     })(),
     (async () => {
       const name = 'BeatFirst'
@@ -70,5 +83,5 @@ export async function loadOwnerOverview() {
     })(),
   ])
   coverage.sort((a, b) => a.id.localeCompare(b.id))
-  return buildOverview(directory, activity, coverage)
+  return buildOverview(directory, activity, coverage, false, new Date().toISOString(), historical)
 }

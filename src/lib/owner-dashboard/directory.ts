@@ -1,7 +1,6 @@
-import type { DirectoryRow } from './model'
 /** Follow actual returned page sizes, including a lower PostgREST row cap. */
-export async function readDirectory(page: (offset: number) => Promise<{ rows: DirectoryRow[]; count: number | null }>) {
-  const rows: DirectoryRow[] = []
+export async function readDirectory<T extends { user_id: string }>(page: (offset: number) => Promise<{ rows: T[]; count: number | null }>) {
+  const rows: T[] = []
   while (true) {
     const result = await page(rows.length)
     if (result.count === null || result.count < 0) throw new Error('Directory count unavailable')

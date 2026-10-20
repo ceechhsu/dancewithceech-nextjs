@@ -1,0 +1,16 @@
+# Historical email recovery release plan
+
+Goal: Show 44 verified historical ID/email associations in the sole-owner dashboard while preserving the one real sign-in and one unknown account.
+
+1. Recheck live exact-ID evidence, ambiguity and current main/deployment. Read only minimal Google subject/email fields from existing attendance tables; never expose their details in chat or dashboard.
+2. Add failing model tests: historical matches label existing activity accounts without creating sign-in dates/counts; real sign-in email takes precedence; unmatched stays unknown; stale orphan recovery does not create observed accounts.
+3. Generate migration: separate private historical-email table with actual matched_at and 90-day expiry; separate one-way account-hash exclusion markers. Browser roles receive no grants. Service-only SECURITY INVOKER functions/triggers handle erasure, cleanup and removal of historical data on future real sign-in.
+4. Install deletion triggers on both identity tables and atomic erase RPC; preserve original recorded directory timestamps. Triggers retain a minimal hash to prevent recovery after deletion or expiry. A genuine new Google sign-in can create its normal directory entry, but does not reset/revive historical recovery.
+5. Add PGlite tests for exact one-email matching, conflicts, literal-prefix normalization, private grants, erasure suppression, expiry suppression, no retention reset on repeated recovery, and genuine sign-in replacement. Test SQL uses synthetic minimal attendance tables only.
+6. Add server-authorized read of active historical matches, with provenance in UI and independent coverage status. Update existing self-erasure API to atomic RPC. Publish accurate privacy/deletion text including recovery source, own expiry and minimal suppression marker.
+7. Write idempotent one-time recovery SQL: lock identity/suppression tables briefly, reject ambiguous or unexpected count, insert only exact unique subject matches for currently observed accounts without active directory emails; honor markers and never overwrite existing matches or directory. No sign-in timestamps are written.
+8. Run focused tests, TypeScript, changed-file lint, build, production HTTP fixture checks. Independent code review before release.
+9. Apply schema first (empty recovery table), verify live grants/functions/cleanup; deploy and promote the reviewed code before importing any email so the updated deletion API is active first.
+10. Recheck candidate count/conflicts and directory timestamps immediately in import transaction; apply 44 eligible matches. Verify count/provenance/expiry and exact directory timestamps unchanged. Run security advisors. Align local migration version with recorded history.
+11. Refresh existing real owner IAB session. Verify 45 emails total (44 historical + one live directory), one unknown, one recorded sign-in, real source coverage and no synthetic banner. No personal list in reports/screenshots. Preserve browser tab and queue opening in original chat.
+12. Commit/push scoped release and verification notes. Report live URL, recovered/unknown/sign-in counts, retention/deletion behavior, browser status and any genuine blocker. User already authorized this release.
