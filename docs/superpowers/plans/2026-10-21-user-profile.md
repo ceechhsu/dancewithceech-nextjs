@@ -29,6 +29,6 @@ Files: add `src/app/profile/page.tsx`, `src/components/profile/ProfileEditor.tsx
 
 ### Task 3: Verification and live delivery
 
-- [ ] Focused new/existing profile/auth/privacy tests, typecheck, scoped lint, optimized build and synthetic production HTTP checks including two identities, denied reads, save/reload, custom photo, Google/remove restore, no rewards/attendance access.
-- [ ] Independent review; fix material issues. Verify actual UI via browser, responsive layout, keyboard labels and feedback.
-- [ ] Commit exact source, stage production, verify guest denials, promote. Use signed-in owner profile without changing personal details unless an exact save/restore can preserve existing data. Refresh and leave live My profile visible in IAB; save a nonidentifying preview. Push runtime and verification notes to existing main/scoped branch.
+- [x] Focused new/existing profile/auth/privacy tests, typecheck, scoped lint, optimized build and synthetic production HTTP checks including two identities, denied reads, save/reload, custom photo, Google/remove restore, no rewards/attendance access.
+- [x] Independent review; fix material issues. Verify actual UI via browser, responsive layout, keyboard labels and feedback.
+- [x] Commit exact source, stage production, verify guest denials, promote. Use signed-in owner profile without changing personal details unless an exact save/restore can preserve existing data. Refresh and leave live My profile visible in IAB; save an owner-only preview without student data. Push runtime and verification notes to existing main/scoped branch.

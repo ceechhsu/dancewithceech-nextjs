@@ -10,4 +10,13 @@ The native labelled form shows saved/unsaved/loading/error states, Save and Canc
 
 Verification before staging:19 focused profile/trainer/auth/privacy tests pass. Typecheck, scoped lint, whitespace and optimized build pass. Existing production tables verified RLS enabled and browser roles denied direct SELECT/UPDATE. Full production HTTP synthetic fixture verifies Google defaults, GET without mutation, name save/reload, two-account isolation, stale session409, origin/selectors/forged account and email rejection, private custom-photo serving,384x384JPEG with no EXIF, other-account photo404, removal/Google restore, safe unavailable state and unsupported methods. No rewards, attendance or other storage is queried by profile tests. Independent review found no important service, UI async-state or shared menu issue.
 
-Deployment and real browser verification follow staging. No production personal profile changes are needed for testing.
+## Final live verification
+
+Runtime commit33e3fd809f73ded2352bbfb0d0dad919631c97ce is READY as dpl_CuGdweQHzrXaW79xD5s7sbs8p9Lx. Staged guest API returned401 with no profile data and private/no-store/noindex/no-referrer/private CSP. Promotion succeeded; production domain lookup confirms this exact deployment.
+
+Actual signed-in owner opened /profile and saw editable first/last/nickname, Google photo, readonly email and initially disabled Save. Nickname preview/Unsaved changes and Cancel passed. Remove photo preview and Cancel restored the original. A local site-logo PNG was chosen through the file picker; client prepared a data:JPEG preview and Photo ready state. Cancel discarded it. No live profile Save/POST was performed, and no personal settings were changed. Synthetic production HTTP tests supply save/reload/photo persistence evidence.
+
+Real phone390x844 verified document width390, first/last fields169px each, nickname350px, no page overflow, visible Upload and correctly stacked preview/form. Keyboard Tab advanced First name to Last name. Desktop restored to default1101px with no overflow. Live profile analytics-script count0, Google photo loaded. Main mobile menu My profile link opened the new page; final reload returned clean/up-to-date settings. In-app browser marked deliverable and explicitly made visible, left on My profile. Header/form preview saved outside repository; only the owner's own profile appears, no student data.
+
+Focused19tests, typecheck, scoped lint, final optimized build, final synthetic profile HTTP and existing owner/classes/Other users/privacy HTTP regressions pass. Independent review found no important issues. No schema migration or permission expansion was needed. Source and verification notes are pushed to main and the existing scoped branch; no user action remains.
+
