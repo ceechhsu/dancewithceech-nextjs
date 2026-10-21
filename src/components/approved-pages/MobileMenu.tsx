@@ -80,6 +80,7 @@ export default function MobileMenu({ user, showAttendance = false, alwaysVisible
         if ((event.target as HTMLElement).closest("a")) { setOpen(false); trigger.current?.focus(); }
       }}>
       <Link href="/private-lessons#booking" prefetch={false} className={`${styles.booking} mb-3 shrink-0`}>Book a Free Call</Link>
+      {user && <a href="/profile" className="flex min-h-12 shrink-0 items-center font-semibold text-amber-200">My profile</a>}
       {user && !showAttendance && <a href="/dashboard" className="flex min-h-12 shrink-0 items-center font-semibold text-blue-300">My Classes</a>}
       {/* Fresh document applies attendance permissions and unloads marketing scripts. */}
       {showAttendance && <a href="/attendance/instructor" className="flex min-h-11 shrink-0 items-center font-semibold text-blue-300">Attendance</a>}

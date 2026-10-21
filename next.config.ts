@@ -145,13 +145,13 @@ const nextConfig: NextConfig = {
         source: "/",
         headers: homepageCacheHeaders,
       },
-      ...["/admin/:path*", "/api/admin/:path*", "/privacy", "/api/account/:path*"].map(source => ({source, headers: [
+      ...["/admin/:path*", "/api/admin/:path*", "/profile", "/privacy", "/api/account/:path*"].map(source => ({source, headers: [
         {key:"Permissions-Policy",value:BLOCKED_PERMISSIONS},
         {key:"Referrer-Policy",value:"no-referrer"},
         {key:"Cache-Control",value:"private, no-store"},
         {key:"X-Robots-Tag",value:"noindex, nofollow"},
         {key:"X-Frame-Options",value:"DENY"},
-        {key:"Content-Security-Policy",value:`default-src 'self'; script-src 'self' 'unsafe-inline'${process.env.NODE_ENV==='development'?" 'unsafe-eval'":''}; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'`},
+        {key:"Content-Security-Policy",value:`default-src 'self'; script-src 'self' 'unsafe-inline'${process.env.NODE_ENV==='development'?" 'unsafe-eval'":''}; style-src 'self' 'unsafe-inline'; img-src 'self' data:${source==='/profile'?" https://googleusercontent.com https://*.googleusercontent.com":''}; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'`},
       ]})),
       ...["/attendance/:path*", "/dashboard"].map(source => ({source, headers: [
         {key:"Permissions-Policy",value:"camera=(), microphone=(), geolocation=(self), browsing-topics=()"},

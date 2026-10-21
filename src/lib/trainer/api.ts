@@ -46,14 +46,15 @@ async function profileRow(client: SupabaseClient, who: TrainerIdentity): Promise
   const display = who.name.trim().replace(/\s+/g, ' ').slice(0, 40)
   return row ?? { first_name: who.firstName.slice(0, 80), last_name: who.lastName.slice(0, 80), display_name: display && !display.includes('@') ? display : 'Dancer', photo_mode: 'google', photo: null, updated: 0 }
 }
-function publicProfile(row: Profile, who: TrainerIdentity) {
-  return { first_name: row.first_name, last_name: row.last_name, display_name: row.display_name, photo_mode: row.photo_mode, photo_url: row.photo_mode === 'custom' && row.photo ? `/practice/api/profile/photo?v=${row.updated}` : row.photo_mode === 'google' ? googlePhoto(who.photo) : '', google_photo_url: googlePhoto(who.photo), email: who.email }
+function publicProfile(row: Profile, who: TrainerIdentity, photoPath='/practice/api/profile/photo') {
+  return { first_name: row.first_name, last_name: row.last_name, display_name: row.display_name, photo_mode: row.photo_mode, photo_url: row.photo_mode === 'custom' && row.photo ? `${photoPath}?v=${row.updated}` : row.photo_mode === 'google' ? googlePhoto(who.photo) : '', google_photo_url: googlePhoto(who.photo), email: who.email }
 }
 export async function readTrainerProfile(who: TrainerIdentity) { return publicProfile(await profileRow(db(), who), who) }
+export async function readAccountProfile(who: TrainerIdentity) { return { ...publicProfile(await profileRow(db(), who), who, '/api/account/profile/photo'), account: who.account } }
 async function rewards(client: SupabaseClient, account: string): Promise<{ points: number; rewards: { lesson: string; points: number; completed: number }[] }> {
   return checked(client.rpc(storage('trainer_rewards'), { actor: account }))
 }
-async function profile(request: Request, client: SupabaseClient, who: TrainerIdentity, photo: boolean) {
+async function profile(request: Request, client: SupabaseClient, who: TrainerIdentity, photo: boolean, accountPage=false) {
   let row = await profileRow(client, who)
   if (photo) {
     if (!['GET', 'HEAD'].includes(request.method)) throw new TrainerError('Method not allowed.', 405)
@@ -81,7 +82,30 @@ async function profile(request: Request, client: SupabaseClient, who: TrainerIde
     row = { first_name, last_name, display_name, photo_mode: mode as string, photo: mode === 'custom' ? photoData : null, updated: now() }
     await checked(client.from(storage('trainer_profiles')).upsert({ ...row, account: who.account }))
   } else if (!['GET', 'HEAD'].includes(request.method)) throw new TrainerError('Method not allowed.', 405)
-  return json({ ...publicProfile(row, who), ...await rewards(client, who.account) })
+  return json({ ...publicProfile(row, who, accountPage ? '/api/account/profile/photo' : undefined), ...accountPage ? { account: who.account } : await rewards(client, who.account) })
+}
+
+/** Private site settings share practice identity storage; rewards are independent. */
+export async function handleAccountProfile(request: Request, identity: TrainerIdentity | null, photo=false): Promise<Response> {
+  try {
+    const who = requireIdentity(identity)
+    if (!(photo ? ['GET', 'HEAD'] : ['GET', 'HEAD', 'POST']).includes(request.method)) throw new TrainerError('Method not allowed.', 405)
+    const url = new URL(request.url)
+    if ([...url.searchParams.keys()].some(key => !photo || key !== 'v')) throw new TrainerError('Account selectors are not accepted.', 400)
+    const expected = request.headers.get('x-profile-owner')
+    if ((request.method === 'POST' || expected !== null) && expected !== who.account) throw new TrainerError('Your signed-in account changed. Reload your profile before editing.', 409)
+    if (request.method === 'POST') {
+      if (request.headers.get('origin') !== url.origin) throw new TrainerError('This request must come from this website.', 403)
+      if (request.headers.get('content-type')?.split(';')[0].trim().toLowerCase() !== 'application/json') throw new TrainerError('Send profile changes as JSON.', 415)
+    }
+    const response = await profile(request, db(), who, photo, true)
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow')
+    response.headers.set('Referrer-Policy', 'no-referrer')
+    return response
+  } catch (error) {
+    const status = error instanceof TrainerError ? error.status : 503
+    return json({ error: status === 503 ? 'Your profile is temporarily unavailable. Please retry.' : error instanceof TrainerError ? error.message : 'Profile unavailable.' }, status)
+  }
 }
 async function scores(request: Request, client: SupabaseClient, who: TrainerIdentity) {
   if (request.method === 'POST') {

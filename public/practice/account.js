@@ -4,12 +4,12 @@ window.addEventListener('dance-result',async event=>{await accountPromise;result
 const account=await accountPromise;
 if(account.can_save_scores){
  const sheet=document.createElement('link');sheet.rel='stylesheet';sheet.href='/practice/profile.css';document.head.append(sheet);
- const header=document.querySelector('header'),profile=document.createElement('a');profile.href='/practice/profile.html';profile.className='header-profile';profile.setAttribute('aria-label','My profile · '+(account.display_name||'Dancer'));
+ const header=document.querySelector('header'),profile=document.createElement('a');profile.href='/profile';profile.className='header-profile';profile.setAttribute('aria-label','My profile · '+(account.display_name||'Dancer'));
  const greeting=document.createElement('span');greeting.className='profile-greeting';greeting.textContent='Hi, '+(account.display_name||'Dancer');
  const avatar=document.createElement('span');avatar.className='profile-avatar';avatar.textContent=(account.display_name||'D').slice(0,1).toUpperCase();
  if(account.photo_url){const image=document.createElement('img');image.src=account.photo_url;image.alt='';image.referrerPolicy='no-referrer';image.onerror=()=>{avatar.textContent=(account.display_name||'D').slice(0,1).toUpperCase();};avatar.replaceChildren(image);}
  profile.append(greeting,avatar);header?.insertBefore(profile,document.getElementById('navToggle')||document.getElementById('signOut')||null);
- const menu=document.getElementById('siteNav');if(menu){const link=document.createElement('a');link.href='/practice/profile.html';link.textContent='My profile';menu.prepend(link);}
+ const menu=document.getElementById('siteNav');if(menu){const link=document.createElement('a');link.href='/profile';link.textContent='My profile';menu.prepend(link);}
 }
 
 const signout=document.getElementById('signOut');if(signout)signout.hidden=!account.signed_in;

@@ -1,4 +1,5 @@
 'use client'
+/* Full-document links isolate private account settings. */
 
 import { useState, useRef, useEffect } from 'react'
 import { signOut } from 'next-auth/react'
@@ -14,6 +15,29 @@ type Props = {
 export default function UserMenu({ name, email, image }: Props) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const [custom, setCustom] = useState<{ email: string; name: string; image: string } | null>(null)
+  const [failedPhoto, setFailedPhoto] = useState('')
+
+  useEffect(() => {
+    let active = true
+    const key = email?.trim().toLowerCase()
+    if (!key) return
+    const refresh = async () => {
+      try {
+        const response = await fetch('/api/account/profile', { cache: 'no-store' })
+        if (!response.ok) { if (active) setCustom(null); return }
+        const profile = await response.json()
+        if (active && profile.email?.trim().toLowerCase() === key) setCustom({ email: key, name: profile.display_name, image: profile.photo_url })
+      } catch { /* Google identity remains available during a profile storage outage. */ }
+    }
+    void refresh()
+    window.addEventListener('focus', refresh)
+    return () => { active = false; window.removeEventListener('focus', refresh) }
+  }, [email])
+
+  const savedProfile = custom?.email === email?.trim().toLowerCase() ? custom : null
+  const visibleName = savedProfile?.name || name
+  const visibleImage = savedProfile ? savedProfile.image : image
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -23,7 +47,7 @@ export default function UserMenu({ name, email, image }: Props) {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  const initials = name?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() ?? '?'
+  const initials = visibleName?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() ?? '?'
 
   return (
     <div ref={ref} style={{ position: 'relative' }}>
@@ -40,11 +64,15 @@ export default function UserMenu({ name, email, image }: Props) {
         }}
         aria-label="User menu"
       >
-        {image ? (
+        {visibleImage && failedPhoto !== visibleImage ? visibleImage.startsWith('/api/account/profile/photo') ? (
+          // The authenticated photo must receive the browser's session cookie directly.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={visibleImage} alt={visibleName ?? 'Your profile photo'} width={32} height={32} referrerPolicy="no-referrer" onError={() => setFailedPhoto(visibleImage)} style={{ borderRadius: '50%', display: 'block', objectFit: 'cover' }} />
+        ) : (
           <Image
-            src={image}
-            alt={name ?? 'User'}
-            title={name ?? 'User profile photo'}
+            src={visibleImage}
+            alt={visibleName ?? 'User'}
+            title={visibleName ?? 'User profile photo'}
             width={32}
             height={32}
             style={{ borderRadius: '50%', display: 'block' }}
@@ -74,11 +102,12 @@ export default function UserMenu({ name, email, image }: Props) {
           zIndex: 100,
           boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
         }}>
-          {name && (
+          {visibleName && (
             <div style={{ padding: '10px 14px', borderBottom: '1px solid #222', fontSize: 12, color: '#6b7280' }}>
-              {name}
+              {visibleName}
             </div>
           )}
+          <a href="/profile" onClick={() => setOpen(false)} className="block px-3.5 py-3 text-sm text-white hover:bg-white/5">My profile</a>
           {email?.trim().toLowerCase() === 'dancewithceech@gmail.com' && <a href="/admin" className="block px-3.5 py-3 text-sm text-white hover:bg-white/5">Owner dashboard</a>}
           <Link
             href="/beat-first#progress"
