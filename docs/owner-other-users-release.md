@@ -1,0 +1,13 @@
+# Other users — October 20, 2026
+
+User requested a separate menu list for website accounts outside the four existing classes. Other users is top-level alongside Classes; Non-students would incorrectly assert student status outside these specific rosters.
+
+Reuses the existing account overview, recorded sign-in emails and clearly labelled historical matches. Current roster membership is matched by exact linked Google subject (with only the literal google: prefix normalized) or trimmed/case-normalized exact email. Unknown email stays unknown; no display-name inference or new identity collection. Only accounts with no roster match and their saved activity are returned. No database migration, grant, enrollment write, new sign-in, name collection or browsing analytics added.
+
+Owner authorization precedes storage access. All four manifest classes must still match sole owner/Fall2026/unarchived state before any membership query. Current enrollment reads select only Google subject/email, stable complete pagination, effective_to/removed_at null. All membership checks complete before account queries; any metadata/roster failure produces unavailable, never an unfiltered list. Roster identities remain server-only. Page and read-only GET API inherit existing private/no-store/noindex/CSP/analytics isolation. Refresh stays within Other users; denied session clears private data. Summary/list/activity are scoped, source coverage explains its wider totals, and the empty state distinguishes missing records from actual history.
+
+Verification:25 focused tests pass including exact/prefixed subjects, normalized email, no near matches, unknown email, historical timestamp preservation, zero storage calls on denial, and no account reads after membership failure. TypeScript, changed-file ESLint, whitespace and optimized production build pass. Production HTTP fixture verifies guest401, ordinary/unverified403 before any storage, filtered owner200 API/SSR without roster-only identity, roster/class-metadata failure503 without accounts, no roster read for incomplete class scope, POST405 and prior privacy/erasure/class regressions. Fixture servers contain synthetic identities only. Independent plan and code review found no important issues.
+
+Live read-only SQL aggregate before deployment:46 observed accounts,2 without a match in the four rosters;1 has an email and1 is unknown. Sign-in directory fingerprint remains7d7660ca7d9b573d75a4640e20745c2c. These are current roster matches, not a statement that the accounts are not students anywhere.
+
+Deployment and live desktop/phone checks follow staging.
