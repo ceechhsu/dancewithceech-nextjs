@@ -29,5 +29,5 @@ Files: modify `src/components/owner-dashboard/OwnerSidebar.tsx`, `Dashboard.tsx`
 
 - [x] Focused regression tests, TypeScript, scoped lint, optimized build and production HTTP fixture.
 - [x] Independent review; resolve material findings.
-- [ ] Commit and deploy exact source, test staged deployment, promote, verify live actual owner UI desktop/phone and guest denial.
-- [ ] Push main/scoped branch, document nonidentifying verification and leave Other users open.
+- [x] Commit and deploy exact source, test staged deployment, promote, verify live actual owner UI desktop/phone and guest denial.
+- [x] Push main/scoped branch, document nonidentifying verification and leave Other users open.

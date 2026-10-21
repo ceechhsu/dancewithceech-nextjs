@@ -10,4 +10,11 @@ Verification:25 focused tests pass including exact/prefixed subjects, normalized
 
 Live read-only SQL aggregate before deployment:46 observed accounts,2 without a match in the four rosters;1 has an email and1 is unknown. Sign-in directory fingerprint remains7d7660ca7d9b573d75a4640e20745c2c. These are current roster matches, not a statement that the accounts are not students anywhere.
 
-Deployment and live desktop/phone checks follow staging.
+## Final live verification
+
+Runtime commit c0101529f70eebe0ec37a68e5a7e05d52ca8e96d is READY as dpl_2Fx5bSgQJLZJJeK2RCizY7yibbip. Staged guest API returned401 with private/no-store, noindex, no-referrer and private CSP; promotion succeeded and domain lookup confirms DanceWithCeech.com resolves to this deployment.
+
+Actual already-signed-in owner navigated from Mission Weight Training to the new top-level Other users link. DOM checks confirm four class links, Other users outside the Classes disclosure, selected state,2account rows and1unknown email; no emails exported. Search no-match/Reset filters and Refresh snapshot retain the scoped two-row result. Desktop document/viewport1403; phone document/viewport390 with internal table scroll and no page overflow. Analytics scripts0. Viewport reset and live Other users tab marked deliverable. Header-only preview saved outside repository with no account identities. Current owner account is included because it has no roster match.
+
+No deployment approval, schema change or other user action remains. Runtime source and final verification notes are pushed to main and the scoped branch.
+
