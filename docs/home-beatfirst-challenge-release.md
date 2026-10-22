@@ -8,4 +8,11 @@ Validation: 35 focused homepage/game/scoring tests, TypeScript, changed-file ESL
 
 The local Quick Hip-Hop lesson warning was traced to the preview lacking its YouTube service configuration. The live endpoint returned 200 with 29 lessons; the user accepted the local limitation. No production configuration was changed.
 
-Production deployment verification is recorded below after staging and promotion.
+## Production verification
+
+Runtime commit `50d5d4d5c1c78d329c1131b190998fb31d84e44b` is READY as `dpl_6P4oi7k3v9yAiDiUQDhT1qmgTkue`. Staged production homepage returned 200 with the new challenge and centered markup. The teaching-lessons endpoint returned 200 with 29 lessons; guest profile access returned 401 with only an error and private/no-store caching. Promotion succeeded, and live-domain lookup confirmed that exact deployment.
+
+The refreshed live in-app browser verified heading/game center at 646px on a 1292px viewport, with game width440px and no overflow. A real completed round showed the per-visit best and “Can you beat your best?” message. At390px phone width the game was342px, centered at195px with no document overflow. Refresh cleared the best, restored the initial prompt and showed working lesson cards. Desktop restored; the live trainer is left open. Runtime error-log query after promotion returned no errors/log entries.
+
+Source is pushed to `codex/live-owner-signins`. Automatic approval review rejected pushing directly to `main` because the user's release authorization did not explicitly name the default branch. That action was not retried or bypassed; main remains at the preceding release pending explicit user approval. The production deployment is already live from the pushed working branch.
+
