@@ -3,7 +3,9 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useRef, useState } from "react";
-import { scoreAttempt, type Attempt } from "./beatfirst-preview/progress";
+import { Trophy } from "lucide-react";
+import type { Attempt } from "./beatfirst-preview/progress";
+import { nextHomeDemoBest, type HomeDemoBest } from "./beatfirst-preview/home-demo-best";
 import styles from "./HomeBeatFirstDemo.module.css";
 
 const ClapGame = dynamic(() => import("./beatfirst-preview/ClapGame"), {
@@ -15,9 +17,9 @@ export default function HomeBeatFirstDemo() {
   const demoRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
   const [round, setRound] = useState(0);
-  const [best, setBest] = useState<number>();
+  const [best, setBest] = useState<HomeDemoBest>();
   const finishSample = useCallback((attempt: Attempt) => {
-    setBest(current => Math.max(current ?? 0, scoreAttempt(attempt).score));
+    setBest(current => nextHomeDemoBest(current, attempt));
   }, []);
 
   const onActive = useCallback((playing: boolean) => {
@@ -37,7 +39,7 @@ export default function HomeBeatFirstDemo() {
       <ClapGame
         key={round}
         levelId={1}
-        personalBest={best}
+        personalBest={best?.score}
         onComplete={finishSample}
         onActive={onActive}
         onNext={() => router.push('/beat-first')}
@@ -46,6 +48,12 @@ export default function HomeBeatFirstDemo() {
       <div className={styles.controls}>
         {active ? <button type="button" onClick={stopRound}>Stop round</button> : <p>Try ten seconds here. Sound starts when you press play.</p>}
       </div>
+      {best !== undefined && <div className={styles.personalBest} role="status" aria-live="polite">
+        <Trophy size={20} aria-hidden="true" />
+        <div><p>Your best this visit</p><strong>{best.hits}<span> / 15 beats</span></strong></div>
+        <div className={styles.timingBest}><p>Best timing</p><strong>{best.score}<span> / 100</span></strong></div>
+        <small>Can you beat your best? Resets when you refresh.</small>
+      </div>}
     </div>
   );
 }

@@ -89,13 +89,13 @@ export default async function Home() {
 
       {/* BEATFIRST TEASER */}
       <section id="rhythm-trainer" className="py-16 px-6 scroll-mt-20" style={{ backgroundColor: "var(--surface)" }}>
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-14 items-center">
-          <div className="md:col-span-2">
+        <div className="max-w-6xl mx-auto flex flex-col items-center gap-6 sm:gap-8">
+          <div className="w-full text-center">
             <h2 className="home-section-heading">BeatFirst Rhythm Trainer</h2>
-            <p className="home-section-tagline">Build your rhythm, one beat at a time</p>
-            <p className="home-section-tagline mt-4">Tap to the beat. See if you’re early, late, or right on time.</p>
+            <p className="mt-3 text-lg font-semibold text-amber-300 sm:text-xl">Can you hit all 15 beats?</p>
+            <p className="home-section-tagline mt-3">Tap to the beat. See if you’re early, late, or right on time.</p>
           </div>
-          <div className="md:col-start-2">
+          <div className="w-full max-w-[440px]">
             <HomeBeatFirstDemo />
             <div className="mt-4 flex justify-center">
               <Link href="/beat-first" prefetch={false} className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/25 px-5 py-2.5 text-sm font-medium text-muted transition-colors hover:border-accent-primary-accessible hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-primary-accessible">

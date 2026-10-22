@@ -20,8 +20,8 @@ test('homepage sample reuses level one and provides a stop and full-trainer path
 
 test('sample personal best survives replay within the page', async () => {
  const demo = await read('src/components/HomeBeatFirstDemo.tsx');
- assert.match(demo, /personalBest=\{best\}/);
- assert.match(demo, /Math\.max\(current \?\? 0, scoreAttempt\(attempt\)\.score\)/);
+ assert.match(demo, /personalBest=\{best\?\.score\}/);
+ assert.match(demo, /nextHomeDemoBest\(current, attempt\)/);
 });
 
 test('starting on a phone brings the tap pad into view below the fixed navigation', async () => {
