@@ -35,7 +35,7 @@ export default function Footer() {
           <ul className="flex flex-col gap-2 text-sm" style={{ color: 'var(--muted)' }}>
             <li><Link href="/blog" prefetch={false} className="hover:text-white transition-colors">Blog</Link></li>
             <li><Link href="/about" prefetch={false} className="hover:text-white transition-colors">About</Link></li>
-            <li><a href="/privacy" className="hover:text-white transition-colors">Account data & privacy</a></li>
+            <li><a href="/privacy" className="hover:text-white transition-colors">Account Data &amp; Privacy</a></li>
             <li><Link href="/contact" prefetch={false} className="hover:text-white transition-colors">Contact</Link></li>
           </ul>
         </div>
