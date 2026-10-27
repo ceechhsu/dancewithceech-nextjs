@@ -1,0 +1,138 @@
+.season {
+  position: relative;
+  --halloween-art: url('/halloween-v2/pumpkin-ghost.webp');
+}
+
+.toggle {
+  position: absolute;
+  z-index: 20;
+  top: 80px;
+  right: 24px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid #edaa6a45;
+  border-radius: 999px;
+  background: #15110ee6;
+  color: #f2c79f;
+  font-size: 12px;
+  cursor: pointer;
+}
+.toggle:hover { background: #332117; color: #fff4e9; }
+.toggle:focus-visible { outline: 3px solid #c4a4e8; outline-offset: 4px; }
+
+.season[data-halloween="active"] main > section,
+.season[data-halloween="active"] footer { position: relative; }
+
+/* Three small scenes, with light concentrated around the introduction.
+   All artwork is decorative and cannot intercept interaction. */
+.season[data-halloween="active"] main > section:first-of-type::before,
+.season[data-halloween="active"] :global(#teaching-story)::after,
+.season[data-halloween="active"] footer::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
+  background: var(--halloween-art) center / contain no-repeat;
+  filter: drop-shadow(0 8px 10px #0008);
+  transform-origin: 50% 80%;
+  animation: friendly-float 7s ease-in-out infinite;
+}
+
+.season[data-halloween="active"] main > section:first-of-type::before {
+  width: 168px;
+  height: 152px;
+  left: max(32px, calc((100% - 1152px) / 2));
+  bottom: 26px;
+}
+
+.season[data-halloween="active"] main > section:first-of-type::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  width: 240px;
+  height: 130px;
+  left: max(0px, calc((100% - 1216px) / 2));
+  bottom: 0;
+  background: radial-gradient(ellipse at 35% 70%, #f884263b, transparent 65%),
+    radial-gradient(ellipse at 70% 40%, #9b6ad124, transparent 65%);
+  filter: blur(12px);
+  opacity: .7;
+  animation: candle-glow 8s ease-in-out 3;
+}
+
+.season[data-halloween="active"] :global(#teaching-story)::after {
+  width: 64px;
+  height: 58px;
+  right: 24px;
+  bottom: 8px;
+  opacity: .9;
+  --float-height: -4px;
+  animation-duration: 9s;
+  animation-delay: -3s;
+}
+
+.season[data-halloween="active"] footer::before {
+  width: 80px;
+  height: 72px;
+  left: calc(50% - 40px);
+  top: -74px;
+  --float-height: -5px;
+  animation-duration: 8.5s;
+  animation-delay: -5s;
+}
+
+@keyframes friendly-float {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(var(--float-height, -7px)) rotate(1deg); }
+}
+
+@keyframes candle-glow {
+  0%, 100% { opacity: .7; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 639px) {
+  .toggle { top: 76px; right: 16px; }
+  .season[data-halloween="active"] main > section:first-of-type > div:last-child {
+    padding-bottom: 148px !important;
+  }
+  .season[data-halloween="active"] main > section:first-of-type::before {
+    width: 108px;
+    height: 98px;
+    left: 18px;
+    bottom: 22px;
+  }
+  .season[data-halloween="active"] main > section:first-of-type::after {
+    width: 160px;
+    height: 96px;
+    left: 0;
+    bottom: 0;
+  }
+  .season[data-halloween="active"] :global(#teaching-story)::after {
+    width: 52px;
+    height: 48px;
+    right: 18px;
+  }
+}
+
+@media (max-height: 720px) {
+  .season[data-halloween="active"] main > section:first-of-type > div:last-child {
+    padding-top: 140px !important;
+    padding-bottom: 148px !important;
+  }
+  .season[data-halloween="active"] main > section:first-of-type::before {
+    width: 108px;
+    height: 98px;
+    left: 18px;
+    bottom: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .season[data-halloween="active"] main > section:first-of-type::before,
+  .season[data-halloween="active"] :global(#teaching-story)::after,
+  .season[data-halloween="active"] footer::before,
+  .season[data-halloween="active"] main > section:first-of-type::after { animation: none; }
+}
