@@ -1,41 +1,18 @@
-# Dynamic Review Summary Setup
+# Monthly review summary maintenance
 
-When provider credentials are configured, the site reads review ratings and total review counts on the server and caches them for 24 hours. Refreshes are request-driven, not an exact daily schedule, and are not instantaneous. If a provider is unavailable or its credentials are not configured, the site uses a manually maintained static fallback, not a persisted last-successful API response.
+The website displays verified snapshots of Google and Yelp overall ratings and review counts from `src/lib/reviews.ts`. It calls no Windsor, Google Business Profile, or Yelp review APIs. Website Google sign-in is separate and unchanged.
 
-## Google through the existing Windsor connection
+Verified on the public business pages on October 27, 2026:
 
-The connected Dance With Ceech Business Profile returned a 5.0 rating and 60 all-time reviews on October 27, 2026. The website can use this existing connection when its own server API key is configured:
+- Google: 5.0 stars, 60 reviews — https://share.google/E6jTuMATZ1KCtAPBZ
+- Yelp: 5.0 stars, 30 recommended reviews — https://www.yelp.com/biz/dance-with-ceech-san-jose-3
 
-```text
-WINDSOR_API_KEY=<private Production secret>
-WINDSOR_GOOGLE_BUSINESS_LOCATION_ID=locations/9606510620043048085
-```
+The existing Codex monthly task checks both pages on the first day of each month at 9 a.m. America/Los_Angeles. A verified change updates the snapshot and related expectations, validates a preview, commits, pushes, deploys, and verifies the live website. Unchanged values require no release. Start from the current production commit to preserve other releases.
 
-The location setting and the API key are configured in Vercel Production as of October 27, 2026. The key is stored as a production-only secret. Obtain any replacement through Windsor Settings → API Access and store it privately in the linked Vercel project. Never paste it in chat, put it in source, or include it in screenshots. A new production deployment is required after changing the secret.
+If a page blocks access or its identity or totals are unclear, preserve that source's values and request help. Never guess from old snippets or bypass access restrictions. The local task needs the computer on, the app running, and workspace/browser/deployment access available. These are monthly snapshots, not live counts.
 
-The adapter requests only the selected location's ID, all-time rating and all-time review count. It rejects ambiguous, incomplete or other-location responses, times out after eight seconds, and suppresses secret-bearing provider errors. Google data obtained by direct OAuth, when available and valid, remains preferred. No Yelp connection is added by this change.
+Public evidence and check history live under `/Volumes/ACASIS4T/DanceWithCeech.com/yelp-review-maintenance/` for both sources. Automation ID `update-yelp-rating-and-review-count-monthly` is retained to preserve its schedule and history; its display name covers Google and Yelp.
 
-## Direct Google and Yelp server-only variables
+Windsor integration code and its deployment check have been removed. The website no longer needs `WINDSOR_API_KEY` or `WINDSOR_GOOGLE_BUSINESS_LOCATION_ID` in Vercel. Preserve `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, which support sign-in.
 
-Add these to the deployment environment. Do not prefix them with `NEXT_PUBLIC_`.
-
-```text
-GOOGLE_BUSINESS_PROFILE_CLIENT_ID=
-GOOGLE_BUSINESS_PROFILE_CLIENT_SECRET=
-GOOGLE_BUSINESS_PROFILE_REFRESH_TOKEN=
-GOOGLE_BUSINESS_PROFILE_ACCOUNT_ID=
-GOOGLE_BUSINESS_PROFILE_LOCATION_ID=
-YELP_API_KEY=
-YELP_BUSINESS_ID=
-```
-
-Google requires OAuth access to the verified Business Profile location. The review-list response supplies the average rating and total review count. Yelp requires a Places API key and the business ID; its Business Details response supplies the rating and review count.
-
-When no configured provider succeeds, pages display the fallback values of 5.0 Google / 60 reviews (verified October 27, 2026) and 5.0 Yelp / 30 reviews (older snapshot). The displayed wording intentionally says “reviews,” not “five-star reviews,” because the provider count represents total reviews.
-
-Direct Google credentials remain optional because the Windsor connection supplies this profile's review totals. Existing website Google sign-in does not grant Business Profile access. The daily cache is request-driven, so updates are not immediate or tied to an exact scheduled time. Verify each activation using `node --conditions=react-server --import tsx scripts/check-google-review-connection.ts` in the deployment environment; it fails if no valid live provider response is available and prints only public totals on success.
-
-## References
-
-- https://windsor.ai/api-documentation/
-- https://windsor.ai/answers/
+Focused validation: `node --conditions=react-server --import tsx --test tests/reviews-snapshot.test.ts`.
