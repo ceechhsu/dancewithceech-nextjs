@@ -25,8 +25,8 @@ test('shared and homepage footers use the official spaced business name', () => 
   assert.match(read('src/app/page.tsx'), /font-bold text-lg mb-2">Dance With Ceech/);
 });
 
-test('review fallback reflects the verified September 5 snapshot', () => {
-  assert.match(read('src/lib/reviews.ts'), /google: \{ rating: 5, reviewCount: 58 \}/);
+test('review fallback reflects the verified October 27 Google snapshot', () => {
+  assert.match(read('src/lib/reviews.ts'), /google: \{ rating: 5, reviewCount: 60 \}/);
 });
 
 test('a changed fallback invalidates the previous review cache', () => {

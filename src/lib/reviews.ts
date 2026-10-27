@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { unstable_cache } from 'next/cache';
+import { getWindsorGoogleSummary } from './reviews-windsor';
 
 export type ReviewSourceSummary = {
   rating: number;
@@ -13,9 +14,10 @@ export type ReviewSummary = {
 };
 
 const fallbackSummary: ReviewSummary = {
-  // Manually verified on the Google Business Profile on September 5, 2026.
+  // Google verified through the connected Business Profile on October 27, 2026.
+  // Yelp retains its September 5 snapshot pending its separate API connection.
   // This is a static fallback, not a persisted last-successful API response.
-  google: { rating: 5, reviewCount: 58 },
+  google: { rating: 5, reviewCount: 60 },
   yelp: { rating: 5, reviewCount: 30 },
 };
 
@@ -39,6 +41,8 @@ async function getGoogleAccessToken() {
       grant_type: 'refresh_token',
     }),
     cache: 'no-store',
+    redirect: 'error',
+    signal: AbortSignal.timeout(8_000),
   });
   if (!response.ok) return null;
 
@@ -46,7 +50,7 @@ async function getGoogleAccessToken() {
   return data.access_token ?? null;
 }
 
-async function fetchGoogleSummary(): Promise<ReviewSourceSummary | null> {
+async function fetchGoogleDirectSummary(): Promise<ReviewSourceSummary | null> {
   const accountId = process.env.GOOGLE_BUSINESS_PROFILE_ACCOUNT_ID;
   const locationId = process.env.GOOGLE_BUSINESS_PROFILE_LOCATION_ID;
   const accessToken = await getGoogleAccessToken();
@@ -54,15 +58,30 @@ async function fetchGoogleSummary(): Promise<ReviewSourceSummary | null> {
 
   const response = await fetch(
     `https://mybusiness.googleapis.com/v4/accounts/${accountId}/locations/${locationId}/reviews?pageSize=1`,
-    { headers: { authorization: `Bearer ${accessToken}` }, cache: 'no-store' },
+    { headers: { authorization: `Bearer ${accessToken}` }, cache: 'no-store', redirect: 'error', signal: AbortSignal.timeout(8_000) },
   );
   if (!response.ok) return null;
 
   const data = await response.json() as { averageRating?: number; totalReviewCount?: number };
+  if (typeof data.averageRating !== 'number' || !Number.isFinite(data.averageRating) || data.averageRating < 0 || data.averageRating > 5) return null;
+  if (typeof data.totalReviewCount !== 'number' || !Number.isSafeInteger(data.totalReviewCount) || data.totalReviewCount < 0) return null;
   return {
-    rating: numericOrFallback(data.averageRating, fallbackSummary.google.rating),
-    reviewCount: numericOrFallback(data.totalReviewCount, fallbackSummary.google.reviewCount),
+    rating: data.averageRating,
+    reviewCount: data.totalReviewCount,
   };
+}
+
+export async function fetchGoogleSummary(): Promise<ReviewSourceSummary | null> {
+  try {
+    const direct = await fetchGoogleDirectSummary();
+    if (direct) return direct;
+  } catch {
+    // The optional Windsor connection can still work when direct OAuth fails.
+  }
+  return getWindsorGoogleSummary({
+    apiKey: process.env.WINDSOR_API_KEY,
+    locationId: process.env.WINDSOR_GOOGLE_BUSINESS_LOCATION_ID,
+  });
 }
 
 async function fetchYelpSummary(): Promise<ReviewSourceSummary | null> {
