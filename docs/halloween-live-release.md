@@ -1,6 +1,14 @@
-# Halloween homepage release — October 26, 2026
+# Halloween homepage release — reverted October 26, 2026
 
-The user approved the local preview and explicitly authorized deployment on October 26, 2026. The light Halloween decoration is now live at https://dancewithceech.com.
+The user requested removal after viewing the deployed decorations. The regular site is restored at https://dancewithceech.com. The release details below are historical.
+
+## Reversion
+
+- Restored the exact previous production deployment `dpl_9k6oJw6og8TxJZ31vZB3E4HmNdaN` by promoting it; the live domain lookup confirms this deployment is serving production again.
+- Reverted the feature in source with `fe20b13`. Source, public assets, and tests match the previous production commit `855ad47950016b5fa78e597fffc1c651100232d2` exactly.
+- Verified the live homepage at desktop 1440px and phone 390px: no Halloween attribute, decoration control, or decorative pseudo-element; original headline intact; lesson feed and BeatFirst load; no overflow.
+- All 14 focused existing homepage/navigation/BeatFirst checks passed after the revert.
+- No seasonal code or automatic recurrence remains in the reverted source. Already-open browser tabs may need a refresh to load the restored release.
 
 ## Source and deployment
 
