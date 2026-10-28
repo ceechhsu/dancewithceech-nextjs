@@ -14,7 +14,7 @@ try{
  const dialog=page.getByRole('dialog',{name:'Choose a classmate',exact:true}),wheel=dialog.getByRole('listbox',{name:'Archery class roster',exact:true})
  await dialog.waitFor({timeout:3000})
  const box=await dialog.boundingBox();assert.ok(box.height<600&&box.width<=375&&box.y>=0,'picker stays compact on a small phone')
- assert.equal(await wheel.getByRole('option').count(),12,'all classmates are listed, including own labeled entry')
+ assert.equal(await wheel.getByRole('option').count(),13,'all classmates and instructor are listed, including own labeled entry')
  assert.equal(await wheel.getByRole('option',{name:'Alex Sample (you)',exact:true}).getAttribute('aria-disabled'),'true')
  await page.screenshot({path:output+'/classmate-wheel-mobile.png'})
  for(const [label,width,height] of [['tablet',768,1024],['desktop',1440,1000]]){
@@ -30,7 +30,7 @@ try{
  await page.waitForFunction(()=>document.querySelector('[role=listbox]').scrollTop>48)
  await wheel.press('End');await dialog.getByRole('button',{name:'Choose Taylor Sample',exact:true}).waitFor()
  await wheel.press('Home');assert.equal(await wheel.getByRole('option',{name:'Alex Sample (you)',exact:true}).getAttribute('aria-selected'),'false','keyboard skips own name')
- await wheel.getByRole('option',{name:'Jamie Demo',exact:true}).click();await wheel.press('PageUp');await dialog.getByRole('button',{name:'Choose Avery Example',exact:true}).waitFor()
+ await wheel.getByRole('option',{name:'Jamie Demo',exact:true}).click();await wheel.press('PageUp');await dialog.getByRole('button',{name:'Choose Instructor',exact:true}).waitFor()
  await wheel.getByRole('option',{name:'Jordan Example',exact:true}).click()
  await dialog.getByRole('button',{name:'Choose Jordan Example',exact:true}).click()
  await page.getByRole('button',{name:'Classmate Jordan Example',exact:true}).waitFor()
@@ -48,5 +48,5 @@ try{
  await page.getByRole('button',{name:'Classmate Taylor Sample',exact:true}).waitFor()
  assert.deepEqual(errors,[])
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no page overflow')
- console.log('PASS: compact phone name wheel, all 12 class names, self challenge disabled, touch scroll, keyboard navigation, deliberate confirmation, cancellation/focus, invite and reset.')
+ console.log('PASS: compact phone name wheel, all 12 student names plus instructor, self challenge disabled, touch scroll, keyboard navigation, deliberate confirmation, cancellation/focus, invite and reset.')
 }catch(error){console.log('Failure page:',(await page.locator('body').innerText()).slice(0,5000));console.log('Runtime errors:',errors);await page.screenshot({path:output+'/failure.png',fullPage:true});throw error}finally{await browser.close()}

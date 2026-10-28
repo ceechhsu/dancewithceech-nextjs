@@ -48,7 +48,7 @@ export default function ArcheryHub({classId,transport,onTryStudent,startPractice
   catch(err){setError(errorMessage(err));return false}finally{locked.current=false;setBusy(false)}
  }
  if(!data)return <section className={s.card}>{error?<><p role="alert">{error}</p><button className={s.button} onClick={()=>void load().catch(err=>setError(errorMessage(err)))}>Try again</button></>:<p role="status">Loading archery…</p>}</section>
- const incoming=data.challenges.filter(c=>c.opponent===data.me&&c.status==='pending').length
+ const incoming=data.challenges.filter(c=>c.opponent===(data.challengeMe??data.me)&&c.status==='pending').length
  const disputed=data.disputes?.length??0
  const selectedDate=date||(startPractice?data.today:null)
  const hasTournaments=data.tournaments.some(t=>t.event_date===selectedDate)
@@ -67,7 +67,7 @@ export default function ArcheryHub({classId,transport,onTryStudent,startPractice
   <DailyPracticeSummary data={data} date={selectedDate}/>
   <nav className={a.modes} aria-label="Archery modes">
    <button className={`${s.button} ${mode!=='practice'?s.secondary:''}`} aria-pressed={mode==='practice'} aria-controls="archery-mode-content" onClick={()=>chooseMode('practice')}>Individual scoring</button>
-   <button className={`${s.button} ${mode!=='challenges'?s.secondary:''}`} aria-pressed={mode==='challenges'} aria-controls="archery-mode-content" onClick={()=>chooseMode('challenges')}>{data.instructor?'Review class challenges':'Challenge a classmate'}</button>
+   <button className={`${s.button} ${mode!=='challenges'?s.secondary:''}`} aria-pressed={mode==='challenges'} aria-controls="archery-mode-content" onClick={()=>chooseMode('challenges')}>{data.instructor?'Challenge a student':'Challenge a classmate'}</button>
    {data.instructor&&selectedDate===data.today&&<button className={`${s.button} ${mode!=='host'?s.secondary:''}`} aria-pressed={mode==='host'} aria-controls="archery-mode-content" onClick={()=>chooseMode('host')}>Host a tournament</button>}
   </nav>
   </section>}

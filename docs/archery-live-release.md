@@ -53,3 +53,12 @@ The homepage, dance tutorials and online/San Jose lesson pages use separate `app
 The expanded browser regression passes homepage, lesson, older-page and classroom navigation for the instructor, enrolled student, unrelated students and guests, including direct-route denial and existing sign-out/API-failure protections. Seventeen focused navigation/homepage tests, scoped lint, TypeScript and optimized build pass. This correction requires no database or roster changes.
 
 Navigation correction publication: deployment `dpl_56zZ5SmoaGKNqHQutwSh8P8tZJbh` is READY on the production domains, source commit `d92f1cf`. The existing real instructor browser now shows Archery in the homepage menu; clicking it opens Mission Archery and its instructor calendar directly. Guest membership requests remain 401/private/no-store, and the new deployment’s error/fatal log scan is empty. The real instructor menu screenshot is retained outside the repository in the chat’s visualization folder.
+
+
+## Instructor participation in challenges — October 27, 2026
+
+The owning instructor can now challenge students and receive student invitations. The Instructor entry is available in the class challenge wheel without creating an attendance enrollment. Instructor self-reports require opponent confirmation; own disputes use the existing explicit audited ruling. Nonparticipating instructors retain student-game referee controls.
+
+Applied only `20261028014318_archery_instructor_challenges.sql` to the confirmed attendance project, installed version `20261028015312`. The player registry has RLS and no anon/authenticated grants. Seven focused database regressions cover identity changes, cross-class FKs, late enrollment, rate/duplicate rules, legacy upgrades/rollback, privacy, and own disputes. All 157 automated tests and full classroom/browser/name-wheel checks pass; independent code review approved. Live service-role challenge smoke checks passed with all fictional writes rolled back.
+
+Rollback for this update: restore `dpl_56zZ5SmoaGKNqHQutwSh8P8tZJbh` while retaining the additive player registry and records. No roster or attendance data was removed or reassigned.

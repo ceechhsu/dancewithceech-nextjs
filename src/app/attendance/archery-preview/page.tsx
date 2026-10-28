@@ -10,7 +10,8 @@ export default async function Page(){
   'supabase/migrations/20261027153351_archery_instructor_practice.sql',
   'supabase/migrations/20261027164537_archery_tournament_formats.sql',
   'supabase/migrations/20261027224308_archery_result_disputes.sql',
-  'supabase/migrations/20261028002402_archery_history_visibility.sql']
- const [schema,rules,upgrade,scoreRules,instructorRules,tournamentRules,disputeRules,historyRules]=await Promise.all(files.map(file=>readFile(path.join(process.cwd(),file),'utf8')))
- return <ArcheryPreview schema={schema} rules={rules} upgrade={upgrade} scoreRules={scoreRules} instructorRules={instructorRules} tournamentRules={tournamentRules} disputeRules={disputeRules} historyRules={historyRules}/>
+  'supabase/migrations/20261028002402_archery_history_visibility.sql',
+  'supabase/migrations/20261028014318_archery_instructor_challenges.sql']
+ const [schema,rules,upgrade,scoreRules,instructorRules,tournamentRules,disputeRules,historyRules,challengeRules]=await Promise.all(files.map(file=>readFile(path.join(process.cwd(),file),'utf8')))
+ return <ArcheryPreview schema={schema} rules={rules} upgrade={upgrade} scoreRules={scoreRules} instructorRules={instructorRules} tournamentRules={tournamentRules} disputeRules={disputeRules} historyRules={historyRules} challengeRules={challengeRules}/>
 }

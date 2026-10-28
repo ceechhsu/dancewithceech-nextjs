@@ -7,12 +7,12 @@ import s from '@/components/attendance/Attendance.module.css'
 import a from './Archery.module.css'
 const classId='00000000-0000-0000-0000-000000000001'
 const people=['Alex Sample','Jordan Example','Casey Demo','Morgan Sample','Riley Demo','Sam Example','Taylor Sample','Jamie Demo','Drew Example','Quinn Sample','Robin Demo','Avery Example']
-export default function ArcheryPreview({schema,rules,upgrade,scoreRules,instructorRules,tournamentRules,disputeRules,historyRules}:{schema:string;rules:string;upgrade:string;scoreRules:string;instructorRules:string;tournamentRules:string;disputeRules:string;historyRules:string}){
+export default function ArcheryPreview({schema,rules,upgrade,scoreRules,instructorRules,tournamentRules,disputeRules,historyRules,challengeRules}:{schema:string;rules:string;upgrade:string;scoreRules:string;instructorRules:string;tournamentRules:string;disputeRules:string;historyRules:string;challengeRules:string}){
  const db=useRef<PGlite|null>(null),boot=useRef<Promise<void>|null>(null)
  const [ready,setReady]=useState(false),[error,setError]=useState(''),[view,setView]=useState('1'),[revision,setRevision]=useState(0),[resetting,setResetting]=useState(false),[startPractice,setStartPractice]=useState(false)
  const seed=useCallback(async(database:PGlite)=>{
-  await database.transaction(async tx=>{await tx.exec(schema+'\n'+rules+'\n'+upgrade+'\n'+scoreRules+'\n'+instructorRules+'\n'+tournamentRules+'\n'+disputeRules+'\n'+historyRules)})
- },[schema,rules,upgrade,scoreRules,instructorRules,tournamentRules,disputeRules,historyRules])
+  await database.transaction(async tx=>{await tx.exec(schema+'\n'+rules+'\n'+upgrade+'\n'+scoreRules+'\n'+instructorRules+'\n'+tournamentRules+'\n'+disputeRules+'\n'+historyRules+'\n'+challengeRules)})
+ },[schema,rules,upgrade,scoreRules,instructorRules,tournamentRules,disputeRules,historyRules,challengeRules])
  useEffect(()=>{
   let cancelled=false
   if(!boot.current)boot.current=(async()=>{
@@ -34,11 +34,13 @@ export default function ArcheryPreview({schema,rules,upgrade,scoreRules,instruct
     if(!(disputeVersion.rows[0] as {present:unknown})?.present)await database.transaction(async tx=>{await tx.exec(disputeRules)})
     const historyVersion=await database.query("select to_regprocedure('archery_private.archery_api_disputes(text,text,boolean,text,jsonb)') as present")
     if(!(historyVersion.rows[0] as {present:unknown})?.present)await database.transaction(async tx=>{await tx.exec(historyRules)})
+    const challengeVersion=await database.query("select to_regclass('public.archery_challenge_players') as present")
+    if(!(challengeVersion.rows[0] as {present:unknown})?.present)await database.transaction(async tx=>{await tx.exec(challengeRules)})
    }
   })()
   boot.current.then(()=>{if(!cancelled)setReady(true)}).catch(err=>{if(!cancelled)setError(errorMessage(err))})
   return()=>{cancelled=true}
- },[seed,upgrade,scoreRules,instructorRules,tournamentRules,disputeRules,historyRules])
+ },[seed,upgrade,scoreRules,instructorRules,tournamentRules,disputeRules,historyRules,challengeRules])
  const transport=useCallback<ArcheryTransport>(async(action,body={})=>{
   if(!db.current)throw Error('The preview is loading.')
   const email=view==='teacher'?'teacher@example.com':`student${view}@example.com`

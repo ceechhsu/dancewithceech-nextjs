@@ -4,12 +4,12 @@ import type {Perform} from './ArcheryHub'
 import s from '@/components/attendance/Attendance.module.css'
 import a from './Archery.module.css'
 
-export default function DisputePanel({dispute,players,instructor,perform}:{dispute:ResultDispute;players:Person[];instructor:boolean;perform:Perform}){
+export default function DisputePanel({dispute,players,instructor,competing=false,perform}:{dispute:ResultDispute;players:Person[];instructor:boolean;competing?:boolean;perform:Perform}){
  const name=(id:string|null)=>players.find(p=>p.id===id)?.name||'Former participant'
  const pending=dispute.status==='pending'
  return <section className={pending?a.disputePending:a.disputeHistory} aria-label={pending?'Disputed result':'Dispute decision'}>
   {pending?<>
-   <p role="status">{instructor?'Result disputed. Both players have been asked to find you.':'Result disputed. Please find your instructor together so they can decide the winner.'}</p>
+   <p role="status">{instructor?(competing?'Result disputed. Review the outcome together before making your instructor decision.':'Result disputed. Both players have been asked to find you.'):'Result disputed. Please find your instructor together so they can decide the winner.'}</p>
    <p className={s.muted}>This result is paused until the instructor decides.</p>
    <p>Reported winner: <strong>{name(dispute.reported_winner)}</strong></p>
    {dispute.reported_notes&&<p className={s.progressNotes}>{dispute.reported_notes}</p>}

@@ -31,7 +31,7 @@ export default function ClassmateWheel({people,me,initialId,onChoose,onDismiss}:
  }
  function confirm(){if(eligible)onChoose(candidate!.id)}
  return <dialog ref={dialog} className={w.dialog} aria-labelledby={`${id}-title`} aria-describedby={`${id}-help`} onCancel={event=>{event.preventDefault();onDismiss()}}>
-  <p className={s.eyebrow}>{people.length} student{people.length===1?'':'s'} in your class</p>
+  <p className={s.eyebrow}>{people.length} player{people.length===1?'':'s'} in your class</p>
   <h2 id={`${id}-title`}>Choose a classmate</h2><p id={`${id}-help`} className={s.muted}>Scroll to a name, then confirm.</p>
   <div className={w.frame}>
    <div className={w.highlight} aria-hidden="true"/>

@@ -128,7 +128,7 @@ const RENAMED_IMAGE_REDIRECTS = [
 const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     '/api/archery-preview/runtime/*': ['./node_modules/@electric-sql/pglite/dist/pglite.wasm', './node_modules/@electric-sql/pglite/dist/pglite.data'],
-    '/attendance/archery-preview': ['./src/lib/archery/demo-schema.sql', './supabase/migrations/20261018225039_archery_rounds_and_competitions.sql', './supabase/migrations/20261019010834_archery_calendar_registration.sql', './supabase/migrations/20261019013958_archery_score_wheel.sql', './supabase/migrations/20261027153351_archery_instructor_practice.sql', './supabase/migrations/20261027164537_archery_tournament_formats.sql', './supabase/migrations/20261027224308_archery_result_disputes.sql', './supabase/migrations/20261028002402_archery_history_visibility.sql'],
+    '/attendance/archery-preview': ['./src/lib/archery/demo-schema.sql', './supabase/migrations/20261018225039_archery_rounds_and_competitions.sql', './supabase/migrations/20261019010834_archery_calendar_registration.sql', './supabase/migrations/20261019013958_archery_score_wheel.sql', './supabase/migrations/20261027153351_archery_instructor_practice.sql', './supabase/migrations/20261027164537_archery_tournament_formats.sql', './supabase/migrations/20261027224308_archery_result_disputes.sql', './supabase/migrations/20261028002402_archery_history_visibility.sql', './supabase/migrations/20261028014318_archery_instructor_challenges.sql'],
   },
   poweredByHeader: false,
   devIndicators: false,

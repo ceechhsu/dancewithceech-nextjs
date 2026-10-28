@@ -38,7 +38,7 @@ try{
  await page.getByRole('button',{name:'Challenge a classmate',exact:true}).waitFor()
  await saved(page.getByRole('button',{name:'Accept challenge',exact:true}))
  await view('teacher')
- await page.getByRole('button',{name:'Review class challenges',exact:true}).waitFor()
+ await page.getByRole('button',{name:'Challenge a student',exact:true}).waitFor()
  await page.getByRole('button',{name:'Host a tournament',exact:true}).click()
  await page.getByLabel('Tournament name',{exact:true}).fill('Visible on the calendar day')
  await page.getByLabel('Game',{exact:true}).fill('Tic tac toe')
