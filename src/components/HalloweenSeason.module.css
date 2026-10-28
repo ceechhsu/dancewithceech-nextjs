@@ -23,23 +23,34 @@
 .season[data-halloween="active"] main > section,
 .season[data-halloween="active"] footer { position: relative; }
 
-/* Three small scenes, with light concentrated around the introduction.
-   All artwork is decorative and cannot intercept interaction. */
-.season[data-halloween="active"] main > section:first-of-type::before,
-.season[data-halloween="active"] :global(#teaching-story)::after,
-.season[data-halloween="active"] footer::before {
-  content: "";
+.scene {
   position: absolute;
   z-index: 2;
-  pointer-events: none;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
   user-select: none;
+}
+.scene:focus-visible { outline: 3px solid #f5c084; outline-offset: 5px; border-radius: 12px; }
+.float, .reaction, .art { position: absolute; inset: 0; pointer-events: none; }
+.art {
   background: var(--halloween-art) center / contain no-repeat;
   filter: drop-shadow(0 8px 10px #0008);
-  transform-origin: 50% 80%;
-  animation: friendly-float 7s ease-in-out infinite;
 }
+.float {
+  transform-origin: 50% 80%;
+  animation: friendly-float var(--float-duration, 7s) ease-in-out var(--float-delay, 0s) infinite;
+}
+.reaction { transform-origin: 50% 85%; }
+.reaction[data-music-playing] { animation: music-dance 900ms ease-in-out infinite; }
+.scene:hover .art { filter: drop-shadow(0 8px 10px #0008) drop-shadow(0 0 5px #efb05266); }
 
-.season[data-halloween="active"] main > section:first-of-type::before {
+.hero {
+  --spark-range: 56px;
   width: 168px;
   height: 152px;
   left: max(32px, calc((100% - 1152px) / 2));
@@ -62,25 +73,88 @@
   animation: candle-glow 8s ease-in-out 3;
 }
 
-.season[data-halloween="active"] :global(#teaching-story)::after {
+.story {
+  --spark-range: 30px;
   width: 64px;
   height: 58px;
   right: 24px;
   bottom: 8px;
   opacity: .9;
   --float-height: -4px;
-  animation-duration: 9s;
-  animation-delay: -3s;
+  --float-duration: 9s;
+  --float-delay: -3s;
 }
 
-.season[data-halloween="active"] footer::before {
+.footer {
+  --spark-range: 36px;
   width: 80px;
   height: 72px;
   left: calc(50% - 40px);
   top: -74px;
   --float-height: -5px;
-  animation-duration: 8.5s;
-  animation-delay: -5s;
+  --float-duration: 8.5s;
+  --float-delay: -5s;
+}
+
+.hint {
+  position: absolute;
+  bottom: -13px;
+  left: -10px;
+  width: calc(100% + 20px);
+  color: #f6d7b1;
+  font-size: 10px;
+  line-height: 14px;
+  white-space: nowrap;
+  text-align: center;
+  text-shadow: 0 1px 4px #000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+}
+.scene:hover .hint, .scene:focus-visible .hint { opacity: 1; }
+.boo {
+  position: absolute;
+  right: -4px;
+  top: -8px;
+  padding: 4px 8px;
+  border: 1px solid #f5c08488;
+  border-radius: 10px 10px 10px 2px;
+  background: #25192bf2;
+  color: #fff0dc;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  animation: boo-greeting 1s ease-out both;
+}
+.spark {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  color: #ffc267;
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0;
+  animation: spark-burst 800ms ease-out both;
+}
+.spark:nth-of-type(3) { --spark-x: calc(var(--spark-range) * -1); --spark-y: -12px; }
+.spark:nth-of-type(4) { --spark-x: calc(var(--spark-range) * -.5); --spark-y: -32px; color: #ddc0ff; }
+.spark:nth-of-type(5) { --spark-x: calc(var(--spark-range) * .5); --spark-y: -36px; }
+.spark:nth-of-type(6) { --spark-x: var(--spark-range); --spark-y: -10px; color: #ddc0ff; }
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+@keyframes music-dance {
+  0%, 50%, 100% { transform: translate(0, 0) rotate(0); }
+  25% { transform: translate(-3px, -7px) rotate(-5deg); }
+  75% { transform: translate(3px, -7px) rotate(5deg); }
+}
+@keyframes spark-burst {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.6); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(var(--spark-x) - 50%), calc(var(--spark-y) - 50%)) rotate(35deg) scale(1); }
+}
+@keyframes boo-greeting {
+  0%, 100% { opacity: 0; }
+  15%, 75% { opacity: 1; }
 }
 
 @keyframes friendly-float {
@@ -98,7 +172,8 @@
   .season[data-halloween="active"] main > section:first-of-type > div:last-child {
     padding-bottom: 148px !important;
   }
-  .season[data-halloween="active"] main > section:first-of-type::before {
+  .hero {
+    --spark-range: 38px;
     width: 108px;
     height: 98px;
     left: 18px;
@@ -110,7 +185,7 @@
     left: 0;
     bottom: 0;
   }
-  .season[data-halloween="active"] :global(#teaching-story)::after {
+  .story {
     width: 52px;
     height: 48px;
     right: 18px;
@@ -122,7 +197,7 @@
     padding-top: 140px !important;
     padding-bottom: 148px !important;
   }
-  .season[data-halloween="active"] main > section:first-of-type::before {
+  .hero {
     width: 108px;
     height: 98px;
     left: 18px;
@@ -131,8 +206,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .season[data-halloween="active"] main > section:first-of-type::before,
-  .season[data-halloween="active"] :global(#teaching-story)::after,
-  .season[data-halloween="active"] footer::before,
+  .float, .reaction[data-music-playing], .boo,
   .season[data-halloween="active"] main > section:first-of-type::after { animation: none; }
+  .spark { display: none; }
 }
+
+@media (hover: none) { .hero .hint { opacity: .85; } }

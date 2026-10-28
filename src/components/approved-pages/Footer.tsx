@@ -1,8 +1,10 @@
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 
-export default function Footer() {
+export default function Footer({ children }: { children?: ReactNode }) {
   return (
     <footer className="border-t mt-20 py-12 px-6" style={{ borderColor: '#1f1f1f', backgroundColor: 'var(--background)' }}>
+      {children}
       <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
         <div>
           <Link href="/" prefetch={false} className="text-base font-bold tracking-tight" style={{ color: 'var(--foreground)' }}>

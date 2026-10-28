@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 
 const CTA_BUTTONS = (
@@ -100,12 +100,13 @@ function HeroContent() {
   );
 }
 
-export default function VideoHero() {
+export default function VideoHero({ children }: { children?: ReactNode }) {
   return (
     <section aria-label="Dance With Ceech introduction" style={{ position: "relative", overflow: "hidden", backgroundColor: "#0A0A0A" }}>
       <HeroVideo />
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.16) 50%, rgba(0,0,0,0.76) 100%)" }} />
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.9) 100%)" }} />
+      {children}
       <HeroContent />
     </section>
   );
