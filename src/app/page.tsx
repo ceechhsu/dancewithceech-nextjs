@@ -13,6 +13,7 @@ import DeferredHomeTestimonials from "@/components/approved-pages/DeferredHomeTe
 import { homepageFaqs, homepageSchema } from "@/lib/approved-pages/homepage-details";
 import { getReviewSummary } from "@/lib/reviews";
 import HalloweenSeason from "@/components/HalloweenSeason";
+import HalloweenScene from "@/components/HalloweenScene";
 
 export const metadata = {
   title: "Online Hip-Hop Dance Lessons for Adults | Dance With Ceech",
@@ -26,11 +27,12 @@ export default async function Home() {
   const reviewSummary = await getReviewSummary();
   return <HalloweenSeason className={approvedStyles.scope}><a href="#main-content" className={approvedStyles.skipLink}>Skip to content</a><Nav /><main id="main-content">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageSchema).replace(/</g, "\\u003c") }} />
-    <VideoHero />
+    <VideoHero><HalloweenScene placement="hero" /></VideoHero>
     <StatsBar />
     <HomePrivateCoaching uniformHeading />
       {/* CREDIBILITY */}
       <section id="teaching-story" aria-labelledby="teaching-story-heading" className="py-16 px-6">
+        <HalloweenScene placement="story" />
         <div className="max-w-4xl mx-auto">
           <h2 id="teaching-story-heading" className="home-section-heading mb-8">
             Meet Ceech
@@ -112,5 +114,5 @@ export default async function Home() {
     <section id="faq" className="funnel-section"><div className="funnel-wrap max-w-3xl"><h2 className="funnel-heading mb-8">Getting started with Dance With Ceech</h2>{homepageFaqs.map(faq => <details key={faq.question} className="border-b border-white/15 py-5"><summary className="cursor-pointer text-lg font-semibold">{faq.question}</summary><p className="mt-4 leading-relaxed text-muted">{faq.answer}</p></details>)}<p className="mt-6 text-sm text-muted">Compare <Link href="/private-lessons" prefetch={false} className="funnel-link">online and in-person lessons</Link>, or read the <Link href="/private-lessons#faq" prefetch={false} className="funnel-link">lesson FAQs</Link>.</p></div></section>
     <section className="funnel-section bg-surface text-center"><div className="funnel-wrap max-w-3xl"><h2 className="funnel-heading">Want direct feedback from Ceech?</h2><p className="funnel-copy mx-auto mb-8">Choose online lessons or meet in person in San Jose. Start with a free 30-minute phone consultation about your goals.</p><Link href="/private-lessons#booking" prefetch={false} className="funnel-button">Book a free 30-minute phone consultation</Link></div></section>
     <HomeSocialLinks />
-  </main><Footer /></HalloweenSeason>;
+  </main><Footer><HalloweenScene placement="footer" /></Footer></HalloweenSeason>;
 }
