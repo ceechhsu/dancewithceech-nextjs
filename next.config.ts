@@ -126,6 +126,10 @@ const RENAMED_IMAGE_REDIRECTS = [
 ].map(([source, destination]) => ({ source, destination, permanent: true }));
 
 const nextConfig: NextConfig = {
+  outputFileTracingIncludes: {
+    '/api/archery-preview/runtime/*': ['./node_modules/@electric-sql/pglite/dist/pglite.wasm', './node_modules/@electric-sql/pglite/dist/pglite.data'],
+    '/attendance/archery-preview': ['./src/lib/archery/demo-schema.sql', './supabase/migrations/20261018225039_archery_rounds_and_competitions.sql', './supabase/migrations/20261019010834_archery_calendar_registration.sql', './supabase/migrations/20261019013958_archery_score_wheel.sql', './supabase/migrations/20261027153351_archery_instructor_practice.sql', './supabase/migrations/20261027164537_archery_tournament_formats.sql', './supabase/migrations/20261027224308_archery_result_disputes.sql', './supabase/migrations/20261028002402_archery_history_visibility.sql'],
+  },
   poweredByHeader: false,
   devIndicators: false,
   images: {
@@ -159,6 +163,10 @@ const nextConfig: NextConfig = {
         {key:"Cache-Control",value:"private, no-store"},
         {key:"Content-Security-Policy",value:`default-src 'self'; script-src 'self' 'unsafe-inline'${process.env.NODE_ENV==='development'?" 'unsafe-eval'":''}; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'`},
       ]})),
+      {
+        source: '/attendance/archery-preview',
+        headers: [{key:'Content-Security-Policy',value:`default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${process.env.NODE_ENV==='development'?" 'unsafe-eval'":''}; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'`}],
+      },
       {
         source: "/beat-first/practice/:path*",
         headers: [

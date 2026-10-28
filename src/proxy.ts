@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { protectBeatFirstPreview } from "./lib/beatfirst-preview-access";
+import { archeryPreviewPath } from './lib/archery/preview-access';
 
 const WORDPRESS_SEARCH_PLACEHOLDER = "{search_term_string}";
 const WORDPRESS_PHP_PROBE = /^\/wp-[^/]*\.php$/;
@@ -64,6 +65,9 @@ function getCleanQueryUrl(request: NextRequest) {
 }
 
 export function proxy(request: NextRequest) {
+  const archeryPreview = archeryPreviewPath(request.nextUrl.pathname, process.env.ARCHERY_DEMO_ONLY === 'true');
+  if (archeryPreview === 'redirect') return NextResponse.redirect(new URL('/attendance/archery-preview', request.url));
+  if (archeryPreview === 'deny') return new Response('This preview contains only fictional archery tools.', { status: 404, headers: { 'Cache-Control': 'no-store' } });
   const previewAccess = protectBeatFirstPreview(request, process.env.VERCEL_ENV, process.env.BEATFIRST_PREVIEW_PASSWORD);
   if (previewAccess) return previewAccess;
 

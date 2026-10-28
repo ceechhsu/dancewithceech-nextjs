@@ -114,6 +114,16 @@
   align-items: center;
   flex-wrap: wrap;
 }
+.dashboardSection { scroll-margin-top: 24px; }
+.progressHeading { font-size: 26px; font-weight: 700; margin-top: 32px; }
+.progressFields { border: 0; padding: 0; margin: 20px 0 0; min-width: 0; }
+.progressEntry h3 { font-size: 22px; font-weight: 600; overflow-wrap: anywhere; }
+.progressResult { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 18px; font-variant-numeric: tabular-nums; margin: 12px 0; }
+.progressNotes { white-space: pre-wrap; overflow-wrap: anywhere; color: #b8bec8; }
+.progressTable { width: 100%; border-collapse: collapse; }
+.progressTable th, .progressTable td { text-align: left; padding: 12px 8px; border-bottom: 1px solid #383838; }
+.progressTable th { font-weight: 600; }
+.progressTable td { font-variant-numeric: tabular-nums; }
 .rosterTotals { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
 .rosterTotals th, .rosterTotals td { padding: 12px 4px; border-bottom: 1px solid #383838; }
 .rosterTotals th:first-child { text-align: left; width: 64%; overflow-wrap: anywhere; font-weight: 500; }

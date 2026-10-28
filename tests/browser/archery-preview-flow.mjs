@@ -1,0 +1,145 @@
+import {createRequire} from 'node:module'
+import {mkdir,readFile} from 'node:fs/promises'
+import assert from 'node:assert/strict'
+const require=createRequire('/Users/ceechhsu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/runtime.cjs')
+const {chromium}=require('playwright')
+const origin=process.env.ARCHERY_PREVIEW_ORIGIN||'http://localhost:3106',output=process.env.ARCHERY_SCREENSHOTS||'/tmp/archery-phone-review'
+await mkdir(output,{recursive:true})
+const browser=await chromium.launch({headless:true,channel:'chrome'})
+const context=await browser.newContext({viewport:{width:375,height:812}}),page=await context.newPage(),errors=[]
+page.on('pageerror',e=>errors.push(e.message))
+try{
+ const entry=process.env.ARCHERY_PREVIEW_LINK_FILE?(await readFile(process.env.ARCHERY_PREVIEW_LINK_FILE,'utf8')).trim():origin+'/attendance/archery-preview'
+ await page.goto(entry)
+ if(process.env.ARCHERY_PREVIEW_LINK_FILE){
+  for(const path of ['/api/attendance/classes','/api/attendance/archery','/api/running-man/checkout','/api/auth/session']){
+   const response=await context.request.get(new URL(path,entry).href)
+   assert.equal(response.status(),404,'hosted demo must deny real account and class APIs')
+  }
+ }
+ await page.getByRole('region',{name:'Archery calendar',exact:true}).waitFor({timeout:60000})
+ assert.equal(await page.getByRole('heading',{name:'Record a round',exact:true}).count(),0,'calendar is the initial screen')
+ const chooseDay=async()=>{await page.getByRole('button',{name:'Today',exact:true}).click()}
+ const chooseTournament=async()=>{await chooseDay();}
+ const switchView=async(view)=>{await page.getByLabel('Preview as',{exact:true}).selectOption(view);await page.getByRole('region',{name:'Archery calendar',exact:true}).waitFor()}
+ await page.screenshot({path:output+'/calendar-mobile.png',fullPage:true})
+ await chooseDay();await page.getByRole('button',{name:'Individual scoring',exact:true}).click()
+ assert.equal(await page.getByRole('group',{name:'Arrow scores',exact:true}).getByRole('button').count(),5)
+ await page.getByLabel('Distance',{exact:true}).fill('30')
+ for(const [i,score] of [10,10,9,8,7].entries()){
+  await page.getByRole('button',{name:new RegExp('^Arrow '+(i+1)+':')}).click()
+  const dialog=page.getByRole('dialog',{name:'Choose your score',exact:true}),slider=dialog.getByRole('slider')
+  await slider.press('End');for(let j=10;j>=score;j--)await slider.press('ArrowLeft')
+  await dialog.getByRole('button',{name:'Use '+score,exact:true}).click()
+ }
+ await page.getByRole('button',{name:'Save round',exact:true}).click()
+ const history=page.getByRole('region',{name:'Individual round history'})
+ await history.getByText('30 m · 5 arrows',{exact:true}).waitFor()
+ await chooseDay()
+ const daily=page.getByRole('region',{name:'Daily practice summary',exact:true})
+ await daily.getByRole('table').waitFor()
+ assert.match(await daily.innerText(),/30 m/)
+ assert.match(await daily.innerText(),/44/)
+ assert.equal(await page.getByRole('heading',{name:'Record a round',exact:true}).count(),0,'reviewing a date does not require opening scoring')
+ await page.getByRole('button',{name:'Individual scoring',exact:true}).click()
+ assert.match(await history.innerText(),/44/)
+ await page.screenshot({path:output+'/individual-mobile.png',fullPage:true})
+ await page.getByLabel('Arrows this round',{exact:true}).fill('10')
+ assert.equal(await page.getByRole('group',{name:'Arrow scores',exact:true}).getByRole('button').count(),10)
+ // A different calendar date has separate history, and future dates cannot save.
+ const today=await page.locator('[aria-current="date"]').getAttribute('data-date')
+ const tomorrow=new Date(today+'T12:00:00Z');tomorrow.setUTCDate(tomorrow.getUTCDate()+1)
+ const nextDay=page.locator(`[data-date="${tomorrow.toISOString().slice(0,10)}"]`)
+ if(!await nextDay.count())await page.getByRole('button',{name:'Next month',exact:true}).click()
+ await nextDay.click();await page.getByRole('button',{name:'Individual scoring',exact:true}).click()
+ assert.equal(await page.getByRole('button',{name:'Save round',exact:true}).count(),0,'future dates cannot save scores')
+ assert.equal(await history.getByText('30 m · 5 arrows',{exact:true}).count(),0,'history is date-specific')
+ await chooseDay()
+
+ await page.getByRole('button',{name:'Challenge a classmate',exact:true}).click()
+ await page.getByRole('button',{name:'Classmate Choose a classmate',exact:true}).click()
+ await page.getByRole('dialog',{name:'Choose a classmate',exact:true}).getByRole('option',{name:'Jordan Example',exact:true}).click()
+ await page.getByRole('dialog',{name:'Choose a classmate',exact:true}).getByRole('button',{name:'Choose Jordan Example',exact:true}).click()
+ await page.getByLabel('Game',{exact:true}).fill('Tic tac toe')
+ await page.getByRole('button',{name:'Send challenge',exact:true}).click()
+ await page.getByText('Waiting for Jordan Example to respond.',{exact:true}).waitFor()
+ await switchView('2')
+ await page.getByText(/You have 1 new challenge/).waitFor()
+ await chooseTournament();await page.getByRole('button',{name:'View challenges',exact:true}).click()
+ await page.getByRole('button',{name:'Accept challenge',exact:true}).click()
+ await page.getByLabel('Winner',{exact:true}).selectOption({label:'Alex Sample'})
+ await page.getByRole('button',{name:'Report result',exact:true}).click()
+ await page.getByText('Waiting for your opponent to confirm.',{exact:true}).waitFor()
+ await switchView('1');await chooseTournament();await page.getByRole('button',{name:'Challenge a classmate',exact:true}).click()
+ await page.getByRole('button',{name:'Confirm result',exact:true}).click()
+ await page.getByText('Winner: Alex Sample',{exact:true}).waitFor()
+ await page.screenshot({path:output+'/challenge-mobile.png',fullPage:true})
+ await switchView('teacher');await chooseTournament()
+ await page.getByRole('button',{name:'Host a tournament',exact:true}).click()
+ await page.getByLabel('Tournament name',{exact:true}).fill('Eleven-player class tournament')
+ await page.getByLabel('Game',{exact:true}).fill('Tic tac toe')
+ await page.getByLabel('How to play (optional)',{exact:true}).fill('Best of three. First to two wins.')
+ await page.getByRole('button',{name:'Open 5-minute registration',exact:true}).click()
+ const event=page.getByRole('article',{name:'Eleven-player class tournament',exact:true})
+ await event.getByText('Registration open · 0 joined',{exact:true}).waitFor()
+ assert.equal(await event.getByRole('region',{name:/bracket/}).count(),0,'no draw before instructor closes')
+ for(let i=1;i<=11;i++){
+  await switchView(String(i));await chooseTournament()
+  assert.equal(await page.getByRole('button',{name:'Host a tournament',exact:true}).count(),0,'only teacher hosts')
+  await event.getByRole('button',{name:'Enter tournament',exact:true}).click()
+  await event.getByRole('button',{name:'Leave tournament',exact:true}).waitFor()
+  if(i===1){
+   await event.getByRole('button',{name:'Leave tournament',exact:true}).click()
+   await event.getByRole('button',{name:'Enter tournament',exact:true}).click()
+   await event.getByRole('button',{name:'Leave tournament',exact:true}).waitFor()
+  }
+ }
+ await switchView('teacher');await chooseTournament()
+ await event.getByText('Registration open · 11 joined',{exact:true}).waitFor()
+ await page.screenshot({path:output+'/registration-mobile.png',fullPage:true})
+ await event.getByRole('button',{name:'Close registration & draw',exact:true}).click()
+ await event.getByText('In play · 11 players · 5 byes',{exact:true}).waitFor()
+ const first=event.locator('form').first()
+ const choices=await first.locator('select option').allTextContents()
+ const players=await page.getByLabel('Preview as',{exact:true}).locator('option').evaluateAll(options=>Object.fromEntries(options.map(o=>[o.textContent,o.value])))
+ const winnerName=choices[1],opponentName=choices[2]
+ await switchView(players[winnerName]);await chooseTournament()
+ const personal=event.getByRole('region',{name:'Your tournament status',exact:true})
+ await personal.getByText('You vs '+opponentName,{exact:true}).waitFor()
+ await personal.getByLabel('Match winner',{exact:true}).selectOption({label:winnerName})
+ await personal.getByRole('button',{name:'Report match winner',exact:true}).click()
+ await personal.getByText('Waiting for your opponent to confirm.',{exact:true}).waitFor()
+ await switchView(players[opponentName]);await chooseTournament()
+ await personal.getByRole('button',{name:'Dispute result',exact:true}).click()
+ await personal.getByText('Result disputed. Please find your instructor together so they can decide the winner.',{exact:true}).waitFor()
+ await switchView('teacher');await page.getByRole('button',{name:'Resolve disputes',exact:true}).click()
+ const disputes=page.getByRole('region',{name:'Instructor disputes',exact:true})
+ await disputes.getByLabel('Winner selected by instructor',{exact:true}).selectOption({label:winnerName})
+ await disputes.getByRole('button',{name:'Resolve dispute',exact:true}).click()
+ await disputes.getByText('No disputes waiting for your decision.',{exact:true}).waitFor()
+ await switchView(players[winnerName]);await chooseTournament()
+ await personal.getByText('Round 2',{exact:true}).waitFor()
+ await page.screenshot({path:output+'/personal-match-mobile.png',fullPage:true})
+ await switchView('12');await chooseTournament()
+ await event.getByRole('region',{name:'Eleven-player class tournament bracket',exact:true}).waitFor()
+ assert.equal(await event.getByRole('button',{name:'Enter tournament',exact:true}).count(),0,'draw freezes registration')
+ assert.equal(await event.getByRole('region',{name:'Your tournament status',exact:true}).count(),0,'spectator sees board only')
+ await switchView('teacher');await chooseTournament()
+ for(let i=0;i<9;i++){
+  const form=event.locator('form').first()
+  await form.waitFor()
+  const select=form.locator('select');const value=await select.locator('option').nth(1).getAttribute('value');await select.selectOption(value)
+  await form.getByRole('button',{name:'Advance winner',exact:true}).click()
+  await page.waitForFunction(()=>!document.querySelector('fieldset[disabled]'))
+ }
+ await event.getByText(/^Champion:/).waitFor()
+ for(const [label,width,height]of[['mobile',375,812],['tablet',768,1024],['desktop',1440,1000]]){
+  await page.setViewportSize({width,height});await page.screenshot({path:output+'/tournament-'+label+'.png',fullPage:true})
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'page should not overflow')
+ }
+ await page.reload();await page.getByRole('region',{name:'Archery calendar',exact:true}).waitFor({timeout:60000})
+ await chooseDay();await page.getByRole('button',{name:'Individual scoring',exact:true}).click()
+ await history.getByText('30 m · 5 arrows',{exact:true}).waitFor()
+ assert.deepEqual(errors,[])
+ console.log('PASS: calendar-first phone UI, scorecard customization/total, challenge confirmation, 11 self-opt-ins, leave/rejoin, instructor lock/draw with 5 byes, personal opponent, dispute/confirmation, spectator board, champion, responsive layout and saved history. Screenshots: '+output)
+}catch(error){console.log('Failure page:',(await page.locator('body').innerText()).slice(0,6000));console.log('Runtime errors:',errors);await page.screenshot({path:output+'/failure.png',fullPage:true});throw error}finally{await browser.close()}

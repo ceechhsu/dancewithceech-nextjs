@@ -4,6 +4,7 @@ import { attendanceApi, errorMessage } from "@/lib/attendance/client";
 import type { AttendanceClass } from "@/lib/attendance/types";
 import s from "./Attendance.module.css";
 import ScheduleManager from './ScheduleManager';
+import ProgressToolSettings from './ProgressToolSettings';
 export default function ClassSetup() {
   const [classes, setClasses] = useState<AttendanceClass[]>([]),
     [error, setError] = useState(""),
@@ -67,7 +68,9 @@ export default function ClassSetup() {
               <a href={`/attendance/instructor/classes/${c.id}/roster`}>
                 Manage roster
               </a>
+              <p><a href={`/attendance/instructor/classes/${c.id}`}>Students &amp; attendance →</a></p>
               <button className={`${s.button} ${s.secondary}`} onClick={()=>setEditing(c)}>Edit class and schedule</button>
+              <ProgressToolSettings key={c.id} classId={c.id} tool={c.progress_tool} onSaved={() => { void load() }} />
             </div>
           ))}
         </section>

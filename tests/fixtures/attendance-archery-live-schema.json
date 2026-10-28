@@ -1,0 +1,84 @@
+{
+  "tables": [
+    {
+      "ddl": "create table public.attendance_classes (\n id uuid default gen_random_uuid() not null,\n instructor_email text not null,\n name text not null,\n college text default ''::text not null,\n location_label text default ''::text not null,\n term text not null,\n year integer not null,\n start_date date not null,\n end_date date not null,\n timezone text default 'America/Los_Angeles'::text not null,\n days integer[] default '{}'::integer[] not null,\n start_time time without time zone not null,\n end_time time without time zone not null,\n archived boolean default false not null,\n schedule_revision integer default 1 not null,\n credit_before date\n);"
+    },
+    {
+      "ddl": "create table public.attendance_enrollments (\n id uuid default gen_random_uuid() not null,\n class_id uuid not null,\n name text not null,\n college_id text,\n email text,\n google_sub text,\n effective_from date not null,\n effective_to date,\n first_name text,\n last_name text,\n photo_url text,\n nickname text,\n removed_at timestamp with time zone\n);"
+    },
+    {
+      "ddl": "create table public.attendance_meetings (\n id uuid default gen_random_uuid() not null,\n class_id uuid not null,\n instructor_email text not null,\n meeting_date date not null,\n status text default 'open'::text not null,\n opened_at timestamp with time zone default clock_timestamp() not null,\n expires_at timestamp with time zone default (clock_timestamp() + '00:10:00'::interval) not null,\n extended boolean default false not null,\n closed_at timestamp with time zone,\n latitude double precision,\n longitude double precision,\n location_timestamp timestamp with time zone,\n token text,\n token_slot bigint,\n merged_into uuid,\n reopen_count integer default 0 not null\n);"
+    },
+    {
+      "ddl": "create table public.attendance_records (\n meeting_id uuid not null,\n enrollment_id uuid not null,\n status text not null,\n source text not null,\n revision integer default 1 not null,\n updated_at timestamp with time zone default clock_timestamp() not null,\n checked_in_at timestamp with time zone\n);"
+    },
+    {
+      "ddl": "create table public.attendance_roster (\n meeting_id uuid not null,\n enrollment_id uuid not null,\n name text not null,\n college_id text,\n email text\n);"
+    }
+  ],
+  "constraints": [
+    {
+      "ddl": "alter table public.attendance_classes add constraint attendance_classes_check CHECK ((end_date >= start_date));"
+    },
+    {
+      "ddl": "alter table public.attendance_classes add constraint attendance_classes_name_check CHECK (((length(name) >= 1) AND (length(name) <= 120)));"
+    },
+    {
+      "ddl": "alter table public.attendance_classes add constraint attendance_classes_pkey PRIMARY KEY (id);"
+    },
+    {
+      "ddl": "alter table public.attendance_classes add constraint attendance_classes_year_check CHECK (((year >= 2000) AND (year <= 2200)));"
+    },
+    {
+      "ddl": "alter table public.attendance_enrollments add constraint attendance_enrollments_check CHECK (((effective_to IS NULL) OR (effective_to >= effective_from)));"
+    },
+    {
+      "ddl": "alter table public.attendance_enrollments add constraint attendance_enrollments_email_check CHECK (((email IS NULL) OR ((email = lower(TRIM(BOTH FROM email))) AND (email ~ '^[^[:space:]@]+@[^[:space:]@]+\\.[^[:space:]@]+$'::text))));"
+    },
+    {
+      "ddl": "alter table public.attendance_enrollments add constraint attendance_enrollments_name_check CHECK (((length(name) >= 1) AND (length(name) <= 200)));"
+    },
+    {
+      "ddl": "alter table public.attendance_enrollments add constraint attendance_enrollments_nickname_check CHECK ((length(nickname) <= 80));"
+    },
+    {
+      "ddl": "alter table public.attendance_enrollments add constraint attendance_enrollments_pkey PRIMARY KEY (id);"
+    },
+    {
+      "ddl": "alter table public.attendance_meetings add constraint attendance_meetings_pkey PRIMARY KEY (id);"
+    },
+    {
+      "ddl": "alter table public.attendance_meetings add constraint attendance_meetings_status_check CHECK ((status = ANY (ARRAY['open'::text, 'closed'::text, 'cancelled'::text])));"
+    },
+    {
+      "ddl": "alter table public.attendance_records add constraint attendance_records_pkey PRIMARY KEY (meeting_id, enrollment_id);"
+    },
+    {
+      "ddl": "alter table public.attendance_records add constraint attendance_records_source_check CHECK ((source = ANY (ARRAY['check_in'::text, 'manual'::text, 'finalized'::text, 'instructor_credit'::text])));"
+    },
+    {
+      "ddl": "alter table public.attendance_records add constraint attendance_records_status_check CHECK ((status = ANY (ARRAY['present'::text, 'absent'::text])));"
+    },
+    {
+      "ddl": "alter table public.attendance_roster add constraint attendance_roster_pkey PRIMARY KEY (meeting_id, enrollment_id);"
+    },
+    {
+      "ddl": "alter table public.attendance_enrollments add constraint attendance_enrollments_class_id_fkey FOREIGN KEY (class_id) REFERENCES attendance_classes(id);"
+    },
+    {
+      "ddl": "alter table public.attendance_meetings add constraint attendance_meetings_class_id_fkey FOREIGN KEY (class_id) REFERENCES attendance_classes(id);"
+    },
+    {
+      "ddl": "alter table public.attendance_meetings add constraint attendance_meetings_merged_into_fkey FOREIGN KEY (merged_into) REFERENCES attendance_meetings(id);"
+    },
+    {
+      "ddl": "alter table public.attendance_records add constraint attendance_records_meeting_id_enrollment_id_fkey FOREIGN KEY (meeting_id, enrollment_id) REFERENCES attendance_roster(meeting_id, enrollment_id);"
+    },
+    {
+      "ddl": "alter table public.attendance_roster add constraint attendance_roster_enrollment_id_fkey FOREIGN KEY (enrollment_id) REFERENCES attendance_enrollments(id);"
+    },
+    {
+      "ddl": "alter table public.attendance_roster add constraint attendance_roster_meeting_id_fkey FOREIGN KEY (meeting_id) REFERENCES attendance_meetings(id);"
+    }
+  ]
+}

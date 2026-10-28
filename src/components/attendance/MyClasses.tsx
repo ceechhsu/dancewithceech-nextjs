@@ -3,18 +3,25 @@ import { useEffect, useState } from "react";
 import type { AttendanceClass } from "@/lib/attendance/types";
 import { attendanceApi, errorMessage } from "@/lib/attendance/client";
 import styles from "./Attendance.module.css";
+import { progressLabels } from '@/lib/attendance/progress';
 export default function MyClasses() {
   const [data, setData] = useState<{
     classes: AttendanceClass[];
     instructor: boolean;
   } | null>(null);
   const [error, setError] = useState("");
+  const [progressClasses, setProgressClasses] = useState<string[]>([]);
   useEffect(() => {
+    let cancelled = false;
     attendanceApi<{ classes: AttendanceClass[]; instructor: boolean }>(
       "classes",
     )
-      .then(setData)
-      .catch((e) => setError(errorMessage(e)));
+      .then(value => { if (!cancelled) setData(value) })
+      .catch((e) => { if (!cancelled) setError(errorMessage(e)) });
+    attendanceApi<{ classes: AttendanceClass[] }>('progress')
+      .then(value => { if (!cancelled) setProgressClasses(value.classes.map(c => c.id)) })
+      .catch(() => { /* Attendance remains available when progress is unavailable. */ });
+    return () => { cancelled = true };
   }, []);
   return (
     <>
@@ -49,6 +56,7 @@ export default function MyClasses() {
                   · {c.start_time.slice(0, 5)}–{c.end_time.slice(0, 5)}
                 </p>
                 <a href={`/attendance/history/${c.id}`}>View attendance →</a>
+                {progressClasses.includes(c.id) && c.progress_tool && c.progress_tool !== 'none' && <p><a className={styles.button} href={c.progress_tool === 'archery' ? `/attendance/archery/${c.id}` : `/attendance/progress/${c.id}`}>{progressLabels[c.progress_tool]} progress →</a></p>}
               </article>
             ))}
           </div>

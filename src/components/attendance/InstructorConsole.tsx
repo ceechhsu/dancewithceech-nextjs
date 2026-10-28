@@ -1,4 +1,6 @@
 "use client";
+/* Full navigation isolates private pages from marketing scripts. */
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { attendanceApi, errorMessage } from "@/lib/attendance/client";
@@ -42,13 +44,15 @@ export default function InstructorConsole({ owner }: { owner: string }) {
     void registerOfflineShell().catch(()=>setMessage('Offline setup unavailable. Keep a separate manual record if needed.'));
     attendanceApi<{ classes: AttendanceClass[] }>("classes")
       .then((r) => {
-        const active = r.classes.filter((c) => !c.archived);
+        const active = r.classes.filter((c) => !c.archived && c.instructor_email === owner);
         setClasses(active);
+        const requested = new URLSearchParams(window.location.search).get('classId');
         const matches = scheduledClasses(active);
-        if (matches.length === 1) setClassId(matches[0].id);
+        if (requested && active.some(c => c.id === requested)) setClassId(requested);
+        else if (matches.length === 1) setClassId(matches[0].id);
       })
       .catch((e) => setError(errorMessage(e)));
-  }, []);
+  }, [owner]);
   const load = useCallback(async () => {
     if (!classId) return;
     const generation=++requestGeneration.current;
