@@ -24,7 +24,7 @@ async function context(email) {
 async function menu(page,yes,header=false) {
   const desktop=page.getByRole('navigation',{name:'Main navigation'}).getByRole('link',{name:'Archery',exact:true})
   if(!header) {
-    if(yes) await desktop.waitFor({state:'visible'})
+    if(yes) await desktop.waitFor({state:'visible',timeout:5000})
     else assert.equal(await desktop.count(),0)
     await page.setViewportSize({width:375,height:667})
   }
@@ -35,7 +35,7 @@ async function menu(page,yes,header=false) {
   await page.getByRole('button',{name:'Close menu',exact:true}).click()
 }
 try {
-  for(const [email,allowed] of [[null,false],['teacher@example.com',true],['student@example.com',true],['dance@example.com',false],['outsider@example.com',false]]) {
+  for(const [email,allowed] of [['teacher@example.com',true],['student@example.com',true],[null,false],['dance@example.com',false],['outsider@example.com',false]]) {
     const c=await context(email),page=await c.newPage();page.on('pageerror',e=>errors.push(e.message))
     const access=await c.request.get(origin+'/api/attendance/archery-access')
     assert.equal(access.status(),email?200:401)
@@ -47,7 +47,13 @@ try {
       assert.equal(data.classes.length,allowed?1:0)
       for(const item of data.classes)assert.deepEqual(Object.keys(item).sort(),['id','name'])
     }
-    await page.goto(origin+'/about');await page.waitForLoadState('networkidle');await menu(page,allowed)
+    // The homepage/lesson menu and the older page menu are separate components.
+    for (const path of ['/','/about','/private-lessons/online']) {
+      await page.setViewportSize({width:1440,height:900})
+      // Wait for navigation hydration, without waiting for unrelated public media.
+      const sessionReady=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/auth/session'&&r.status()===200)
+      await page.goto(origin+path,{waitUntil:'domcontentloaded'});await sessionReady;await menu(page,allowed)
+    }
     await page.goto(origin+'/attendance/archery/'+id);await page.waitForLoadState('networkidle')
     if(allowed)await page.getByRole('region',{name:'Archery calendar',exact:true}).waitFor()
     else {
@@ -83,5 +89,5 @@ try {
   assert.equal(await p.getByRole('navigation',{name:'Main navigation'}).getByRole('link',{name:'Archery',exact:true}).count(),0)
   await stale.close()
   assert.deepEqual(errors,[])
-  console.log('PASS: minimal authenticated membership endpoint; desktop, phone and attendance-header menus; direct route denial; owner/student access; unrelated classes, errors and late logout responses stay closed.')
+  console.log('PASS: minimal authenticated membership endpoint; homepage, lessons, older pages and attendance-header desktop/phone menus; direct route denial; owner/student access; unrelated classes, errors and late logout responses stay closed.')
 } finally { await browser.close() }

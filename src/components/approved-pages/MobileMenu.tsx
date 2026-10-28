@@ -12,9 +12,9 @@ import styles from "@/components/Navigation.module.css";
 const links = [
   { label: "About Ceech", href: "/about" },
 ];
-type Props = { user?: { name?: string | null; email?: string | null; image?: string | null } | null; showAttendance?: boolean; alwaysVisible?: boolean };
+type Props = { user?: { name?: string | null; email?: string | null; image?: string | null } | null; showAttendance?: boolean; archeryHref?: string | null; alwaysVisible?: boolean };
 
-export default function MobileMenu({ user, showAttendance = false, alwaysVisible = false }: Props) {
+export default function MobileMenu({ user, showAttendance = false, archeryHref, alwaysVisible = false }: Props) {
   const [requestedOpen, setOpen] = useState(false);
   const pathname = usePathname();
   const [openedPath, setOpenedPath] = useState(pathname);
@@ -84,6 +84,7 @@ export default function MobileMenu({ user, showAttendance = false, alwaysVisible
       {user && !showAttendance && <a href="/dashboard" className="flex min-h-12 shrink-0 items-center font-semibold text-blue-300">My Classes</a>}
       {/* Fresh document applies attendance permissions and unloads marketing scripts. */}
       {showAttendance && <a href="/attendance/instructor" className="flex min-h-11 shrink-0 items-center font-semibold text-blue-300">Attendance</a>}
+      {user && archeryHref && <a href={archeryHref} className="flex min-h-11 shrink-0 items-center font-semibold text-blue-300">Archery</a>}
       <Link href="/private-lessons/online" prefetch={false}>Online lessons</Link>
       <Link href="/private-lessons/san-jose" prefetch={false}>In-person lessons</Link>
       <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Learn Free</p>

@@ -44,3 +44,10 @@ Migration history uses the timestamps assigned by the connected migration servic
 | archery_tournament_formats | 20261028010938 |
 | archery_result_disputes | 20261028010957 |
 | archery_history_visibility | 20261028011011 |
+
+
+## Homepage navigation correction — October 27, 2026
+
+The homepage, dance tutorials and online/San Jose lesson pages use separate `approved-pages` navigation components. The initial release added the membership-scoped link to the older public navigation and classroom header but missed these components. The omission was reproduced in the real instructor browser and by a failing local browser regression. Both approved desktop and phone menus now use the existing race-safe membership controller and link directly to the authorized class. Logged-out/unrelated accounts remain excluded.
+
+The expanded browser regression passes homepage, lesson, older-page and classroom navigation for the instructor, enrolled student, unrelated students and guests, including direct-route denial and existing sign-out/API-failure protections. Seventeen focused navigation/homepage tests, scoped lint, TypeScript and optimized build pass. This correction requires no database or roster changes.

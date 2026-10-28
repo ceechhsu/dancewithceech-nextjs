@@ -10,6 +10,7 @@ import UserMenu from "@/components/UserMenu";
 import SignInButton from "@/components/SignInButton";
 import LearnFreeMenu from "@/components/approved-pages/LearnFreeMenu";
 import styles from "@/components/Navigation.module.css";
+import useArcheryNavigation from "@/components/attendance/useArcheryNavigation";
 
 type NavUser = {
   name?: string | null;
@@ -39,6 +40,7 @@ export default function Nav({ user: initialUser }: Props = {}) {
     return () => { active = false; window.removeEventListener('focus', refresh); };
   }, []);
   const showAttendance = canSeeAttendance(user);
+  const archeryHref = useArcheryNavigation(user?.email);
   return (
     <nav aria-label="Main navigation" className={`${styles.navigation} fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 py-3 sm:px-6`} style={{ backgroundColor: "var(--background)", borderBottom: "1px solid #1f1f1f" }}>
       <SiteLogo />
@@ -50,6 +52,7 @@ export default function Nav({ user: initialUser }: Props = {}) {
         <Link href="/about" prefetch={false} className="hover:text-white transition-colors">About Ceech</Link>
         {/* Fresh document applies attendance permissions and unloads marketing scripts. */}
         {showAttendance && <a href="/attendance/instructor" className="inline-flex min-h-11 items-center font-semibold text-blue-300 hover:text-white">Attendance</a>}
+        {archeryHref && <a href={archeryHref} className="inline-flex min-h-11 items-center font-semibold text-blue-300 hover:text-white">Archery</a>}
         <Link href="/private-lessons#booking" prefetch={false} className={styles.booking}>Book a Free Call</Link>
         <div className="text-xs">
         {user ? (
@@ -60,7 +63,7 @@ export default function Nav({ user: initialUser }: Props = {}) {
         </div>
       </div>
       {/* Mobile: fluid hamburger menu */}
-      <MobileMenu user={user} showAttendance={showAttendance} />
+      <MobileMenu user={user} showAttendance={showAttendance} archeryHref={archeryHref} />
     </nav>
   );
 }
