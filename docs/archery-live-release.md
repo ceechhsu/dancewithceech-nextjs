@@ -2,7 +2,7 @@
 
 ## Release state
 
-**Live at https://dancewithceech.com/attendance/archery.** Vercel production deployment `dpl_FNPoX1LdDYpgufXVq8QV67EkAkQT` (`dancewithceech-nextjs-hf5jt54zv-ceechhsus-projects.vercel.app`) is READY and serves both production domains. Feature commit `2c366cfb17304d4f65185ba731f4f56645ce581c` is pushed to GitHub main and `release/archery-classroom-2026-10-27`. Its optimized Next.js build completed in approximately 52 seconds.
+**Live at https://dancewithceech.com/attendance/archery.** Vercel production deployment `dpl_56zZ5SmoaGKNqHQutwSh8P8tZJbh` (`dancewithceech-nextjs-p20ri9vei-ceechhsus-projects.vercel.app`) is READY and serves both production domains. Feature commit `2c366cfb17304d4f65185ba731f4f56645ce581c` is pushed to GitHub main and `release/archery-classroom-2026-10-27`. The latest navigation correction is commit `d92f1cfec2fa3e7a270d6acea4c3e577246ec3f6`; its optimized Next.js production build completed in approximately 35 seconds.
 
 All eight reviewed additive migrations are installed in the existing attendance database, `dance-with-ceech-academy` (`ywianppupnxduthvyeyb`). Mission Archery, Fall 2026, is configured with `progress_tool=archery`. No roster assignments or historical attendance were changed.
 
@@ -51,3 +51,5 @@ Migration history uses the timestamps assigned by the connected migration servic
 The homepage, dance tutorials and online/San Jose lesson pages use separate `approved-pages` navigation components. The initial release added the membership-scoped link to the older public navigation and classroom header but missed these components. The omission was reproduced in the real instructor browser and by a failing local browser regression. Both approved desktop and phone menus now use the existing race-safe membership controller and link directly to the authorized class. Logged-out/unrelated accounts remain excluded.
 
 The expanded browser regression passes homepage, lesson, older-page and classroom navigation for the instructor, enrolled student, unrelated students and guests, including direct-route denial and existing sign-out/API-failure protections. Seventeen focused navigation/homepage tests, scoped lint, TypeScript and optimized build pass. This correction requires no database or roster changes.
+
+Navigation correction publication: deployment `dpl_56zZ5SmoaGKNqHQutwSh8P8tZJbh` is READY on the production domains, source commit `d92f1cf`. The existing real instructor browser now shows Archery in the homepage menu; clicking it opens Mission Archery and its instructor calendar directly. Guest membership requests remain 401/private/no-store, and the new deployment’s error/fatal log scan is empty. The real instructor menu screenshot is retained outside the repository in the chat’s visualization folder.
