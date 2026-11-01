@@ -11,9 +11,9 @@ export type ReviewSummary = {
 };
 
 const reviewSnapshot: ReviewSummary = {
-  // Verified on the public Google and Yelp business pages on October 27, 2026.
+  // Verified on the public Google and Yelp business pages on November 1, 2026.
   // Maintained by the monthly review check; no provider API is called by the site.
-  google: { rating: 5, reviewCount: 60 },
+  google: { rating: 5, reviewCount: 61 },
   yelp: { rating: 5, reviewCount: 30 },
 };
 

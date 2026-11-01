@@ -6,9 +6,9 @@ test('review totals remain available without network access or provider credenti
   const fetchMock = t.mock.method(globalThis, 'fetch', () => { throw new Error('Review summaries must not call a provider'); });
   const summary = await getReviewSummary();
   assert.deepEqual(summary, {
-    google: { rating: 5, reviewCount: 60 },
+    google: { rating: 5, reviewCount: 61 },
     yelp: { rating: 5, reviewCount: 30 },
   });
-  assert.equal(formatReviewProof(summary), '5.0 on Yelp from 30 reviews. 5.0 on Google from 60 reviews. All earned, all from real students.');
+  assert.equal(formatReviewProof(summary), '5.0 on Yelp from 30 reviews. 5.0 on Google from 61 reviews. All earned, all from real students.');
   assert.equal(fetchMock.mock.callCount(), 0);
 });

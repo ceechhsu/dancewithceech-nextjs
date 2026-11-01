@@ -25,8 +25,8 @@ test('shared and homepage footers use the official spaced business name', () => 
   assert.match(read('src/app/page.tsx'), /font-bold text-lg mb-2">Dance With Ceech/);
 });
 
-test('review summary reflects the verified October 27 Google snapshot', () => {
-  assert.match(read('src/lib/reviews.ts'), /google: \{ rating: 5, reviewCount: 60 \}/);
+test('review summary reflects the verified November 1 Google snapshot', () => {
+  assert.match(read('src/lib/reviews.ts'), /google: \{ rating: 5, reviewCount: 61 \}/);
 });
 
 test('legacy courses keep their intentional older YouTube channel links', () => {

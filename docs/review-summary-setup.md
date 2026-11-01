@@ -2,9 +2,9 @@
 
 The website displays verified snapshots of Google and Yelp overall ratings and review counts from `src/lib/reviews.ts`. It calls no Windsor, Google Business Profile, or Yelp review APIs. Website Google sign-in is separate and unchanged.
 
-Verified on the public business pages on October 27, 2026:
+Verified on the public business pages on November 1, 2026:
 
-- Google: 5.0 stars, 60 reviews — https://share.google/E6jTuMATZ1KCtAPBZ
+- Google: 5.0 stars, 61 reviews — https://share.google/E6jTuMATZ1KCtAPBZ
 - Yelp: 5.0 stars, 30 recommended reviews — https://www.yelp.com/biz/dance-with-ceech-san-jose-3
 
 The existing Codex monthly task checks both pages on the first day of each month at 9 a.m. America/Los_Angeles. A verified change updates the snapshot and related expectations, validates a preview, commits, pushes, deploys, and verifies the live website. Unchanged values require no release. Start from the current production commit to preserve other releases.
