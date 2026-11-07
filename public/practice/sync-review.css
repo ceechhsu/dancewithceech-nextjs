@@ -1,6 +1,4 @@
 .owner-sync-workspace .viewer-panel{overflow:visible}
-.owner-sync-workspace .stage{position:sticky;top:0;z-index:3;background:#0b100e;height:min(38vh,420px);aspect-ratio:auto;display:flex;justify-content:center}
-.owner-sync-workspace .stage canvas{height:100%;width:auto;max-width:100%;object-fit:contain}
 .owner-sync-workspace #audioWaveforms{max-width:none;padding:16px;margin:0;border-top:1px solid #343d36;background:#1a211e;color:#c5d7cc}
 .owner-sync-workspace #audioWaveforms h2{margin:0;font-size:18px}
 .owner-sync-workspace .mirror-row{flex-direction:row;flex-wrap:wrap;gap:8px}
@@ -12,7 +10,7 @@
 #syncPlayhead{position:absolute;top:12px;bottom:25px;width:2px;background:#fff;pointer-events:none;z-index:1;box-shadow:0 0 3px #111}
 .owner-sync-workspace #waveformCanvas{height:160px!important;margin-top:0!important}
 .original-waveforms{margin:10px 0}
-@media(max-width:600px){.owner-sync-workspace .stage{height:32vh}.owner-sync-workspace #audioWaveforms{padding:12px}.sync-shortcuts label{margin-left:0}}
+@media(max-width:600px){.owner-sync-workspace #audioWaveforms{padding:12px}.sync-shortcuts label{margin-left:0}}
 
 /* Comparison shares the website palette; video identity colors remain distinct. */
 body.compare-page{--bg:#0a0a0a;--panel:#161618;--line:#2c2c30;--ink:#f9f9f9;--muted:#a8a8b1;--accent:#2563eb;background:var(--bg)}
