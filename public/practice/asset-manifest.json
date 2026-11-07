@@ -98,7 +98,7 @@
     },
     {
       "name": "local-pose-worker.mjs",
-      "sha256": "06a90f31e46cf6af976bbc3a408d36e2fca4b37b4e84677f5e0b33fe7abff101"
+      "sha256": "c9b97242eedc9096c396afebe035fe1064bdfb2013759e3232b174200d2a41c6"
     },
     {
       "name": "local-store.mjs",

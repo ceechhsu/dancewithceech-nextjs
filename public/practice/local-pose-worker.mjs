@@ -1,9 +1,12 @@
 const runtime=import('./trial-assets/vision_bundle.mjs');
-let pose,canvas,ctx;
+let pose,canvas,ctx,poseCanvas;
 self.onmessage=async({data:d})=>{try{
  if(d.type==='init'){
   const {PoseLandmarker,FilesetResolver}=await runtime;
-  pose=await PoseLandmarker.createFromOptions(await FilesetResolver.forVisionTasks('/practice/trial-assets'),{baseOptions:{modelAssetPath:'/practice/trial-assets/pose_landmarker_full.task',delegate:'CPU'},runningMode:'VIDEO',numPoses:2,minPoseDetectionConfidence:.6,minPosePresenceConfidence:.6,minTrackingConfidence:.6});
+  // iOS Chrome can select the library's DOM fallback inside this worker.
+  // Supply its canvas explicitly and keep frame-pixel reads on a separate 2D canvas.
+  poseCanvas=new OffscreenCanvas(d.width,d.height);
+  pose=await PoseLandmarker.createFromOptions(await FilesetResolver.forVisionTasks('/practice/trial-assets'),{canvas:poseCanvas,baseOptions:{modelAssetPath:'/practice/trial-assets/pose_landmarker_full.task',delegate:'CPU'},runningMode:'VIDEO',numPoses:2,minPoseDetectionConfidence:.6,minPosePresenceConfidence:.6,minTrackingConfidence:.6});
   canvas=new OffscreenCanvas(d.width,d.height);ctx=canvas.getContext('2d',{willReadFrequently:true});postMessage({ready:true});return;
  }
  const started=performance.now();ctx.drawImage(d.bitmap,0,0);d.bitmap.close();
