@@ -54,7 +54,7 @@
     },
     {
       "name": "index.html",
-      "sha256": "908c76308a16d34835206640d65a319ce660a89c69e73025765e9d0294d54492"
+      "sha256": "1d9331f824b825a3341562cc633442f458611eee19824f1b82d4a789c546595f"
     },
     {
       "name": "lesson-navigation.mjs",
@@ -90,7 +90,7 @@
     },
     {
       "name": "local-contacts.mjs",
-      "sha256": "b66be4c49e187791c4f6f36623119ef94c6ed101c533cf6074410ee456d5d33f"
+      "sha256": "8549437b3034d6a74402bd78f9aecb554a353d47c838709c9ffdf27d1ea1c473"
     },
     {
       "name": "local-engine.mjs",

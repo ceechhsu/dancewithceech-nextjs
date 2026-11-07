@@ -1,11 +1,11 @@
-export const CONTACT_VERSION=5;
+export const CONTACT_VERSION=6;
 // Port of feet-1 + front-foot settling. No teacher markers enter detection.
 const feet={left:[27,29,31],right:[28,30,32]};
 const finite=a=>a.filter(Number.isFinite);
 const quantile=(a,q)=>{a=finite(a).sort((a,b)=>a-b);if(!a.length)return NaN;const x=(a.length-1)*q,i=Math.floor(x);return a[i]+(a[Math.min(i+1,a.length-1)]-a[i])*(x-i);};
 const min=a=>Math.min(...finite(a));
 export function detectLocalContacts(rows,{lessonId}={}){
- const times=rows.map(r=>r.time),n=rows.length,p=(i,k,v='y')=>rows[i].points?.[k]?.[v]??(v==='x'||v==='y'?NaN:0);
+ const times=rows.map(r=>r.time),n=rows.length,p=(i,k,v='y')=>rows[i].points?.[k]?.[v]??(v==='presence'?rows[i].points?.[k]?.visibility??0:v==='x'||v==='y'?NaN:0);
  if(n>22000||times.some((t,i)=>!Number.isFinite(t)||t<0||t>181||(i&&t<=times[i-1])))throw Error('Invalid frame timestamps.');
  const scale=quantile(rows.map((_,i)=>(p(i,31)+p(i,32)-p(i,23)-p(i,24))/2),.5);
  if(n<5||!Number.isFinite(scale)||scale<.12)return [];
@@ -14,7 +14,12 @@ export function detectLocalContacts(rows,{lessonId}={}){
  const hip=rows.map((_,i)=>(p(i,23)+p(i,24))/2),hx=rows.map((_,i)=>(p(i,23,'x')+p(i,24,'x'))/2);
  const valid=rows.map((r,i)=>r.poses===1&&[23,24,27,28,29,30,31,32].every(k=>['x','y'].every(v=>p(i,k,v)>.015&&p(i,k,v)<.985)&&p(i,k,'visibility')>=.8&&p(i,k,'presence')>=.8)&&Math.abs(p(i,31,'x')-p(i,32,'x'))>.025&&r.blur.left>=8&&r.blur.right>=8);
  const invalidate=(a,b)=>{for(let j=Math.max(0,a);j<Math.min(n,b);j++)valid[j]=false;};
- for(let i=1;i<n;i++)if(times[i]-times[i-1]>.085||Math.abs(hip[i]-hip[i-1])>.08*scale||Math.abs(hx[i]-hx[i-1])>.1*scale)invalidate(i-1,i+1);
+ // Camera discontinuities apply to every proposal. Foot visibility is checked
+ // separately at contact; the heel can be occluded during an incoming swing.
+ const trackingValid=rows.map((r,i)=>r.poses===1&&[23,24].every(k=>['x','y'].every(v=>p(i,k,v)>.015&&p(i,k,v)<.985)&&p(i,k,'visibility')>=.8&&p(i,k,'presence')>=.8));
+ for(let i=1;i<n;i++)if(times[i]-times[i-1]>.085||Math.abs(hip[i]-hip[i-1])>.08*scale||Math.abs(hx[i]-hx[i-1])>.1*scale){
+  invalidate(i-1,i+1);for(let j=i-1;j<=i;j++)trackingValid[j]=false;
+ }
  const events=[];
  for(const [foot,keys] of Object.entries(feet)){
   const tip=rows.map((_,i)=>p(i,keys[2]));const height=times.map((t,i)=>{const near=tip.filter((_,j)=>times[j]>=t-.7&&times[j]<=t+.7);return finite(near).length>=4?(quantile(near,.85)-tip[i])/scale:NaN;});
@@ -33,13 +38,7 @@ export function detectLocalContacts(rows,{lessonId}={}){
   }
   if(flight!==null)invalidate(flight-3,n);
  }
- for(const e of events){e.candidate_time=e.time;e.settled_confirmed=false;const start=times.indexOf(e.time),k=feet[e.foot][2];
-  for(let i=start;i<n-2&&times[i]-times[start]<=.15;i++){
-   if(![i,i+1,i+2].every(j=>Number.isFinite(p(j,k))&&Number.isFinite(p(j,k,'x'))))continue;
-   if(![i,i+1].every(j=>{const dt=times[j+1]-times[j];return dt>0&&dt<=.085&&Math.abs(p(j+1,k)-p(j,k))/(dt*scale)<=.36;}))continue;
-   e.time=times[i];e.settled_confirmed=true;e.lower=Math.min(e.lower,times[Math.max(0,i-1)]);e.upper=Math.max(e.upper,times[i+1]);break;
-  }if(!e.settled_confirmed)e.confidence=Math.min(e.confidence,.6);
- }
+ for(const e of events){e.candidate_time=e.time;e.settled_confirmed=false;}
  for(const event of lateralContacts(rows,scale)){
   const nearby=events.filter(e=>e.foot===event.foot&&Math.abs(e.time-event.time)<.23);
   if(!nearby.length){events.push(event);continue;}
@@ -51,10 +50,50 @@ export function detectLocalContacts(rows,{lessonId}={}){
    events.push(event);
   }
  }
- return events.sort((a,b)=>a.time-b.time);
+ return settledMarchingContacts(rows,events,scale,trackingValid);
 }
 export function pairTrial(events,reference,offset){
  const used=new Set();return reference.map(r=>{const candidates=events.filter(e=>e.foot===r.foot&&!used.has(e.id)&&Math.abs(e.time-r.time-offset)<=.3).sort((a,b)=>Math.abs(a.time-r.time-offset)-Math.abs(b.time-r.time-offset));const e=candidates[0];if(e)used.add(e.id);return {beat:r.beat,reference_time:r.time,event:e??null,delta_ms:e?(e.time-r.time-offset)*1000:null};});
+}
+
+// Confirm the first compact forefoot plateau after incoming travel. Small
+// point-estimation wobble must not postpone contact until the heel finishes.
+function settledMarchingContacts(rows,proposals,scale,trackingValid){
+ const events=[],quality=p=>p?Math.min(p.visibility??0,p.presence??p.visibility??0):0;
+ for(const proposal of proposals){
+  const k=feet[proposal.foot]?.[2];if(k===undefined)continue;
+  const point=i=>rows[i]?.points?.[k];
+  const readablePoint=(i,key)=>{const p=rows[i]?.points?.[key];return trackingValid[i]&&rows[i]?.poses===1&&quality(p)>=.8&&Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.x>.015&&p.x<.985&&p.y>.015&&p.y<.985;};
+  const readable=i=>readablePoint(i,k);
+  const relative=i=>{const p=point(i),hips=rows[i].points;return {x:p.x-(hips[23].x+hips[24].x)/2,y:p.y-(hips[23].y+hips[24].y)/2};};
+  const speed=i=>{const dt=rows[i+1]?.time-rows[i]?.time;if(!readable(i)||!readable(i+1)||!(dt>0&&dt<=.085))return Infinity;const a=relative(i),b=relative(i+1);return Math.hypot(b.x-a.x,b.y-a.y)/(dt*scale);};
+  const start=rows.findIndex(r=>r.time>=(proposal.candidate_time??proposal.time)-1e-6);
+  for(let i=Math.max(0,start);i<rows.length-2&&rows[i].time-(proposal.candidate_time??proposal.time)<=.18;i++){
+   if(!readable(i)||!Number.isFinite(rows[i].blur?.[proposal.foot])||rows[i].blur[proposal.foot]<8)continue;
+   let end=i+1;while(end<rows.length-1&&rows[end].time-rows[i].time<.09)end++;
+   const duration=rows[end].time-rows[i].time,p=point(i);
+   if(end<i+2||duration<.09||duration>.17)continue;
+   if(!rows.slice(i,end+1).every((row,j)=>readable(i+j)&&(!j||row.time-rows[i+j-1].time<=.085)&&Math.hypot(point(i+j).x-p.x,point(i+j).y-p.y)<=.04*scale))continue;
+   const netSpeed=Math.hypot(point(end).x-p.x,point(end).y-p.y)/(duration*scale);
+   if(netSpeed>.45)continue;
+   const history=[];for(let j=i-1;j>=0&&rows[i].time-rows[j].time<=.45;j--)if(readable(j))history.push(j);
+   const bodyPoint=relative(i),travel=history.length?Math.max(...history.map(j=>Math.hypot(bodyPoint.x-relative(j).x,bodyPoint.y-relative(j).y)/scale)):0;
+   const moving=history.filter(j=>Number.isFinite(speed(j))&&speed(j)>.6);
+   const lastMotion=moving.length?Math.max(...moving.map(j=>rows[j+1].time)):-Infinity;
+   if(travel<.06||moving.length<2||rows[i].time-lastMotion>.17)continue;
+   if((bodyPoint.y-Math.min(bodyPoint.y,...history.map(j=>relative(j).y)))/scale<.009)continue;
+   events.push({...proposal,time:rows[i].time,settled_confirmed:true,
+    confidence:Math.min(...rows.slice(i,end+1).flatMap(row=>feet[proposal.foot].map(key=>quality(row.points?.[key])))),
+    lower:rows[Math.max(0,i-1)].time,upper:rows[i+1].time,method:'forefoot_plateau_v1',
+    landingEvidence:{travel,lastMotion,plateauDuration:duration,forefootNetSpeed:netSpeed}});break;
+  }
+ }
+ const unique=[];
+ for(const event of events.sort((a,b)=>a.time-b.time)){
+  const previous=unique.findLast(e=>e.foot===event.foot);
+  if(!previous||event.time-previous.time>=.23)unique.push(event);
+ }
+ return unique;
 }
 
 // Detect a moving foot settling at a new screen position. No beat grid is used.
