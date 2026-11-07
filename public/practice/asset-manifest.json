@@ -2,7 +2,7 @@
   "files": [
     {
       "name": "account.js",
-      "sha256": "21276885e835d507e42b3bd4d398c616df25178a580efe957396cb9148063dc4"
+      "sha256": "642c0b9996f6cddaad3b558edaa4b0a4b33413529d5517ffcf1232aae62cd075"
     },
     {
       "name": "analysis-waiting-loop.mp3",
@@ -126,7 +126,7 @@
     },
     {
       "name": "profile.html",
-      "sha256": "8a71c76a5c98e62c61a49d462bc78f8b9b9f49d361d1e35ce1587c4c0a412976"
+      "sha256": "620fb71e53eba3945057d022a57574930abb8617492a4da167484bed30bbc819"
     },
     {
       "name": "profile.mjs",
