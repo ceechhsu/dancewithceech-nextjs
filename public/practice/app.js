@@ -50,13 +50,20 @@ function setBusy(value) {
   $('clear').disabled=value || !jobId;
   $('progress').hidden=!value;
 }
+function updateVideoViewport(){
+ const viewport=$('videoViewport'),stage=viewport.parentElement;
+ const width=Math.min(stage.clientWidth,stage.clientHeight*4/3);
+ if(width>0){viewport.style.width=width+'px';viewport.style.height=width*.75+'px';}
+}
+if(typeof ResizeObserver!=='undefined')new ResizeObserver(updateVideoViewport).observe($('videoViewport').parentElement);
 function setReady(value) {
   ready=value;
   // Loading and errors stay visible; completed alignment details live in Advanced.
   if(value)$('advancedStatus')?.append?.($('status'));
   else $('statusHome')?.after?.($('status'));
   ['play','back','forward','seek','speed','audio','adjustments','save'].forEach(id => $(id).disabled=!value);
-  $('empty').hidden=value; $('stageBadge').hidden=!value;
+  $('empty').hidden=value; $('stageBadge').hidden=!value; $('nativeVideos').hidden=!value;
+  if(value)updateVideoViewport();
 }
 async function api(path, options={}) {
   const response=await fetch(path,options);if(response.status===401)window.showSignIn?.();
@@ -288,7 +295,7 @@ async function play() {
   await pendingSeek;
   if(!playbackIntent.isCurrent(request)||!ready||document.hidden)return;
   try {
-    playing=true;ref.playbackRate=stu.playbackRate=Number($('speed').value);
+    playing=true;lastDriftSeek=Date.now();ref.playbackRate=stu.playbackRate=Number($('speed').value);
     await Promise.all([stu,ref].filter(video=>video.currentTime<video.duration).map(video=>video.play()));
     if(playbackIntent.isCurrent(request))$('play').textContent='Ⅱ Pause';
   } catch {
@@ -420,9 +427,11 @@ function drawVideo(video, area, ghost=false) {
   const w=video.videoWidth*ratio,h=video.videoHeight*ratio;
   const x=area.x+area.w/2+(adjust?Number($('x').value)/100*area.w:0);
   const y=area.h/2+(adjust?Number($('y').value)/100*area.h:0);
-  ctx.save();ctx.beginPath();ctx.rect(area.x,0,area.w,area.h);ctx.clip();ctx.translate(x,y);
-  if($(ghost?'mirrorReference':'mirrorStudent').checked)ctx.scale(-1,1);
-  ctx.drawImage(video,-w/2,-h/2,w,h);ctx.restore();
+  // Let the browser composite its decoded video surfaces. Copying them into
+  // a 2D canvas can block WebKit for hundreds of milliseconds per frame.
+  const mirror=$(ghost?'mirrorReference':'mirrorStudent').checked;
+  video.style.transform=`translate(${adjust?Number($('x').value):0}%, ${adjust?Number($('y').value):0}%) scale(${mirror?-scale:scale}, ${scale})`;
+  video.style.opacity=String(adjust?Number($('opacity').value)/100:1);
   return {left:x-w/2,top:y-h/2,width:w,height:h};
 }
 function drawReferenceBeatLabels(videoRect,area,time){
@@ -440,15 +449,21 @@ function drawBeatLabels(videoRect,area,labels,student=false){
   ctx.fillStyle='rgba(11,16,14,.9)';ctx.fillRect(x,y,textWidth+16,30);
   ctx.fillStyle=student?'#c5b9ed':'#f2f0e7';ctx.fillText(text,x+8,y+6);ctx.restore();
 }
+function playbackPosition(){
+ const studentMaster=$('audio').value==='student',master=studentMaster?stu:ref;
+ const referenceTime=studentMaster?stu.currentTime-offset:ref.currentTime;
+ return master.ended?Math.max(stu.currentTime-offset,ref.currentTime):referenceTime;
+}
 function correctDrift(target){
-  if(ref.seeking||stu.seeking||stu.ended||target>=ref.duration)return;
-  const base=Number($('speed').value),drift=target-ref.currentTime;
-  const now=Date.now();
-  if(Math.abs(drift)>.25&&now-lastDriftSeek>750){
-    lastDriftSeek=now;ref.playbackRate=base;ref.currentTime=Math.max(0,target);
-  }else{
-    ref.playbackRate=base*(Math.abs(drift)>.03?1+Math.max(-.04,Math.min(.04,drift*.4)):1);
-  }
+ // The audible track owns the clock. Never seek it or continuously change its
+ // rate to follow the muted decoder: WebKit can restart audio on each change.
+ const studentMaster=$('audio').value==='student',master=studentMaster?stu:ref,follower=studentMaster?ref:stu;
+ const followerTarget=studentMaster?target:target+offset;
+ if(master.seeking||follower.seeking||master.ended||followerTarget<0||followerTarget>=follower.duration)return;
+ const drift=followerTarget-follower.currentTime,now=Date.now();
+ if(Math.abs(drift)>.25&&now-lastDriftSeek>750){
+  lastDriftSeek=now;follower.currentTime=followerTarget;
+ }
 }
 function tick() {
   updateSyncPlayhead();
@@ -459,17 +474,19 @@ function tick() {
       Promise.all([ref,stu].filter(video=>video.currentTime<video.duration).map(video=>video.play())).then(()=>{if(playbackIntent.isCurrent(request))$('play').textContent='Ⅱ Pause';}).catch(()=>{if(playbackIntent.isCurrent(request))pause();});
     }
     if(playing&&!buffering){
-      current=stu.ended?Math.max(stu.currentTime-offset,ref.currentTime):stu.currentTime-offset;
+      current=playbackPosition();
       if(current>=interval.end-.015){pause();seek(interval.end);}
       else correctDrift(current);
     }
-    // Keep the last complete pair visible while either decoder seeks.
-    // Clearing first would flash the background when drawVideo has no frame.
+    // Keep frame labels stable while either decoder seeks. Native video
+    // surfaces keep their own last decoded frames during this transition.
     if(ref.seeking||stu.seeking||ref.readyState<2||stu.readyState<2){
       requestAnimationFrame(tick);return;
     }
     footReview?.updatePlayback(ref.currentTime,true);
-    ctx.globalAlpha=1;ctx.fillStyle='#0b100e';ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.globalAlpha=1;ctx.clearRect(0,0,canvas.width,canvas.height);
+    const nativeView=$('view').value==='side'?'side':'overlay';
+    if($('nativeVideos').dataset.view!==nativeView)$('nativeVideos').dataset.view=nativeView;
     let referenceRect,referenceArea,studentRect,studentArea;
     if($('view').value==='side'){
       referenceArea={x:0,w:480,h:720};referenceRect=drawVideo(ref,referenceArea,true);studentArea={x:480,w:480,h:720};studentRect=drawVideo(stu,studentArea);

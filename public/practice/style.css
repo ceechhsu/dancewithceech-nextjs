@@ -31,3 +31,8 @@
 .waiting-music-control button:focus-visible{outline:2px solid #bce7b1;outline-offset:4px}
 .waiting-music-control button[data-audible="true"]{background:#15241a;color:#bce7b1}
 @media(max-width:520px){.waiting-music-control{align-items:flex-start;flex-direction:column;gap:10px}}
+
+/* Native video layers avoid synchronous decoded-frame copies on mobile WebKit. */
+.native-videos{position:absolute;inset:0;pointer-events:none}.video-slot{position:absolute;inset:0;overflow:hidden}.comparison-video{display:block;width:100%;height:100%;object-fit:contain;transform-origin:center}.native-videos[data-view="side"] .video-slot{width:50%;right:auto}.native-videos[data-view="side"] .student-slot{left:50%}.stage canvas{position:relative;z-index:1;pointer-events:none}
+
+.video-viewport{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:100%;height:100%}

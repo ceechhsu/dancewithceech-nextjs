@@ -10,7 +10,7 @@
     },
     {
       "name": "app.js",
-      "sha256": "e1383d1b83e5590bf843a7f2042207738cadfb21e3b2abdc10cf88d8230bfc80"
+      "sha256": "2a774d23e75ca4e7fcb4c6148f34395b78de488ae7776db91d63f090f245b247"
     },
     {
       "name": "audio-alignment.mjs",
@@ -38,7 +38,7 @@
     },
     {
       "name": "compare.html",
-      "sha256": "d04124e10b0b386cde1efaf607ebb1b2270f41737481119f0f048d333d81b3d6"
+      "sha256": "a06152489cfc7c3a219bef673f4590ada757ab2da26e651db9c6b5f517ff92b2"
     },
     {
       "name": "debug-upload.mjs",
@@ -138,7 +138,7 @@
     },
     {
       "name": "style.css",
-      "sha256": "e412c3c96b33678430ac116785ca373166e8629a25a53b4161078852fc87dbef"
+      "sha256": "af4dbb23f7306eb01e7bb8227a6590e94ec0f946a231c1de0e7bc32ae22126fd"
     },
     {
       "name": "submission.mjs",
@@ -166,7 +166,7 @@
     },
     {
       "name": "trainer.js",
-      "sha256": "a6daa5a973170d902e3b16b97267dd3116c985e1b98f1f13d0e7b187a62240b7"
+      "sha256": "06084a9bb0ae03050783519ec757dc7086e6b5d63ae2a74bcc1d57ddecbc9f8c"
     },
     {
       "name": "trial-assets/mp4box.js",

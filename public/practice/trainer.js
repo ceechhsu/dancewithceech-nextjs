@@ -43,6 +43,16 @@ function navigateBack(){
  const state=navigation.back();if(state)restoreScreen(state);
 }
 $('flowBack').onclick=navigateBack;
+// Browser Back may restore the take page from the page cache after submission.
+// The saved video remains valid, but the navigation lock must not survive it.
+window.addEventListener('pageshow',event=>{
+ if(!event.persisted)return;
+ navigating=false;setSubmitting(false);
+ if(currentScreen==='take'&&take&&pending?.prepared){
+  navigation.open('take',lesson?.id,{replace:true});
+  $('takeStatus').textContent='Ready to compare on this device. Your recording is kept.';
+ }
+});
 window.addEventListener('popstate',event=>{
  if(!activeCapture()&&!submitting&&(new URLSearchParams(location.search).get('challenge')||null)!==navigation.challenge){location.reload();return;}
  const previous=navigation.current;
