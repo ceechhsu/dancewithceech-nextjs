@@ -547,7 +547,9 @@ async function loadWaveforms(job){
       report('Decoding '+name+' audio…');
       const buffer=await bounded(decoder.decodeAudioData(bytes),'Decoding '+name+' audio');
       // Use channel one consistently; no audio is played or replaced.
-      envelopes.push(waveformEnvelope(buffer.getChannelData(0),buffer.sampleRate));
+      const envelope=waveformEnvelope(buffer.getChannelData(0),buffer.sampleRate);
+      envelope.clockOffset=job.local&&index?(localRecord?.videoTimeline?.clockOffset||0):0;
+      envelopes.push(envelope);
     }
     if(generation!==waveformGeneration)return;
     waveformData={envelopes,start:job.lesson?.reference_audio_offset??job.result.exercise_duration?.reference?.start??job.result.count_in_evidence?.reference?.offset??0};
@@ -560,11 +562,12 @@ function drawWaveforms(){
   if(!waveformData)return;
   const [reference,student]=waveformData.envelopes;
   // Hold the axis steady while the student timing slider moves within ±1 second of the estimate.
-  const first=Math.min(0,-estimate-1),last=Math.max(reference.duration,student.duration,student.duration-estimate+1);
+  const studentEnd=student.duration+(student.clockOffset||0);
+  const first=Math.min(0,-estimate-1),last=Math.max(reference.duration,studentEnd,studentEnd-estimate+1);
   let start=first,end=last;
   if($('waveformView').value==='count'){start=Math.max(first,waveformData.start-.1);end=Math.min(last,start+2.6);}
   if($('waveformView').value==='middle'){const mid=reference.duration/2;start=Math.max(first,mid-1.3);end=Math.min(last,mid+1.3);}
-  if($('waveformView').value==='end'){const finish=Math.max(reference.duration,student.duration,student.duration-estimate);start=Math.max(first,finish-2.5);end=Math.min(last,finish+.1);}
+  if($('waveformView').value==='end'){const finish=Math.max(reference.duration,studentEnd,studentEnd-estimate);start=Math.max(first,finish-2.5);end=Math.min(last,finish+.1);}
   if(end<=start)return;
   waveformViewport={start,end};
   function draw(canvas,shift){
@@ -575,7 +578,7 @@ function drawWaveforms(){
     waveformData.envelopes.forEach((data,index)=>{
       const overlay=canvas.id==='waveformCanvas'&&$('waveformOverlay')?.checked;
       const base=overlay?125:index?185:70;ctx.strokeStyle=index?'#c5b9ed':'#bce7b1';ctx.fillStyle=ctx.strokeStyle;ctx.fillText(index?'Your take':'Reference',5,overlay?(index?155:95):base);ctx.beginPath();
-      for(let k=0;k<data.lo.length;k++){const time=k*data.hop/data.sampleRate-(index?shift:0);if(time<start||time>end)continue;const x=left+(time-start)/(end-start)*width;ctx.moveTo(x,base-data.lo[k]/data.peak*48);ctx.lineTo(x,base-data.hi[k]/data.peak*48);}ctx.stroke();
+      for(let k=0;k<data.lo.length;k++){const time=k*data.hop/data.sampleRate+(data.clockOffset||0)-(index?shift:0);if(time<start||time>end)continue;const x=left+(time-start)/(end-start)*width;ctx.moveTo(x,base-data.lo[k]/data.peak*48);ctx.lineTo(x,base-data.hi[k]/data.peak*48);}ctx.stroke();
     });
   }
   draw($('waveformBeforeCanvas'),0);
@@ -693,6 +696,17 @@ async function openLocalComparison(key){
    localRecord.videoTimeline={version:VIDEO_TIMELINE_VERSION,clockOffset:timeline.clockOffset,edited:timeline.edited};
    await saveLocalTake(localRecord);
   }
+  // Audio matching retains file-clock evidence. Map its offset to the verified
+  // video browser clock so shifting decoded frame times cannot shift the score.
+  // Owner-confirmed manual offsets already use the browser playback clock.
+  if(!localRecord.manualSync?.verified&&localRecord.audioAlignment?.verified&&Number.isFinite(localRecord.audioAlignment.offset)){
+    const alignedOffset=localRecord.audioAlignment.offset+(localRecord.videoTimeline?.clockOffset||0);
+    if(localRecord.offset!==alignedOffset){
+     localRecord.offset=alignedOffset;
+     if(localRecord.settings){localRecord.settings.offset=alignedOffset;delete localRecord.settings.start;delete localRecord.settings.end;}
+     await saveLocalTake(localRecord);
+    }
+   }
   const previousAnalysis=localRecord.analysis;
   localRecord.analysis=refreshCachedAnalysis(previousAnalysis,localRecord.lesson?.id);
   const reusedAnalysis=!!localRecord.analysis;

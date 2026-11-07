@@ -152,3 +152,22 @@ test('an unverified video clock cannot reuse cached analysis or present a score'
  context.calibrateVideoTimeline=async()=>{throw Error('This edited video timeline changes during playback.');};
  await run();assert.equal(events.includes('analysis'),false);assert.equal(events.includes('result'),false);
 });
+
+test('a normalized recorder maps audio alignment to the same browser clock without changing its source evidence',async()=>{
+ const {record,events,run,context}=fixture();delete record.videoTimeline;
+ record.audioAlignment.offset=.2;record.offset=.2;
+ record.samples=[{time:.043333333,duration:.033333333}];record.duration=1;
+ context.calibrateVideoTimeline=async()=>({samples:[{time:0,duration:.033333333}],duration:1,edited:false,clockOffset:-.043333333});
+ await run();
+ assert.ok(events.includes('result'));
+ assert.ok(Math.abs(record.offset-(.2-.043333333))<1e-9);
+ assert.equal(record.audioAlignment.offset,.2);
+ assert.equal(record.settings.offset,record.offset);
+ await run();
+ assert.ok(Math.abs(record.offset-(.2-.043333333))<1e-9,'reopening cannot apply the clock shift twice');
+});
+test('a verified owner manual offset already uses the browser clock and must not be shifted again',async()=>{
+ const {record,run}=fixture({owner:true,manual:true});
+ record.videoTimeline.clockOffset=-.043333333;record.audioAlignment.offset=.2;
+ await run();assert.equal(record.offset,-.281);
+});

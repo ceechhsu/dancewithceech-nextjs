@@ -10,7 +10,7 @@
     },
     {
       "name": "app.js",
-      "sha256": "0b1aed2a561ce1ae51735b98b0920eb99a57bb6b014b07893788c1e54e02ea2b"
+      "sha256": "13dabdbf346f4e90835cc5dbbb5573261e6d2a7ddd1fd6a3130ed4d734b6055c"
     },
     {
       "name": "audio-alignment.mjs",
@@ -106,7 +106,7 @@
     },
     {
       "name": "local-video.mjs",
-      "sha256": "229427ac9f359db5a791edb8699764d1db25ad3b01b5b40f8307eb125ffeccc9"
+      "sha256": "2105f89b5942a5944920ffe46b139447dda167e5254826da5550f5ca2f0fec65"
     },
     {
       "name": "logo-mark.png",

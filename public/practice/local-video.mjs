@@ -1,6 +1,6 @@
 import {createFile} from './trial-assets/mp4box.js';
 import {pairTrial} from './local-contacts.mjs';
-export const VIDEO_TIMELINE_VERSION=2;
+export const VIDEO_TIMELINE_VERSION=3;
 
 export function presentationSamples(samples,{mediaStart=0,duration=Infinity}={}){
  return samples.map(s=>({time:s.time-mediaStart,duration:s.duration}))
@@ -21,25 +21,27 @@ export function seekVideoFrame(video,target,{signal}={}){
 }
 export async function calibrateVideoTimeline(video,prepared,{signal}={}){
  signal?.throwIfAborted();
- const {samples,edited}=prepared;
- if(!edited||samples[0].time<=.001)return {...prepared,clockOffset:0};
- // Edited MP4s may expose either their movie clock or a decoder clock starting
- // at the first retained frame. Only that known first-frame difference is
- // eligible, and it must agree at three distant frames before use.
+ const {samples}=prepared;
+ if(samples[0].time<=.001)return {...prepared,clockOffset:0};
+ // Edited and fragmented recorder MP4s can expose either source timestamps or
+ // a decoder clock starting at the first retained video frame. Probe near zero
+ // so a large initial gap cannot accidentally select a later decoded frame.
+ // Seek away first: a same-frame seek need not emit a new frame callback.
  const first=samples[0].time;
- if(first>=samples[0].duration)throw Error('This edited video timeline could not be verified. Choose another recording.');
+ const middle=samples[Math.floor(samples.length/2)];
+ await seekVideoFrame(video,Math.min(video.duration-.0001,middle.time+Math.min(middle.duration/2,.01)),{signal});
  let clockOffset;
  for(const index of [...new Set([0,Math.floor(samples.length/2),samples.length-1])]){
   signal?.throwIfAborted();const sample=samples[index];
-  const inset=clockOffset===undefined?Math.min(.001,(sample.duration-first)/2):Math.min(sample.duration/2,.01);
-  const time=sample.time+(clockOffset||0),target=Math.min(video.duration-.0001,time+inset);
+  const inset=Math.min(sample.duration/2,.01);
+  const time=sample.time+(clockOffset||0),target=clockOffset===undefined?Math.min(.001,sample.duration/2):Math.min(video.duration-.0001,time+inset);
   const meta=await seekVideoFrame(video,target,{signal});
   if(clockOffset===undefined){
    if(Math.abs(meta.mediaTime-sample.time)<=.001)clockOffset=0;
    else if(Math.abs(meta.mediaTime)<=.001)clockOffset=-first;
-   else throw Error('This edited video timeline could not be verified. Choose another recording.');
+   else throw Error('This video timeline could not be verified. Choose another recording.');
   }
-  if(Math.abs(meta.mediaTime-(sample.time+clockOffset))>.008)throw Error('This edited video timeline changes during playback. Choose another recording.');
+  if(Math.abs(meta.mediaTime-(sample.time+clockOffset))>.008)throw Error('This video timeline changes during playback. Choose another recording.');
  }
  const resolved=clockOffset?samples.map(s=>({...s,time:s.time+clockOffset})):samples;
  return {...prepared,samples:resolved,duration:Math.min(video.duration,prepared.duration+clockOffset),clockOffset};
