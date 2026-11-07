@@ -18,3 +18,15 @@ test('debug transfer reports an unreadable saved file before requesting an uploa
  await assert.rejects(()=>debug.authorizeDebugUpload(record,async()=>{requested=true;return Response.json({url:'https://test.dancewithceech.com/api/owner-debug-transfer',token:'signed'});}),/could not read.*saved recording/i);
  assert.equal(requested,false);
 });
+
+test('owner debugging includes a bounded final-foot tracking window without changing video bytes',async()=>{
+ const rows=Array.from({length:1000},(_,i)=>({time:i/30,poses:1,blur:{left:100,right:120},points:Object.fromEntries([11,23,24,27,28,29,30,31,32].map(k=>[k,{x:.123456789,y:.765432123,visibility:.987654321}]))}));
+ const record={studentBlob:new Blob(['original video']),videoTimeline:{version:3,clockOffset:-.046666667},analysis:{frames:rows.length,events:[],tracking:{version:1,rows}}};
+ const b=await debug.debugPayload(record).arrayBuffer(),length=new DataView(b).getUint32(0),data=JSON.parse(new TextDecoder().decode(new Uint8Array(b,4,length)));
+ assert.deepEqual(data.videoTimeline,record.videoTimeline);
+ const window=data.analysis.trackingWindow;assert.ok(window,'iPad-specific pose jitter must be available for the final-step diagnosis');
+ assert.deepEqual(window.pointIds,[23,24,27,28,29,30,31,32]);assert.equal(window.version,1);assert.ok(window.rows.length<=96&&window.rows.length>1);
+ assert.ok(window.rows[0][0]>=rows.at(-1).time-3.000001);assert.equal(window.rows.at(-1)[0],33.3);
+ assert.deepEqual(window.rows.at(-1).slice(4,8),[.123457,.765432,.987654,null],'missing presence remains missing rather than becoming zero confidence');
+ assert.ok(length<=65536);assert.equal(new TextDecoder().decode(new Uint8Array(b,4+length)),'original video');
+});

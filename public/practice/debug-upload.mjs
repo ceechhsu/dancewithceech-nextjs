@@ -1,10 +1,21 @@
 const receiver='https://test.dancewithceech.com/api/owner-debug-transfer';
+// Keep the final steps' point evidence within the receiver's 64 KB metadata
+// envelope. Missing model fields stay null so they cannot imply low confidence.
+function finalFootTracking(tracking){
+ const rows=tracking?.rows;if(!Array.isArray(rows)||!rows.length)return undefined;
+ const pointIds=[23,24,27,28,29,30,31,32],end=rows.at(-1).time;
+ const number=value=>Number.isFinite(value)?Math.round(value*1e6)/1e6:null;
+ return {version:tracking.version,pointIds,rows:rows.filter(r=>r.time>=end-3).slice(-96).map(r=>[
+  number(r.time),r.poses,number(r.blur?.left),number(r.blur?.right),
+  ...pointIds.flatMap(k=>['x','y','visibility','presence'].map(field=>number(r.points?.[k]?.[field])))
+ ])};
+}
 export function debugPayload(record,mediaBytes){
  const metadata=JSON.stringify({comparison:record.id,lesson:record.lesson,recording:record.metadata,
   offset:record.offset,audioAlignment:record.audioAlignment,manualSync:record.manualSync,
   duration:record.duration,referenceVersion:record.reference?.version,
-  videoHash:record.videoHash,
-  analysis:record.analysis?{frames:record.analysis.frames,events:record.analysis.events,detectorVersion:record.analysis.detectorVersion,detectorProfile:record.analysis.detectorProfile,analysisMs:record.analysis.analysisMs}:null});
+  videoHash:record.videoHash,videoTimeline:record.videoTimeline,
+  analysis:record.analysis?{frames:record.analysis.frames,events:record.analysis.events,detectorVersion:record.analysis.detectorVersion,detectorProfile:record.analysis.detectorProfile,analysisMs:record.analysis.analysisMs,trackingWindow:finalFootTracking(record.analysis.tracking)}:null});
  const bytes=new TextEncoder().encode(metadata),prefix=new Uint8Array(4);
  if(bytes.length>65536||!record.studentBlob||record.studentBlob.size>90*1024*1024)throw Error('Choose a recording under 90 MB with valid analysis details.');
  new DataView(prefix.buffer).setUint32(0,bytes.length);
@@ -35,7 +46,7 @@ export function showDebugUpload(record,owner){
  panel.hidden=false;
  let details=document.getElementById('recordingDiagnostics');
  if(!details){details=document.createElement('details');details.id='recordingDiagnostics';const summary=document.createElement('summary');summary.textContent='Recording diagnostics';details.append(summary,document.createElement('pre'));panel.append(details);}
- details.querySelector('pre').textContent=JSON.stringify({recordingDuration:record.duration,videoHash:record.videoHash,audioAlignment:record.audioAlignment?.reason||record.audioAlignment?.method,decodeClocks:record.audioAlignment?.decodeClocks,videoTimeline:record.videoTimeline},null,2);
+ details.querySelector('pre').textContent=JSON.stringify({recordingDuration:record.duration,videoHash:record.videoHash,videoTimeline:record.videoTimeline,audioAlignment:record.audioAlignment?.reason||record.audioAlignment?.method,decodeClocks:record.audioAlignment?.decodeClocks,videoTimeline:record.videoTimeline},null,2);
  const button=document.getElementById('sendDebugRecording'),progress=document.getElementById('debugUploadProgress'),status=document.getElementById('debugUploadStatus');
  button.onclick=async()=>{
   if(button.disabled)return;
