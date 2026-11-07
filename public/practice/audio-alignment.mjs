@@ -1,5 +1,22 @@
-// Offsets always mean student time = reference time + offset.
-export const ALIGNMENT_VERSION=6;
+import {readAudioTimeline} from './local-video.mjs';
+// Matching offsets use decoded PCM clocks; playback maps their measured origins.
+export const ALIGNMENT_VERSION=7;
+export function inferDecodedAudioClock(timeline,buffer){
+ const duration=(buffer.length??buffer.getChannelData(0).length)/buffer.sampleRate;
+ const unknown={known:false,offset:0,decodedDuration:duration,sourceDuration:timeline?.duration};
+ if(!timeline||timeline.codec!=='mp4a.40.2'||!(timeline.sampleRate>0))return unknown;
+ const tolerance=Math.max(2/buffer.sampleRate,2/timeline.sampleRate);
+ if(Number.isFinite(timeline.editDuration)){
+  if(Math.abs(duration-timeline.editDuration)<=tolerance)return {known:true,offset:0,decodedDuration:duration,method:'explicit-edit'};
+  return unknown;
+ }
+ // AAC's standard implicit priming is 2112 source PCM samples. Recognize the
+ // actual decoded length; never infer an arbitrary shift from waveform matching.
+ const priming=2112/timeline.sampleRate;
+ if(Math.abs(duration-timeline.duration)<=tolerance)return {known:true,offset:timeline.first===0?0:-timeline.first,decodedDuration:duration,method:'packet-clock'};
+ if(Math.abs(duration-(timeline.duration-priming))<=tolerance)return {known:true,offset:-timeline.first-priming,decodedDuration:duration,method:'aac-priming'};
+ return unknown;
+}
 export function envelope(samples,sampleRate,rate=500){
  // A rounded, fixed block size changes the clock at 44.1 kHz. Bin by time.
  const out=new Float32Array(Math.floor(samples.length*rate/sampleRate));
@@ -289,7 +306,17 @@ export async function alignRecordedAudio(referenceBlob,studentBlob,audioStart,{a
  const context=new Audio({sampleRate:16000});
  try{
   signal?.throwIfAborted();
-  const buffers=await Promise.all([referenceBlob,studentBlob].map(async blob=>context.decodeAudioData(await blob.arrayBuffer())));
+  const decoded=await Promise.all([referenceBlob,studentBlob].map(async blob=>{
+   let bytes;
+   try{bytes=await blob.arrayBuffer();}
+   catch(cause){throw new Error('This browser could not read the saved recording audio. Choose your downloaded backup and try again.',{cause});}
+   if(bytes.byteLength!==blob.size)throw new Error('This browser read an incomplete saved recording. Choose your downloaded backup and try again.');
+   const timeline=readAudioTimeline(bytes);
+   const buffer=await context.decodeAudioData(bytes);
+   return {buffer,clock:{...inferDecodedAudioClock(timeline,buffer),sourceDuration:timeline?.duration}};
+  }));
+  const buffers=decoded.map(value=>value.buffer),decodeClocks={reference:decoded[0].clock,student:decoded[1].clock};
+  const finish=result=>({version:ALIGNMENT_VERSION,...result,decodeClocks});
   signal?.throwIfAborted();
   // Combine channel energy, avoiding stereo phase cancellation or a silent left channel.
   const signals=buffers.map(buffer=>{
@@ -297,14 +324,14 @@ export async function alignRecordedAudio(referenceBlob,studentBlob,audioStart,{a
    return Float32Array.from(channels[0],(_,i)=>Math.sqrt(channels.reduce((sum,c)=>sum+c[i]**2,0)/channels.length));
   });
   await new Promise(resolve=>setTimeout(resolve,0));signal?.throwIfAborted();
-  const options={audioStart,audioDuration,bpm,beats},clean=alignEnvelopes(...signals,options);
-  if(clean.verified)return {version:ALIGNMENT_VERSION,...clean};
+  const options={audioStart:audioStart+(decodeClocks.reference.known?decodeClocks.reference.offset:0),audioDuration,bpm,beats},clean=alignEnvelopes(...signals,options);
+  if(clean.verified)return finish(clean);
   signal?.throwIfAborted();
   const bandSignals=buffers.map(buffer=>musicBands(buffer));
   await new Promise(resolve=>setTimeout(resolve,0));signal?.throwIfAborted();
   const pattern=alignMusicalPattern(...bandSignals,options);
-  if(pattern.verified)return {version:ALIGNMENT_VERSION,...pattern};
+  if(pattern.verified)return finish(pattern);
   signal?.throwIfAborted();
-  return {version:ALIGNMENT_VERSION,...alignMusicalPattern(...bandSignals,{...options,attacksOnly:true})};
+  return finish(alignMusicalPattern(...bandSignals,{...options,attacksOnly:true}));
  }finally{await context.close();}
 }

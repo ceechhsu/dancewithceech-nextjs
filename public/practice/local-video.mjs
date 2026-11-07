@@ -2,6 +2,29 @@ import {createFile} from './trial-assets/mp4box.js';
 import {pairTrial} from './local-contacts.mjs';
 export const VIDEO_TIMELINE_VERSION=3;
 
+// AudioContext and video playback may remove different leading timestamps.
+// Apply only a measured audio decoder origin, rather than shifting it twice.
+export function audioPlaybackShift(record,role='student'){
+ const clock=record.audioAlignment?.decodeClocks?.[role];
+ if(!clock?.known)return 0;
+ return (role==='student'?(record.videoTimeline?.clockOffset||0):0)-clock.offset;
+}
+
+export function readAudioTimeline(buffer){
+ try{
+  if(buffer.byteLength<12||String.fromCharCode(...new Uint8Array(buffer,4,4))!=='ftyp')return null;
+  const file=createFile();let info;file.onReady=value=>info=value;buffer.fileStart=0;file.appendBuffer(buffer);file.flush();
+  const track=info?.audioTracks?.[0];if(!track)return null;
+  const samples=trackSamples(file,track.id);if(!samples?.length)return null;
+  if(samples.some((s,i)=>i&&Math.abs(s.cts-(samples[i-1].cts+samples[i-1].duration))>1))return null;
+  const first=samples[0].cts/track.timescale,end=(samples.at(-1).cts+samples.at(-1).duration)/track.timescale;
+  const edits=file.getTrackById(track.id).edts?.elst?.entries||[];
+  if(edits.length&&(edits.length!==1||edits[0].media_time<0||edits[0].media_rate_integer!==1||edits[0].media_rate_fraction!==0))return null;
+  return {codec:track.codec,sampleRate:track.audio?.sample_rate,first,duration:end-first,
+   ...(edits.length?{mediaStart:edits[0].media_time/track.timescale,editDuration:edits[0].segment_duration/info.timescale}: {})};
+ }catch{return null;}
+}
+
 export function presentationSamples(samples,{mediaStart=0,duration=Infinity}={}){
  return samples.map(s=>({time:s.time-mediaStart,duration:s.duration}))
   .filter(s=>s.time>=-1e-6&&s.time<duration)

@@ -10,11 +10,11 @@
     },
     {
       "name": "app.js",
-      "sha256": "13dabdbf346f4e90835cc5dbbb5573261e6d2a7ddd1fd6a3130ed4d734b6055c"
+      "sha256": "e1383d1b83e5590bf843a7f2042207738cadfb21e3b2abdc10cf88d8230bfc80"
     },
     {
       "name": "audio-alignment.mjs",
-      "sha256": "350475be169cd4fc4b104b94eba2b94eacc2e7bb5348612f5903978922bf95ec"
+      "sha256": "37aa75a74bcacbd614045411342f652b93b243c19459728ba906f13c1f884c11"
     },
     {
       "name": "auth-recovery.js",
@@ -42,7 +42,7 @@
     },
     {
       "name": "debug-upload.mjs",
-      "sha256": "cbacaf8cf1006d801506025284ed853bddc3f750f39987949b9ca28b56d9ae7a"
+      "sha256": "e10b2a8d6721cc52ad72974f0c532a640be7d00890a327948871c1defd1c16a4"
     },
     {
       "name": "foot-review.css",
@@ -94,7 +94,7 @@
     },
     {
       "name": "local-engine.mjs",
-      "sha256": "540f72670f11eb7627daffc4c08c23dc2910c4d0350eb15472c66a96e7e68b33"
+      "sha256": "512f721111c7634e250b1cd8aaecb153e3899496161ca6aa33832d44bb27f1e4"
     },
     {
       "name": "local-pose-worker.mjs",
@@ -102,11 +102,11 @@
     },
     {
       "name": "local-store.mjs",
-      "sha256": "ab84c805026358fcafa1ba50df703314c0984fd875a561b4121247d3a6ade5b0"
+      "sha256": "5508d2bb5e134756f8fa622e0da65a40b511f87ecbeb59e292cc0e55ab7ff158"
     },
     {
       "name": "local-video.mjs",
-      "sha256": "2105f89b5942a5944920ffe46b139447dda167e5254826da5550f5ca2f0fec65"
+      "sha256": "dbce8535988d90e1ef20216b329b4a069d69b8e1d76b31c4e6f36b8e0bde0aad"
     },
     {
       "name": "logo-mark.png",
@@ -154,7 +154,7 @@
     },
     {
       "name": "timeline.mjs",
-      "sha256": "cb75180253e4316eb5e5471a6aaf4bff81e58c213ca2967fa05fc3569fbf492a"
+      "sha256": "69fe561d4969f4a616e2fd9e9b0b1ccf4f447f18007e1151a73e7c84ee9d7226"
     },
     {
       "name": "trainer-frame.css",

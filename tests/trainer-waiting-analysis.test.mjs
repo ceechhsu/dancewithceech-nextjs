@@ -4,7 +4,8 @@ import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 import {ALIGNMENT_VERSION} from '../public/practice/audio-alignment.mjs';
 import {CONTACT_VERSION} from '../public/practice/local-contacts.mjs';
-import {VIDEO_TIMELINE_VERSION} from '../public/practice/local-video.mjs';
+import * as videoClock from '../public/practice/local-video.mjs';
+const {VIDEO_TIMELINE_VERSION,audioPlaybackShift}=videoClock;
 import {refreshCachedAnalysis} from '../public/practice/local-engine.mjs';
 const source=readFileSync(new URL('../public/practice/app.js',import.meta.url),'utf8');
 const flow=source.slice(source.indexOf('async function openLocalComparison('),source.indexOf('async function openOwnerSync('));
@@ -18,7 +19,7 @@ function fixture({owner=false,lesson='marching',cached=false,alignmentVersion=AL
     waitingMusic:{begin(){events.push('music');},end(){events.push('stop');}},
     setBusy:value=>{context.busy=value;},setReady(){},status(){},getLocalTake:async()=>record,
     mediaURLs:new Map(),URL:{createObjectURL:()=> 'blob:video',revokeObjectURL(){}},ref:{},stu:{},
-    loadVideo:async()=>{},ALIGNMENT_VERSION,VIDEO_TIMELINE_VERSION,
+    loadVideo:async()=>{},ALIGNMENT_VERSION,VIDEO_TIMELINE_VERSION,audioPlaybackShift,
     prepareLocalVideo:async()=>({samples:record.samples,duration:record.duration,edited:false}),
     calibrateVideoTimeline:async(_video,prepared)=>{events.push('clock');return {...prepared,clockOffset:0};},saveLocalTake:async()=>{events.push('save');},
     bounds:{start:0,end:12},interval:null,setAudio(){},updateWindow(){},seek:async()=>{},
@@ -156,6 +157,7 @@ test('an unverified video clock cannot reuse cached analysis or present a score'
 test('a normalized recorder maps audio alignment to the same browser clock without changing its source evidence',async()=>{
  const {record,events,run,context}=fixture();delete record.videoTimeline;
  record.audioAlignment.offset=.2;record.offset=.2;
+ record.audioAlignment.decodeClocks={student:{known:true,offset:0},reference:{known:true,offset:0}};
  record.samples=[{time:.043333333,duration:.033333333}];record.duration=1;
  context.calibrateVideoTimeline=async()=>({samples:[{time:0,duration:.033333333}],duration:1,edited:false,clockOffset:-.043333333});
  await run();
@@ -165,6 +167,12 @@ test('a normalized recorder maps audio alignment to the same browser clock witho
  assert.equal(record.settings.offset,record.offset);
  await run();
  assert.ok(Math.abs(record.offset-(.2-.043333333))<1e-9,'reopening cannot apply the clock shift twice');
+});
+test('an iPad decoder that already trimmed startup audio is not shifted twice',async()=>{
+ const {record,run}=fixture();record.videoTimeline.clockOffset=-.043333333;
+ record.audioAlignment.offset=-.55;
+ record.audioAlignment.decodeClocks={student:{known:true,offset:-.044},reference:{known:true,offset:0}};
+ await run();assert.ok(Math.abs(record.offset-(-.55+.044-.043333333))<1e-9);
 });
 test('a verified owner manual offset already uses the browser clock and must not be shifted again',async()=>{
  const {record,run}=fixture({owner:true,manual:true});

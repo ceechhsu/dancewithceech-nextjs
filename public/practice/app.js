@@ -1,12 +1,12 @@
 import {CONTACT_VERSION} from './local-contacts.mjs';
 import {showDebugUpload} from './debug-upload.mjs';
 let waveformData=null,waveformGeneration=0,waveformViewport=null,waveformDrag=null;
-import {playbackBounds as reviewBounds, sourceTimes, frameStepTime, PlaybackIntent, frameTimecode, markerFrameLabels, markerLabelsAtTime, marchingTimingDefault} from './timeline.mjs';
+import {playbackBounds as reviewBounds, playbackDuration, sourceTimes, frameStepTime, PlaybackIntent, frameTimecode, markerFrameLabels, markerLabelsAtTime, marchingTimingDefault} from './timeline.mjs';
 import {FootReview, beatWindow} from './foot-review.mjs';
 import {getLocalTake,saveLocalTake,deleteLocalTake} from './local-store.mjs';
-import {localJob,prepareLocalVideo,calibrateVideoTimeline,VIDEO_TIMELINE_VERSION} from './local-video.mjs';
+import {localJob,prepareLocalVideo,calibrateVideoTimeline,VIDEO_TIMELINE_VERSION,audioPlaybackShift,readAudioTimeline} from './local-video.mjs';
 import {analyzeOnDevice,refreshCachedAnalysis} from './local-engine.mjs';
-import {alignRecordedAudio,ALIGNMENT_VERSION} from './audio-alignment.mjs';
+import {alignRecordedAudio,ALIGNMENT_VERSION,inferDecodedAudioClock} from './audio-alignment.mjs';
 import {frameShift} from './sync-controls.mjs';
 import {WaitingMusic} from './waiting-music.mjs';
 let canAdjustSync=false,activeSyncJob=null;
@@ -140,6 +140,10 @@ function loadVideo(video,url) {
     video.addEventListener('loadeddata',loaded,{once:true});video.addEventListener('error',failed,{once:true});video.src=url;video.load();
   });
 }
+function comparisonBounds(value){
+ const source=activeSyncJob?.local?activeSyncJob:null;
+ return reviewBounds(playbackDuration(ref.duration,source?.reference?.duration),playbackDuration(stu.duration,source?.student?.duration),value);
+}
 async function loadResult(job) {
   $('comparison').hidden=false;
   activeSyncJob=job;
@@ -200,8 +204,8 @@ async function loadResult(job) {
   offset=estimate=Number.isFinite(result.offset)?result.offset:0;
   const calibratedOffset=job.local?null:marchingTimingDefault(job);
   if(calibratedOffset!==null){offset=calibratedOffset;manualTiming=true;}
-  bounds=reviewBounds(ref.duration,stu.duration,offset);
-  if(!bounds) {offset=0;bounds=reviewBounds(ref.duration,stu.duration,0);}
+  bounds=comparisonBounds(offset);
+  if(!bounds) {offset=0;bounds=comparisonBounds(0);}
   interval={...bounds};
   reviewBeatLabel='';
   if(result.status==='confident' && result.suggested_end-result.suggested_start>=.1) interval={start:Math.max(bounds.start,result.suggested_start),end:Math.min(bounds.end,result.suggested_end)};
@@ -334,7 +338,7 @@ $('studentEarlier').onclick=()=>applyOffset(offset+.01);
 $('studentLater').onclick=()=>applyOffset(offset-.01);
 function applyOffset(value,restored=false){
   if(!canAdjustSync)return;
-  const next=reviewBounds(ref.duration,stu.duration,value);
+  const next=comparisonBounds(value);
   if(!Number.isFinite(value)||!next){$('controlError').textContent='That offset leaves no shared video. Try a smaller offset.';return;}
   const position=current;
   const wasFull=Math.abs(interval.start-bounds.start)<.001&&Math.abs(interval.end-bounds.end)<.001;
@@ -388,7 +392,7 @@ async function restoreComparison(key) {
     jobId=key;savedComparison=true;demo=false;
     await loadResult(saved.job);
     const settings=saved.settings;
-    offset=settings.offset;bounds=reviewBounds(ref.duration,stu.duration,offset);
+    offset=settings.offset;bounds=comparisonBounds(offset);
     if(!bounds||settings.start<bounds.start-.001||settings.end>bounds.end+.001||settings.end-settings.start<.1)throw new Error('Saved timing falls outside the available videos.');
     interval={start:settings.start,end:settings.end};current=interval.start;
     manualTiming=settings.manual||saved.job.result.status!=='confident';
@@ -545,10 +549,12 @@ async function loadWaveforms(job){
       const localBlob=job.local&&(index?localRecord?.studentBlob:localRecord?.referenceBlob);
       const bytes=await bounded(localBlob?localBlob.arrayBuffer():(async()=>{const response=await fetch(media.url,{signal:controller.signal});if(!response.ok)throw new Error(name+' audio could not be loaded.');return response.arrayBuffer();})(),'Reading '+name+' audio');
       report('Decoding '+name+' audio…');
+      const audioTimeline=job.local?readAudioTimeline(bytes):null;
       const buffer=await bounded(decoder.decodeAudioData(bytes),'Decoding '+name+' audio');
       // Use channel one consistently; no audio is played or replaced.
       const envelope=waveformEnvelope(buffer.getChannelData(0),buffer.sampleRate);
-      envelope.clockOffset=job.local&&index?(localRecord?.videoTimeline?.clockOffset||0):0;
+      const decodedClock=job.local?inferDecodedAudioClock(audioTimeline,buffer):null;
+      envelope.clockOffset=decodedClock?.known?((index?localRecord?.videoTimeline?.clockOffset||0:0)-decodedClock.offset):job.local?audioPlaybackShift(localRecord,index?'student':'reference'):0;
       envelopes.push(envelope);
     }
     if(generation!==waveformGeneration)return;
@@ -667,7 +673,8 @@ async function openLocalComparison(key){
    }
    await saveLocalTake(localRecord);
   }
-  // Never analyze or present a synchronized comparison using an unverified fallback.
+   showDebugUpload(localRecord,canAdjustSync);
+   // Never analyze or present a synchronized comparison using an unverified fallback.
   // Content uncertainty needs a different recording, not the same deterministic
   // retry. Decoder failures still offer retry; old automatic matches are rechecked.
   if(!localRecord.manualSync?.verified&&!localRecord.audioAlignment?.verified){
@@ -700,7 +707,7 @@ async function openLocalComparison(key){
   // video browser clock so shifting decoded frame times cannot shift the score.
   // Owner-confirmed manual offsets already use the browser playback clock.
   if(!localRecord.manualSync?.verified&&localRecord.audioAlignment?.verified&&Number.isFinite(localRecord.audioAlignment.offset)){
-    const alignedOffset=localRecord.audioAlignment.offset+(localRecord.videoTimeline?.clockOffset||0);
+    const alignedOffset=localRecord.audioAlignment.offset+audioPlaybackShift(localRecord,'student')-audioPlaybackShift(localRecord,'reference');
     if(localRecord.offset!==alignedOffset){
      localRecord.offset=alignedOffset;
      if(localRecord.settings){localRecord.settings.offset=alignedOffset;delete localRecord.settings.start;delete localRecord.settings.end;}

@@ -1,16 +1,22 @@
 const receiver='https://test.dancewithceech.com/api/owner-debug-transfer';
-export function debugPayload(record){
+export function debugPayload(record,mediaBytes){
  const metadata=JSON.stringify({comparison:record.id,lesson:record.lesson,recording:record.metadata,
   offset:record.offset,audioAlignment:record.audioAlignment,manualSync:record.manualSync,
   duration:record.duration,referenceVersion:record.reference?.version,
+  videoHash:record.videoHash,
   analysis:record.analysis?{frames:record.analysis.frames,events:record.analysis.events,detectorVersion:record.analysis.detectorVersion,detectorProfile:record.analysis.detectorProfile,analysisMs:record.analysis.analysisMs}:null});
  const bytes=new TextEncoder().encode(metadata),prefix=new Uint8Array(4);
  if(bytes.length>65536||!record.studentBlob||record.studentBlob.size>90*1024*1024)throw Error('Choose a recording under 90 MB with valid analysis details.');
  new DataView(prefix.buffer).setUint32(0,bytes.length);
- return new Blob([prefix,bytes,record.studentBlob],{type:'application/octet-stream'});
+ return new Blob([prefix,bytes,mediaBytes??record.studentBlob],{type:'application/octet-stream'});
 }
 export async function authorizeDebugUpload(record,send=fetch){
- const body=debugPayload(record),digest=await crypto.subtle.digest('SHA-256',await body.arrayBuffer());
+ if(!record.studentBlob||record.studentBlob.size>90*1024*1024)throw new Error('Choose a recording under 90 MB with valid analysis details.');
+ let bytes;
+ try{bytes=await record.studentBlob.arrayBuffer();}
+ catch(cause){throw new Error('This browser could not read the saved recording for debugging. Choose your downloaded backup and try again.',{cause});}
+ if(bytes.byteLength!==record.studentBlob.size)throw new Error('The saved recording could not be read completely. Choose your downloaded backup and try again.');
+ const body=debugPayload(record,bytes),digest=await crypto.subtle.digest('SHA-256',await body.arrayBuffer());
  const sha256=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
  const response=await send('/practice/api/debug-transfer',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({length:body.size,sha256})});
  const grant=await response.json();
@@ -27,6 +33,9 @@ export function showDebugUpload(record,owner){
   document.getElementById('statusHome').after(panel);
  }
  panel.hidden=false;
+ let details=document.getElementById('recordingDiagnostics');
+ if(!details){details=document.createElement('details');details.id='recordingDiagnostics';const summary=document.createElement('summary');summary.textContent='Recording diagnostics';details.append(summary,document.createElement('pre'));panel.append(details);}
+ details.querySelector('pre').textContent=JSON.stringify({recordingDuration:record.duration,videoHash:record.videoHash,audioAlignment:record.audioAlignment?.reason||record.audioAlignment?.method,decodeClocks:record.audioAlignment?.decodeClocks,videoTimeline:record.videoTimeline},null,2);
  const button=document.getElementById('sendDebugRecording'),progress=document.getElementById('debugUploadProgress'),status=document.getElementById('debugUploadStatus');
  button.onclick=async()=>{
   if(button.disabled)return;

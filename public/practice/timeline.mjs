@@ -1,3 +1,8 @@
+// Some WebKit builds count repaired movie duration and fragments twice.
+// The parsed video timeline bounds local review; never extend browser media.
+export function playbackDuration(browserDuration,sourceDuration){
+ return Number.isFinite(sourceDuration)&&sourceDuration>0?Math.min(browserDuration,sourceDuration):browserDuration;
+}
 export function reviewBounds(referenceDuration, studentDuration, offset) {
   const start = Math.max(0, -offset), end = Math.min(referenceDuration, studentDuration-offset);
   return Number.isFinite(start+end) && end-start >= .05 ? {start,end} : null;

@@ -29,6 +29,9 @@ export async function analyzeOnDevice(video,samples,{onProgress=()=>{},onScreen=
   check();video.pause();
   const ratio=Math.min(1,720/Math.max(video.videoWidth,video.videoHeight)),width=Math.round(video.videoWidth*ratio),height=Math.round(video.videoHeight*ratio);
   worker=new Worker('/practice/local-pose-worker.mjs');const setupStart=performance.now();onProgress(0,'Loading the analysis model onto your device…');await rpc({type:'init',width,height});const setupMs=performance.now()-setupStart;
+  // A cached/retried take can already show its first frame. Safari need not
+  // submit that same frame again after a seek, so start from a different frame.
+  if(samples.length>1&&video.currentTime<samples[0].time+samples[0].duration){const warmup=samples[Math.floor(samples.length/2)];await seekVideoFrame(video,Math.min(video.duration-.0001,warmup.time+Math.min(warmup.duration/2,.01)),{signal});check();}
   const rows=[];let last=-1,inferenceMs=0;const started=performance.now();
   for(let i=0;i<samples.length;i++){
    check();const sample=samples[i];if(sample.time-last<.028)continue;

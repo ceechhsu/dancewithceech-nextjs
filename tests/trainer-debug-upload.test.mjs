@@ -12,3 +12,9 @@ test('hosted debug upload keeps the legacy diagnostic envelope and requests a bo
  await assert.rejects(debug.authorizeDebugUpload(record,async()=>Response.json({error:'Owner required'},{status:403})),/Owner required/);
  await assert.rejects(debug.authorizeDebugUpload(record,async()=>Response.json({url:'https://untrusted.example',token:'x'})),/destination/);
 })
+test('debug transfer reports an unreadable saved file before requesting an upload grant',async()=>{
+ let requested=false;
+ const record={studentBlob:{size:8,arrayBuffer:async()=>{throw new DOMException('The object can not be found here.','NotFoundError');}}};
+ await assert.rejects(()=>debug.authorizeDebugUpload(record,async()=>{requested=true;return Response.json({url:'https://test.dancewithceech.com/api/owner-debug-transfer',token:'signed'});}),/could not read.*saved recording/i);
+ assert.equal(requested,false);
+});

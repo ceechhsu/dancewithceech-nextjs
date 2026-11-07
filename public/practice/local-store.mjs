@@ -1,9 +1,38 @@
 import {VIDEO_TIMELINE_VERSION} from './local-video.mjs';
 const DB='dance-local-comparisons',STORE='takes';
+const mediaBytes=new WeakMap();
+// Persist bytes rather than browser-managed Blob backing files. Rebuild a fresh
+// Blob on read, while retaining compatibility with existing saved comparisons.
+export async function packLocalTake(record){
+ const packed={...record};
+ for(const [blobKey,mediaKey] of [['studentBlob','studentMedia'],['referenceBlob','referenceMedia']]){
+  const blob=record[blobKey];if(!blob)continue;
+  let bytes=mediaBytes.get(blob);
+  if(!bytes){
+   try{bytes=await blob.arrayBuffer();}
+   catch(cause){throw new Error('This browser could not read the saved recording. Keep your downloaded backup and choose it again.',{cause});}
+   if(bytes.byteLength!==blob.size)throw new Error('This browser read an incomplete recording. Keep your downloaded backup and choose it again.');
+   mediaBytes.set(blob,bytes);
+  }
+  packed[mediaKey]={bytes,type:blob.type};delete packed[blobKey];
+ }
+ return packed;
+}
+export function unpackLocalTake(packed){
+ if(!packed)return packed;
+ const record={...packed};
+ for(const [blobKey,mediaKey] of [['studentBlob','studentMedia'],['referenceBlob','referenceMedia']]){
+  const media=packed[mediaKey];if(!media)continue;
+  if(!(media.bytes instanceof ArrayBuffer))throw new Error('This saved recording could not be read. Keep your downloaded backup and choose it again.');
+  const blob=new Blob([media.bytes],{type:media.type||''});mediaBytes.set(blob,media.bytes);
+  record[blobKey]=blob;delete record[mediaKey];
+ }
+ return record;
+}
 function open(){return new Promise((resolve,reject)=>{const request=indexedDB.open(DB,1);request.onupgradeneeded=()=>request.result.createObjectStore(STORE,{keyPath:'id'});request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(Error('Local storage is unavailable. Your recording is still here; download it before leaving.'));});}
 async function transaction(mode,action){const db=await open();try{return await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,mode);const request=action(tx.objectStore(STORE));tx.oncomplete=()=>resolve(request.result);tx.onerror=tx.onabort=()=>reject(Error('Could not save this take on your device. Free some storage or download your recording.'));});}finally{db.close();}}
-export const saveLocalTake=record=>transaction('readwrite',store=>store.put(record));
-export const getLocalTake=id=>transaction('readonly',store=>store.get(id));
+export const saveLocalTake=async record=>{const packed=await packLocalTake(record);return transaction('readwrite',store=>store.put(packed));};
+export const getLocalTake=async id=>unpackLocalTake(await transaction('readonly',store=>store.get(id)));
 export const deleteLocalTake=id=>transaction('readwrite',store=>store.delete(id));
 
 export async function listLocalTakes(){
