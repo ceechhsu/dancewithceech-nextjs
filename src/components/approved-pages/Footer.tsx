@@ -40,6 +40,7 @@ export default function Footer({ children }: { children?: ReactNode }) {
             <li><Link href="/blog" prefetch={false} className="hover:text-white transition-colors">Blog</Link></li>
             <li><Link href="/about" prefetch={false} className="hover:text-white transition-colors">About</Link></li>
             <li><Link href="/privacy" prefetch={false} className="hover:text-white transition-colors">Account Data &amp; Privacy</Link></li>
+            <li><Link href="/terms" prefetch={false} className="hover:text-white transition-colors">Playlist Updater Terms</Link></li>
             <li><Link href="/contact" prefetch={false} className="hover:text-white transition-colors">Contact</Link></li>
           </ul>
         </div>
