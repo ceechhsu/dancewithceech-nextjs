@@ -1,9 +1,11 @@
 import inventory from "@/content/approved-pages/dance-lessons.json";
+import type { LessonStyle, LessonStyleFilter } from "./lesson-styles";
 
 export const lessonFilters = ["All", "Rhythm", "Footwork", "Isolations"] as const;
 export type LessonFilter = typeof lessonFilters[number];
 export type DanceLesson = Omit<typeof inventory[number], "sourceID" | "timestamp" | "actualLiveDate"> & {
   sourceID: string | null; timestamp: number | null; actualLiveDate: string | null;
+  styles?: LessonStyle[];
 };
 
 // Only confirmed public releases enter the library. A future date never means live.
@@ -20,11 +22,13 @@ export function publicLessons(items: DanceLesson[], now = Date.now()) {
 }
 export const danceLessons = publicLessons(inventory);
 
-export function searchLessons(items: DanceLesson[], query: string, filter: LessonFilter) {
+export function searchLessons(items: DanceLesson[], query: string, filter: LessonFilter, style: LessonStyleFilter = "All") {
   const words = query.trim().toLowerCase().replace(/[-–]/g, " ").split(/\s+/).filter(Boolean);
   return items.filter(lesson => {
     const text = `${lesson.title} ${lesson.tags.join(" ")} ${lesson.practiceCue}`.toLowerCase().replace(/[-–]/g, " ");
-    return (filter === "All" || lesson.tags.includes(filter)) && words.every(word => text.includes(word));
+    return (style === "All" || lesson.styles?.includes(style))
+      && (filter === "All" || lesson.tags.includes(filter))
+      && words.every(word => text.includes(word));
   });
 }
 

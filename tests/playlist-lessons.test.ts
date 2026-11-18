@@ -39,3 +39,33 @@ test("new shoulder/chest members receive body-control tags and only explicit val
   a.description = "Move your chest. https://youtu.be/unknown0001?t=12\nFrom the November 6, 2028 Live.";
   assert.equal(playlistLessons(snapshot([a]))[0].actualLiveDate, null);
 });
+
+test("approved heel taps appear under Hip-Hop and House, and only once across all styles", () => {
+  const lesson = video("aboOF0XsJlA", "Practice the heel-tap cross and check your balance.");
+  lesson.title = "Heel-tap cross: Check your balance";
+  const lessons = playlistLessons(snapshot([lesson, lesson]));
+  assert.deepEqual(lessons[0].styles, ["hip-hop-dance-moves", "house-dance"]);
+  for (const style of ["All", "hip-hop-dance-moves", "house-dance"] as const) {
+    assert.equal(searchLessons(lessons, "heel tap", "Footwork", style).length, 1);
+  }
+  assert.equal(searchLessons(lessons, "", "All", "breaking-dance-moves").length, 0);
+});
+
+test("approved website aliases preserve the original YouTube destination", () => {
+  const lesson = video("2GHW3oogrwM", "Slide back, switch the weight, then check your balance.");
+  lesson.title = "Backslide Weight Shift: Which Foot Has the Pressure?";
+  const lessons = playlistLessons(snapshot([lesson]));
+  assert.equal(lessons[0].title, "Backslide (Moonwalk): Which Foot Holds Your Weight?");
+  assert.equal(lessons[0].publishedVideoURL, lesson.publishedVideoURL);
+  assert.equal(searchLessons(lessons, "moonwalk", "All", "funk-style-dance-moves").length, 1);
+});
+
+test("new isolation lessons also count as Funk while general practice stays in All styles", () => {
+  const isolation = { ...video("fixture0001", "Try these shoulder isolation drills slowly."), title: "Popping: Shoulder Isolation" };
+  const armPattern = { ...video("fixture0002", "Practice the arms after the footwork."), title: "Toprock: Add the Arms" };
+  const general = { ...video("fixture0003"), title: "Find the beat" };
+  const lessons = playlistLessons(snapshot([isolation, armPattern, general]));
+  assert.deepEqual(lessons.map(r => r.styles), [["popping", "funk-style-dance-moves"], ["breaking-dance-moves"], []]);
+  assert.deepEqual(searchLessons(lessons, "", "All", "funk-style-dance-moves").map(r => r.id), [isolation.publishedVideoID]);
+  assert.equal(searchLessons(lessons, "", "All", "All").length, 3);
+});

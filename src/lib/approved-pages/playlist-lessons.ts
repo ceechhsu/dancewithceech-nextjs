@@ -1,9 +1,21 @@
 import inventory from "@/content/approved-pages/dance-lessons.json";
+import reviewedShorts from "@/content/approved-pages/teaching-short-styles.json";
 import { publicLessons, type DanceLesson } from "./dance-lessons";
+import type { LessonStyle } from "./lesson-styles";
 import type { PlaylistSnapshot } from "./teaching-playlist";
 
 const known = new Map(inventory.map(item => [item.publishedVideoID, item]));
 const liveDates = new Map(inventory.map(item => [item.sourceID, item.actualLiveDate]));
+const reviewed = reviewedShorts as Record<string, { styles: LessonStyle[]; teachesIsolation: boolean; title?: string }>;
+const styleTerms: ReadonlyArray<readonly [LessonStyle, RegExp]> = [
+  ["hip-hop-dance-moves", /\b(?:hip[- ]hop|running man)\b/i],
+  ["locking-dance-moves", /\b(?:locking|wrist twirls?|leo walk)\b/i],
+  ["breaking-dance-moves", /\b(?:breaking|top[- ]?rock)\b/i],
+  ["funk-style-dance-moves", /\b(?:boogaloo|funk[- ]style)\b/i],
+  ["popping", /\bpopping\b/i],
+  ["house-dance", /\bhouse (?:dance|footwork)\b/i],
+];
+
 function reference(description: string) {
   for (const text of description.match(/https?:\/\/[^\s<>]+/g) ?? []) {
     try {
@@ -40,8 +52,12 @@ export function playlistLessons(snapshot: PlaylistSnapshot): DanceLesson[] {
     if (/\b(rhythm|timing|bounce|count|balance|weight|beat)\b/i.test(text)) tags.push("Rhythm");
     if (/\b(footwork|foot|step|steps|knee|heel|pivot|leg|feet)\b|weight shift/i.test(text)) tags.push("Footwork");
     if (/\b(isolation|isolations|popping|hit|arm|arms|roll|rolls|shoulder|shoulders|chest)\b/i.test(text)) tags.push("Isolations");
+    const review = reviewed[video.publishedVideoID];
+    const styles = new Set(review?.styles ?? styleTerms.filter(([, term]) => term.test(text)).map(([style]) => style));
+    // Skill tags are broad. An arm pattern alone does not identify an isolation lesson.
+    if (review?.teachesIsolation ?? /\bisolations?\b/i.test(text)) styles.add("funk-style-dance-moves");
     return {
-      id: video.publishedVideoID, title: video.title, ...ref,
+      id: video.publishedVideoID, title: review?.title ?? video.title, styles: [...styles], ...ref,
       actualLiveDate: existing?.actualLiveDate ?? (ref.sourceID ? liveDates.get(ref.sourceID) ?? explicitLiveDate(video.description, snapshot.checkedAt) : null),
       publishedVideoID: video.publishedVideoID, publishedVideoURL: video.publishedVideoURL,
       publishedAt: video.publishedAt, duration: video.duration, tags: existing?.tags ?? tags,

@@ -13,7 +13,7 @@ const readCached = unstable_cache(async () => {
   if (!key) throw new Error("Teaching playlist read access is not configured");
   const snapshot = await readTeachingPlaylist({ id: TEACHING_PLAYLIST_ID, request: youtubeDataRequest(key) });
   return { playlistID: snapshot.playlistID, checkedAt: snapshot.checkedAt, lessons: playlistLessons(snapshot) };
-}, ["teaching-playlist", TEACHING_PLAYLIST_ID, "lesson-schema-v1"], { revalidate: PLAYLIST_REVALIDATE_SECONDS });
+}, ["teaching-playlist", TEACHING_PLAYLIST_ID, "lesson-schema-v2"], { revalidate: PLAYLIST_REVALIDATE_SECONDS });
 
 export async function GET() {
   // Unconfigured/cold-error responses are deliberately not stored as successful empty snapshots.

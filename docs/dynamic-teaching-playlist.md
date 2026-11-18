@@ -14,6 +14,8 @@ A failed or partial refresh throws before replacing a successful snapshot. An in
 
 The original verified inventory enriches only current playlist members with practice cues, source Live timestamps/dates and next steps. New members use published metadata, conservative skill tags, and explicit timestamped YouTube source links where present. Missing source information stays optional; publication time is never substituted for a Live date. Search, skill/style filters, playback selection, lazy embeds and keyboard focus remain in the existing layouts. Removed members lose their playback selection. The three existing teaching videos are preserved.
 
+The reviewed Short styles and website title overrides are keyed by YouTube video ID in `src/content/approved-pages/teaching-short-styles.json`. A Short can match multiple styles. Isolation lessons also match Funk, and a new Short without clear style evidence appears under All styles. Full tutorial articles still use their existing categories.
+
 ## Environment and verification
 
 Keep `YOUTUBE_TEACHING_API_KEY` server-only, stored as a Production-only Vercel Secret. Do not use a `NEXT_PUBLIC_` prefix, commit local environment files, pull production secret values, or log provider URLs/error bodies. The separate development key has a Mac outbound-IP restriction; local verification used IPv4-first DNS resolution without relaxing that restriction. Production uses its separately approved API-restricted key.
@@ -24,7 +26,7 @@ Controlled upstream fixtures exercised actual Next production-cache hot reuse, e
 
 ## Operational limits
 
-The separate publishing worker adds only confirmed-public teaching clips to the dedicated playlist. Upstream propagation and demand-driven refresh can delay visibility beyond publication time. Successful refresh removes videos no longer in the playlist. The normalized cache schema is keyed by playlist ID and `lesson-schema-v1`; increment that version if normalization changes.
+The separate publishing worker adds only confirmed-public teaching clips to the dedicated playlist. Upstream propagation and demand-driven refresh can delay visibility beyond publication time. Successful refresh removes videos no longer in the playlist. The normalized cache schema is keyed by playlist ID and `lesson-schema-v2`. Increment that version if normalization changes.
 
 ## References
 

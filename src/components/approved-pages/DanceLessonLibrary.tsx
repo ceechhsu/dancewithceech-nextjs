@@ -6,12 +6,13 @@ import Link from "next/link";
 import { trackFunnelEvent } from "@/lib/approved-pages/funnel";
 import YouTubeLessonPlayer from "@/components/approved-pages/YouTubeLessonPlayer";
 import { lessonFilters, lessonTime, searchLessons, sourceURL, type LessonFilter } from "@/lib/approved-pages/dance-lessons";
+import { isLessonStyleFilter, lessonStyleLabels, type LessonStyle, type LessonStyleFilter } from "@/lib/approved-pages/lesson-styles";
 
 import { useTeachingLessons } from "./useTeachingLessons";
 import LessonFeedStatus from "./LessonFeedStatus";
 
 type Article = { slug: string; title: string; description: string; category: string; hasImage: boolean };
-const styleLabels: Record<string, string> = { "hip-hop-dance-moves": "Hip-Hop", "locking-dance-moves": "Locking", "breaking-dance-moves": "Breaking", "funk-style-dance-moves": "Funk & Popping", "house-dance": "House" };
+const articleStyleLabels: Record<string, string> = { ...lessonStyleLabels, "funk-style-dance-moves": "Funk & Popping" };
 export default function DanceLessonLibrary({ recent = false, articles = [] }: { recent?: boolean; articles?: Article[] }) {
   const feed = useTeachingLessons();
   const danceLessons = feed.lessons;
@@ -25,14 +26,14 @@ export default function DanceLessonLibrary({ recent = false, articles = [] }: { 
       setPlaying(null);
     }
   }, [danceLessons, playing]);
-  const [style, setStyle] = useState("All");
+  const [style, setStyle] = useState<LessonStyleFilter>("All");
   const [limit, setLimit] = useState(12);
   const [restored, setRestored] = useState(false);
   useEffect(() => {
     if (recent) return;
     try {
       const saved = JSON.parse(sessionStorage.getItem("dwc-lesson-search") ?? "null");
-      if (saved && typeof saved.query === "string" && lessonFilters.includes(saved.filter) && (saved.style === "All" || saved.style in styleLabels)) {
+      if (saved && typeof saved.query === "string" && lessonFilters.includes(saved.filter) && isLessonStyleFilter(saved.style)) {
         // Restore local search when returning from a canonical lesson.
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setQuery(saved.query.slice(0, 120)); setFilter(saved.filter); setStyle(saved.style);
@@ -45,12 +46,13 @@ export default function DanceLessonLibrary({ recent = false, articles = [] }: { 
       try { sessionStorage.setItem("dwc-lesson-search", JSON.stringify({ query, filter, style })); } catch { /* Optional local convenience. */ }
     }
   }, [query, filter, style, recent, restored]);
-  const lessons = recent ? danceLessons.slice(0, 6) : searchLessons(danceLessons, query, filter).filter(() => style === "All" || style === "hip-hop-dance-moves");
+  const lessons = recent ? danceLessons.slice(0, 6) : searchLessons(danceLessons, query, filter, style);
   const words = query.trim().toLowerCase().replace(/[-–]/g, " ").split(/\s+/).filter(Boolean);
+  const articleStyle = style === "popping" ? "funk-style-dance-moves" : style;
   const matchingArticles = recent ? [] : articles.filter(article => {
-    const text = `${article.title} ${article.description} ${styleLabels[article.category] ?? ""}`.toLowerCase().replace(/[-–]/g, " ");
+    const text = `${article.title} ${article.description} ${articleStyleLabels[article.category] ?? ""}`.toLowerCase().replace(/[-–]/g, " ");
     const skillMatches = filter === "All" || (filter === "Rhythm" ? /rhythm|beat|timing/.test(text) : filter === "Footwork" ? /footwork|step|feet|shuffle|running man/.test(text) : /isolation|isolations/.test(text));
-    return (style === "All" || article.category === style) && skillMatches && words.every(word => text.includes(word));
+    return (articleStyle === "All" || article.category === articleStyle) && skillMatches && words.every(word => text.includes(word));
   });
   function reset() { setQuery(""); setFilter("All"); setStyle("All"); setLimit(12); setPlaying(null); }
 
@@ -64,7 +66,7 @@ export default function DanceLessonLibrary({ recent = false, articles = [] }: { 
       <div><label htmlFor="lesson-search" className="mb-2 block text-sm font-semibold">Find your next move</label>
         <input id="lesson-search" type="search" value={query} onChange={event => { setQuery(event.target.value); setPlaying(null); }}
           placeholder="Search moves, skills or titles…" className="lesson-control w-full rounded-xl border border-white/20 bg-background px-4 py-3 text-foreground placeholder:text-muted" /></div>
-      {articles.length > 0 && <div><label htmlFor="lesson-style" className="mr-3 text-sm font-semibold">Dance style</label><select id="lesson-style" value={style} onChange={event => { setStyle(event.target.value); setPlaying(null); setLimit(12); }} className="lesson-control rounded-lg border border-white/20 bg-background px-4 py-2 text-foreground"><option value="All">All styles</option>{Object.entries(styleLabels).filter(([key]) => articles.some(a => a.category === key)).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></div>}
+      <div><label htmlFor="lesson-style" className="mr-3 text-sm font-semibold">Dance style</label><select id="lesson-style" value={style} onChange={event => { const next = event.target.value; if (isLessonStyleFilter(next)) setStyle(next); setPlaying(null); setLimit(12); }} className="lesson-control rounded-lg border border-white/20 bg-background px-4 py-2 text-foreground"><option value="All">All styles</option>{Object.entries(lessonStyleLabels).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></div>
       <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter lessons by skill">
         {lessonFilters.map(option => <button key={option} type="button" aria-pressed={filter === option}
           onClick={() => { setFilter(option); setPlaying(null); }}
@@ -90,7 +92,7 @@ export default function DanceLessonLibrary({ recent = false, articles = [] }: { 
             </button>}
         </div>
         <div className="flex flex-1 flex-col p-5">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent-primary-accessible">Short lesson{lesson.tags.length ? ` · ${lesson.tags.join(" · ")}` : ""}</p>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent-primary-accessible">{["Short lesson", ...(lesson.styles ?? []).map((key: LessonStyle) => lessonStyleLabels[key]), ...lesson.tags].join(" · ")}</p>
           <h3 className="text-xl font-bold leading-snug">{lesson.title}</h3>
           <p className="mt-4 text-sm leading-relaxed text-muted"><span className="font-semibold text-foreground">Try this: </span>{lesson.practiceCue}</p>
           <div className="mt-auto pt-5">
@@ -104,7 +106,7 @@ export default function DanceLessonLibrary({ recent = false, articles = [] }: { 
       </article>)}
     </div>}
     {matchingArticles.length > 0 && <section className="mt-12" aria-label="Full dance tutorials"><h2 className="mb-6 text-2xl font-bold">Full tutorials · Read and practice</h2><div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{matchingArticles.slice(0, limit).map(article => <article key={article.slug} className="flex flex-col rounded-2xl border border-white/10 bg-surface p-5">
-      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent-primary-accessible">Full tutorial · {styleLabels[article.category]}</p><h3 className="text-xl font-bold">{article.title}</h3><p className="my-4 text-sm leading-relaxed text-muted">{article.description}</p><Link href={`/blog/${article.slug}`} prefetch={false} onClick={() => trackFunnelEvent("tutorial_open", { lesson_id: article.slug, placement: "library", destination_type: "tutorial" })} className="funnel-link mt-auto">Read this tutorial →</Link><Link href="/private-lessons#booking" prefetch={false} onClick={() => trackFunnelEvent("tutorial_next_step", { lesson_id: article.slug, placement: "library", destination_type: "coaching", destination: "/private-lessons#booking" })} className="funnel-link mt-2 text-sm">Want feedback on your dancing? →</Link>
+      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent-primary-accessible">Full tutorial · {articleStyleLabels[article.category]}</p><h3 className="text-xl font-bold">{article.title}</h3><p className="my-4 text-sm leading-relaxed text-muted">{article.description}</p><Link href={`/blog/${article.slug}`} prefetch={false} onClick={() => trackFunnelEvent("tutorial_open", { lesson_id: article.slug, placement: "library", destination_type: "tutorial" })} className="funnel-link mt-auto">Read this tutorial →</Link><Link href="/private-lessons#booking" prefetch={false} onClick={() => trackFunnelEvent("tutorial_next_step", { lesson_id: article.slug, placement: "library", destination_type: "coaching", destination: "/private-lessons#booking" })} className="funnel-link mt-2 text-sm">Want feedback on your dancing? →</Link>
     </article>)}</div>{limit < matchingArticles.length && <button type="button" onClick={() => setLimit(n => n + 12)} className="funnel-button mt-8">Show more tutorials</button>}</section>}
   </div>;
 }
