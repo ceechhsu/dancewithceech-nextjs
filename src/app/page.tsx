@@ -28,7 +28,7 @@ export const metadata = {
 
 export default async function Home() {
   const reviewSummary = await getReviewSummary();
-  return <ThanksgivingSeason className={approvedStyles.scope}><a href="#main-content" className={approvedStyles.skipLink}>Skip to content</a><Nav promoteDanceFloorReady /><main id="main-content">
+  return <ThanksgivingSeason className={approvedStyles.scope}><a href="#main-content" className={approvedStyles.skipLink}>Skip to content</a><Nav /><main id="main-content">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageSchema).replace(/</g, "\\u003c") }} />
     <VideoHero><ThanksgivingScene placement="hero" /></VideoHero>
     <StatsBar />

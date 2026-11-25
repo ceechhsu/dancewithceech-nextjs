@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Nav from "@/components/approved-pages/Nav";
+import approvedStyles from "@/components/approved-pages/PageScope.module.css";
 
 export const metadata: Metadata = {
   title: "FTL Popping Training Series Volume 1 | Dance With Ceech",
@@ -516,7 +518,10 @@ function DayCard({ day, entry }: { day: number; entry: DayEntry }) {
 
 export default function FTLPoppingPage() {
   return (
-    <main className="min-h-screen bg-[#0A0A0A] text-[#F9F9F9]">
+    <>
+    <a href="#main-content" className={approvedStyles.skipLink}>Skip to content</a>
+    <Nav position="relative" />
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#0A0A0A] text-[#F9F9F9]">
       {/* Hero */}
       <section className="px-6 pt-20 pb-12 max-w-4xl mx-auto text-center">
         <p className="text-sm font-semibold tracking-widest uppercase text-[#FDB515] mb-4">
@@ -574,5 +579,6 @@ export default function FTLPoppingPage() {
         </div>
       </section>
     </main>
+    </>
   );
 }

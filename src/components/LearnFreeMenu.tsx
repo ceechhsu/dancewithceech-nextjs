@@ -8,7 +8,9 @@ import { ChevronDown } from "lucide-react";
 export const freeLinks = [
   { label: "OnBeat Dance Trainer", href: "/practice/" },
   { label: "Dance Tutorials", href: "/#dance-tutorials" },
+  { label: "Search all lessons", href: "/dance-tutorials" },
   { label: "BeatFirst Rhythm Trainer", href: "/beat-first" },
+  { label: "Running Man Tutorial", href: "/blog/hip-hop-dance-move-running-man" },
   { label: "Blog", href: "/blog" },
 ];
 

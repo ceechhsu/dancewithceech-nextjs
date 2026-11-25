@@ -4,6 +4,36 @@ import {saveLocalTake,listLocalTakes,videoFingerprint,reuseLocalEvidence} from '
 import {marchingTimingDefault} from './timeline.mjs';
 import {LessonNavigation,backDestination} from './lesson-navigation.mjs';
 const $=id=>document.getElementById(id);
+const siteHeader=$('siteHeader'),navToggle=$('navToggle'),siteNav=$('siteNav');
+const learnFree=$('practiceLearnFree'),learnFreeToggle=$('learnFreeToggle'),learnFreeLinks=$('practiceLearnFreeLinks');
+const desktopNav=window.matchMedia('(min-width: 1280px)');
+function showLearnFree(open){
+ learnFreeLinks.toggleAttribute('data-open',open);
+ learnFreeToggle.setAttribute('aria-expanded',String(open));
+}
+function showSiteNav(open){
+ siteNav.toggleAttribute('data-open',open);
+ navToggle.setAttribute('aria-expanded',String(open));
+ navToggle.setAttribute('aria-label',open?'Close menu':'Open menu');
+}
+function closeHeaderMenus(){showSiteNav(false);showLearnFree(false);}
+navToggle.addEventListener('click',()=>{
+ const open=!siteNav.hasAttribute('data-open');showSiteNav(open);
+ if(open)siteNav.querySelector('.nav-book-mobile')?.focus();
+});
+learnFreeToggle.addEventListener('click',()=>showLearnFree(!learnFreeLinks.hasAttribute('data-open')));
+learnFree.addEventListener('focusout',event=>{if(!learnFree.contains(event.relatedTarget))showLearnFree(false);});
+siteNav.addEventListener('click',event=>{if(event.target.closest('a'))closeHeaderMenus();});
+document.addEventListener('pointerdown',event=>{
+ if(!siteHeader.contains(event.target))showSiteNav(false);
+ if(!learnFree.contains(event.target))showLearnFree(false);
+});
+document.addEventListener('keydown',event=>{
+ if(event.key!=='Escape')return;
+ if(siteNav.hasAttribute('data-open')){event.preventDefault();showSiteNav(false);navToggle.focus();}
+ else if(learnFreeLinks.hasAttribute('data-open')){event.preventDefault();showLearnFree(false);learnFreeToggle.focus();}
+});
+desktopNav.addEventListener('change',closeHeaderMenus);
 const screens=['library','lesson','watch','setup','take'];
 const challengeToken=new URLSearchParams(location.search).get('challenge');
 let acceptedChallenge=null,challengeLoadedAt=0;
@@ -17,6 +47,8 @@ function screen(name,{replace=false,fromHistory=false}={}){
  if(!fromHistory&&navigation.current&&(navigation.current.dwcScreen!==name||navigation.current.lessonId!==lesson?.id||replace))navigation.open(name,lesson?.id,{replace});
  if(name==='library'){acceptedChallenge=null;document.body.classList.remove('challenge-recording');$('activeChallengeBanner')?.remove();}
  currentScreen=name;for(const id of screens)$(id+'Screen').hidden=id!==name;
+ siteHeader.hidden=name!=='library';
+ closeHeaderMenus();
  const destination=backDestination(name,lesson?.title);
  $('flowNav').hidden=!destination;$('flowBackLabel').textContent=destination?.label||'';
  $('flowBack').setAttribute('aria-label',destination?`Back to ${destination.label}`:'Back');
@@ -397,9 +429,3 @@ async function showLocalComparisons(){
  }catch{/* Recording still works when storage is unavailable. */}
 }
 showLocalComparisons();
-
-const navToggle=$('navToggle'),siteNav=$('siteNav');
-function closeNav(){siteNav.hidden=true;navToggle.setAttribute('aria-expanded','false');navToggle.setAttribute('aria-label','Open menu');}
-navToggle.addEventListener('click',()=>{const open=siteNav.hidden;siteNav.hidden=!open;navToggle.setAttribute('aria-expanded',String(open));navToggle.setAttribute('aria-label',open?'Close menu':'Open menu');});
-document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!siteNav.hidden){closeNav();navToggle.focus();}});
-document.addEventListener('click',event=>{if(!event.target.closest('.site-header'))closeNav();});

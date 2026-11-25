@@ -12,6 +12,7 @@ import LearnFreeMenu from "@/components/LearnFreeMenu";
 import styles from "./Navigation.module.css";
 import useArcheryNavigation from "@/components/attendance/useArcheryNavigation";
 import ConsultationLink from "@/components/approved-pages/ConsultationLink";
+import LessonNavLinks from "@/components/LessonNavLinks";
 
 type NavUser = {
   name?: string | null;
@@ -42,7 +43,7 @@ export default function Nav({ user: initialUser }: Props = {}) {
       <SiteLogo />
       {/* Desktop nav links */}
       <div className="hidden xl:flex items-center gap-5 text-sm whitespace-nowrap" style={{ color: "var(--muted)" }}>
-        <Link href="/private-lessons" prefetch={false} className="hover:text-white transition-colors">Private Lessons</Link>
+        <LessonNavLinks className="hover:text-white transition-colors" />
         <LearnFreeMenu />
         <Link href="/about" prefetch={false} className="hover:text-white transition-colors">About Ceech</Link>
         {/* Fresh document applies attendance permissions and unloads marketing scripts. */}

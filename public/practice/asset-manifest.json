@@ -54,7 +54,7 @@
     },
     {
       "name": "index.html",
-      "sha256": "1d9331f824b825a3341562cc633442f458611eee19824f1b82d4a789c546595f"
+      "sha256": "70427ba117c9ba4f01d3afdf603c814b814f60bbd72f23f68fa2402159db03a9"
     },
     {
       "name": "lesson-navigation.mjs",
@@ -137,6 +137,10 @@
       "sha256": "34300dc956ef1b122e1c24811a17cdcf3865cfa1a79b1d9272879a79800a372d"
     },
     {
+      "name": "site-navigation.css",
+      "sha256": "63c878251ba8bd687fe0c6d85d9139ef8e8c6d92973ac6b4b6d7773f4edd4d00"
+    },
+    {
       "name": "style.css",
       "sha256": "af4dbb23f7306eb01e7bb8227a6590e94ec0f946a231c1de0e7bc32ae22126fd"
     },
@@ -162,11 +166,11 @@
     },
     {
       "name": "trainer.css",
-      "sha256": "bdcbb78760b5dfa75eb2db9d3124cbb817ec9f51786fccab8ac5ef02917a60dd"
+      "sha256": "259270c77c30295de91c3d9a4e199f0bbf714c30b7adf69ddad0f482f47bc8f9"
     },
     {
       "name": "trainer.js",
-      "sha256": "06084a9bb0ae03050783519ec757dc7086e6b5d63ae2a74bcc1d57ddecbc9f8c"
+      "sha256": "01fa04c52033a42f1e06e2292d3d0fc48b45c52c66ab6ef345a2a39a55743a6c"
     },
     {
       "name": "trial-assets/mp4box.js",

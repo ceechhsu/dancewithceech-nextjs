@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function DanceFloorReadyPage() {
   return <div className={approvedStyles.scope}>
     <a href="#main-content" className={approvedStyles.skipLink}>Skip to content</a>
-    <Nav promoteDanceFloorReady position="sticky" />
+    <Nav position="sticky" />
     <DanceFloorReady version="v2" showPreviewBadge={false} />
   </div>;
 }

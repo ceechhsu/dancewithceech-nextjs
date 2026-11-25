@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Nav from "@/components/approved-pages/Nav";
+import approvedStyles from "@/components/approved-pages/PageScope.module.css";
 import LinksContent from "./LinksContent";
 
 export const metadata: Metadata = {
@@ -10,8 +12,12 @@ export const metadata: Metadata = {
 
 export default function LinksPage() {
   return (
-    <Suspense fallback={null}>
-      <LinksContent />
-    </Suspense>
+    <>
+      <a href="#main-content" className={approvedStyles.skipLink}>Skip to content</a>
+      <Nav position="relative" />
+      <Suspense fallback={null}>
+        <LinksContent />
+      </Suspense>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
+import { lessonNavLinks } from '@/components/LessonNavLinks'
 
 export default function Footer({ children, promoteDanceFloorReady = false }: { children?: ReactNode; promoteDanceFloorReady?: boolean }) {
   return (
@@ -19,8 +20,9 @@ export default function Footer({ children, promoteDanceFloorReady = false }: { c
           <ul className="flex flex-col gap-2 text-sm" style={{ color: 'var(--muted)' }}>
             <li><Link href="/beat-first" prefetch={false} className="hover:text-white transition-colors">BeatFirst</Link></li>
             <li><Link href={promoteDanceFloorReady ? "/#private-coaching" : "/private-lessons"} prefetch={false} className="hover:text-white transition-colors">Private Lessons</Link></li>
-            <li><Link href={promoteDanceFloorReady ? "/dance-floor-ready" : "/private-lessons/online"} prefetch={false} className="hover:text-white transition-colors">{promoteDanceFloorReady ? "Online Dance Lessons" : "Online Lessons"}</Link></li>
-            <li><Link href="/private-lessons/san-jose" prefetch={false} className="hover:text-white transition-colors">San Jose Lessons</Link></li>
+            {lessonNavLinks.map(({ href, label }) => (
+              <li key={href}><Link href={href} prefetch={false} className="hover:text-white transition-colors">{label}</Link></li>
+            ))}
             <li><Link href="/private-lessons/bay-area" prefetch={false} className="hover:text-white transition-colors">Bay Area Lessons</Link></li>
           </ul>
         </div>

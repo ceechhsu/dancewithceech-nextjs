@@ -9,6 +9,7 @@ import SignInButton from "./SignInButton";
 import UserMenu from "./UserMenu";
 import styles from "./Navigation.module.css";
 import ConsultationLink from "@/components/approved-pages/ConsultationLink";
+import LessonNavLinks from "@/components/LessonNavLinks";
 
 const links = [
   { label: "About Ceech", href: "/about" },
@@ -86,7 +87,7 @@ export default function MobileMenu({ user, showAttendance = false, archeryHref, 
       {/* Fresh document applies attendance permissions and unloads marketing scripts. */}
       {showAttendance && <a href="/attendance/instructor" className="flex min-h-11 shrink-0 items-center font-semibold text-blue-300">Attendance</a>}
       {user && archeryHref && <a href={archeryHref} className="flex min-h-11 shrink-0 items-center font-semibold text-blue-300">Archery</a>}
-      <Link href="/private-lessons" prefetch={false}>Private Lessons</Link>
+      <LessonNavLinks />
       <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Learn Free</p>
       {freeLinks.map(({ label, href }) => <Link key={href} href={href} prefetch={false} className="shrink-0 pl-3">{label}</Link>)}
       {links.map(({ label, href }) => <Link key={href} href={href} prefetch={false} className="shrink-0">{label}</Link>)}

@@ -1,5 +1,7 @@
 import BeatFirstJourney from '@/components/beatfirst-preview/BeatFirstJourney'
 import BeatFirstGuide from '@/components/beatfirst-preview/BeatFirstGuide'
+import Nav from '@/components/approved-pages/Nav'
+import styles from '@/components/approved-pages/PageScope.module.css'
 
 export const metadata = {
   title: 'BeatFirst: Rhythm Trainer | DanceWithCeech',
@@ -39,6 +41,8 @@ const beatFirstSchema = {
 export default function BeatFirstPage() {
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(beatFirstSchema) }} />
-    <BeatFirstJourney><BeatFirstGuide /></BeatFirstJourney>
+    <a href="#main-content" className={styles.skipLink}>Skip to content</a>
+    <Nav position="relative" />
+    <BeatFirstJourney showTrainerHeader={false}><BeatFirstGuide /></BeatFirstJourney>
   </>
 }

@@ -82,6 +82,8 @@ export default function LinksContent() {
 
   return (
     <main
+      id="main-content"
+      tabIndex={-1}
       className="min-h-screen flex flex-col items-center px-4 py-10"
       style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}
     >

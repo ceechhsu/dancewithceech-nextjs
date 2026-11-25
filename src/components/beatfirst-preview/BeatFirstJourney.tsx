@@ -14,12 +14,14 @@ import { scoreAttempt, type Attempt } from './progress'
 import gameStyles from './ClapGame.module.css'
 import styles from './Journey.module.css'
 
-export default function BeatFirstJourney({ preview = false, children }: { preview?: boolean; children?: ReactNode }) {
+type JourneyProps = { preview?: boolean; showTrainerHeader?: boolean; children?: ReactNode }
+
+export default function BeatFirstJourney({ preview = false, showTrainerHeader = true, children }: JourneyProps) {
   const progress = useProgress(preview)
-  return <BeatFirstJourneyView progress={progress} preview={preview}>{children}</BeatFirstJourneyView>
+  return <BeatFirstJourneyView progress={progress} preview={preview} showTrainerHeader={showTrainerHeader}>{children}</BeatFirstJourneyView>
 }
 
-export function BeatFirstJourneyView({ progress, preview = false, children }: { progress: ReturnType<typeof useProgress>; preview?: boolean; children?: ReactNode }) {
+export function BeatFirstJourneyView({ progress, preview = false, showTrainerHeader = true, children }: JourneyProps & { progress: ReturnType<typeof useProgress> }) {
   const [chosen, setChosen] = useState(1)
   const [leaderboardLevel, setLeaderboardLevel] = useState(1)
   const [completed, setCompleted] = useState<{ levelId: number; score: number; owner: string | null } | null>(null)
@@ -105,15 +107,15 @@ export function BeatFirstJourneyView({ progress, preview = false, children }: { 
     { title: 'Keep the pocket', detail: '110 BPM · New accents and 30-second practice', ids: [16, 17, 18] },
   ]
 
-  return <main className={gameStyles.page}>
-    <header className={gameStyles.header}>
+  return <main id="main-content" tabIndex={-1} className={gameStyles.page}>
+    {showTrainerHeader && <header className={gameStyles.header}>
       <SiteLogo />
       <span className={gameStyles.preview}>BEATFIRST {preview && <><span>/</span> PREVIEW</>}</span>
-    </header>
+    </header>}
     <div className={styles.layout}>
       <section className={styles.intro}>
         <Link href={preview ? "/beat-first" : "/"} className={styles.back}><ArrowLeft size={14} /> {preview ? "Back to BeatFirst" : "Back to DanceWithCeech"}</Link>
-        <div className={gameStyles.eyebrow}><span /> RHYTHM FIRST. THEN DANCE.</div>
+        <div className={gameStyles.eyebrow}><span /> {showTrainerHeader ? 'RHYTHM FIRST. THEN DANCE.' : 'BEATFIRST RHYTHM TRAINER'}</div>
         <h1>Find your <span>beat.</span></h1>
         <p className={styles.description}>Start with ten seconds. Build a rhythm that stays with you.</p>
         <div className={styles.desktopGuide}>

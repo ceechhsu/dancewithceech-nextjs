@@ -100,12 +100,14 @@ test("college history distinguishes the four employers from guest teaching", asy
 });
 
 test("private lessons and the Running Man article retain useful internal links", async () => {
-  const [hub, footer, article] = await Promise.all([
+  const [hub, footer, lessonNav, article] = await Promise.all([
     read("src/app/private-lessons/page.tsx"),
     read("src/components/Footer.tsx"),
+    read("src/components/LessonNavLinks.tsx"),
     read("src/content/posts/hip-hop-dance-move-running-man.md"),
   ]);
-  for (const source of [hub, footer]) {
+  assert.match(footer, /lessonNavLinks\.map/);
+  for (const source of [hub, footer + lessonNav]) {
     assert.ok(source.includes('/private-lessons/san-jose'));
     assert.ok(source.includes('/private-lessons/bay-area'));
   }
@@ -130,7 +132,7 @@ test("BeatFirst provides descriptive metadata, crawlable guidance, and WebApplic
   const source = await read("src/app/beat-first/page.tsx");
   const guide = await read("src/components/beatfirst-preview/BeatFirstGuide.tsx");
   assert.match(source, /WebApplication/);
-  assert.match(source, /<BeatFirstJourney><BeatFirstGuide \/><\/BeatFirstJourney>/);
+  assert.match(source, /<BeatFirstJourney showTrainerHeader=\{false\}><BeatFirstGuide \/><\/BeatFirstJourney>/);
   assert.match(guide, /How BeatFirst works/i);
   assert.match(guide, /Frequently asked questions/i);
   const description = source.match(/description:\s*['"]([^'"]+)/)?.[1] ?? "";

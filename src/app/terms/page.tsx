@@ -1,9 +1,13 @@
 import Link from 'next/link'
+import Nav from '@/components/approved-pages/Nav'
+import approvedStyles from '@/components/approved-pages/PageScope.module.css'
 export const metadata = { title: 'Playlist updater use terms | DanceWithCeech' }
 export default function PlaylistUpdaterTerms() {
   return (
-    <main className="mx-auto max-w-3xl space-y-6 px-6 py-20 leading-relaxed">
-      <Link href="/">Dance With Ceech</Link>
+    <>
+    <a href="#main-content" className={approvedStyles.skipLink}>Skip to content</a>
+    <Nav position="relative" />
+    <main id="main-content" tabIndex={-1} className="mx-auto max-w-3xl space-y-6 px-6 py-20 leading-relaxed">
       <h1 className="text-4xl font-bold">Playlist updater — use terms</h1>
       <p>Effective November 16, 2026.</p>
       <p>{"This page describes the owner-operated Dance With Ceech YouTube playlist helper. It is not a public account-connection service and these terms do not replace separate terms for classes, purchases or other website features."}</p>
@@ -13,5 +17,6 @@ export default function PlaylistUpdaterTerms() {
       <p><Link className="underline" href="/privacy#playlist-updater">Owner-updater privacy disclosure</Link></p>
       <p><a className="underline" href="https://www.youtube.com/t/terms">YouTube Terms of Service</a> · <a className="underline" href="https://policies.google.com/privacy">Google Privacy Policy</a></p>
     </main>
+    </>
   )
 }
