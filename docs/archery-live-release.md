@@ -2,7 +2,7 @@
 
 ## Release state
 
-**Live at https://dancewithceech.com/attendance/archery.** Vercel production deployment `dpl_56zZ5SmoaGKNqHQutwSh8P8tZJbh` (`dancewithceech-nextjs-p20ri9vei-ceechhsus-projects.vercel.app`) is READY and serves both production domains. Feature commit `2c366cfb17304d4f65185ba731f4f56645ce581c` is pushed to GitHub main and `release/archery-classroom-2026-10-27`. The latest navigation correction is commit `d92f1cfec2fa3e7a270d6acea4c3e577246ec3f6`; its optimized Next.js production build completed in approximately 35 seconds.
+**Live at https://dancewithceech.com/attendance/archery.** Vercel production deployment `dpl_B3fE18n96YhcPBfenuQqFKw3kHBL` (`dancewithceech-nextjs-itdvg0vjy-ceechhsus-projects.vercel.app`) is READY and serves both production domains. Feature commit `2c366cfb17304d4f65185ba731f4f56645ce581c` is pushed to GitHub main and `release/archery-classroom-2026-10-27`. The latest feature commit is `bb74caf077d75f8b9b5cdff1fc50d91821446ae9`; its optimized Next.js production build completed in approximately 37 seconds.
 
 All eight reviewed additive migrations are installed in the existing attendance database, `dance-with-ceech-academy` (`ywianppupnxduthvyeyb`). Mission Archery, Fall 2026, is configured with `progress_tool=archery`. No roster assignments or historical attendance were changed.
 
@@ -62,3 +62,5 @@ The owning instructor can now challenge students and receive student invitations
 Applied only `20261028014318_archery_instructor_challenges.sql` to the confirmed attendance project, installed version `20261028015312`. The player registry has RLS and no anon/authenticated grants. Seven focused database regressions cover identity changes, cross-class FKs, late enrollment, rate/duplicate rules, legacy upgrades/rollback, privacy, and own disputes. All 157 automated tests and full classroom/browser/name-wheel checks pass; independent code review approved. Live service-role challenge smoke checks passed with all fictional writes rolled back.
 
 Rollback for this update: restore `dpl_56zZ5SmoaGKNqHQutwSh8P8tZJbh` while retaining the additive player registry and records. No roster or attendance data was removed or reassigned.
+
+Instructor challenge publication: production deployment `dpl_B3fE18n96YhcPBfenuQqFKw3kHBL` is READY on the live domains, source `bb74caf`. The real instructor session shows Today → Challenge a student, the active-class picker and send form. No invitation was sent to a real student during verification. Live guest-access/phone-menu checks pass and the deployment error/fatal log scan is empty. The live screenshot is retained outside Git in the chat visualization folder.
