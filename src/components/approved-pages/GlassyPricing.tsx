@@ -185,7 +185,7 @@ export const PricingCard = ({
         ))}
       </ul>
       {buttonHref ? (
-        <a href={buttonHref} data-coaching-offer={buttonCoachingOffer} className={`relative border-none overflow-hidden isolate transition-all duration-200 cursor-pointer px-4 py-2 bg-blue-600 hover:opacity-90 text-white rounded-lg text-center ${buttonClasses.trim()}`}>{buttonText}</a>
+        <a href={buttonHref} onClick={onButtonClick} data-coaching-offer={buttonCoachingOffer} className={`relative border-none overflow-hidden isolate transition-all duration-200 cursor-pointer px-4 py-2 bg-blue-600 hover:opacity-90 text-white rounded-lg text-center ${buttonClasses.trim()}`}>{buttonText}</a>
       ) : (
         <RippleButton className={buttonClasses.trim()} onClick={onButtonClick}>{buttonText}</RippleButton>
       )}

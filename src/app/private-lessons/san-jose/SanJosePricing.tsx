@@ -5,8 +5,9 @@ import styles from "./SanJosePricing.module.css";
 import { GlassyPricingSection } from "@/components/approved-pages/GlassyPricing";
 
 import { trackConsultation } from "@/lib/analytics/consultation";
+import { FREE_CONSULTATION_URL } from "@/lib/approved-pages/consultation";
 
-const scrollToBooking = () => { trackConsultation("consultation_link_clicked", "pricing"); document.getElementById('booking')?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); };
+const trackPricingConsultation = () => trackConsultation("consultation_link_clicked", "pricing");
 
 const ghostButtonStyle = {
   background: "none",
@@ -53,7 +54,8 @@ export default function SanJosePricing() {
                 buttonText: "Book a Free 30-Minute Phone Consultation",
                 isPopular: true,
                 buttonVariant: "primary",
-                onButtonClick: scrollToBooking,
+                buttonHref: FREE_CONSULTATION_URL,
+                onButtonClick: trackPricingConsultation,
               },
               {
                 planName: "5 Pack",
@@ -63,7 +65,8 @@ export default function SanJosePricing() {
                 features: ["$230/session, save $100", "60 min each", "Get Down Dance Studios", "Any style or level"],
                 buttonText: "Book a Free 30-Minute Phone Consultation",
                 buttonVariant: "secondary",
-                onButtonClick: scrollToBooking,
+                buttonHref: FREE_CONSULTATION_URL,
+                onButtonClick: trackPricingConsultation,
               },
               {
                 planName: "Single",
@@ -73,19 +76,21 @@ export default function SanJosePricing() {
                 features: ["60 minutes", "Get Down Dance Studios", "Any style or level"],
                 buttonText: "Book a Free 30-Minute Phone Consultation",
                 buttonVariant: "secondary",
-                onButtonClick: scrollToBooking,
+                buttonHref: FREE_CONSULTATION_URL,
+                onButtonClick: trackPricingConsultation,
               },
             ]}
             footer={
               <div>
                 <p className="mb-5 text-sm text-white/60">Packages are valid for one year from your first lesson. Your practice recording is included; music editing, travel, and extra participants are quoted separately.</p>
-                <button
-                  onClick={scrollToBooking}
-                  className="font-semibold hover:text-white focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:rounded-xl"
+                <a
+                  href={FREE_CONSULTATION_URL}
+                  onClick={trackPricingConsultation}
+                  className="block text-center font-semibold hover:text-white focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:rounded-xl"
                   style={ghostButtonStyle}
                 >
                   Start with a free 30-minute phone consultation to discuss your goals and choose the right lesson option →
-                </button>
+                </a>
               </div>
             }
           />

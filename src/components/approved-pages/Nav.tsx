@@ -6,6 +6,7 @@ import { canSeeAttendance } from "@/lib/attendance/navigation";
 import Link from "next/link";
 import SiteLogo from "@/components/SiteLogo";
 import MobileMenu from "@/components/approved-pages/MobileMenu";
+import ConsultationLink from "./ConsultationLink";
 import UserMenu from "@/components/UserMenu";
 import SignInButton from "@/components/SignInButton";
 import LearnFreeMenu from "@/components/approved-pages/LearnFreeMenu";
@@ -55,7 +56,7 @@ export default function Nav({ user: initialUser, promoteDanceFloorReady = false,
         {/* Fresh document applies attendance permissions and unloads marketing scripts. */}
         {showAttendance && <a href="/attendance/instructor" className="inline-flex min-h-11 items-center font-semibold text-blue-300 hover:text-white">Attendance</a>}
         {archeryHref && <a href={archeryHref} className="inline-flex min-h-11 items-center font-semibold text-blue-300 hover:text-white">Archery</a>}
-        <Link href={promoteDanceFloorReady ? "/private-lessons/san-jose#booking" : "/private-lessons#booking"} prefetch={false} className={styles.booking}>{promoteDanceFloorReady ? "San Jose Consultation" : "Book a Free Call"}</Link>
+        <ConsultationLink className={styles.booking} />
         <div className="text-xs">
         {user ? (
           <UserMenu name={user.name} email={user.email} image={user.image} />

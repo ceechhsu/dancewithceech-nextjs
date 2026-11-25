@@ -11,6 +11,7 @@ import TestimonialsMarquee from "@/components/approved-pages/TestimonialsMarquee
 import SanJosePricing from "./SanJosePricing";
 import { SanJoseLessonProcess, SanJoseSpecializedLessons } from "./SanJoseLessonSections";
 import { getReviewSummary } from "@/lib/reviews";
+import { FREE_CONSULTATION_URL } from "@/lib/approved-pages/consultation";
 
 export const metadata = {
   title: "In-Person Hip-Hop Dance Lessons in San Jose | Dance With Ceech",
@@ -64,7 +65,8 @@ export default async function SanJosePrivateLessonsPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href="#booking"
+                href={FREE_CONSULTATION_URL}
+                data-consultation-link
                 className="px-8 py-4 rounded-full text-white font-semibold text-center transition-opacity hover:opacity-90"
                 style={{ backgroundColor: "var(--accent-primary)" }}
               >
@@ -79,7 +81,7 @@ export default async function SanJosePrivateLessonsPage() {
               </a>
             </div>
             <p className="mt-6 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
-              Explore details for <Link href="/private-lessons/bay-area" className="hover:text-white" style={{ color: "var(--accent-primary-accessible)" }}>Bay Area dance lessons</Link>.
+              We welcome dancers from Santa Clara, Campbell, and across the South Bay. Explore details for <Link href="/private-lessons/bay-area" className="hover:text-white" style={{ color: "var(--accent-primary-accessible)" }}>Bay Area dance lessons</Link>.
             </p>
           </div>
           <div className="flex justify-center md:justify-end">
@@ -229,7 +231,7 @@ title="Ceech teaching knee pop footwork"
         </div>
       </section>
 
-      <CelebrationLessons />
+      <CelebrationLessons consultationHref={FREE_CONSULTATION_URL} />
       <SanJoseSpecializedLessons />
 
       {/* TESTIMONIALS */}

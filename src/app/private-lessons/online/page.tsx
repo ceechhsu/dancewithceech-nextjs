@@ -5,6 +5,7 @@ import Link from "next/link";
 import Nav from "@/components/approved-pages/Nav";
 import Footer from "@/components/approved-pages/Footer";
 import HomeSocialLinks from "@/components/approved-pages/HomeSocialLinks";
+import ConsultationLink from "@/components/approved-pages/ConsultationLink";
 import OnlinePricing from "./OnlinePricing";
 import { OnlineCoachingCycle } from "@/components/approved-pages/CoachingDirections";
 import { businessSchema, instructorSchema } from "@/lib/private-lesson-details";
@@ -63,7 +64,7 @@ export default function OnlinePrivateLessonsPage() {
         <div className="funnel-wrap max-w-3xl">
           <h2 id="online-next-step-heading" className="home-section-heading">Let’s find your next step.</h2>
           <p className="home-section-tagline">Talk by phone with Ceech for 30 minutes about your goals and which coaching option fits. No obligation. You can book directly without completing a tutorial, signing in or submitting a video.</p>
-          <Link href="/private-lessons#booking" prefetch={false} className="funnel-button mt-8">Book a Free Consultation</Link>
+          <ConsultationLink className="funnel-button mt-8" />
         </div>
       </section>
       <HomeSocialLinks />

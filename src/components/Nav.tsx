@@ -11,6 +11,7 @@ import SignInButton from "@/components/SignInButton";
 import LearnFreeMenu from "@/components/LearnFreeMenu";
 import styles from "./Navigation.module.css";
 import useArcheryNavigation from "@/components/attendance/useArcheryNavigation";
+import ConsultationLink from "@/components/approved-pages/ConsultationLink";
 
 type NavUser = {
   name?: string | null;
@@ -47,7 +48,7 @@ export default function Nav({ user: initialUser }: Props = {}) {
         {/* Fresh document applies attendance permissions and unloads marketing scripts. */}
         {showAttendance && <a href="/attendance/instructor" className="inline-flex min-h-11 items-center font-semibold text-blue-300 hover:text-white">Attendance</a>}
         {archeryHref && <a href={archeryHref} className="inline-flex min-h-11 items-center font-semibold text-blue-300 hover:text-white">Archery</a>}
-        <Link href="/private-lessons#booking" prefetch={false} className={styles.booking}>Book a Free Call</Link>
+        <ConsultationLink className={styles.booking} />
         <div className="text-xs">
         {user ? (
           <UserMenu name={user.name} email={user.email} image={user.image} />

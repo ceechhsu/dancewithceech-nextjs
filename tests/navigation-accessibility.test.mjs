@@ -5,7 +5,7 @@ const read = (name) => readFile(new URL(`../src/components/${name}`, import.meta
 test('navigation prioritizes lessons, groups free learning and preserves auth on mobile', async () => {
   const nav = await read('Nav.tsx');
   assert.match(nav, /LearnFreeMenu/);
-  assert.match(nav, /Book a Free Call/);
+  assert.match(nav, /<ConsultationLink className=\{styles\.booking\}/);
   assert.match(nav, /About Ceech/);
   assert.match(nav, /MobileMenu user=\{user\}/);
   assert.doesNotMatch(nav, /href="\/contact"/);

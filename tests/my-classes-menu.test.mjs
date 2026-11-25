@@ -5,7 +5,7 @@ test('My Classes follows booking in the signed-in hamburger menu, not the profil
   const mobile = readFileSync('src/components/MobileMenu.tsx', 'utf8');
   const profile = readFileSync('src/components/UserMenu.tsx', 'utf8');
   assert.match(mobile, /user && !showAttendance && <a href="\/dashboard"[^>]*>My Classes<\/a>/);
-  assert.ok(mobile.indexOf('>My Classes</a>') > mobile.indexOf('>Book a Free Call</Link>'));
+  assert.match(mobile, /<ConsultationLink[\s\S]*?>My Classes<\/a>/);
   assert.doesNotMatch(profile, /My Dashboard/);
 });
 test('shared menu retains touch spacing and white booking text inside attendance pages', () => {

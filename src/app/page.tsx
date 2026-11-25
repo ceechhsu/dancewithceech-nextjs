@@ -15,12 +15,15 @@ import { getReviewSummary } from "@/lib/reviews";
 import ThanksgivingSeason from "@/components/ThanksgivingSeason";
 import ThanksgivingScene from "@/components/ThanksgivingScene";
 
+const homepageTitle = "Hip-Hop Dance Lessons for Adults | Dance With Ceech";
+const homepageDescription = "Learn hip-hop with Ceech through Dance Floor Ready, a 30-day private online coaching pilot, or take private in-person lessons in San Jose.";
+
 export const metadata = {
-  title: "Online Hip-Hop Dance Lessons for Adults | Dance With Ceech",
-  description: "Try Dance Floor Ready, a 30-day private online hip-hop coaching pilot for adults. Private in-person lessons are also available in San Jose.",
+  title: homepageTitle,
+  description: homepageDescription,
   alternates: { canonical: "https://dancewithceech.com" },
-  openGraph: { title: "Hip-Hop Dance Lessons for Adults | Dance With Ceech", description: "Explore Dance Floor Ready, a 30-day private online hip-hop coaching pilot with Ceech. In-person lessons are also available in San Jose.", url: "https://dancewithceech.com", siteName: "Dance With Ceech", type: "website", images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Ceech teaching a private dance lesson" }] },
-  twitter: { card: "summary_large_image", title: "Hip-Hop Dance Lessons for Adults | Dance With Ceech", description: "Personal feedback and a clear next step for adult dancers.", images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"] },
+  openGraph: { title: homepageTitle, description: homepageDescription, url: "https://dancewithceech.com", siteName: "Dance With Ceech", type: "website", images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Ceech teaching a private dance lesson" }] },
+  twitter: { card: "summary_large_image", title: homepageTitle, description: homepageDescription, images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"] },
 };
 
 export default async function Home() {

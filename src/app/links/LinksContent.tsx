@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+import { FREE_CONSULTATION_URL } from "@/lib/approved-pages/consultation";
 
 const VALID_SOURCES = new Set(["ig", "tt", "fb", "yt", "gmb", "email"]);
 
@@ -44,8 +45,8 @@ export default function LinksContent() {
     {
       label: "Book a free consultation",
       sublabel: "Private lessons: San Jose or online",
-      href: internal("/private-lessons", "private-lessons"),
-      external: false,
+      href: external(FREE_CONSULTATION_URL, "private-lessons"),
+      external: true,
       campaign: "private-lessons",
       accent: "#2563EB",
     },

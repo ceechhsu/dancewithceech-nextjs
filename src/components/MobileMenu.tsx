@@ -8,6 +8,7 @@ import { freeLinks } from "./LearnFreeMenu";
 import SignInButton from "./SignInButton";
 import UserMenu from "./UserMenu";
 import styles from "./Navigation.module.css";
+import ConsultationLink from "@/components/approved-pages/ConsultationLink";
 
 const links = [
   { label: "About Ceech", href: "/about" },
@@ -79,7 +80,7 @@ export default function MobileMenu({ user, showAttendance = false, archeryHref, 
       style={{ top }} onClick={(event) => {
         if ((event.target as HTMLElement).closest("a")) { setOpen(false); trigger.current?.focus(); }
       }}>
-      <Link href="/private-lessons#booking" prefetch={false} className={`${styles.booking} mb-3 shrink-0`}>Book a Free Call</Link>
+      <ConsultationLink className={`${styles.booking} mb-3 shrink-0`} />
       {user && <a href="/profile" className="flex min-h-12 shrink-0 items-center font-semibold text-amber-200">My profile</a>}
       {user && !showAttendance && <a href="/dashboard" className="flex min-h-12 shrink-0 items-center font-semibold text-blue-300">My Classes</a>}
       {/* Fresh document applies attendance permissions and unloads marketing scripts. */}

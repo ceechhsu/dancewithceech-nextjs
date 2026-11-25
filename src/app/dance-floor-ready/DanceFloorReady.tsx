@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState, type Ref } from "react";
 import { advanceFunnel, initialFunnel, readinessQuestions, type FunnelAction } from "@/lib/program-a/dance-floor-ready";
 import { programA } from "@/lib/program-a/offer";
+import { FREE_CONSULTATION_URL } from "@/lib/approved-pages/consultation";
 import styles from "./DanceFloorReady.module.css";
 import { useFitQuestionMusic } from "./useFitQuestionMusic";
 
 const assets = "/dance-floor-ready-media/pilot";
 const choices = ["ready", "nervous", "not-now"] as const;
-const fitCallUrl = "https://calendly.com/ceechhsu/30min";
 const progressLabels = ["The Story", "How It Works", "Consultation"] as const;
 const v2ProgressLabels = ["The Goal", "The Coaching", "Consultation"] as const;
 const storyEyebrow = "Fully online · 30-day freestyle coaching pilot";
@@ -275,7 +275,7 @@ export default function DanceFloorReady({version = "current", showPreviewBadge =
           </ul>
           <OfferTerms />
         </div>
-        <a className={styles.primary} href={fitCallUrl} target="_blank" rel="noopener noreferrer" aria-describedby="fit-call-booking-note">
+        <a className={styles.primary} href={FREE_CONSULTATION_URL} target="_blank" rel="noopener noreferrer" aria-describedby="fit-call-booking-note">
           Book a free consultation <span aria-hidden="true">→</span>
         </a>
         <p id="fit-call-booking-note" className={styles.small}>No payment to book. Opens in Calendly.</p>

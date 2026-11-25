@@ -83,15 +83,14 @@ function HeroVideo() {
 function HeroContent() {
   return (
     <div style={{ position: "relative", minHeight: "100svh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "112px 24px 104px" }}>
-      <h1 style={{ maxWidth: "960px", fontSize: "clamp(2rem, 4.8vw, 4rem)", fontWeight: 800, color: "#F9F9F9", letterSpacing: "-0.02em", lineHeight: 1.1, textShadow: "0 2px 20px rgba(0,0,0,0.6)", margin: "0 0 1rem" }}>
-        <span className="block">Online Hip-Hop Dance Lessons</span>{" "}
-        <span className="block whitespace-nowrap">For Adults</span>
+      <h1 style={{ maxWidth: "960px", fontSize: "clamp(2rem, 4.8vw, 4rem)", fontWeight: 800, color: "#F9F9F9", letterSpacing: "-0.02em", lineHeight: 1.1, textWrap: "balance", textShadow: "0 2px 20px rgba(0,0,0,0.6)", margin: "0 0 1rem" }}>
+        Hip-Hop Dance Lessons for Adults
       </h1>
       <p className="mb-6 font-semibold text-white" style={{ fontSize: "clamp(1.75rem, 3.6vw, 3rem)", lineHeight: 1.2, textShadow: "0 2px 20px rgba(0,0,0,0.6)" }}>
         Know what to do when the music starts.
       </p>
       <p style={{ textWrap: "balance", maxWidth: "680px", margin: "0 0 1rem", color: "rgba(249,249,249,0.9)", fontSize: "clamp(1rem, 2vw, 1.25rem)", lineHeight: 1.5, textShadow: "0 1px 10px rgba(0,0,0,0.9)" }}>
-        Taken dance classes but still freeze when nobody’s leading? Dance Floor Ready is 30 days of private online coaching with short drills and personal feedback from Ceech.
+        Private online coaching or in-person lessons in San Jose.
       </p>
       {CTA_BUTTONS}
       <div className="mt-5 flex flex-wrap justify-center gap-x-5 gap-y-3 text-sm">

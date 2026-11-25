@@ -1,3 +1,5 @@
+import { FREE_CONSULTATION_URL } from "@/lib/approved-pages/consultation";
+
 const processes = [
   {
     title: "In-person lessons",
@@ -57,7 +59,7 @@ export function SanJoseSpecializedLessons() {
             </p>
           </div>
         </div>
-        <a href="#booking" className="underline underline-offset-4" style={{ color: "var(--accent-primary-accessible)" }}>Talk through your goals in a free 30-minute phone consultation</a>
+        <a href={FREE_CONSULTATION_URL} data-consultation-link className="underline underline-offset-4" style={{ color: "var(--accent-primary-accessible)" }}>Talk through your goals in a free 30-minute phone consultation</a>
       </div>
     </section>
   );

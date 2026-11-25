@@ -62,7 +62,7 @@ export function LessonProcess() {
   );
 }
 
-export function CelebrationLessons() {
+export function CelebrationLessons({ consultationHref }: { consultationHref?: string }) {
   return (
     <section id="wedding-dance" className="py-16 px-6" style={{ borderBottom: "1px solid #1f1f1f" }}>
       <div className="max-w-3xl mx-auto">
@@ -76,7 +76,7 @@ export function CelebrationLessons() {
         <p className="text-sm leading-relaxed mb-5" style={{ color: "var(--muted)" }}>
           Standard in-person rates apply to couples. Larger groups cost more based on participant count. Music editing, travel, and extra rehearsals are quoted separately.
         </p>
-        <a href="#booking" className="underline underline-offset-4" style={{ color: "var(--accent-primary-accessible)" }}>Discuss your dance in a free phone consultation</a>
+        <a href={consultationHref ?? "#booking"} data-consultation-link={consultationHref ? true : undefined} className="underline underline-offset-4" style={{ color: "var(--accent-primary-accessible)" }}>Discuss your dance in a free phone consultation</a>
       </div>
     </section>
   );
