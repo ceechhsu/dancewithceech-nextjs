@@ -13,6 +13,14 @@ test('generated trainer files match the checked-in import manifest',()=>{
  for(const item of manifest.files)assert.equal(crypto.createHash('sha256').update(fs.readFileSync(new URL(item.name,dir))).digest('hex'),item.sha256,item.name);
  assert.ok(!manifest.files.some(x=>/local-analysis\.html|camera-test\.html|foot-reference\.html/.test(x.name)));
 });
+test('practice entry loads matching navigation assets even after a previous release was cached',()=>{
+ const dir=new URL('../public/practice/',import.meta.url);
+ const html=fs.readFileSync(new URL('index.html',dir),'utf8');
+ for(const name of ['trainer.js','trainer.css','site-navigation.css']){
+  const revision=crypto.createHash('sha256').update(fs.readFileSync(new URL(name,dir))).digest('hex').slice(0,12);
+  assert.ok(html.includes(`"/practice/${name}?v=${revision}"`), `${name} must use its current content revision`);
+ }
+});
 test('practice navigation keeps challenge context while moving between screens',async()=>{
  const {LessonNavigation,lessonRoute}=await import('../public/practice/lesson-navigation.mjs');const id='a'.repeat(32);const nav=new LessonNavigation({}, {challenge:id});
  assert.equal(lessonRoute('library'),'/practice/');assert.equal(nav.route('lesson','marching'),'/practice/?challenge='+id+'#lesson=marching');
