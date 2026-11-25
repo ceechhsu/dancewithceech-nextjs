@@ -1,24 +1,44 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { ArrowDown, Drum, Hand, Play, RotateCcw, Volume2, Trophy } from 'lucide-react'
+import { useCallback, useEffect, useImperativeHandle, useRef, useState, type Ref } from 'react'
+import { ArrowDown, ArrowRight, Drum, Hand, Music2, Play, RotateCcw, Sparkle, Volume2, Trophy } from 'lucide-react'
 import { ClapAudio } from './audio'
 import { getLevelTiming, LEVEL, advanceRound, createRound, summarize, tapRound } from './engine'
-import { getLevel } from './levels'
+import { getLevel, PASS_SCORE } from './levels'
 import MasteryStars from './MasteryStars'
 import { nextStarTarget } from './practice-goals'
 import type { Attempt } from './progress'
 import type { Tap } from './engine'
 import styles from './ClapGame.module.css'
+import resultStyles from './EngagementResult.module.css'
 
 type Phase = 'idle' | 'loading' | 'countin' | 'playing' | 'results' | 'interrupted'
 type Feedback = { text: string; detail: string; kind: 'perfect' | 'hit' | 'miss'; id: number }
 
-type Props = { canStart?: boolean; levelId: number; personalBest?: number; onComplete: (attempt: Attempt) => void; onActive: (active: boolean) => void; onNext?: () => void; nextLabel?: string }
+export type ClapGameHandle = { continueTo: (levelId: number) => void }
+export type ResultAction = { label: string; description?: string; onClick?: () => void; disabled?: boolean }
 
-export default function ClapGame({ canStart = true, levelId, personalBest, onComplete, onActive, onNext, nextLabel }: Props) {
+type Props = {
+  ref?: Ref<ClapGameHandle>
+  canStart?: boolean
+  levelId: number
+  personalBest?: number
+  onComplete: (attempt: Attempt) => void
+  onActive: (active: boolean) => void
+  onNext?: () => void
+  nextLabel?: string
+  engagement?: {
+    roundPoints: number
+    totalPoints: number | null
+    signedIn: boolean
+    accountsEnabled: boolean
+    nextAction?: ResultAction
+  }
+}
+
+export default function ClapGame({ ref, canStart = true, levelId, personalBest, onComplete, onActive, onNext, nextLabel, engagement }: Props) {
   const level = getLevel(levelId)!
-  const { beatMs, countInMs } = getLevelTiming(levelId)
+  const engagementEnabled = engagement !== undefined
   const tapsRef = useRef<Tap[]>([])
   const attemptId = useRef('')
   const completedRef = useRef(false)
@@ -32,6 +52,7 @@ export default function ClapGame({ canStart = true, levelId, personalBest, onCom
   const [notice, setNotice] = useState('')
   const phaseRef = useRef<Phase>('idle')
   const roundRef = useRef(round)
+  const timingRef = useRef({ beatMs: 0, countInMs: 0 })
   const audioRef = useRef<ClapAudio | null>(null)
   const frameRef = useRef(0)
   const generationRef = useRef(0)
@@ -42,7 +63,7 @@ export default function ClapGame({ canStart = true, levelId, personalBest, onCom
   const notesRef = useRef<(HTMLSpanElement | null)[]>([])
   const progressRef = useRef<HTMLDivElement>(null)
   const targetRef = useRef<HTMLButtonElement>(null)
-  const replayRef = useRef<HTMLButtonElement>(null)
+  const resultActionRef = useRef<HTMLButtonElement>(null)
   const fieldHeight = useRef(400)
 
   const changePhase = useCallback((next: Phase) => {
@@ -89,7 +110,8 @@ export default function ClapGame({ canStart = true, levelId, personalBest, onCom
   }, [interrupt, stop])
 
   useEffect(() => {
-    if (phase === 'results' || phase === 'interrupted') replayRef.current?.focus({ preventScroll: true })
+    if (phase === 'results' || phase === 'interrupted') resultActionRef.current?.focus({ preventScroll: true })
+    if (phase === 'countin') targetRef.current?.focus({ preventScroll: true })
   }, [phase])
 
   const showFeedback = useCallback((text: string, detail: string, kind: Feedback['kind']) => {
@@ -100,7 +122,7 @@ export default function ClapGame({ canStart = true, levelId, personalBest, onCom
   const tap = useCallback((lane: 0 | 1 = 0) => {
     if (!['countin', 'playing'].includes(phaseRef.current) || !audioRef.current) return
     const atMs = audioRef.current.elapsedMs()
-    if (atMs < -LEVEL.windowMs || atMs >= level.durationMs || tapsRef.current.length >= 250) return
+    if (atMs < -LEVEL.windowMs || atMs >= roundRef.current.durationMs || tapsRef.current.length >= 250) return
     tapsRef.current.push({ atMs, lane })
     const result = tapRound(roundRef.current, atMs, lane)
     if (!result.feedback) return
@@ -111,7 +133,7 @@ export default function ClapGame({ canStart = true, levelId, personalBest, onCom
       result.offsetMs === undefined ? 'Listen for the next beat' : perfect ? 'Right on the beat' : `${Math.round(Math.abs(result.offsetMs))} ms ${result.feedback.toLowerCase()}`,
       result.offsetMs === undefined ? 'miss' : perfect ? 'perfect' : 'hit',
     )
-  }, [publishRound, showFeedback, level.durationMs])
+  }, [publishRound, showFeedback])
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -132,6 +154,8 @@ export default function ClapGame({ canStart = true, levelId, personalBest, onCom
     const audio = audioRef.current
     if (!audio || !['countin', 'playing'].includes(phaseRef.current)) return
     if (!audio.running) { interrupt(); return }
+    const { beatMs, countInMs } = timingRef.current
+    const { levelId: roundLevelId, durationMs } = roundRef.current
     const elapsed = audio.elapsedMs()
     const targetY = fieldHeight.current - 84
     const nextRound = advanceRound(roundRef.current, elapsed)
@@ -148,38 +172,42 @@ export default function ClapGame({ canStart = true, levelId, personalBest, onCom
       element.style.transform = `translate3d(-50%, ${y - 12}px, 0) scale(${0.55 + Math.max(0, Math.min(1, approach)) * 0.45})`
       element.style.opacity = note.status === 'hit' || y < -24 || y > fieldHeight.current ? '0' : note.status === 'miss' ? '0.22' : '1'
     }
-    if (progressRef.current) progressRef.current.style.transform = `scaleX(${Math.max(0, Math.min(1, 1 - elapsed / level.durationMs))})`
+    if (progressRef.current) progressRef.current.style.transform = `scaleX(${Math.max(0, Math.min(1, 1 - elapsed / durationMs))})`
     if (elapsed >= 0 && phaseRef.current === 'countin') changePhase('playing')
     const tickNumber = Math.floor(elapsed / 100)
     if (tickNumber !== lastTick.current) {
       lastTick.current = tickNumber
-      setRemaining(Math.max(0, Math.ceil((level.durationMs - Math.max(0, elapsed)) / 1000)))
+      setRemaining(Math.max(0, Math.ceil((durationMs - Math.max(0, elapsed)) / 1000)))
       setCount(Math.max(1, Math.min(4, Math.floor((elapsed + countInMs) / beatMs) + 1)))
       if (feedbackUntil.current < performance.now()) setFeedback(null)
     }
-    if (elapsed >= level.durationMs) {
+    if (elapsed >= durationMs) {
       audio.stop()
       changePhase('results')
       if (!completedRef.current) {
         completedRef.current = true
-        onCompleteRef.current({ id: attemptId.current, levelId, taps: tapsRef.current.slice(), completedAt: new Date().toISOString() })
+        onCompleteRef.current({ id: attemptId.current, levelId: roundLevelId, taps: tapsRef.current.slice(), completedAt: new Date().toISOString() })
+        if (engagementEnabled) audio.playResult(summarize(roundRef.current).score >= PASS_SCORE)
       }
       return
     }
     frameRef.current = requestAnimationFrame(tick)
-  }, [changePhase, interrupt, publishRound, showFeedback, level.durationMs, levelId, beatMs, countInMs])
+  }, [changePhase, engagementEnabled, interrupt, publishRound, showFeedback])
 
-  const start = async () => {
+  const beginRound = useCallback(async (roundLevelId: number) => {
     if (!canStart || ['loading', 'countin', 'playing'].includes(phaseRef.current)) return
+    const newRound = createRound(roundLevelId)
     stop()
     const generation = generationRef.current
     changePhase('loading')
     setNotice('')
     setFeedback(null)
-    publishRound(createRound(levelId))
-    setRemaining(level.durationMs / 1000)
+    publishRound(newRound)
+    timingRef.current = getLevelTiming(roundLevelId)
+    setRemaining(newRound.durationMs / 1000)
     setCount(1)
     lastTick.current = -1
+    if (progressRef.current) progressRef.current.style.transform = 'scaleX(1)'
     tapsRef.current = []
     attemptId.current = crypto.randomUUID()
     completedRef.current = false
@@ -187,9 +215,8 @@ export default function ClapGame({ canStart = true, levelId, personalBest, onCom
       audioRef.current ??= new ClapAudio()
       await audioRef.current.resume()
       if (generation !== generationRef.current) return
-      audioRef.current.start(levelId)
+      audioRef.current.start(roundLevelId)
       changePhase('countin')
-      targetRef.current?.focus({ preventScroll: true })
       frameRef.current = requestAnimationFrame(animate)
     } catch {
       if (generation !== generationRef.current) return
@@ -198,12 +225,15 @@ export default function ClapGame({ canStart = true, levelId, personalBest, onCom
       setNotice('Sound couldn’t start. Check your volume, then try again.')
       changePhase('interrupted')
     }
-  }
+  }, [animate, canStart, changePhase, publishRound, stop])
+  const start = () => void beginRound(levelId)
+  useImperativeHandle(ref, () => ({ continueTo: roundLevelId => void beginRound(roundLevelId) }), [beginRound])
 
   const active = phase === 'playing' || phase === 'countin'
   useEffect(() => { onActive(active || phase === 'loading') }, [active, phase, onActive])
   const stats = summarize(round)
   const completed = phase === 'results'
+  const passed = stats.score >= PASS_SCORE
   const best = Math.max(personalBest ?? 0, stats.score)
   const starTarget = nextStarTarget(best)
   const resultTitle = stats.hits === stats.total ? 'You found the beat.' : stats.hits >= stats.total * .65 ? 'You’re finding your groove.' : stats.hits > 0 ? 'A little closer every time.' : 'Listen. Then find the beat.'
@@ -253,7 +283,51 @@ export default function ClapGame({ canStart = true, levelId, personalBest, onCom
               <span className={styles.startMeta}>4-BEAT COUNT-IN · {level.durationMs / 1000}-SECOND ROUND</span>
             </div>}
 
-            {(completed || phase === 'interrupted') && <div className={styles.results}>
+            {completed && engagement ? <div className={resultStyles.overlay} data-passed={passed}>
+              <div className={resultStyles.content}>
+                <div className={resultStyles.heading}>
+                  {passed && <div className={resultStyles.pulseStage} aria-hidden="true">
+                    <div className={resultStyles.ripples}><span data-result-ripple /><span data-result-ripple /></div>
+                    <div className={resultStyles.accents}>
+                      <span data-result-accent><Music2 size={14} /></span><span data-result-accent />
+                      <span data-result-accent><Sparkle size={11} /></span><span data-result-accent />
+                      <span data-result-accent><Sparkle size={14} /></span><span data-result-accent />
+                      <span data-result-accent><Music2 size={13} /></span><span data-result-accent />
+                    </div>
+                    <div className={resultStyles.pulse}><span /><span /><span /><span /></div>
+                  </div>}
+                  <h3>{passed ? `Level ${levelId} passed!` : 'Try again. You’ve got this.'}</h3>
+                </div>
+                <div className={resultStyles.metrics} data-points={engagement.accountsEnabled}>
+                  <div className={resultStyles.timing}>
+                    <div><strong>{stats.score}</strong><span> / 100</span></div>
+                    <span>Timing score</span>
+                  </div>
+                  {engagement.accountsEnabled && <div className={resultStyles.points}>
+                    <div>
+                      {engagement.totalPoints !== null && <strong>{engagement.totalPoints.toLocaleString('en-US')}</strong>}
+                      {engagement.roundPoints > 0 && <span className={resultStyles.earnedPoints} data-result-points>+{engagement.roundPoints} round</span>}
+                    </div>
+                    <span>{engagement.totalPoints !== null ? 'Rhythm points' : engagement.signedIn ? 'Rhythm points sync with your account' : 'Sign in to save Rhythm Points'}</span>
+                    {passed && <span className={resultStyles.rewardHint}>First saved passes add 20 points.</span>}
+                  </div>}
+                </div>
+                <div className={resultStyles.stats}>
+                  <span><b>{stats.hits}/{stats.total}</b> beats hit</span>
+                  <span><b>{stats.bestStreak}</b> best beat streak</span>
+                  <span className={resultStyles.personalBest}><MasteryStars score={best} highlightScore={passed ? stats.score : undefined} /> <span>Best <b>{best}</b></span></span>
+                </div>
+                {stats.extraTaps > 0 && <p className={resultStyles.extras}>{stats.extraTaps} extra {stats.extraTaps === 1 ? 'tap' : 'taps'} · One tap per note.</p>}
+                <div className={resultStyles.actions}>
+                  {engagement.nextAction?.description && <p>{engagement.nextAction.description}</p>}
+                  <button ref={resultActionRef} className={`${styles.primary} ${resultStyles.primary}`} onClick={engagement.nextAction?.onClick ?? start} disabled={engagement.nextAction?.disabled || !canStart}>
+                    {engagement.nextAction?.label ?? 'Replay'}
+                    {engagement.nextAction?.onClick ? <ArrowRight size={18} aria-hidden="true" /> : <RotateCcw size={16} aria-hidden="true" />}
+                  </button>
+                  {engagement.nextAction?.onClick && <button className={resultStyles.replay} onClick={start}><RotateCcw size={14} aria-hidden="true" /> {passed ? 'Replay' : 'Try again'}</button>}
+                </div>
+              </div>
+            </div> : (completed || phase === 'interrupted') && <div className={styles.results}>
               {completed ? <>
                 <span className={styles.resultIcon}><Trophy size={23} /></span>
                 <span className={styles.resultEyebrow}>ROUND COMPLETE</span>
@@ -264,7 +338,7 @@ export default function ClapGame({ canStart = true, levelId, personalBest, onCom
                 <p className={styles.resultTip}>{starTarget ? `Aim for ${starTarget} to earn your next star. Listen, then tap with the beat.` : 'All three stars earned. Keep your rhythm sharp.'}</p>
                 {stats.extraTaps > 0 && <p className={styles.extraTaps}>{stats.extraTaps} extra {stats.extraTaps === 1 ? 'tap' : 'taps'} · One tap per note.</p>}
               </> : <><Volume2 className={styles.interruptedIcon} size={32} /><h3>Ready when you are.</h3><p className={styles.resultTip} role="status">{notice}</p></>}
-              <button ref={replayRef} className={styles.primary} onClick={start}><RotateCcw size={16} />{completed ? 'Play again' : 'Start again'}</button>
+              <button ref={resultActionRef} className={styles.primary} onClick={start}><RotateCcw size={16} />{completed ? 'Play again' : 'Start again'}</button>
               {completed && onNext && <button className={styles.next} onClick={onNext}>{nextLabel ?? 'Next level'} →</button>}
             </div>}
           </div>
@@ -273,7 +347,7 @@ export default function ClapGame({ canStart = true, levelId, personalBest, onCom
             <span className={styles.keyboardHint}>{level.lanes === 1 ? <>Tap or press <kbd>SPACE</kbd></> : <>Left <kbd>F</kbd> · Right <kbd>J</kbd></>}</span>
             <span className={styles.touchHint}>{level.lanes === 1 ? 'Tap the gold pad with your thumb' : 'Kick left · Clap right'}</span>
           </div>
-          <p className={styles.srOnly} role="status" aria-live="polite">{phase === 'countin' ? 'Four-beat count-in. Get ready to tap.' : phase === 'playing' ? `Go. Tap each note in its lane for ${level.durationMs / 1000} seconds.` : completed ? `Round complete. ${stats.hits} of ${stats.total} beats hit. Best streak ${stats.bestStreak}. Timing score ${stats.score} out of 100.` : ''}</p>
+          <p className={styles.srOnly} role="status" aria-live="polite">{phase === 'countin' ? 'Four-beat count-in. Get ready to tap.' : phase === 'playing' ? `Go. Tap each note in its lane for ${level.durationMs / 1000} seconds.` : completed ? `${engagement ? passed ? `Level ${levelId} passed.` : 'Try again. You’ve got this.' : 'Round complete.'} ${stats.hits} of ${stats.total} beats hit. Best streak ${stats.bestStreak}. Timing score ${stats.score} out of 100.${engagement?.totalPoints != null ? ` ${engagement.totalPoints} rhythm points.` : ''}${engagement?.nextAction?.description ? ` ${engagement.nextAction.description}` : ''}` : ''}</p>
         </section>
   )
 }

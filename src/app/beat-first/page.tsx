@@ -1,7 +1,8 @@
 import BeatFirstJourney from '@/components/beatfirst-preview/BeatFirstJourney'
 import BeatFirstGuide from '@/components/beatfirst-preview/BeatFirstGuide'
+import { beatFirstAccountsEnabled, beatFirstEngagementEnabled, isBeatFirstStaging } from '@/lib/beatfirst-engagement-config'
 
-export const metadata = {
+const beatFirstMetadata = {
   title: 'BeatFirst: Rhythm Trainer | DanceWithCeech',
   description: 'Build your rhythm with BeatFirst. Try three free 10-second samples, then sign in free to save progress across 18 levels of claps, kicks, and new beat patterns.',
   alternates: { canonical: 'https://dancewithceech.com/beat-first' },
@@ -19,6 +20,10 @@ export const metadata = {
     description: 'Start with ten seconds. Build your rhythm through 18 free levels of claps, kicks, and new beat patterns.',
     images: ['https://dancewithceech.com/images/ceech/ceech-samy-teaching-knee-pop.jpg'],
   },
+}
+
+export function generateMetadata() {
+  return isBeatFirstStaging() ? { ...beatFirstMetadata, robots: { index: false, follow: false } } : beatFirstMetadata
 }
 
 const beatFirstSchema = {
@@ -39,6 +44,6 @@ const beatFirstSchema = {
 export default function BeatFirstPage() {
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(beatFirstSchema) }} />
-    <BeatFirstJourney><BeatFirstGuide /></BeatFirstJourney>
+    <BeatFirstJourney engagementEnabled={beatFirstEngagementEnabled()} accountsEnabled={beatFirstAccountsEnabled()}><BeatFirstGuide /></BeatFirstJourney>
   </>
 }

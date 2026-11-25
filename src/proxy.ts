@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { protectBeatFirstPreview } from "./lib/beatfirst-preview-access";
 import { archeryPreviewPath } from './lib/archery/preview-access';
+import { beatFirstAccountsEnabled, beatFirstStagingPathAllowed, isBeatFirstStaging } from './lib/beatfirst-engagement-config';
 
 const WORDPRESS_SEARCH_PLACEHOLDER = "{search_term_string}";
 const WORDPRESS_PHP_PROBE = /^\/wp-[^/]*\.php$/;
@@ -65,6 +66,14 @@ function getCleanQueryUrl(request: NextRequest) {
 }
 
 export function proxy(request: NextRequest) {
+  if (isBeatFirstStaging()) {
+    const { pathname } = request.nextUrl;
+    if (pathname === '/') return NextResponse.redirect(new URL('/beat-first', request.url));
+    const headers = { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'private, no-store' };
+    if (!beatFirstStagingPathAllowed(pathname, beatFirstAccountsEnabled())) return new Response('Not found.', { status: 404, headers });
+    if (pathname === '/beat-first') return NextResponse.next({ headers });
+    return NextResponse.next();
+  }
   const archeryPreview = archeryPreviewPath(request.nextUrl.pathname, process.env.ARCHERY_DEMO_ONLY === 'true');
   if (archeryPreview === 'redirect') return NextResponse.redirect(new URL('/attendance/archery-preview', request.url));
   if (archeryPreview === 'deny') return new Response('This preview contains only fictional archery tools.', { status: 404, headers: { 'Cache-Control': 'no-store' } });

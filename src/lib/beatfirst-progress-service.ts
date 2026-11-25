@@ -1,11 +1,12 @@
 import {
   identityFromSession, scoreAttempt, summarizeAttempts, validateAttempts,
-  type Attempt, type AttemptResult,
+  type Attempt, type AttemptResult, type EngagementRewards, type ProgressSummary,
 } from '../components/beatfirst-preview/progress'
 
 export interface ProgressStore {
   list(userId: string): Promise<AttemptResult[]>
   insert(userId: string, results: AttemptResult[]): Promise<void>
+  engagement?(userId: string, claim: boolean): Promise<{ rewards: EngagementRewards; checkInAwarded: boolean }>
 }
 
 const MAX_BODY_BYTES = 128 * 1024
@@ -48,7 +49,18 @@ export function createProgressHandlers(dependencies: {
   getSession: () => Promise<unknown>
   getStore: () => ProgressStore
   isEnabled?: () => boolean
+  rewardsEnabled?: () => boolean
 }) {
+  async function withRewards(summary: ProgressSummary, store: ProgressStore, userId: string) {
+    if (!dependencies.rewardsEnabled?.() || !store.engagement) return summary
+    try {
+      const { rewards } = await store.engagement(userId, false)
+      return { ...summary, rewards }
+    } catch {
+      // Saving and reading timing progress remain available if rewards are temporarily unavailable.
+      return { ...summary, rewards: null }
+    }
+  }
   return {
     async GET(request: Request) {
       if (dependencies.isEnabled?.() === false) return json({ error: 'Not found.' }, 404)
@@ -57,8 +69,9 @@ export function createProgressHandlers(dependencies: {
         if (!userId) return json({ error: 'Sign in with a verified Google account to save your progress.' }, 401)
         const expectedOwner = request.headers.get('x-beatfirst-owner')
         if (expectedOwner !== null && expectedOwner !== userId) return json({ error: 'Your account changed. Please retry saving.' }, 409)
-        const results = await dependencies.getStore().list(userId)
-        return json(summarizeAttempts(results))
+        const store = dependencies.getStore()
+        const results = await store.list(userId)
+        return json(await withRewards(summarizeAttempts(results), store, userId))
       } catch {
         return json({ error: 'Saved progress is temporarily unavailable. Please try again.' }, 503)
       }
@@ -104,9 +117,23 @@ export function createProgressHandlers(dependencies: {
           persisted = await store.list(userId)
           summary = summarizeAttempts(persisted)
         }
-        return json({ ...summary, acceptedIds: attempts.map(attempt => attempt.id) })
+        return json({ ...await withRewards(summary, store, userId), acceptedIds: attempts.map(attempt => attempt.id) })
       } catch {
         return json({ error: 'Your rounds could not be saved right now. Please try again.' }, 503)
+      }
+    },
+    async CHECK_IN(request: Request) {
+      if (dependencies.isEnabled?.() === false || !dependencies.rewardsEnabled?.()) return json({ error: 'Not found.' }, 404)
+      try {
+        const userId = identityFromSession(await dependencies.getSession())
+        if (!userId) return json({ error: 'Sign in with a verified Google account to check in.' }, 401)
+        if (request.headers.get('x-beatfirst-owner') !== userId) return json({ error: 'Your account changed. Please retry.' }, 409)
+        if (request.headers.get('origin') !== new URL(request.url).origin) return json({ error: 'This request must come from the same site.' }, 403)
+        const store = dependencies.getStore()
+        if (!store.engagement) return json({ error: 'Daily check-in is temporarily unavailable.' }, 503)
+        return json(await store.engagement(userId, true))
+      } catch {
+        return json({ error: 'Daily check-in is temporarily unavailable.' }, 503)
       }
     },
   }

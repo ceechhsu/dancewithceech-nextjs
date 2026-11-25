@@ -4,25 +4,27 @@ import Link from 'next/link'
 import SiteLogo from '@/components/SiteLogo'
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Check, LockKeyhole, Volume2, ArrowLeft, ArrowRight, CloudCheck, Sparkles, ChevronDown } from 'lucide-react'
-import ClapGame from './ClapGame'
+import ClapGame, { type ClapGameHandle, type ResultAction } from './ClapGame'
 import { LEVELS, PASS_SCORE } from './levels'
 import { useProgress } from './useProgress'
 import MasteryStars from './MasteryStars'
 import Leaderboard from './LevelLeaderboard'
+import EngagementRewards from './EngagementRewards'
 import { dailyPractice, masteryStars, nextMasteryLevel, nextStarTarget } from './practice-goals'
 import { scoreAttempt, type Attempt } from './progress'
 import gameStyles from './ClapGame.module.css'
 import styles from './Journey.module.css'
 
-export default function BeatFirstJourney({ preview = false, children }: { preview?: boolean; children?: ReactNode }) {
-  const progress = useProgress(preview)
+export default function BeatFirstJourney({ preview = false, engagementEnabled = false, accountsEnabled = true, children }: { preview?: boolean; engagementEnabled?: boolean; accountsEnabled?: boolean; children?: ReactNode }) {
+  const progress = useProgress(preview, engagementEnabled && !preview, accountsEnabled)
   return <BeatFirstJourneyView progress={progress} preview={preview}>{children}</BeatFirstJourneyView>
 }
 
 export function BeatFirstJourneyView({ progress, preview = false, children }: { progress: ReturnType<typeof useProgress>; preview?: boolean; children?: ReactNode }) {
+  const { engagementEnabled, accountsEnabled } = progress
   const [chosen, setChosen] = useState(1)
   const [leaderboardLevel, setLeaderboardLevel] = useState(1)
-  const [completed, setCompleted] = useState<{ levelId: number; score: number; owner: string | null } | null>(null)
+  const [completed, setCompleted] = useState<{ levelId: number; score: number; owner: string | null; nextWasOpen: boolean } | null>(null)
   const [expanded, setExpanded] = useState([0, 1])
   const [now, setNow] = useState<Date | null>(null)
   const recentKey = progress.summary.recent.map(round => `${round.id}:${round.completedAt}`).join('|')
@@ -40,27 +42,39 @@ export function BeatFirstJourneyView({ progress, preview = false, children }: { 
   const owner = useRef<string | null>(null)
   const accountRef = useRef(progress.account)
   useEffect(() => { accountRef.current = progress.account }, [progress.account])
-  const levelId = progress.summary.unlockedLevelIds.includes(chosen) ? chosen : 1
+  const { unlockedLevelIds } = progress.summary
+  const levelId = unlockedLevelIds.includes(chosen) ? chosen : 1
   const gameRef = useRef<HTMLDivElement>(null)
+  const clapGameRef = useRef<ClapGameHandle>(null)
   const leaderboardRef = useRef<HTMLDivElement>(null)
+  const levelMapRef = useRef<HTMLElement>(null)
   const onActive = useCallback((playing: boolean) => {
-    if (playing && !wasActive.current) { owner.current = accountRef.current?.id ?? null; setCompleted(null) }
+    if (playing && !wasActive.current) {
+      owner.current = accountRef.current?.id ?? null
+      setCompleted(null)
+      if (engagementEnabled) gameRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' })
+    }
     wasActive.current = playing
     setActive(playing)
-  }, [])
+  }, [engagementEnabled])
   const { record } = progress
   const onComplete = useCallback((attempt: Attempt) => {
-    setCompleted({ levelId: attempt.levelId, score: scoreAttempt(attempt).score, owner: owner.current })
+    setCompleted({ levelId: attempt.levelId, score: scoreAttempt(attempt).score, owner: owner.current, nextWasOpen: unlockedLevelIds.includes(attempt.levelId + 1) })
     void record(attempt, owner.current)
-  }, [record])
-  const choose = (id: number) => {
-    if (active || !progress.summary.unlockedLevelIds.includes(id)) return
-    if (id === levelId) setGameVersion(version => version + 1)
+  }, [record, unlockedLevelIds])
+  const choose = (id: number, start = false) => {
+    if (active || !unlockedLevelIds.includes(id)) return
+    if (start) clapGameRef.current?.continueTo(id)
+    else if (engagementEnabled || id === levelId) setGameVersion(version => version + 1)
     setChosen(id)
     setCompleted(null)
     setLeaderboardLevel(id)
     setExpanded(current => [...new Set([...current, Math.floor((id - 1) / 3)])])
     gameRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' })
+  }
+  const viewLevelMap = () => {
+    levelMapRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' })
+    levelMapRef.current?.focus({ preventScroll: true })
   }
   const viewLeaderboard = () => {
     setLeaderboardLevel(levelId)
@@ -83,12 +97,43 @@ export function BeatFirstJourneyView({ progress, preview = false, children }: { 
   const newChallenge = highest > 6 && !progress.summary.completedLevelIds.includes(highest)
   const nextGate = highest < LEVELS.length ? highest + 1 : null
   const prerequisiteBest = progress.summary.bestScores[highest] ?? 0
-  const canSignIn = !active && progress.ready && progress.status !== 'loading'
-  const stepTitle = !progress.account ? 'Unlock levels 4–6. Free.'
+  const canSignIn = accountsEnabled && !active && progress.ready && progress.status !== 'loading'
+  const result = completed?.levelId === levelId && completed.owner === (progress.account?.id ?? null) ? completed : null
+  const nextLevel = LEVELS[levelId]
+  let engagementAction: ResultAction | undefined
+  if (engagementEnabled && result) {
+    if (nextLevel && unlockedLevelIds.includes(nextLevel.id)) {
+      engagementAction = {
+        label: `Continue to Level ${nextLevel.id}`,
+        description: result.score < PASS_SCORE ? 'Try the rhythm again or keep going.'
+          : result.nextWasOpen ? nextLevel.title : `Level ${nextLevel.id} unlocked · ${nextLevel.title}`,
+        onClick: () => choose(nextLevel.id, true),
+      }
+    } else if (result.score < PASS_SCORE) {
+      engagementAction = {
+        label: `Retry Level ${levelId}`,
+        description: nextLevel && progress.account ? `Reach ${PASS_SCORE}/100 to open Level ${nextLevel.id}. Your best score counts.`
+          : 'Listen for the beat, then give it another go.',
+      }
+    } else if (!progress.account && accountsEnabled) {
+      engagementAction = {
+        label: 'Sign in to open Level 4',
+        description: 'Levels 4–6 open together and your sample scores come with you.',
+        onClick: () => void progress.login(),
+        disabled: !canSignIn,
+      }
+    } else if (!nextLevel) {
+      engagementAction = { label: 'View level map', description: 'You cleared the final level! Replay any favorite from your journey.', onClick: viewLevelMap }
+    } else if (!accountsEnabled) {
+      engagementAction = { label: 'View level map', description: 'Level 3 is the final free sample. Replay a favorite from the level map.', onClick: viewLevelMap }
+    }
+  }
+  const stepTitle = !accountsEnabled ? 'Explore the free samples.'
+    : !progress.account ? 'Unlock levels 4–6. Free.'
     : newChallenge ? `Level ${highest} unlocked!`
       : highest === 6 && firstUnplayed ? 'Levels 4–6 unlocked!'
         : nextGate ? `Your next goal: level ${nextGate}` : `All ${LEVELS.length} levels are open.`
-  const stepDescription = !progress.account
+  const stepDescription = !accountsEnabled ? 'Practice any of the three sample levels. Your sample scores stay in this browser.' : !progress.account
     ? 'Sign in to play three longer challenges right away and save your progress on every device.'
     : newChallenge ? `${LEVELS[highest - 1].description} Your new challenge is ready.`
       : highest === 6 && firstUnplayed ? 'Build up gently from 15 to 20 seconds. Score 80 in level 6 to open level 7.'
@@ -98,7 +143,7 @@ export function BeatFirstJourneyView({ progress, preview = false, children }: { 
   const showGoalProgress = !!progress.account && !!nextGate && !newChallenge && !(highest === 6 && firstUnplayed)
   const groups = [
     { title: 'Start here', detail: '3 free samples · No account needed', ids: [1, 2, 3] },
-    { title: 'Keep going', detail: progress.account ? 'Included with your free account' : 'Sign in free to unlock all three', ids: [4, 5, 6] },
+    { title: 'Keep going', detail: progress.account ? 'Included with your free account' : accountsEnabled ? 'Sign in free to unlock all three' : 'Requires account sign-in', ids: [4, 5, 6] },
     { title: 'Build your skill', detail: '90 BPM · Meet your kick and clap', ids: [7, 8, 9] },
     { title: 'Find your groove', detail: '90 BPM · Longer rounds, pairs, and pauses', ids: [10, 11, 12] },
     { title: 'Pick up the pace', detail: '100 BPM · Familiar patterns, a quicker pulse', ids: [13, 14, 15] },
@@ -110,7 +155,7 @@ export function BeatFirstJourneyView({ progress, preview = false, children }: { 
       <SiteLogo />
       <span className={gameStyles.preview}>BEATFIRST {preview && <><span>/</span> PREVIEW</>}</span>
     </header>
-    <div className={styles.layout}>
+    <div className={engagementEnabled ? `${styles.layout} ${styles.engagementLayout}` : styles.layout} data-accounts={accountsEnabled}>
       <section className={styles.intro}>
         <Link href={preview ? "/beat-first" : "/"} className={styles.back}><ArrowLeft size={14} /> {preview ? "Back to BeatFirst" : "Back to DanceWithCeech"}</Link>
         <div className={gameStyles.eyebrow}><span /> RHYTHM FIRST. THEN DANCE.</div>
@@ -122,20 +167,24 @@ export function BeatFirstJourneyView({ progress, preview = false, children }: { 
           <span><Volume2 size={15} /> Sound on. Shoulders loose.</span>
         </div>
       </section>
+      {engagementEnabled && <div className={styles.rewardsSlot}>
+        <EngagementRewards rewards={progress.rewards} accountsEnabled={accountsEnabled} signedIn={!!progress.account} loading={progress.status === 'loading' || !progress.ready} />
+      </div>}
       <div className={styles.gameSlot} ref={gameRef}>
-        <ClapGame key={`${progress.account?.id ?? 'guest'}:${levelId}:${gameVersion}`} canStart={progress.ready} levelId={levelId} personalBest={progress.summary.bestScores[levelId]} onComplete={onComplete} onActive={onActive}
-          onNext={next ? () => choose(next) : !progress.account ? () => void progress.login() : highest === LEVELS.length ? () => choose(suggested) : undefined} nextLabel={next ? newChallenge && next === highest ? `Level ${next} unlocked! Play now` : `Try level ${next}` : progress.account ? `Practice level ${suggested}` : 'Sign in to unlock levels 4–6'} />
+        <ClapGame key={`${progress.account?.id ?? 'guest'}:${engagementEnabled ? 'engagement' : levelId}:${gameVersion}`} ref={clapGameRef} canStart={progress.ready} levelId={levelId} personalBest={progress.summary.bestScores[levelId]} onComplete={onComplete} onActive={onActive}
+          engagement={engagementEnabled ? { roundPoints: result ? 10 : 0, totalPoints: progress.rewards?.points ?? null, signedIn: !!progress.account, accountsEnabled, nextAction: engagementAction } : undefined}
+          onNext={next ? () => choose(next) : !progress.account && accountsEnabled ? () => void progress.login() : highest === LEVELS.length ? () => choose(suggested) : undefined} nextLabel={next ? newChallenge && next === highest ? `Level ${next} unlocked! Play now` : `Try level ${next}` : progress.account ? `Practice level ${suggested}` : 'Sign in to unlock levels 4–6'} />
         <p className={styles.saveStatus} role="status">{progress.account ? progress.pendingCount ? `${progress.pendingCount} ${progress.pendingCount === 1 ? 'round waiting' : 'rounds waiting'} to save` : progress.status === 'saved' ? 'Progress saved to your account' : progress.status === 'loading' ? 'Loading your progress…' : '' : 'Free samples · No account needed'}</p>
-        {!active && completed?.levelId === levelId && completed.owner === (progress.account?.id ?? null) && <div className={styles.resultLeaderboard}>
+        {accountsEnabled && !active && completed?.levelId === levelId && completed.owner === (progress.account?.id ?? null) && <div className={styles.resultLeaderboard}>
           <span>Your best: <b>{Math.max(completed.score, progress.summary.bestScores[levelId] ?? 0)}</b></span>
           <button type="button" onClick={viewLeaderboard}>View Level {levelId} Top 10 <ArrowRight size={14} /></button>
         </div>}
       </div>
-      <div className={styles.leaderboardSlot} ref={leaderboardRef}>
+      {accountsEnabled && <div className={styles.leaderboardSlot} ref={leaderboardRef}>
         <Leaderboard key={progress.account?.id ?? 'guest'} levelId={leaderboardLevel} onLevelChange={setLeaderboardLevel} accountId={progress.account?.id ?? null}
           ready={progress.ready && progress.status !== 'loading'} active={active} bestScores={progress.summary.bestScores} refreshKey={progress.summary.attemptCount} onLogin={progress.login} />
-      </div>
-      <section className={styles.journey} aria-label="Your rhythm journey">
+      </div>}
+      <section className={styles.journey} aria-label="Your rhythm journey" ref={levelMapRef} tabIndex={engagementEnabled ? -1 : undefined}>
         <div className={styles.sectionHeading}><span>YOUR RHYTHM JOURNEY</span><span>{progress.summary.completedLevelIds.length} / {LEVELS.length} PLAYED</span></div>
         <div className={styles.nextStep}>
           <span className={styles.stepEyebrow}><Sparkles size={14} /> {!progress.account ? 'YOUR NEXT STEP' : 'KEEP YOUR RHYTHM GROWING'}</span>
@@ -145,10 +194,10 @@ export function BeatFirstJourneyView({ progress, preview = false, children }: { 
             <label htmlFor="next-level-progress">Level {highest} best: <b>{prerequisiteBest} / {PASS_SCORE}</b></label>
             <progress id="next-level-progress" value={Math.min(prerequisiteBest, PASS_SCORE)} max={PASS_SCORE} />
           </div>}
-          <button className={styles.unlockButton} disabled={progress.account ? active || !progress.ready : !canSignIn} onClick={() => progress.account ? choose(suggested) : void progress.login()}>
+          {accountsEnabled && <button className={styles.unlockButton} disabled={progress.account ? active || !progress.ready : !canSignIn} onClick={() => progress.account ? choose(suggested) : void progress.login()}>
             {progress.account ? `Play level ${suggested}` : 'Sign in free to unlock levels 4–6'}<ArrowRight size={16} />
-          </button>
-          {!progress.account && <span className={styles.stepHint}>Continue with Google · Your sample scores come with you</span>}
+          </button>}
+          {accountsEnabled && !progress.account && <span className={styles.stepHint}>Continue with Google · Your sample scores come with you</span>}
         </div>
         <div className={styles.starGuide}><b>{totalStars} / {LEVELS.length * 3} stars</b><span>80 points ★ · 90 points ★★ · 95 points ★★★</span></div>
         {groups.map((group, index) => <div key={group.title} className={styles.levelGroup}>
@@ -160,8 +209,8 @@ export function BeatFirstJourneyView({ progress, preview = false, children }: { 
             const unlocked = progress.summary.unlockedLevelIds.includes(level.id)
             const best = progress.summary.bestScores[level.id]
             const mastered = best !== undefined && best >= PASS_SCORE
-            const signInUnlock = !progress.account && level.id >= 4 && level.id <= 6
-            const requirement = level.id <= 6 ? 'Sign in free to unlock'
+            const signInUnlock = accountsEnabled && !progress.account && level.id >= 4 && level.id <= 6
+            const requirement = !accountsEnabled ? 'Requires account sign-in' : level.id <= 6 ? 'Sign in free to unlock'
               : `${!progress.account ? 'Sign in, then score' : 'Score'} ${PASS_SCORE} in level ${level.id - 1} to unlock`
             const previousBest = progress.summary.bestScores[level.id - 1]
             return <button key={level.id} className={styles.level} data-selected={levelId === level.id} data-locked={!unlocked} disabled={active || (!unlocked && (!signInUnlock || !canSignIn))} onClick={() => signInUnlock ? void progress.login() : choose(level.id)} aria-pressed={unlocked ? levelId === level.id : undefined}>
@@ -194,13 +243,17 @@ export function BeatFirstJourneyView({ progress, preview = false, children }: { 
           </div>
           {progress.summary.recent.length > 0 && <div className={styles.history}><h3>Recent rounds</h3>{progress.summary.recent.map(row => <div key={row.id}><span>{LEVELS.find(level => level.id === row.levelId)?.title}</span><b>{row.score}<span> / 100</span></b></div>)}</div>}
           <button className={styles.textButton} onClick={() => void progress.logout()} disabled={active || progress.pendingCount > 0}>Sign out</button>
-        </> : <>
+        </> : accountsEnabled ? <>
           <span className={styles.accountEyebrow}>A LITTLE PRACTICE. REAL PROGRESS.</span>
           <h2>{invite ? 'You’ve found the beat. Keep your progress.' : 'Make your rhythm count.'}</h2>
           <p>Unlock levels 4–6 instantly, save your best scores, and pick up where you left off on any device. Then earn kick-and-clap patterns, two tracks, and faster tempos as you improve.</p>
           <button className={gameStyles.primary} onClick={() => void progress.login()} disabled={!canSignIn}>Sign in free to unlock levels 4–6</button>
           <span className={styles.googleHint}>Continue with Google · Your practice rounds come with you</span>
           {invite && <button className={styles.textButton} onClick={() => { setDismissed(true); choose(1) }}>Keep practicing</button>}
+        </> : <>
+          <span className={styles.accountEyebrow}>ACCOUNT PROGRESS</span>
+          <h2>Try the free samples.</h2>
+          <p>Account sign-in is unavailable on this staging deployment.</p>
         </>}
         {progress.message && <div className={styles.error} role="alert"><p>{progress.message}</p><button onClick={() => void progress.retry()} disabled={active || progress.status === 'loading' || progress.status === 'saving'}>Retry saving</button></div>}
         {progress.storageWarning && <p className={styles.error} role="alert">{progress.storageWarning}</p>}

@@ -1,7 +1,7 @@
 'use client'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getSession, signIn, signOut } from 'next-auth/react'
-import { identityFromSession, scoreAttempt, summarizeAttempts, type Attempt, type ProgressSummary } from './progress'
+import { identityFromSession, includePendingUnlocks, scoreAttempt, summarizeAttempts, type Attempt, type EngagementRewards, type ProgressSummary } from './progress'
 import { acknowledge, claimGuest, emptyLocal, nextSaveBatch, STORAGE_KEY, type LocalProgress } from './local-progress'
 
 type Account = { id: string; name: string }
@@ -10,7 +10,7 @@ import { progressRequest } from './progress-request'
 import { beatFirstRoutes } from './routes'
 import { signOutAfterAttendanceCleanup } from './logout'
 
-export function useProgress(preview = false) {
+export function useProgress(preview = false, engagementEnabled = false, accountsEnabled = true) {
   const { pagePath, progressPath } = beatFirstRoutes(preview)
   const [local, setLocal] = useState<LocalProgress>(emptyLocal)
   const localRef = useRef(local)
@@ -34,6 +34,11 @@ export function useProgress(preview = false) {
   }, [])
 
   const sync = useCallback(async () => {
+    if (!accountsEnabled) {
+      setStatus('idle')
+      setReady(true)
+      return
+    }
     if (busy.current) { rerun.current = true; return }
     busy.current = true
     setStatus('loading')
@@ -63,13 +68,21 @@ export function useProgress(preview = false) {
         const data = result.data
         if (!result.ok) throw new Error(typeof data.error === 'string' ? data.error : 'Your round is waiting to save. Please retry.')
         if (!Array.isArray(data.acceptedIds) || data.acceptedIds.length === 0) throw new Error('Your round is waiting to save. Please retry.')
-        await updateLocal(state => acknowledge(state, id, data.acceptedIds))
         summary = data as ProgressSummary
+        if (mounted.current) setSaved(summary)
+        await updateLocal(state => acknowledge(state, id, data.acceptedIds))
       }
       if (!mounted.current) return
       setSaved(summary)
       setMessage('')
       setStatus('saved')
+      if (engagementEnabled && summary.rewards?.checkedInToday === false) {
+        try {
+          const checkIn = await progressRequest({ method: 'POST', headers: { 'X-BeatFirst-Owner': id } }, undefined, undefined, `${progressPath}/check-in`)
+          const rewards = checkIn.data?.rewards as EngagementRewards | undefined
+          if (mounted.current && checkIn.ok && rewards) setSaved(current => ({ ...current, rewards }))
+        } catch { /* The next visit or focus can check in again without affecting saved rounds. */ }
+      }
     } catch (error) {
       if (mounted.current) { setMessage(error instanceof Error ? error.message : 'Saving is unavailable. Your rounds are waiting on this device.'); setStatus('error') }
     } finally {
@@ -79,7 +92,7 @@ export function useProgress(preview = false) {
         if (rerun.current) { rerun.current = false; void syncRef.current() }
       }
     }
-  }, [updateLocal, progressPath])
+  }, [accountsEnabled, engagementEnabled, updateLocal, progressPath])
 
   useEffect(() => { syncRef.current = sync }, [sync])
   useEffect(() => {
@@ -95,8 +108,19 @@ export function useProgress(preview = false) {
     window.addEventListener('focus', refresh)
     window.addEventListener('online', refresh)
     window.addEventListener('storage', storage)
-    return () => { mounted.current = false; window.removeEventListener('focus', refresh); window.removeEventListener('online', refresh); window.removeEventListener('storage', storage) }
-  }, [sync])
+    if (engagementEnabled) {
+      window.addEventListener('pageshow', refresh)
+      document.addEventListener('visibilitychange', refresh)
+    }
+    return () => {
+      mounted.current = false
+      window.removeEventListener('focus', refresh)
+      window.removeEventListener('online', refresh)
+      window.removeEventListener('storage', storage)
+      window.removeEventListener('pageshow', refresh)
+      document.removeEventListener('visibilitychange', refresh)
+    }
+  }, [engagementEnabled, sync])
 
   const record = useCallback(async (attempt: Attempt, owner: string | null) => {
     try {
@@ -107,12 +131,14 @@ export function useProgress(preview = false) {
   }, [])
 
   const login = async () => {
+    if (!accountsEnabled) return
     if (!await updateLocal(state => ({ ...state, claim: true }), true)) return
     setStatus('loading')
     try { await signIn('google', { redirectTo: pagePath }) }
     catch { setMessage('Sign-in could not start. Your rounds are still here. Please retry.'); setStatus('error') }
   }
   const logout = async () => {
+    if (!accountsEnabled) return
     if ((localRef.current.pending[accountRef.current?.id ?? ''] ?? []).length) { setMessage('Save your waiting rounds before signing out.'); setStatus('error'); return }
     try {
       const endSession = () => signOut({ redirectTo: pagePath })
@@ -123,8 +149,13 @@ export function useProgress(preview = false) {
       setStatus('error')
     }
   }
-  const guest = summarizeAttempts(local.guest.map(scoreAttempt))
-  const summary = account ? saved : { ...guest, unlockedLevelIds: [1,2,3] }
-  const pendingCount = account ? (local.pending[account.id]?.length ?? 0) : 0
-  return { ready, account, summary, guest, record, login, logout, retry: sync, status, message, storageWarning, pendingCount }
+  const guest = useMemo(() => summarizeAttempts(local.guest.map(scoreAttempt)), [local.guest])
+  const pending = account ? local.pending[account.id] : undefined
+  const summary = useMemo(() => {
+    if (!account) return { ...guest, unlockedLevelIds: [1, 2, 3] }
+    return engagementEnabled && pending ? includePendingUnlocks(saved, pending.map(scoreAttempt)) : saved
+  }, [account, engagementEnabled, guest, pending, saved])
+  const pendingCount = pending?.length ?? 0
+  const rewards = engagementEnabled && account ? saved.rewards ?? null : null
+  return { accountsEnabled, engagementEnabled, rewards, ready, account, summary, guest, record, login, logout, retry: sync, status, message, storageWarning, pendingCount }
 }

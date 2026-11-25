@@ -35,11 +35,45 @@ function createKick(context: AudioContext): AudioBuffer {
   return buffer
 }
 
+type ResultSound = 'pass' | 'retry'
+type ActiveCue = { source: AudioBufferSourceNode; gain: GainNode }
+
+function createResultSound(context: AudioContext, sound: ResultSound): AudioBuffer {
+  const chime = sound === 'pass'
+  const notes = chime ? [
+    { onset: 0, duration: 0.19, pitch: 659.25, glide: 0, volume: 0.083 },
+    { onset: 0.098, duration: 0.215, pitch: 987.77, glide: 0, volume: 0.092 },
+  ] : [
+    { onset: 0, duration: 0.19, pitch: 350, glide: 40, volume: 0.039 },
+    { onset: 0.14, duration: 0.22, pitch: 292, glide: 52, volume: 0.03 },
+  ]
+  const rate = context.sampleRate
+  const buffer = context.createBuffer(1, Math.ceil(rate * (chime ? 0.32 : 0.37)), rate)
+  const data = buffer.getChannelData(0)
+  for (const note of notes) {
+    const firstSample = Math.round(note.onset * rate)
+    const sampleCount = Math.round(note.duration * rate)
+    for (let i = 0; i < sampleCount; i++) {
+      const time = i / rate
+      const progress = time / note.duration
+      const phase = 2 * Math.PI * time * (note.pitch - 0.5 * note.glide * progress)
+      const envelope = chime
+        ? Math.min(1, time / 0.009) * Math.exp(-time / 0.078) * Math.min(1, (note.duration - time) / 0.028)
+        : Math.pow(Math.sin(Math.PI * progress), 1.5)
+      const harmonic = chime ? 0.18 * Math.exp(-time / 0.058) : 0.09 * (1 - progress)
+      data[firstSample + i] += (Math.sin(phase) + harmonic * Math.sin(phase * 2)) * envelope * note.volume
+    }
+  }
+  return buffer
+}
+
 export class ClapAudio {
   private context: AudioContext
   private sounds: Record<Sound, AudioBuffer>
   private sources: AudioBufferSourceNode[] = []
   private roundStart = 0
+  private resultSounds: Partial<Record<ResultSound, AudioBuffer>> = {}
+  private activeCue: ActiveCue | null = null
 
   constructor() {
     this.context = new AudioContext({ latencyHint: 'interactive' })
@@ -85,12 +119,41 @@ export class ClapAudio {
     return (now - this.roundStart) * 1000
   }
 
+  playResult(passed: boolean): void {
+    if (!this.running || this.activeCue) return
+    const sound = passed ? 'pass' : 'retry'
+    const source = this.context.createBufferSource()
+    const gain = this.context.createGain()
+    source.buffer = this.resultSounds[sound] ??= createResultSound(this.context, sound)
+    source.connect(gain)
+    gain.connect(this.context.destination)
+    source.onended = () => {
+      if (this.activeCue?.source === source) this.activeCue = null
+      source.disconnect()
+      gain.disconnect()
+    }
+    source.start(this.context.currentTime)
+    this.activeCue = { source, gain }
+  }
+
   stop() {
     for (const source of this.sources) {
       try { source.stop() } catch { /* A source may already have ended. */ }
       source.disconnect()
     }
     this.sources = []
+    const cue = this.activeCue
+    if (!cue) return
+    this.activeCue = null
+    if (!this.running) {
+      cue.source.stop()
+      return
+    }
+    const now = this.context.currentTime
+    const cutoff = now + 0.016
+    cue.gain.gain.setValueAtTime(1, now)
+    cue.gain.gain.linearRampToValueAtTime(0, cutoff)
+    cue.source.stop(cutoff)
   }
 
   dispose() {

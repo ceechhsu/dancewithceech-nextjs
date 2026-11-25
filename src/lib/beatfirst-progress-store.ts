@@ -3,6 +3,7 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import type { AttemptResult } from '../components/beatfirst-preview/progress'
 import type { ProgressStore } from './beatfirst-progress-service'
 import { getSupabaseServerKey } from './supabase-server-key'
+import { beatFirstStagingDatabase, isBeatFirstStaging } from './beatfirst-engagement-config'
 
 type ProgressRow = {
   attempt_id: string
@@ -13,11 +14,25 @@ type ProgressRow = {
   best_streak: number
   completed_at: string
 }
+type EngagementRow = {
+  points: number
+  current_streak: number
+  best_streak: number
+  check_in_date: string
+  checked_in_today: boolean
+  check_in_awarded: boolean
+  restarted: boolean
+}
 
 const TABLE = 'beatfirst_preview_attempts'
 const PAGE_SIZE = 1000
 
 export function resolveProgressDatabaseConfig(environment: Record<string, string | undefined>) {
+  if (isBeatFirstStaging(environment)) {
+    const database = beatFirstStagingDatabase(environment)
+    if (!database) throw new Error('BeatFirst staging database is not configured.')
+    return database
+  }
   const pairs = [
     ['BEATFIRST_SUPABASE_URL', 'BEATFIRST_SUPABASE_SERVICE_ROLE_KEY'],
     ['ATTENDANCE_SUPABASE_URL', 'ATTENDANCE_SUPABASE_SERVICE_ROLE_KEY'],
@@ -63,6 +78,17 @@ export function createProgressStore(client: SupabaseClient): ProgressStore {
         best_streak: result.bestStreak, completed_at: result.completedAt,
       })), { onConflict: 'user_id,attempt_id', ignoreDuplicates: true })
       if (error) throw new Error('Saved progress could not be written.')
+    },
+    async engagement(userId, claim) {
+      const { data, error } = await client.rpc('beatfirst_check_in', { p_user_id: userId, p_claim: claim }).single<EngagementRow>()
+      if (error || !data) throw new Error('Rhythm Points could not be loaded.')
+      return {
+        rewards: {
+          points: data.points, currentStreak: data.current_streak, bestStreak: data.best_streak,
+          checkInDate: data.check_in_date, checkedInToday: data.checked_in_today, restarted: data.restarted,
+        },
+        checkInAwarded: data.check_in_awarded,
+      }
     },
   }
 }

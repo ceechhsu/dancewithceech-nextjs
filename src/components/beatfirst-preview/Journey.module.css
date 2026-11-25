@@ -10,6 +10,14 @@
 .saveStatus { min-height:18px; text-align:center; font-size:10px; color:#a6acb9; margin-top:10px; }
 .journey { grid-column:1; grid-row:2 / span 2; min-width:0; }
 .leaderboardSlot { grid-column:2; grid-row:2; min-width:0; width:100%; scroll-margin-top:20px; }
+.engagementLayout { grid-template-areas:'intro game' 'rewards game' 'journey leaderboard' 'journey account'; }
+.engagementLayout[data-accounts=false] { grid-template-areas:'intro game' 'rewards game' 'journey account'; }
+.engagementLayout .intro { grid-area:intro; }
+.engagementLayout .gameSlot { grid-area:game; }
+.engagementLayout .journey { grid-area:journey; }
+.engagementLayout .leaderboardSlot { grid-area:leaderboard; }
+.engagementLayout .account { grid-area:account; }
+.rewardsSlot { grid-area:rewards; min-width:0; width:100%; }
 .resultLeaderboard { display:flex; flex-wrap:wrap; gap:5px 12px; justify-content:space-between; align-items:center; font-size:11px; color:#aeb9cb; padding:6px 0; }
 .resultLeaderboard b { color:#f1c766; }
 .resultLeaderboard button { display:flex; align-items:center; gap:6px; border:1px solid #586343; border-radius:8px; background:#222719; color:#f1d997; font-size:11px; min-height:44px; padding:10px 12px; cursor:pointer; }

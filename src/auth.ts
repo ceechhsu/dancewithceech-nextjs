@@ -3,6 +3,7 @@ import Google from 'next-auth/providers/google'
 import { rosterGoogleProfile } from './lib/attendance/google-profile'
 import { syncRosterProfile } from './lib/attendance/profile-sync'
 import { getSupabaseServerKey } from './lib/supabase-server-key'
+import { isBeatFirstStaging } from './lib/beatfirst-engagement-config'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
@@ -46,6 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   events: {
     async signIn({ profile }) {
+      if (isBeatFirstStaging()) return
       const { recordOwnerDirectorySignIn } = await import('./lib/owner-dashboard/recording')
       await recordOwnerDirectorySignIn(profile)
       const fields = rosterGoogleProfile(profile)

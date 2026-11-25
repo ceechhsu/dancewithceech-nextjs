@@ -3,7 +3,15 @@ import { LEVELS, unlockedLevelIds } from './levels'
 
 export type Attempt = { id: string; levelId: number; taps: Tap[]; completedAt: string }
 export type AttemptResult = Pick<Attempt, 'id' | 'levelId' | 'completedAt'> & { score: number; hits: number; total: number; bestStreak: number }
-export type ProgressSummary = { bestScores: Record<string, number>; completedLevelIds: number[]; attemptCount: number; recent: AttemptResult[]; unlockedLevelIds: number[] }
+export type EngagementRewards = {
+  points: number
+  currentStreak: number
+  bestStreak: number
+  checkInDate: string
+  checkedInToday: boolean
+  restarted: boolean
+}
+export type ProgressSummary = { bestScores: Record<string, number>; completedLevelIds: number[]; attemptCount: number; recent: AttemptResult[]; unlockedLevelIds: number[]; rewards?: EngagementRewards | null }
 export const MAX_BATCH = 25
 export const MAX_TAPS = 250
 
@@ -48,4 +56,19 @@ export function summarizeAttempts(results: AttemptResult[]): ProgressSummary {
     attemptCount: results.length, recent: results.slice().sort((a,b) => Date.parse(b.completedAt) - Date.parse(a.completedAt)).slice(0,5),
     unlockedLevelIds: unlockedLevelIds(bestScores, true),
   }
+}
+
+/** Keep one-tap Continue available while this account's verified attempts wait to sync. */
+export function includePendingUnlocks(saved: ProgressSummary, pending: AttemptResult[]): ProgressSummary {
+  if (!pending.length) return saved
+  const bestScores = { ...saved.bestScores }
+  let unlocked = saved.unlockedLevelIds
+  for (const attempt of pending) {
+    if (!unlocked.includes(attempt.levelId)) continue
+    const previous = bestScores[attempt.levelId]
+    if (previous !== undefined && previous >= attempt.score) continue
+    bestScores[attempt.levelId] = attempt.score
+    unlocked = unlockedLevelIds(bestScores, true)
+  }
+  return { ...saved, bestScores, unlockedLevelIds: unlocked, completedLevelIds: Object.keys(bestScores).map(Number).sort((a, b) => a - b) }
 }
