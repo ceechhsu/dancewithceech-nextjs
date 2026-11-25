@@ -82,8 +82,8 @@ export default function HomeTutorials() {
           ))}
         </div>
         <div className="mt-10 text-center">
-          <p className="mb-5 leading-relaxed" style={{ color: "var(--muted)" }}>Want feedback on your own dancing? In private coaching, we work at your pace and focus on what you need.</p>
-          <Link href="/private-lessons#booking" className="inline-block rounded-full px-7 py-3.5 font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400" style={{ backgroundColor: "var(--accent-primary)" }}>Book a free phone consultation</Link>
+          <p className="mb-5 leading-relaxed" style={{ color: "var(--muted)" }}>Want feedback on your own dancing? In Dance Floor Ready, Ceech shows you what to work on in your next practice.</p>
+          <Link href="/dance-floor-ready" prefetch={false} className="inline-block rounded-full px-7 py-3.5 font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400" style={{ backgroundColor: "var(--accent-primary)" }}>Explore Dance Floor Ready</Link>
         </div>
         </section>
       </div>

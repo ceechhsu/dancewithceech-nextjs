@@ -248,6 +248,11 @@ const nextConfig: NextConfig = {
         destination: "https://dancewithceech.com/:path*",
         permanent: true,
       },
+      {
+        source: "/private-lessons/online",
+        destination: "/dance-floor-ready",
+        permanent: true,
+      },
       ...Object.entries(BLOG_CATEGORY_REDIRECTS).map(([category, destination]) => ({
         source: "/blog",
         has: [{ type: "query" as const, key: "category", value: category }],

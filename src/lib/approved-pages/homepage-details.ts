@@ -1,12 +1,12 @@
 import { businessSchema } from "@/lib/private-lesson-details";
 
 export const homepageFaqs = [
-  { question: "Is this for adult beginners?", answer: "Yes. Coaching is for adults 18 and older, from beginners to experienced dancers. Ceech identifies the rhythm, balance or coordination skill that needs work and chooses a specific drill." },
-  { question: "What does one online coaching cycle include?", answer: "Submit one dance video after purchasing a cycle or pack. Ceech sends recorded feedback within three business days. Then arrange the next available 30-minute Google Meet to practice corrections together. That meeting completes the cycle. Additional recorded reviews are not included in the same cycle." },
-  { question: "How much does online coaching cost?", answer: "A single cycle is $80. Five cycles are $300, used within three months of purchase; ten cycles are $500, used within six months. These are one-time purchases with no automatic renewal. Appointments are arranged in Pacific Time." },
-  { question: "What happens in the free consultation?", answer: "You and Ceech talk by phone for 30 minutes about your goals, experience and which option fits. There is no obligation. The consultation is separate from the 30-minute Google Meet included in a paid coaching cycle." },
-  { question: "Can I try something free first?", answer: "Yes. Explore the free tutorials or BeatFirst rhythm trainer. Prospective virtual students can also request one free video evaluation per person. These are optional; you can book a consultation directly." },
-  { question: "What if I need to reschedule?", answer: "Give at least 24 hours’ notice. Late cancellations and missed appointments count as a used session; genuine emergencies may be considered case by case. If Ceech cancels, the lesson is rescheduled without using a session. See the private lesson FAQs for preparation and recording policies." },
+  { question: "Who is Dance Floor Ready for?", answer: "It’s for adults who’ve paid for dance classes or tutorials and still feel stuck when nobody’s leading. If you want to learn to freestyle with short drills and personal feedback, the fit questions will help you see if it makes sense for you." },
+  { question: "How does the online coaching work?", answer: "Dance Floor Ready is a 30-day pilot with a short kickoff call and private video feedback from Ceech. Practice in two-minute bursts and send at least one clip each week, with one optional follow-up. On Day 1 and Day 30, film the same part of the same song so you can compare your clips." },
+  { question: "How do I get started with Dance Floor Ready?", answer: "Open Dance Floor Ready and answer a few short fit questions. If the coaching fits your goals and schedule, you can book a free 30-minute phone call with Ceech." },
+  { question: "Can I still book in-person lessons in San Jose?", answer: "Yes. Ceech offers 60-minute private hip-hop lessons for adults at Get Down Dance Studios in San Jose, by appointment." },
+  { question: "Can I try something free first?", answer: "Yes. Try the free tutorials or the BeatFirst rhythm trainer. Dance Floor Ready also includes a free two-minute drill for visitors who want a smaller first step." },
+  { question: "What if I need to reschedule an in-person lesson?", answer: "Give at least 24 hours’ notice. Late cancellations and missed appointments count as a used session; genuine emergencies may be considered case by case. If Ceech cancels, the lesson is rescheduled without using a session. See the San Jose lesson page for preparation and recording policies." },
 ];
 
 export const homepageSchema = {
@@ -15,13 +15,12 @@ export const homepageSchema = {
     businessSchema,
     {
       "@type": "Service",
-      "@id": "https://dancewithceech.com/private-lessons#service",
-      name: "Online dance coaching and private lessons in San Jose",
-      url: "https://dancewithceech.com/private-lessons",
-      description: "Personalized dance instruction for adults, with in-person private lessons in San Jose and online coaching that combines recorded feedback with a 30-minute Google Meet session.",
+      "@id": "https://dancewithceech.com/dance-floor-ready#service",
+      name: "Dance Floor Ready",
+      url: "https://dancewithceech.com/dance-floor-ready",
+      description: "A 30-day private online hip-hop coaching pilot for adults, with short freestyle drills and personal video feedback from Ceech.",
       provider: { "@id": businessSchema["@id"] },
-      serviceType: "Private dance instruction",
-      areaServed: ["San Francisco Bay Area", "Worldwide online"],
+      serviceType: "Private online hip-hop dance coaching",
       audience: { "@type": "Audience", audienceType: "Adults 18 and older" },
     },
     {

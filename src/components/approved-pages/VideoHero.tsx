@@ -5,8 +5,8 @@ import Link from "next/link";
 
 const CTA_BUTTONS = (
   <div className="hero-cta-buttons" style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
-    <Link data-coaching-offer="online_coaching" href="/private-lessons#booking" prefetch={false} className="hero-primary-cta" style={{ padding: "16px 32px", minHeight: "44px", borderRadius: "9999px", backgroundColor: "#2563EB", color: "#fff", fontWeight: 600, fontSize: "1.05rem", textDecoration: "none" }}>
-            Book a free 30-minute phone consultation
+    <Link data-coaching-offer="online_coaching" href="/dance-floor-ready" prefetch={false} className="hero-primary-cta" style={{ padding: "16px 32px", minHeight: "44px", borderRadius: "9999px", backgroundColor: "#2563EB", color: "#fff", fontWeight: 600, fontSize: "1.05rem", textDecoration: "none" }}>
+      Explore Dance Floor Ready
     </Link>
   </div>
 );
@@ -88,14 +88,16 @@ function HeroContent() {
         <span className="block whitespace-nowrap">For Adults</span>
       </h1>
       <p className="mb-6 font-semibold text-white" style={{ fontSize: "clamp(1.75rem, 3.6vw, 3rem)", lineHeight: 1.2, textShadow: "0 2px 20px rgba(0,0,0,0.6)" }}>
-        It&apos;s a skill, not a gift.
+        Know what to do when the music starts.
       </p>
       <p style={{ textWrap: "balance", maxWidth: "680px", margin: "0 0 1rem", color: "rgba(249,249,249,0.9)", fontSize: "clamp(1rem, 2vw, 1.25rem)", lineHeight: 1.5, textShadow: "0 1px 10px rgba(0,0,0,0.9)" }}>
-        Personalized video feedback. Clear corrections. Practice tailored to you.
+        Taken dance classes but still freeze when nobody’s leading? Dance Floor Ready is 30 days of private online coaching with short drills and personal feedback from Ceech.
       </p>
-      <p className="mb-7 text-sm text-white/80"><Link href="/private-lessons/san-jose" prefetch={false} className="funnel-link underline underline-offset-4">In-person lessons</Link> are also available in San Jose.</p>
       {CTA_BUTTONS}
-      <Link href="/dance-tutorials" prefetch={false} className="funnel-link mt-5 text-sm text-white underline underline-offset-4">Browse tutorials →</Link>
+      <div className="mt-5 flex flex-wrap justify-center gap-x-5 gap-y-3 text-sm">
+        <Link href="/private-lessons/san-jose" prefetch={false} className="funnel-link text-white underline underline-offset-4">In-person lessons in San Jose</Link>
+        <Link href="/dance-tutorials" prefetch={false} className="funnel-link text-white underline underline-offset-4">Browse tutorials →</Link>
+      </div>
     </div>
   );
 }

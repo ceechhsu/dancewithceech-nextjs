@@ -21,9 +21,11 @@ type NavUser = {
 
 type Props = {
   user?: NavUser | null;
+  promoteDanceFloorReady?: boolean;
+  position?: "fixed" | "sticky";
 };
 
-export default function Nav({ user: initialUser }: Props = {}) {
+export default function Nav({ user: initialUser, promoteDanceFloorReady = false, position = "fixed" }: Props = {}) {
   const [user, setUser] = useState<NavUser | null>(initialUser ?? null);
   useEffect(() => {
     // Older routes use their own main wrappers; make the shared skip link work
@@ -42,18 +44,18 @@ export default function Nav({ user: initialUser }: Props = {}) {
   const showAttendance = canSeeAttendance(user);
   const archeryHref = useArcheryNavigation(user?.email);
   return (
-    <nav aria-label="Main navigation" className={`${styles.navigation} fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 py-3 sm:px-6`} style={{ backgroundColor: "var(--background)", borderBottom: "1px solid #1f1f1f" }}>
+    <nav aria-label="Main navigation" className={`${styles.navigation} ${position} top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 py-3 sm:px-6`} style={{ backgroundColor: "var(--background)", borderBottom: "1px solid #1f1f1f" }}>
       <SiteLogo />
       {/* Desktop nav links */}
       <div className="hidden xl:flex items-center gap-5 text-sm whitespace-nowrap" style={{ color: "var(--muted)" }}>
-        <Link href="/private-lessons/online" prefetch={false} className="hover:text-white transition-colors">Online lessons</Link>
+        <Link href={promoteDanceFloorReady ? "/dance-floor-ready" : "/private-lessons/online"} prefetch={false} className="hover:text-white transition-colors">{promoteDanceFloorReady ? "Online Dance Lessons" : "Online lessons"}</Link>
         <Link href="/private-lessons/san-jose" prefetch={false} className="hover:text-white transition-colors">In-person lessons</Link>
         <LearnFreeMenu />
         <Link href="/about" prefetch={false} className="hover:text-white transition-colors">About Ceech</Link>
         {/* Fresh document applies attendance permissions and unloads marketing scripts. */}
         {showAttendance && <a href="/attendance/instructor" className="inline-flex min-h-11 items-center font-semibold text-blue-300 hover:text-white">Attendance</a>}
         {archeryHref && <a href={archeryHref} className="inline-flex min-h-11 items-center font-semibold text-blue-300 hover:text-white">Archery</a>}
-        <Link href="/private-lessons#booking" prefetch={false} className={styles.booking}>Book a Free Call</Link>
+        <Link href={promoteDanceFloorReady ? "/private-lessons/san-jose#booking" : "/private-lessons#booking"} prefetch={false} className={styles.booking}>{promoteDanceFloorReady ? "San Jose Consultation" : "Book a Free Call"}</Link>
         <div className="text-xs">
         {user ? (
           <UserMenu name={user.name} email={user.email} image={user.image} />
@@ -63,7 +65,7 @@ export default function Nav({ user: initialUser }: Props = {}) {
         </div>
       </div>
       {/* Mobile: fluid hamburger menu */}
-      <MobileMenu user={user} showAttendance={showAttendance} archeryHref={archeryHref} />
+      <MobileMenu user={user} showAttendance={showAttendance} archeryHref={archeryHref} promoteDanceFloorReady={promoteDanceFloorReady} />
     </nav>
   );
 }

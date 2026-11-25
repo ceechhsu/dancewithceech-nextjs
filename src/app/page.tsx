@@ -17,15 +17,15 @@ import ThanksgivingScene from "@/components/ThanksgivingScene";
 
 export const metadata = {
   title: "Online Hip-Hop Dance Lessons for Adults | Dance With Ceech",
-  description: "Hip-hop dance lessons for adults: learn online or in person in San Jose, explore free tutorials, and practice rhythm with BeatFirst.",
+  description: "Try Dance Floor Ready, a 30-day private online hip-hop coaching pilot for adults. Private in-person lessons are also available in San Jose.",
   alternates: { canonical: "https://dancewithceech.com" },
-  openGraph: { title: "Hip-Hop Dance Lessons for Adults | Dance With Ceech", description: "Recorded feedback on your dancing, then practice corrections with Ceech. Adults 18+, worldwide. In-person lessons also available in San Jose.", url: "https://dancewithceech.com", siteName: "Dance With Ceech", type: "website", images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Ceech teaching a private dance lesson" }] },
+  openGraph: { title: "Hip-Hop Dance Lessons for Adults | Dance With Ceech", description: "Explore Dance Floor Ready, a 30-day private online hip-hop coaching pilot with Ceech. In-person lessons are also available in San Jose.", url: "https://dancewithceech.com", siteName: "Dance With Ceech", type: "website", images: [{ url: "https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg", width: 1200, height: 630, alt: "Ceech teaching a private dance lesson" }] },
   twitter: { card: "summary_large_image", title: "Hip-Hop Dance Lessons for Adults | Dance With Ceech", description: "Personal feedback and a clear next step for adult dancers.", images: ["https://dancewithceech.com/images/ceech/ceech-teaching-private-student-neck-control.jpg"] },
 };
 
 export default async function Home() {
   const reviewSummary = await getReviewSummary();
-  return <ThanksgivingSeason className={approvedStyles.scope}><a href="#main-content" className={approvedStyles.skipLink}>Skip to content</a><Nav /><main id="main-content">
+  return <ThanksgivingSeason className={approvedStyles.scope}><a href="#main-content" className={approvedStyles.skipLink}>Skip to content</a><Nav promoteDanceFloorReady /><main id="main-content">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageSchema).replace(/</g, "\\u003c") }} />
     <VideoHero><ThanksgivingScene placement="hero" /></VideoHero>
     <StatsBar />
@@ -111,8 +111,21 @@ export default async function Home() {
 
     <HomeTutorials />
     <DeferredHomeTestimonials uniformHeadings summary={reviewSummary} items={[{ videoId: "PppnU3oHvlQ" }, { videoId: "J4_XpORtTfQ" }, { videoId: "bdSEa_S85-c" }, { videoId: "I68OCXhkaEo" }, { videoId: "0DKQ1PPW7Ag" }, { videoId: "CgB1N_nx5vo" }, { videoId: "h32DyBzyi4Q" }]} />
-    <section id="faq" className="funnel-section"><div className="funnel-wrap max-w-3xl"><h2 className="funnel-heading mb-8">Getting started with Dance With Ceech</h2>{homepageFaqs.map(faq => <details key={faq.question} className="border-b border-white/15 py-5"><summary className="cursor-pointer text-lg font-semibold">{faq.question}</summary><p className="mt-4 leading-relaxed text-muted">{faq.answer}</p></details>)}<p className="mt-6 text-sm text-muted">Compare <Link href="/private-lessons" prefetch={false} className="funnel-link">online and in-person lessons</Link>, or read the <Link href="/private-lessons#faq" prefetch={false} className="funnel-link">lesson FAQs</Link>.</p></div></section>
-    <section className="funnel-section bg-surface text-center"><div className="funnel-wrap max-w-3xl"><h2 className="funnel-heading">Want direct feedback from Ceech?</h2><p className="funnel-copy mx-auto mb-8">Choose online lessons or meet in person in San Jose. Start with a free 30-minute phone consultation about your goals.</p><Link href="/private-lessons#booking" prefetch={false} className="funnel-button">Book a free 30-minute phone consultation</Link></div></section>
+    <section id="faq" className="funnel-section">
+      <div className="funnel-wrap max-w-3xl">
+        <h2 className="funnel-heading mb-8">Getting started with Dance With Ceech</h2>
+        {homepageFaqs.map(faq => <details key={faq.question} className="border-b border-white/15 py-5"><summary className="cursor-pointer text-lg font-semibold">{faq.question}</summary><p className="mt-4 leading-relaxed text-muted">{faq.answer}</p></details>)}
+        <p className="mt-6 text-sm text-muted">Explore <Link href="/dance-floor-ready" prefetch={false} className="funnel-link">online coaching with Dance Floor Ready</Link> or <Link href="/private-lessons/san-jose" prefetch={false} className="funnel-link">in-person lessons in San Jose</Link>.</p>
+      </div>
+    </section>
+    <section className="funnel-section bg-surface text-center">
+      <div className="funnel-wrap max-w-3xl">
+        <h2 className="funnel-heading">Ready to dance when nobody’s leading?</h2>
+        <p className="funnel-copy mx-auto mb-8">See how Dance Floor Ready works and find out if 30 days of private online coaching is right for you.</p>
+        <Link href="/dance-floor-ready" prefetch={false} data-coaching-offer="online_coaching" className="funnel-button">Explore Dance Floor Ready</Link>
+        <p className="mt-5 text-sm"><Link href="/private-lessons/san-jose" prefetch={false} className="funnel-link">Looking for in-person lessons in San Jose?</Link></p>
+      </div>
+    </section>
     <HomeSocialLinks />
-  </main><Footer><ThanksgivingScene placement="footer" /></Footer></ThanksgivingSeason>;
+  </main><Footer promoteDanceFloorReady><ThanksgivingScene placement="footer" /></Footer></ThanksgivingSeason>;
 }

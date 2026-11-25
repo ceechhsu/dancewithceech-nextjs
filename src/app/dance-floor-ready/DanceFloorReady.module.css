@@ -1,0 +1,118 @@
+.page {
+  min-height: 100svh;
+  color: #f6f5ff;
+  background: var(--background);
+  padding: clamp(1rem, 3.4vw, 3rem) clamp(1rem, 4vw, 3.5rem) 2.75rem;
+}
+
+.shell { max-width: 76rem; margin: 0 auto; }
+.header, .hint, .actions { display: flex; align-items: center; }
+.header { justify-content: space-between; gap: .75rem; }
+.brand { font-size: clamp(1.12rem, 2vw, 1.45rem); font-weight: 760; line-height: 1.2; letter-spacing: -.025em; }
+.preview { font-size: .74rem; color: #c4d3e8; border: 1px solid #435470; border-radius: 3rem; padding: .31rem .65rem; white-space: nowrap; }
+.steps { display: flex; gap: clamp(.65rem, 3.6vw, 2.4rem); padding: .65rem 0; margin: clamp(1.15rem, 4vw, 2.8rem) 0 clamp(1rem, 3vw, 2.2rem); border-bottom: 1px solid #30415b; list-style: none; }
+.steps li { display: flex; align-items: center; gap: .4rem; font-size: clamp(.75rem, 2.75vw, .92rem); color: #a5b6ce; }
+.stepNumber { display: grid; place-items: center; flex: 0 0 1.4rem; height: 1.4rem; border-radius: 50%; border: 1px solid #637796; font-size: .72rem; }
+.steps [aria-current] { color: #fff; font-weight: 700; }
+.steps [aria-current] .stepNumber { background: #b9d9ff; color: #142444; border-color: #b9d9ff; }
+.chapter { display: grid; grid-template-columns: minmax(0, 1.52fr) minmax(18rem, 1fr); gap: clamp(1.1rem, 4vw, 3rem); align-items: center; }
+.chapter[hidden] { display: none; }
+.outcomeChapter { grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr); }
+.outcomeChapter > .card { order: -1; }
+.mobileStoryIntro { display: none; }
+.salesPreview .outcomeChapter h1 { font-size: clamp(2rem, 4vw, 3.5rem); }
+.salesQuestions { margin: .6rem 0 .95rem; border-block: 1px solid #30415b; }
+.salesQuestions .textOption { margin: .3rem 0; }
+.salesQuestions .details { margin: .45rem 0 .7rem; }
+.salesQuestions .offerTerms { border-top: 0; padding-top: 0; }
+.videoColumn { min-width: 0; }
+.film { width: 100%; height: auto; aspect-ratio: 16 / 9; display: block; background: #101722; border: 1px solid #425371; border-radius: clamp(.6rem, 2vw, 1.25rem); box-shadow: 0 12px 38px rgb(28 47 77 / 24%); }
+.hint { justify-content: space-between; gap: .6rem; color: #b7c9e2; font-size: .75rem; margin-top: .75rem; }
+.storyActions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .75rem; }
+.card, .single { border-radius: 1.25rem; border: 1px solid #2b3549; background: linear-gradient(155deg, #151c29, var(--surface) 93%); padding: clamp(1.25rem, 4.5vw, 2.7rem); }
+.single { max-width: 42rem; margin: clamp(1.65rem, 6vh, 4.6rem) auto 0; }
+.page h1, .page h2 { margin: 0 0 1rem; color: #f8f8ff; font-size: clamp(1.85rem, 4.15vw, 3.4rem); font-weight: 780; letter-spacing: -.045em; line-height: 1.06; text-wrap: balance; }
+.page h1:focus, .page h2:focus { outline: none; }
+.page p { color: #cedaec; line-height: 1.55; margin: 0 0 1rem; }
+.page .eyebrow { color: #afceff; text-transform: uppercase; letter-spacing: .11em; font-size: .73rem; font-weight: 780; margin-bottom: .85rem; }
+.page .lead { font-size: clamp(1.02rem, 2vw, 1.22rem); }
+.page .small { color: #adbed7; font-size: .84rem; }
+.storyPromise { display: block; margin-bottom: .25rem; color: #f4f7ff; font-weight: 750; }
+.page .storyProgress { border-inline-start: 2px solid #83baff; padding-inline-start: .75rem; font-size: .9rem; }
+.storyProgress strong { color: #f4f7ff; }
+.page button, .choice, .page summary { cursor: pointer; }
+.primary, .secondary, .choice, .back { min-height: 2.75rem; font-weight: 700; }
+.primary, .secondary, .choice { border-radius: .68rem; padding: .72rem 1rem; display: inline-flex; gap: .6rem; align-items: center; justify-content: center; font-size: .94rem; line-height: 1.35; text-align: left; }
+.primary { background: #ffd885; border: 1px solid #ffd885; color: #1b2131; }
+.primary:hover { background: #ffe5a9; }
+.mobileCoachingContinue { display: none; }
+.secondary, .choice { color: #eef4ff; border: 1px solid #526888; background: #1b2a41; }
+.secondary:hover, .choice:hover { background: #253c5d; }
+.storyActions :is(.primary, .secondary) { padding-inline: .8rem; }
+.storySkip { color: #f4f7ff; border-color: #7895bc; }
+.back { display: block; margin-top: .5rem; color: #c1dbff; font-size: .86rem; text-decoration: underline; text-underline-offset: .2em; }
+.textOption { margin-top: .85rem; margin-bottom: .6rem; color: #c1dbff; font-size: .88rem; }
+.textOption summary { width: fit-content; padding: .38rem 0; }
+.textOption p { margin-top: .35rem; }
+.socialGuide { max-width: 61rem; margin: clamp(1.6rem, 4vw, 3rem) auto 0; border-top: 1px solid #30415b; padding: clamp(1.3rem, 3.5vw, 2.3rem) 0 0; }
+.page .socialGuide h2 { margin-bottom: .65rem; font-size: clamp(1.3rem, 2.5vw, 2rem); letter-spacing: -.025em; line-height: 1.18; text-wrap: pretty; }
+.socialGuide h3 { margin: 0 0 .3rem; color: #f4f7ff; font-size: 1rem; font-weight: 750; }
+.guideIntro { max-width: 48rem; }
+.guideDrill { margin: .9rem 0 0; padding: .9rem 1rem; border-left: 3px solid #8cbfff; background: #111e31; border-radius: 0 .6rem .6rem 0; }
+.page .guideDrill p, .page .guideSituations p { margin: 0; font-size: .92rem; }
+.guideSituations { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem 1.25rem; margin: 1.1rem 0; padding: 0; list-style: none; }
+.actions { gap: .65rem; flex-wrap: wrap; }
+.questionTools { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; column-gap: .75rem; }
+.questionTools .back { margin-top: 0; }
+.musicControl {
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 2.75rem;
+  padding: .25rem .55rem; border-radius: .45rem; color: #c1dbff;
+  font-size: .84rem; font-weight: 600;
+}
+.musicControl:hover { background: #22344e; }
+.answers { display: grid; gap: .55rem; margin: .9rem 0; padding: 0; border: 0; }
+.answers legend { margin-bottom: .6rem; }
+.choice { width: 100%; justify-content: flex-start; }
+.choice span { margin-left: auto; color: #b1cbf6; }
+.choice input { accent-color: #ffd885; }
+.drill { border-top: 1px solid #3d506c; padding: 0; margin: .85rem 0; list-style: none; }
+.drill li { display: grid; grid-template-columns: 5rem 1fr; padding: .75rem 0; border-bottom: 1px solid #3d506c; gap: .4rem .8rem; font-size: .95rem; color: #c7d6eb; }
+.drill strong { color: #ffda91; }
+.details { background: #0f192b; padding: 1rem; border-radius: .6rem; color: #eef4ff; margin: 1rem 0; }
+.page .details p { margin: .5rem 0 0; font-size: .9rem; }
+.offerHeading { margin: 0 0 .45rem; font-size: 1rem; font-weight: 750; }
+.offerInclusions { display: grid; gap: .26rem; margin: 0 0 .75rem; padding-inline-start: 1.15rem; list-style: disc; color: #d7e2f4; font-size: .92rem; line-height: 1.42; }
+.offerInclusions li::marker { color: #ffda91; }
+.offerTerms { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem 1rem; border-top: 1px solid #30415b; padding-top: .7rem; color: #d7e2f4; }
+.price { color: #ffda91; font-size: 1.24rem; }
+.guarantee { color: #eef4ff; font-size: .95rem; }
+.primary + .small { margin-top: .7rem; margin-bottom: 0; }
+.page :is(a, button, label, summary, video):focus-visible, .choice:focus-within { outline: 2px solid #a7cfff; outline-offset: 3px; }
+
+@media (max-width: 48rem) {
+  .chapter { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  .salesPreview .outcomeChapter h1 { font-size: clamp(1.85rem, 7.6vw, 2.65rem); }
+  .outcomeChapter { gap: .75rem; }
+  .outcomeChapter > .card { order: 0; }
+  .desktopStoryIntro { display: none; }
+  .mobileStoryIntro { display: block; }
+  .page .mobileStoryIntro :is(.eyebrow, h1) { margin-bottom: 0; }
+  .page .mobileStoryIntro .eyebrow { margin-bottom: .35rem; }
+  .outcomeChapter .hint, .outcomeChapter .storyActions { margin-top: .5rem; }
+  .outcomeChapter .storyActions .secondary { background: #ffd885; border-color: #ffd885; color: #1b2131; }
+  .outcomeChapter .storyActions .secondary:hover { background: #ffe5a9; }
+  .mobileCoachingContinue { display: inline-flex; margin-top: .75rem; }
+  .desktopCoachingContinue { display: none; }
+  .single { margin-top: 1.15rem; }
+  .card, .single { border-radius: .9rem; }
+  .card :is(h1, h2) { font-size: clamp(1.7rem, 7vw, 2.65rem); }
+  .guideSituations { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 32rem) {
+  .booking { margin-top: .5rem; padding: 1rem; }
+  .page .booking .eyebrow { margin-bottom: .55rem; }
+  .page .booking h2 { margin-bottom: .7rem; font-size: clamp(1.65rem, 7vw, 2.1rem); }
+  .page .booking .lead { margin-bottom: .7rem; font-size: 1rem; line-height: 1.45; }
+  .booking .details { margin: .7rem 0 .8rem; padding: .85rem; }
+}

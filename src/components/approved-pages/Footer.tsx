@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 
-export default function Footer({ children }: { children?: ReactNode }) {
+export default function Footer({ children, promoteDanceFloorReady = false }: { children?: ReactNode; promoteDanceFloorReady?: boolean }) {
   return (
     <footer className="border-t mt-20 py-12 px-6" style={{ borderColor: '#1f1f1f', backgroundColor: 'var(--background)' }}>
       {children}
@@ -18,8 +18,8 @@ export default function Footer({ children }: { children?: ReactNode }) {
           <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: 'var(--muted)' }}>Learn</p>
           <ul className="flex flex-col gap-2 text-sm" style={{ color: 'var(--muted)' }}>
             <li><Link href="/beat-first" prefetch={false} className="hover:text-white transition-colors">BeatFirst</Link></li>
-            <li><Link href="/private-lessons" prefetch={false} className="hover:text-white transition-colors">Private Lessons</Link></li>
-            <li><Link href="/private-lessons/online" prefetch={false} className="hover:text-white transition-colors">Online Lessons</Link></li>
+            <li><Link href={promoteDanceFloorReady ? "/#private-coaching" : "/private-lessons"} prefetch={false} className="hover:text-white transition-colors">Private Lessons</Link></li>
+            <li><Link href={promoteDanceFloorReady ? "/dance-floor-ready" : "/private-lessons/online"} prefetch={false} className="hover:text-white transition-colors">{promoteDanceFloorReady ? "Online Dance Lessons" : "Online Lessons"}</Link></li>
             <li><Link href="/private-lessons/san-jose" prefetch={false} className="hover:text-white transition-colors">San Jose Lessons</Link></li>
             <li><Link href="/private-lessons/bay-area" prefetch={false} className="hover:text-white transition-colors">Bay Area Lessons</Link></li>
           </ul>

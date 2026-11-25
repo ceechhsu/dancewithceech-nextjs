@@ -12,9 +12,9 @@ import styles from "@/components/Navigation.module.css";
 const links = [
   { label: "About Ceech", href: "/about" },
 ];
-type Props = { user?: { name?: string | null; email?: string | null; image?: string | null } | null; showAttendance?: boolean; archeryHref?: string | null; alwaysVisible?: boolean };
+type Props = { user?: { name?: string | null; email?: string | null; image?: string | null } | null; showAttendance?: boolean; archeryHref?: string | null; alwaysVisible?: boolean; promoteDanceFloorReady?: boolean };
 
-export default function MobileMenu({ user, showAttendance = false, archeryHref, alwaysVisible = false }: Props) {
+export default function MobileMenu({ user, showAttendance = false, archeryHref, alwaysVisible = false, promoteDanceFloorReady = false }: Props) {
   const [requestedOpen, setOpen] = useState(false);
   const pathname = usePathname();
   const [openedPath, setOpenedPath] = useState(pathname);
@@ -79,14 +79,15 @@ export default function MobileMenu({ user, showAttendance = false, archeryHref, 
       style={{ top }} onClick={(event) => {
         if ((event.target as HTMLElement).closest("a")) { setOpen(false); trigger.current?.focus(); }
       }}>
-      <Link href="/private-lessons#booking" prefetch={false} className={`${styles.booking} mb-3 shrink-0`}>Book a Free Call</Link>
+      {promoteDanceFloorReady ? null : <Link href="/private-lessons#booking" prefetch={false} className={`${styles.booking} mb-3 shrink-0`}>Book a Free Call</Link>}
       {user && <a href="/profile" className="flex min-h-12 shrink-0 items-center font-semibold text-amber-200">My profile</a>}
       {user && !showAttendance && <a href="/dashboard" className="flex min-h-12 shrink-0 items-center font-semibold text-blue-300">My Classes</a>}
       {/* Fresh document applies attendance permissions and unloads marketing scripts. */}
       {showAttendance && <a href="/attendance/instructor" className="flex min-h-11 shrink-0 items-center font-semibold text-blue-300">Attendance</a>}
       {user && archeryHref && <a href={archeryHref} className="flex min-h-11 shrink-0 items-center font-semibold text-blue-300">Archery</a>}
-      <Link href="/private-lessons/online" prefetch={false}>Online lessons</Link>
+      <Link href={promoteDanceFloorReady ? "/dance-floor-ready" : "/private-lessons/online"} prefetch={false}>{promoteDanceFloorReady ? "Online Dance Lessons" : "Online lessons"}</Link>
       <Link href="/private-lessons/san-jose" prefetch={false}>In-person lessons</Link>
+      {promoteDanceFloorReady ? <Link href="/private-lessons/san-jose#booking" prefetch={false} className={`${styles.booking} mt-2 mb-1 shrink-0`}>San Jose Consultation</Link> : null}
       <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Learn Free</p>
       {freeLinks.map(({ label, href }) => <Link key={href} href={href} prefetch={false} className="shrink-0 pl-3">{label}</Link>)}
       {links.map(({ label, href }) => <Link key={href} href={href} prefetch={false} className="shrink-0">{label}</Link>)}
