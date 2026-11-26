@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
-import Nav from "@/components/Nav";
+import Nav from "@/components/approved-pages/Nav";
+import pageStyles from "@/components/approved-pages/PageScope.module.css";
 import ProductCard from "./ProductCard";
 import { products } from "./products";
 import styles from "./shop.module.css";
@@ -13,9 +14,10 @@ export const metadata: Metadata = {
 
 export default function ShopPage() {
   return (
-    <>
+    <div className={pageStyles.scope}>
+      <a href="#main-content" className={pageStyles.skipLink}>Skip to content</a>
       <Nav />
-      <main className={styles.shop}>
+      <main id="main-content" tabIndex={-1} className={styles.shop}>
         <header className={styles.hero}>
           <div>
             <p className={styles.eyebrow}>Dance With Ceech Shop</p>
@@ -37,6 +39,6 @@ export default function ShopPage() {
         </section>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
