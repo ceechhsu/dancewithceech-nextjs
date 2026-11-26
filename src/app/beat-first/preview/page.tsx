@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import BeatFirstJourney from '@/components/beatfirst-preview/BeatFirstJourney'
+import { beatFirstAccountsEnabled } from '@/lib/beatfirst-engagement-config'
 
 export const metadata: Metadata = {
   title: 'BeatFirst Playground — Your Rhythm Journey | DanceWithCeech',
@@ -8,5 +9,5 @@ export const metadata: Metadata = {
 }
 
 export default function BeatFirstPreviewPage() {
-  return <BeatFirstJourney preview />
+  return <BeatFirstJourney preview accountsEnabled={beatFirstAccountsEnabled()} />
 }

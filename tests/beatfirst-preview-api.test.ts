@@ -315,6 +315,23 @@ test('the store selects one complete trimmed environment pair without mixing cre
   `)
 })
 
+test('the store requires a dedicated database on any Preview while production keeps its normal pair', () => {
+  checkServerStore(`
+    const live = { BEATFIRST_SUPABASE_URL: 'https://live.example.test', BEATFIRST_SUPABASE_SERVICE_ROLE_KEY: 'live-key' };
+    const dedicated = { BEATFIRST_STAGING_SUPABASE_URL: 'https://stage.example.test', BEATFIRST_STAGING_SUPABASE_SERVICE_ROLE_KEY: 'stage-key' };
+    for (const preview of [
+      { VERCEL_ENV: 'preview' },
+      { VERCEL_TARGET_ENV: 'preview', VERCEL_GIT_COMMIT_REF: 'codex/archery-preview' },
+      { BEATFIRST_STAGING_ISOLATION: '1' },
+    ]) {
+      assert.throws(() => resolveProgressDatabaseConfig({ ...preview, ...live }), /staging database is not configured/);
+      assert.throws(() => resolveProgressDatabaseConfig({ ...preview, ...live, ...dedicated, BEATFIRST_STAGING_SUPABASE_URL: live.BEATFIRST_SUPABASE_URL }), /staging database is not configured/);
+      assert.deepEqual(resolveProgressDatabaseConfig({ ...preview, ...live, ...dedicated }), { url: 'https://stage.example.test', key: 'stage-key' });
+    }
+    assert.deepEqual(resolveProgressDatabaseConfig({ VERCEL_ENV: 'production', BEATFIRST_STAGING_ISOLATION: '1', ...live, ...dedicated }), { url: 'https://live.example.test', key: 'live-key' });
+  `)
+})
+
 test('the database adapter loads every owned page after 1,000 rows', () => {
   checkServerStore(`
     let requests = 0;

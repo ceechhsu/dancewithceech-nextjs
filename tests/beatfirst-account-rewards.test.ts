@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { beatFirstAccountsEnabled, beatFirstEngagementEnabled, beatFirstStagingDatabase, beatFirstStagingPathAllowed } from '../src/lib/beatfirst-engagement-config'
+import { NextRequest } from 'next/server'
+import { beatFirstAccountsEnabled, beatFirstEngagementEnabled, beatFirstStagingDatabase, beatFirstStagingPathAllowed, isBeatFirstStaging } from '../src/lib/beatfirst-engagement-config'
 import { createProgressHandlers } from '../src/lib/beatfirst-progress-service'
 import { includePendingUnlocks, type AttemptResult } from '../src/components/beatfirst-preview/progress'
+import { proxy } from '../src/proxy'
 
 const host = 'https://stage.example.test'
 const owner = 'google:test-user'
@@ -10,6 +12,62 @@ const stage = { VERCEL_ENV: 'preview', VERCEL_GIT_COMMIT_REF: 'codex/beatfirst-e
 const stagingDatabase = { BEATFIRST_STAGING_SUPABASE_URL: 'https://test-db.supabase.co', BEATFIRST_STAGING_SUPABASE_SERVICE_ROLE_KEY: 'test-secret' }
 const checkInPath = '/api/beatfirst/progress/check-in'
 const existing: AttemptResult = { id: 'legacy', levelId: 6, score: 75, hits: 20, total: 30, bestStreak: 10, completedAt: '2026-11-20T12:00:00.000Z' }
+
+test('whole-app staging is limited to the exact Preview branch or an explicit non-production marker', () => {
+  assert.equal(isBeatFirstStaging(stage), true)
+  assert.equal(isBeatFirstStaging({ VERCEL_TARGET_ENV: 'preview', VERCEL_GIT_COMMIT_REF: stage.VERCEL_GIT_COMMIT_REF }), true)
+  assert.equal(isBeatFirstStaging({ VERCEL_ENV: 'preview', BEATFIRST_STAGING_ISOLATION: '1' }), true)
+  assert.equal(isBeatFirstStaging({ BEATFIRST_STAGING_ISOLATION: '1' }), true)
+  assert.equal(isBeatFirstStaging({ VERCEL_ENV: 'preview' }), false)
+  assert.equal(isBeatFirstStaging({ ...stage, VERCEL_GIT_COMMIT_REF: `${stage.VERCEL_GIT_COMMIT_REF}-other` }), false)
+  assert.equal(isBeatFirstStaging({ ...stage, VERCEL_ENV: 'development' }), false)
+  assert.equal(isBeatFirstStaging({ ...stage, VERCEL_TARGET_ENV: 'production', BEATFIRST_STAGING_ISOLATION: '1' }), false)
+  assert.equal(beatFirstEngagementEnabled({ VERCEL_ENV: 'preview' }), false)
+})
+
+function withProxyEnvironment(environment: NodeJS.ProcessEnv, verify: (request: (path: string) => Response) => void) {
+  const previous = process.env
+  process.env = environment
+  try {
+    verify(path => proxy(new NextRequest(`${host}${path}`)))
+  } finally {
+    process.env = previous
+  }
+}
+
+test('unrelated Previews retain normal routes and the optional Archery demo', () => {
+  const environment: NodeJS.ProcessEnv = { NODE_ENV: 'test', VERCEL_ENV: 'preview', VERCEL_GIT_COMMIT_REF: 'codex/archery-preview' }
+  withProxyEnvironment(environment, request => {
+    assert.equal(request('/').headers.get('x-middleware-next'), '1')
+    assert.equal(request('/attendance/archery-preview').headers.get('x-middleware-next'), '1')
+    assert.equal(request('/api/auth/session').headers.get('x-middleware-next'), '1')
+
+    environment.ARCHERY_DEMO_ONLY = 'true'
+    const redirect = request('/')
+    assert.equal(redirect.status, 307)
+    assert.equal(redirect.headers.get('location'), `${host}/attendance/archery-preview`)
+    assert.equal(request('/attendance/archery-preview').headers.get('x-middleware-next'), '1')
+    assert.equal(request('/beat-first').status, 404)
+  })
+})
+
+test('the dedicated and explicitly marked BeatFirst Previews retain isolated routing', () => {
+  const environment: NodeJS.ProcessEnv = { NODE_ENV: 'test', ...stage }
+  withProxyEnvironment(environment, request => {
+    assert.equal(request('/').headers.get('location'), `${host}/beat-first`)
+    assert.equal(request('/attendance/archery-preview').status, 404)
+    assert.equal(request('/beat-first').headers.get('x-robots-tag'), 'noindex, nofollow')
+
+    delete environment.VERCEL_GIT_COMMIT_REF
+    environment.BEATFIRST_STAGING_ISOLATION = '1'
+    assert.equal(request('/').headers.get('location'), `${host}/beat-first`)
+    assert.equal(request(checkInPath).status, 404)
+
+    environment.VERCEL_ENV = 'production'
+    assert.equal(request('/').headers.get('x-middleware-next'), '1')
+    assert.equal(request('/beat-first').headers.get('x-robots-tag'), null)
+  })
+})
 
 test('the BeatFirst Preview enables gameplay and fails closed on shared or missing database settings', () => {
   const shared = { ATTENDANCE_SUPABASE_URL: 'https://attendance.supabase.co' }
@@ -23,6 +81,7 @@ test('the BeatFirst Preview enables gameplay and fails closed on shared or missi
   assert.equal(beatFirstStagingDatabase({ ...stage, ...stagingDatabase, BEATFIRST_STAGING_SUPABASE_URL: 'https://ywianppupnxduthvyeyb.supabase.co' }), null)
   assert.deepEqual(beatFirstStagingDatabase({ ...stage, ...shared, ...stagingDatabase }), { url: stagingDatabase.BEATFIRST_STAGING_SUPABASE_URL, key: 'test-secret' })
   assert.equal(beatFirstAccountsEnabled({ ...stage, ...shared, ...stagingDatabase }), true)
+  assert.equal(beatFirstAccountsEnabled({ VERCEL_ENV: 'preview', ...shared, ...stagingDatabase }), true)
   assert.equal(beatFirstEngagementEnabled({ VERCEL_ENV: 'production', VERCEL_GIT_COMMIT_REF: stage.VERCEL_GIT_COMMIT_REF }), false)
   assert.equal(beatFirstAccountsEnabled({ VERCEL_ENV: 'production' }), true)
   assert.equal(beatFirstAccountsEnabled({ VERCEL_ENV: 'production', BEATFIRST_STAGING_ISOLATION: '1' }), true)

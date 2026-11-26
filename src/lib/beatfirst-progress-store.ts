@@ -3,7 +3,7 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import type { AttemptResult } from '../components/beatfirst-preview/progress'
 import type { ProgressStore } from './beatfirst-progress-service'
 import { getSupabaseServerKey } from './supabase-server-key'
-import { beatFirstStagingDatabase, isBeatFirstStaging } from './beatfirst-engagement-config'
+import { beatFirstStagingDatabase, requiresBeatFirstStagingDatabase } from './beatfirst-engagement-config'
 
 type ProgressRow = {
   attempt_id: string
@@ -28,7 +28,7 @@ const TABLE = 'beatfirst_preview_attempts'
 const PAGE_SIZE = 1000
 
 export function resolveProgressDatabaseConfig(environment: Record<string, string | undefined>) {
-  if (isBeatFirstStaging(environment)) {
+  if (requiresBeatFirstStagingDatabase(environment)) {
     const database = beatFirstStagingDatabase(environment)
     if (!database) throw new Error('BeatFirst staging database is not configured.')
     return database

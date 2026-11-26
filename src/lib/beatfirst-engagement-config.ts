@@ -1,11 +1,24 @@
 type Environment = Record<string, string | undefined>
 
+const stagingBranch = 'codex/beatfirst-engagement-staging'
 const productionDatabaseHost = 'ywianppupnxduthvyeyb.supabase.co'
 
+function isVercelProduction(environment: Environment) {
+  return environment.VERCEL_ENV === 'production' || environment.VERCEL_TARGET_ENV === 'production'
+}
+
+function isVercelPreview(environment: Environment) {
+  return environment.VERCEL_ENV === 'preview' || environment.VERCEL_TARGET_ENV === 'preview'
+}
+
 export function isBeatFirstStaging(environment: Environment = process.env) {
-  if (environment.VERCEL_ENV === 'production' || environment.VERCEL_TARGET_ENV === 'production') return false
-  return environment.VERCEL_ENV === 'preview' || environment.VERCEL_TARGET_ENV === 'preview' ||
-    environment.BEATFIRST_STAGING_ISOLATION === '1'
+  if (isVercelProduction(environment)) return false
+  return environment.BEATFIRST_STAGING_ISOLATION === '1' ||
+    (isVercelPreview(environment) && environment.VERCEL_GIT_COMMIT_REF === stagingBranch)
+}
+
+export function requiresBeatFirstStagingDatabase(environment: Environment = process.env) {
+  return !isVercelProduction(environment) && (isVercelPreview(environment) || isBeatFirstStaging(environment))
 }
 
 export function beatFirstEngagementEnabled(environment: Environment = process.env) {
@@ -27,7 +40,7 @@ export function beatFirstStagingDatabase(environment: Environment = process.env)
 }
 
 export function beatFirstAccountsEnabled(environment: Environment = process.env) {
-  return !isBeatFirstStaging(environment) || beatFirstStagingDatabase(environment) !== null
+  return !requiresBeatFirstStagingDatabase(environment) || beatFirstStagingDatabase(environment) !== null
 }
 
 export function beatFirstStagingPathAllowed(pathname: string, accountsEnabled: boolean) {

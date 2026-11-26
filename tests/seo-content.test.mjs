@@ -130,7 +130,7 @@ test("BeatFirst provides descriptive metadata, crawlable guidance, and WebApplic
   const source = await read("src/app/beat-first/page.tsx");
   const guide = await read("src/components/beatfirst-preview/BeatFirstGuide.tsx");
   assert.match(source, /WebApplication/);
-  assert.match(source, /<BeatFirstJourney><BeatFirstGuide \/><\/BeatFirstJourney>/);
+  assert.match(source, /<BeatFirstJourney\b[^>]*>\s*<BeatFirstGuide\s*\/>\s*<\/BeatFirstJourney>/);
   assert.match(guide, /How BeatFirst works/i);
   assert.match(guide, /Frequently asked questions/i);
   const description = source.match(/description:\s*['"]([^'"]+)/)?.[1] ?? "";
