@@ -1,0 +1,50 @@
+{
+  "tee": {
+    "bay": {
+      "back": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/78878/98446/unisex-garment-dyed-t-shirt.jpg?camera_label=back&t=1795732480757&s=1000",
+      "front": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/78878/98445/unisex-garment-dyed-t-shirt.jpg?camera_label=front&t=1795732465482&s=1000"
+    },
+    "black": {
+      "back": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/73204/98446/unisex-garment-dyed-t-shirt.jpg?camera_label=back&t=1795732353193&s=1000",
+      "front": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/73204/98445/unisex-garment-dyed-t-shirt.jpg?camera_label=front&t=1795732348770&s=1000"
+    },
+    "blossom": {
+      "back": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/78888/98446/unisex-garment-dyed-t-shirt.jpg?camera_label=back&t=1795732485145&s=1000",
+      "front": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/78888/98445/unisex-garment-dyed-t-shirt.jpg?camera_label=front&t=1795732469939&s=1000"
+    },
+    "chambray": {
+      "back": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/78923/98446/unisex-garment-dyed-t-shirt.jpg?camera_label=back&t=1795732483081&s=1000",
+      "front": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/78923/98445/unisex-garment-dyed-t-shirt.jpg?camera_label=front&t=1795732467820&s=1000"
+    },
+    "graphite": {
+      "back": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/78963/98446/unisex-garment-dyed-t-shirt.jpg?camera_label=back&t=1795732478715&s=1000",
+      "front": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/78963/98445/unisex-garment-dyed-t-shirt.jpg?camera_label=front&t=1795732463324&s=1000"
+    },
+    "island-reef": {
+      "back": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/73983/98446/unisex-garment-dyed-t-shirt.jpg?camera_label=back&t=1795732487383&s=1000",
+      "front": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/73983/98445/unisex-garment-dyed-t-shirt.jpg?camera_label=front&t=1795732472216&s=1000"
+    },
+    "white": {
+      "back": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/73207/98446/unisex-garment-dyed-t-shirt.jpg?camera_label=back&t=1795732355053&s=1000",
+      "front": "https://images.printify.com/mockup/6b08a50612c0d8409002e449/73207/98445/unisex-garment-dyed-t-shirt.jpg?camera_label=front&t=1795732350820&s=1000"
+    }
+  },
+  "hoodie": {
+    "ash": {
+      "back": "https://images.printify.com/mockup/6b08a9f855d595d88e0a0db7/32872/98425/unisex-heavy-blend-hooded-sweatshirt.jpg?camera_label=back&t=1795732447302&s=1000",
+      "front": "https://images.printify.com/mockup/6b08a9f855d595d88e0a0db7/32872/98424/unisex-heavy-blend-hooded-sweatshirt.jpg?camera_label=front&t=1795732442914&s=1000"
+    },
+    "black": {
+      "back": "https://images.printify.com/mockup/6b08a9f855d595d88e0a0db7/32920/98425/unisex-heavy-blend-hooded-sweatshirt.jpg?camera_label=back&t=1795732395045&s=1000",
+      "front": "https://images.printify.com/mockup/6b08a9f855d595d88e0a0db7/32920/98424/unisex-heavy-blend-hooded-sweatshirt.jpg?camera_label=front&t=1795732390503&s=1000"
+    },
+    "fan-charcoal-heather": {
+      "back": "https://images.printify.com/mockup/6b08a9f855d595d88e0a0db7/407932/98425/unisex-heavy-blend-hooded-sweatshirt.jpg?camera_label=back&t=1795732449594&s=1000",
+      "front": "https://images.printify.com/mockup/6b08a9f855d595d88e0a0db7/407932/98424/unisex-heavy-blend-hooded-sweatshirt.jpg?camera_label=front&t=1795732445202&s=1000"
+    },
+    "white": {
+      "back": "https://images.printify.com/mockup/6b08a9f855d595d88e0a0db7/32912/98425/unisex-heavy-blend-hooded-sweatshirt.jpg?camera_label=back&t=1795732397067&s=1000",
+      "front": "https://images.printify.com/mockup/6b08a9f855d595d88e0a0db7/32912/98424/unisex-heavy-blend-hooded-sweatshirt.jpg?camera_label=front&t=1795732392749&s=1000"
+    }
+  }
+}
