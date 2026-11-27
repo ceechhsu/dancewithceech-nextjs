@@ -1,4 +1,5 @@
 import mockups from "./mockups.json";
+import savedVariants from "./variant-prices.json";
 
 export type View = "front" | "back";
 
@@ -9,11 +10,14 @@ type Color = {
   ink: "dark" | "light";
 };
 
+type PricesBySize = Partial<Record<string, number | null>>;
+const variants: Record<"tee" | "hoodie", Partial<Record<string, PricesBySize>>> = savedVariants;
+const sizes = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"] as const;
+
 export type Product = {
-  id: string;
+  id: keyof typeof variants;
   name: string;
   garment: string;
-  sizes: string;
   fit: string;
   colors: readonly Color[];
   defaultColor: string;
@@ -22,13 +26,13 @@ export type Product = {
 
 const white: Color = { id: "white", name: "White", swatch: "#f5f4f0", ink: "dark" };
 const black: Color = { id: "black", name: "Black", swatch: "#202020", ink: "light" };
+const dollars = new Intl.NumberFormat("en-US", { style: "currency", currency: savedVariants.currency });
 
 export const products: readonly Product[] = [
   {
     id: "tee",
     name: "Got Rhythm? Tee",
     garment: "Comfort Colors 1717 · Garment-dyed tee",
-    sizes: "S–4XL",
     fit: "Unisex",
     defaultColor: "black",
     colors: [
@@ -46,8 +50,7 @@ export const products: readonly Product[] = [
     id: "hoodie",
     name: "Got Rhythm? Hoodie",
     garment: "Gildan 18500 · Heavy Blend hoodie",
-    sizes: "S–5XL",
-    fit: "Unisex · Sizes vary by color",
+    fit: "Unisex",
     defaultColor: "white",
     colors: [
       white,
@@ -58,3 +61,23 @@ export const products: readonly Product[] = [
     mockups: mockups.hoodie,
   },
 ];
+
+function getColorPrices(product: Product, colorId: string): PricesBySize | undefined {
+  const color = product.colors.find(({ id }) => id === colorId);
+  return color ? variants[product.id][color.name] : undefined;
+}
+
+export function getSizes(product: Product, colorId: string): readonly string[] {
+  const prices = getColorPrices(product, colorId);
+  return prices ? sizes.filter((size) => Object.hasOwn(prices, size)) : [];
+}
+
+export function getRetailPrice(product: Product, colorId: string, size: string): number | null {
+  const prices = getColorPrices(product, colorId);
+  const price = prices?.[size];
+  return typeof price === "number" ? price : null;
+}
+
+export function formatPrice(cents: number): string {
+  return dollars.format(cents / 100);
+}

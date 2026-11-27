@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import Nav from "@/components/approved-pages/Nav";
 import pageStyles from "@/components/approved-pages/PageScope.module.css";
-import ProductCard from "./ProductCard";
-import { products } from "./products";
+import ShopStorefront from "./ShopStorefront";
 import styles from "./shop.module.css";
 
 export const metadata: Metadata = {
@@ -18,25 +17,7 @@ export default function ShopPage() {
       <a href="#main-content" className={pageStyles.skipLink}>Skip to content</a>
       <Nav />
       <main id="main-content" tabIndex={-1} className={styles.shop}>
-        <header className={styles.hero}>
-          <div>
-            <p className={styles.eyebrow}>Dance With Ceech Shop</p>
-            <h1 className={styles.title}>Got <em>Rhythm?</em></h1>
-            <p className={styles.intro}>
-              You need rhythm, I’ll lend you some.
-            </p>
-          </div>
-          <div className={styles.launchNote}>
-            <p className={styles.launchTitle}>Prelaunch preview</p>
-            <p>Explore the tee and hoodie. Pricing and ordering details will follow at launch.</p>
-          </div>
-        </header>
-
-        <section className={styles.products} aria-label="Got Rhythm? apparel">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </section>
+        <ShopStorefront />
       </main>
       <Footer />
     </div>
