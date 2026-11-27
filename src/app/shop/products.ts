@@ -67,17 +67,18 @@ function getColorPrices(product: Product, colorId: string): PricesBySize | undef
   return color ? variants[product.id][color.name] : undefined;
 }
 
-export function getSizes(product: Product, colorId: string): readonly string[] {
+export function getColorSizeRange(product: Product, colorId: string): string {
   const prices = getColorPrices(product, colorId);
-  return prices ? sizes.filter((size) => Object.hasOwn(prices, size)) : [];
+  const available = prices ? sizes.filter((size) => Object.hasOwn(prices, size)) : [];
+  if (available.length < 2) return available[0] ?? "";
+  return `${available[0]}–${available[available.length - 1]}`;
 }
 
-export function getRetailPrice(product: Product, colorId: string, size: string): number | null {
-  const prices = getColorPrices(product, colorId);
-  const price = prices?.[size];
-  return typeof price === "number" ? price : null;
-}
-
-export function formatPrice(cents: number): string {
-  return dollars.format(cents / 100);
+export function getProductPriceRange(id: Product["id"]): string {
+  const prices = Object.values(savedVariants[id]).flatMap((color) => Object.values(color));
+  if (prices.length === 0) return "Price pending";
+  const low = Math.min(...prices);
+  const high = Math.max(...prices);
+  const min = dollars.format(low / 100);
+  return low === high ? min : `${min}–${dollars.format(high / 100)}`;
 }
