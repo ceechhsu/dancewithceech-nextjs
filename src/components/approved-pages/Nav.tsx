@@ -5,6 +5,7 @@ import { getSession } from "next-auth/react";
 import { canSeeAttendance } from "@/lib/attendance/navigation";
 import Link from "next/link";
 import SiteLogo from "@/components/SiteLogo";
+import ShopNavLink from "@/components/ShopNavLink";
 import MobileMenu from "@/components/approved-pages/MobileMenu";
 import UserMenu from "@/components/UserMenu";
 import SignInButton from "@/components/SignInButton";
@@ -50,6 +51,7 @@ export default function Nav({ user: initialUser }: Props = {}) {
         <Link href="/private-lessons/san-jose" prefetch={false} className="hover:text-white transition-colors">In-person lessons</Link>
         <LearnFreeMenu />
         <Link href="/about" prefetch={false} className="hover:text-white transition-colors">About Ceech</Link>
+        <ShopNavLink />
         {/* Fresh document applies attendance permissions and unloads marketing scripts. */}
         {showAttendance && <a href="/attendance/instructor" className="inline-flex min-h-11 items-center font-semibold text-blue-300 hover:text-white">Attendance</a>}
         {archeryHref && <a href={archeryHref} className="inline-flex min-h-11 items-center font-semibold text-blue-300 hover:text-white">Archery</a>}

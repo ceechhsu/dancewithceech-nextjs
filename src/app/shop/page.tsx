@@ -2,15 +2,28 @@ import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import Nav from "@/components/approved-pages/Nav";
 import pageStyles from "@/components/approved-pages/PageScope.module.css";
+import { isShopProduction, SHOP_PATH } from "@/lib/shop-publication";
 import ProductCard from "./ProductCard";
 import { getProductPriceRange, products } from "./products";
 import styles from "./shop.module.css";
 
-export const metadata: Metadata = {
-  title: "Got Rhythm? Shop Preview | Dance With Ceech",
-  description: "Preview the Dance With Ceech Got Rhythm? tee and hoodie.",
-  robots: { index: false, follow: false },
+const production = isShopProduction();
+const publishedListings = {
+  tee: "https://dance-with-ceech.printify.me/product/35136313/unisex-garment-dyed-t-shirt",
+  hoodie: "https://dance-with-ceech.printify.me/product/35136351/got-rhythm-dancing-figure-hoodie",
 };
+
+export const metadata: Metadata = production
+  ? {
+    title: "Got Rhythm? Shop | Dance With Ceech",
+    description: "Shop the Dance With Ceech Got Rhythm? tee and hoodie. Explore colors and sizes, then order on Printify.",
+    alternates: { canonical: `https://dancewithceech.com${SHOP_PATH}` },
+  }
+  : {
+    title: "Got Rhythm? Shop Preview | Dance With Ceech",
+    description: "Preview the Dance With Ceech Got Rhythm? tee and hoodie.",
+    robots: { index: false, follow: false },
+  };
 
 function readPrintifyListing(value: string | undefined) {
   if (!value) return undefined;
@@ -22,7 +35,7 @@ function readPrintifyListing(value: string | undefined) {
 }
 
 export default function ShopPage() {
-  const listings = {
+  const listings = production ? publishedListings : {
     tee: readPrintifyListing(process.env.PRINTIFY_POPUP_TEE_URL),
     hoodie: readPrintifyListing(process.env.PRINTIFY_POPUP_HOODIE_URL),
   };
@@ -40,7 +53,7 @@ export default function ShopPage() {
             <p className={styles.intro}>You need rhythm, I’ll lend you some.</p>
           </div>
           <div className={styles.launchNote}>
-            <p className={styles.launchTitle}>Prelaunch preview</p>
+            <p className={styles.launchTitle}>{production ? "Order on Printify" : "Prelaunch preview"}</p>
             <p>
               {hasListing
                 ? "Choose your color, size, and quantity on Printify."

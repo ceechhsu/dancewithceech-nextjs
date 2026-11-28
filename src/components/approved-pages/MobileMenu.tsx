@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import ShopNavLink from "@/components/ShopNavLink";
 import { freeLinks } from "./LearnFreeMenu";
 import SignInButton from "@/components/SignInButton";
 import UserMenu from "@/components/UserMenu";
@@ -90,6 +91,7 @@ export default function MobileMenu({ user, showAttendance = false, archeryHref, 
       <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Learn Free</p>
       {freeLinks.map(({ label, href }) => <Link key={href} href={href} prefetch={false} className="shrink-0 pl-3">{label}</Link>)}
       {links.map(({ label, href }) => <Link key={href} href={href} prefetch={false} className="shrink-0">{label}</Link>)}
+      <ShopNavLink />
       <div className="mt-3 border-t border-white/10 pt-3 pb-32 text-xs">
         {user ? <UserMenu name={user.name} email={user.email} image={user.image} /> : <SignInButton />}
       </div>

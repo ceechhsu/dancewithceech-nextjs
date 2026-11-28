@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { getAllPosts } from '@/lib/posts'
 import { postLastModified } from '@/lib/sitemap-date'
+import { isShopProduction, SHOP_PATH } from '@/lib/shop-publication'
 
 const BASE_URL = 'https://dancewithceech.com'
 
@@ -18,6 +19,7 @@ const STATIC_ROUTE_LAST_MODIFIED: Record<string, string> = {
   '/house-dance': '2026-05-19',
   '/about': '2026-08-24',
   '/contact': '2026-08-24',
+  [SHOP_PATH]: '2026-11-27',
   '/locking-fundamentals-volume-1': '2026-08-24',
   '/ftl-popping-training-series-volume-1': '2026-08-24',
 }
@@ -50,6 +52,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     route('/house-dance', 'weekly', 0.8),
     route('/about', 'monthly', 0.6),
     route('/contact', 'monthly', 0.5),
+    ...(isShopProduction() ? [route(SHOP_PATH, 'monthly', 0.7)] : []),
     route('/locking-fundamentals-volume-1', 'monthly', 0.7),
     route('/ftl-popping-training-series-volume-1', 'monthly', 0.7),
   ]

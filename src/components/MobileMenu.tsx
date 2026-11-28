@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import ShopNavLink from "@/components/ShopNavLink";
 import { freeLinks } from "./LearnFreeMenu";
 import SignInButton from "./SignInButton";
 import UserMenu from "./UserMenu";
@@ -12,9 +13,9 @@ import styles from "./Navigation.module.css";
 const links = [
   { label: "About Ceech", href: "/about" },
 ];
-type Props = { user?: { name?: string | null; email?: string | null; image?: string | null } | null; showAttendance?: boolean; archeryHref?: string | null; alwaysVisible?: boolean };
+type Props = { user?: { name?: string | null; email?: string | null; image?: string | null } | null; showAttendance?: boolean; archeryHref?: string | null; alwaysVisible?: boolean; showShop?: boolean };
 
-export default function MobileMenu({ user, showAttendance = false, archeryHref, alwaysVisible = false }: Props) {
+export default function MobileMenu({ user, showAttendance = false, archeryHref, alwaysVisible = false, showShop = false }: Props) {
   const [requestedOpen, setOpen] = useState(false);
   const pathname = usePathname();
   const [openedPath, setOpenedPath] = useState(pathname);
@@ -89,6 +90,7 @@ export default function MobileMenu({ user, showAttendance = false, archeryHref, 
       <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Learn Free</p>
       {freeLinks.map(({ label, href }) => <Link key={href} href={href} prefetch={false} className="shrink-0 pl-3">{label}</Link>)}
       {links.map(({ label, href }) => <Link key={href} href={href} prefetch={false} className="shrink-0">{label}</Link>)}
+      {showShop && <ShopNavLink />}
       <div className="mt-3 border-t border-white/10 pt-3 pb-32 text-xs">
         {user ? <UserMenu name={user.name} email={user.email} image={user.image} /> : <SignInButton />}
       </div>
